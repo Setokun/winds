@@ -1,4 +1,4 @@
-package com.winds.window;
+package com.winds.display;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
@@ -6,8 +6,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import com.winds.audio.AudioPlayer;
-import com.winds.menus.Menu;
-import com.winds.menus.Menu.typeMenu;
+import com.winds.menus.MainMenu;
 
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
@@ -28,8 +27,6 @@ public class Game extends Canvas implements Runnable{
 
 	private boolean running = false;
 	private Thread thread;
-	public WindowType winType;
-	private Menu menu;
 	private String bgMusicFilename;
 	
 	
@@ -38,10 +35,7 @@ public class Game extends Canvas implements Runnable{
 	
 	
 	private void init(){
-		
-		winType = WindowType.MENU;
 
-		menu = new Menu();
 		
 		/////////////// sound initialization
 		bgMusicFilename = "res/Winds_Ice_Cavern.mp3";
@@ -123,10 +117,6 @@ public class Game extends Canvas implements Runnable{
 		/////////////////////////////////////////
 
 		g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
-		if(winType == WindowType.MENU){
-			menu.type = typeMenu.MAIN;
-		    menu.render(g);
-		}
 		
 		
 		/////////////////////////////////////////
