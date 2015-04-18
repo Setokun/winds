@@ -1,12 +1,14 @@
 package com.winds.display;
 
 import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import com.winds.audio.AudioPlayer;
-import com.winds.menus.MainMenu;
 
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
@@ -23,8 +25,6 @@ public class Game extends Canvas implements Runnable{
 	public static final int SCALE = 2;
 	public final String TITLE = "Winds";
 	
-	
-
 	private boolean running = false;
 	private Thread thread;
 	private String bgMusicFilename;
@@ -32,10 +32,13 @@ public class Game extends Canvas implements Runnable{
 	
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	
-	
+	public Game(){
+		
+		start();
+	}
 	
 	private void init(){
-
+		this.setPreferredSize(new Dimension(800,600));
 		
 		/////////////// sound initialization
 		bgMusicFilename = "res/Winds_Ice_Cavern.mp3";
@@ -50,7 +53,7 @@ public class Game extends Canvas implements Runnable{
 			return;
 		
 		running = true;
-		Thread thread = new Thread(this);
+		thread = new Thread(this);
 		thread.start();
 	}
 	
@@ -68,6 +71,7 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	public void run() {
+		init();
 		
 		long lastTime = System.nanoTime();
 		final double amountOfTicks = 60.0;
@@ -110,21 +114,21 @@ public class Game extends Canvas implements Runnable{
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null){
 			// set the number of images prepared before rendering, including the current one
-			createBufferStrategy(2);
+			this.createBufferStrategy(2);
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
 		/////////////////////////////////////////
-
-		g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
 		
+		image.getGraphics().fillRect(0, 0, 50, 50);
+		g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+		g.setFont(new Font("bubble & soap", 0, 36));
+		g.setColor(Color.WHITE);
+		g.drawString("Winds", 150, 150);
 		
 		/////////////////////////////////////////
 		g.dispose();
 		bs.show();
 	}
 	
-	public static void main(String[] args) {
-		new Window(400, 300, "Neon Platformer", new Game());
-	}
 }

@@ -14,7 +14,8 @@ import javax.swing.LayoutStyle;
 import com.winds.display.Window;
 
 public class MainMenu extends JPanel{
-
+	private static final long serialVersionUID = 2331229056450441371L;
+	
 	private JButton jBtnChangeProfile, jBtnConfiguration, jBtnLevelEditor, jBtnPlay, jBtnQuit, jBtnScores, jBtnShop;
     private JLabel jLblTitle;
 	
@@ -97,11 +98,11 @@ public class MainMenu extends JPanel{
         layout.setHorizontalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(170, Short.MAX_VALUE)
+                .addContainerGap(250, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLblTitle)
-                        .addGap(241, 241, 241))
+                        .addGap(320))
                     .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                             .addComponent(jBtnScores, 300, 300, 300)
@@ -111,7 +112,7 @@ public class MainMenu extends JPanel{
                             .addComponent(jBtnLevelEditor, 300, 300, 300)
                             .addComponent(jBtnChangeProfile, 300, 300, 300)
                             .addComponent(jBtnQuit, 300, 300, 300))
-                        .addGap(167, 167, 167))))
+                        .addGap(250))))
         );
         
         layout.setVerticalGroup(
@@ -119,7 +120,7 @@ public class MainMenu extends JPanel{
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLblTitle)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(25)
                 .addComponent(jBtnPlay, 50, 50, 50)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBtnScores, 50, 50, 50)
@@ -143,7 +144,8 @@ public class MainMenu extends JPanel{
     }                                        
 
     private void jBtnScoresActionPerformed(java.awt.event.ActionEvent evt) {                                           
-    	// TODO add your handling code here:
+    	Window.resize(new Dimension(800, 550));
+		Window.affect(new Scores());
     }  
     
     private void jBtnConfigurationActionPerformed(java.awt.event.ActionEvent evt) {                                                  
@@ -151,15 +153,17 @@ public class MainMenu extends JPanel{
     }                                                 
     
     private void jBtnShopActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+    	Window.resize(new Dimension(800, 550));
+		Window.affect(new Shop());
     }                                        
 
     private void jBtnLevelEditorActionPerformed(java.awt.event.ActionEvent evt) {                                                
-        // TODO add your handling code here:
+    	Window.resize(new Dimension(800, 550));
+		Window.affect(new LevelEditorList());
     }                                               
 
     private void jBtnChangeProfileActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-    	Window.resize(new Dimension(640, 500));
+    	Window.resize(new Dimension(800, 550));
 		Window.affect(new Login());
     }                                                 
 
@@ -168,4 +172,6 @@ public class MainMenu extends JPanel{
     }                                        
 
 
+        
+	
 }

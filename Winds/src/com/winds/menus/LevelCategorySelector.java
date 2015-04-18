@@ -205,7 +205,7 @@ public class LevelCategorySelector extends JPanel{
     }                        
 
     private void jBtnBackActionPerformed(java.awt.event.ActionEvent evt) {
-    	Window.resize(new Dimension(640, 500));
+    	Window.resize(new Dimension(800, 550));
 		Window.affect(new MainMenu());
     }                                        
 

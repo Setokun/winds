@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 
 import com.winds.menus.MainMenu;
 
-public class Window {
+public	 class Window {
 
 	private static JFrame main;
 	
@@ -23,12 +23,11 @@ public class Window {
 		main.setVisible(true);
 	}
 	
-	public Window(int w, int h, String title, Game game){
-		
+	public static void main(String[] args) {
 		main = new JFrame("Winds");
 		main.pack();
 		main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		main.setSize(new Dimension(640, 500));
+		main.setSize(new Dimension(800, 550));
 		main.setResizable(false);
 		main.setLocationRelativeTo(null);
 		

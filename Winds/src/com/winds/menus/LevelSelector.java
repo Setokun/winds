@@ -19,8 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.LayoutStyle;
 import javax.swing.border.SoftBevelBorder;
 
+import com.winds.addons.Level;
+import com.winds.display.Game;
 import com.winds.display.Window;
-import com.winds.levels.Level;
 
 public class LevelSelector extends JPanel{
 	private static final long serialVersionUID = 9194645999792575062L;
@@ -181,6 +182,12 @@ public class LevelSelector extends JPanel{
             jButton15.setBorder(new javax.swing.border.SoftBevelBorder(0));
             jButton15.setBorderPainted(false);
             jButton15.setContentAreaFilled(false);
+            jButton15.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Window.resize(new Dimension(1024, 768));
+					Window.affect(new Game());
+				}
+			});
             jLabel15.setText(levels.get(14).titreNiveau);
             
             vGroup3.addComponent(jButton15, 64, 64, 64);

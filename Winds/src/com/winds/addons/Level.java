@@ -1,4 +1,4 @@
-package com.winds.levels;
+package com.winds.addons;
 
 public class Level {
 

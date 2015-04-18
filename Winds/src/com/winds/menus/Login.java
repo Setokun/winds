@@ -8,13 +8,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 import com.winds.display.Window;
 
@@ -23,19 +24,20 @@ public class Login extends JPanel{
 	
     //region : Variables declaration
     private JButton jBtnLogOn, jBtnQuit;
-    private JLabel jLblAuthentification, jLblLogin, jLblPwd;
+    private JLabel title, jLblLogin, jLblPwd;
     private JPasswordField jPwdPassword;
     private JTextField jTxtLogin;
     //endregion
 	
 	
 	public Login() {
+		this.setPreferredSize(new Dimension(800,550));
         initComponents();
     }
                         
     private void initComponents() {
 
-        jLblAuthentification = new JLabel();
+        title = new JLabel();
         jLblLogin = new JLabel();
         jTxtLogin = new JTextField();
         jLblPwd = new JLabel();
@@ -43,9 +45,11 @@ public class Login extends JPanel{
         jBtnQuit = new JButton();
         jBtnLogOn = new JButton();
 
-        jLblAuthentification.setFont(new Font("bubble & soap", 0, 36));
-        jLblAuthentification.setText("authentification");
+        title.setFont(new Font("bubble & soap", 0, 36));
+        title.setText("authentification");
 
+        int titleMargin = 400 - (title.getFontMetrics(title.getFont()).stringWidth(title.getText())/2);
+        
         jTxtLogin.setFont(new Font("Tahoma", 0, 14));
 
         jLblLogin.setFont(new Font("bubble & soap", 0, 24));
@@ -97,51 +101,49 @@ public class Login extends JPanel{
 		});
         
         GroupLayout layout = new GroupLayout(this);
-        this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(177, Short.MAX_VALUE)
-                .addComponent(jBtnQuit, 140, 140, 140)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBtnLogOn, 139, 139, 139)
-                .addGap(178, 178, 178))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(149, 149, 149)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLblAuthentification)
-                        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLblLogin)
-                            .addComponent(jLblPwd))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(jTxtLogin)
-                            .addComponent(jPwdPassword))
-                        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        	layout.createParallelGroup(Alignment.TRAILING)
+        		.addGroup(layout.createSequentialGroup()
+        			.addContainerGap(10, Short.MAX_VALUE)
+        			.addComponent(jBtnQuit, 140, 140, 140)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(jBtnLogOn, 139, 139, 139)
+        			.addGap(250))
+        		.addGroup(layout.createSequentialGroup()
+        			.addGap(149)
+        			.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+        				.addComponent(jLblLogin)
+        				.addComponent(jLblPwd))
+        			.addGap(18)
+        			.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        				.addComponent(jTxtLogin, 251, 251, 251)
+        				.addComponent(jPwdPassword, 251, 251, 251))
+        			.addContainerGap(255, Short.MAX_VALUE))
+        		.addGroup(layout.createSequentialGroup()
+        			.addContainerGap(titleMargin, Short.MAX_VALUE)
+        			.addComponent(title)
+        			.addGap(214))
         );
-        
         layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addComponent(jLblAuthentification)
-                .addGap(76, 76, 76)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTxtLogin, 30, 30, 30)
-                    .addComponent(jLblLogin))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jPwdPassword, 30, 30, 30)
-                    .addComponent(jLblPwd, 32, 32, 32))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBtnQuit, 49, 49, 49)
-                    .addComponent(jBtnLogOn, 49, 49, 49))
-                .addContainerGap(170, Short.MAX_VALUE))
+        	layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(layout.createSequentialGroup()
+        			.addGap(76)
+        			.addComponent(title)
+        			.addGap(77)
+        			.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(jTxtLogin, 30, 30, 30)
+        				.addComponent(jLblLogin))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(jPwdPassword, 30, 30, 30)
+        				.addComponent(jLblPwd, 32, 32, 32))
+        			.addGap(20)
+        			.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(jBtnQuit, 49, 49, 49)
+        				.addComponent(jBtnLogOn, 49, 49, 49))
+        			.addContainerGap(220, Short.MAX_VALUE))
         );
+        this.setLayout(layout);
     }
 
     private void jBtnQuitActionPerformed(java.awt.event.ActionEvent evt) {                                         
@@ -149,7 +151,7 @@ public class Login extends JPanel{
     }                                        
 
     private void jBtnLogOnActionPerformed(java.awt.event.ActionEvent evt) {                                          
-    	Window.resize(new Dimension(640, 500));
+    	Window.resize(new Dimension(800, 550));
 		Window.affect(new MainMenu());
     }                                         
 
