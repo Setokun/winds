@@ -5,10 +5,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import com.winds.audio.AudioPlayer;
+import com.winds.menus.MainMenu;
 
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
@@ -24,10 +27,13 @@ public class Game extends Canvas implements Runnable{
 	//public static int HEIGHT = height/2;
 	public static final int SCALE = 2;
 	public final String TITLE = "Winds";
+	private BufferedImage bg = null, pauseImage;
 	
 	private boolean running = false;
 	private Thread thread;
 	private String bgMusicFilename;
+	AudioPlayer bgMusic;
+	private boolean paused;
 	
 	
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -39,13 +45,37 @@ public class Game extends Canvas implements Runnable{
 	
 	private void init(){
 		this.setPreferredSize(new Dimension(800,600));
+		paused = false;
+		BufferedImageLoader loader = new BufferedImageLoader();
+		bg = loader.loadImage("/background/pirate3.jpg");
+		pauseImage = loader.loadImage("/background/pause.jpg");
 		
 		/////////////// sound initialization
 		bgMusicFilename = "res/Winds_Ice_Cavern.mp3";
-	    AudioPlayer bgMusic = new AudioPlayer(bgMusicFilename, true);
+	    bgMusic = new AudioPlayer(bgMusicFilename, true);
 	    bgMusic.play();
 	    ///////////////
         
+	    this.addKeyListener(new KeyListener() {
+			public void keyTyped(KeyEvent e) {}
+			public void keyReleased(KeyEvent e) {}
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+					thread.stop();
+					bgMusic.close();
+					Window.resize(new Dimension(800, 550));
+					Window.affect(new MainMenu());
+				}
+				if(e.getKeyCode() == KeyEvent.VK_C){
+					if(paused)
+						paused = false;
+					else
+						paused = true;
+					System.out.println(paused);
+				}
+			}
+		});
+	    
 	}
 	
 	public synchronized void start(){
@@ -71,7 +101,6 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	public void run() {
-		init();
 		
 		long lastTime = System.nanoTime();
 		final double amountOfTicks = 60.0;
@@ -101,7 +130,6 @@ public class Game extends Canvas implements Runnable{
 				updates = 0;
 				frames = 0;
 			}
-			
 		}
 		stop();
 	}
@@ -119,9 +147,13 @@ public class Game extends Canvas implements Runnable{
 		}
 		Graphics g = bs.getDrawGraphics();
 		/////////////////////////////////////////
+		if(paused)
+			g.drawImage(pauseImage, 0, 0, this);
+		else
+			g.drawImage(bg, 0, 0, this);
 		
-		image.getGraphics().fillRect(0, 0, 50, 50);
-		g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+		image.getGraphics().fillRect(50, 100, 40, 30);
+		//g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
 		g.setFont(new Font("bubble & soap", 0, 36));
 		g.setColor(Color.WHITE);
 		g.drawString("Winds", 150, 150);
