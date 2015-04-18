@@ -152,9 +152,6 @@ public class Scores extends JPanel {
 				"Trophies", "OK"
 			}
 		) {
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 5700292645347825439L;
 			boolean[] columnEditables = new boolean[] {
 				true, false

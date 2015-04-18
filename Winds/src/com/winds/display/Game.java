@@ -60,13 +60,13 @@ public class Game extends Canvas implements Runnable{
 			public void keyTyped(KeyEvent e) {}
 			public void keyReleased(KeyEvent e) {}
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+				if(e.getKeyCode() == KeyEvent.VK_Q){
 					thread.stop();
 					bgMusic.close();
 					Window.resize(new Dimension(800, 550));
 					Window.affect(new MainMenu());
 				}
-				if(e.getKeyCode() == KeyEvent.VK_C){
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
 					if(paused)
 						paused = false;
 					else
