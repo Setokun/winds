@@ -3,11 +3,16 @@ package com.winds.menus;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -17,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import com.winds.display.Window;
@@ -130,49 +136,49 @@ public class LevelEditorList extends JPanel {
 		table.setFont(new Font("bubble & soap", Font.PLAIN, 16));
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-					{"Level 1", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 2", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 3", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 4", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 5", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 6", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 7", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 8", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 9", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 10", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 11", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 12", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 13", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 14", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 15", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 16", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 17", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 18", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 19", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 20", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
-					{"Level 21", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 1", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 2", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 3", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 4", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 5", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 6", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 7", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 8", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 9", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 10", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 11", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 12", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 13", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 14", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 15", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 16", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 17", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 18", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 19", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 20", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
+					{"Level 21", new ImageIcon("res/Buttons/Btn_edit.png"), new ImageIcon("res/Buttons/Btn_duplicate.png"), new ImageIcon("res/Buttons/Btn_delete.png"), new ImageIcon("res/Buttons/Btn_upload.png")},
 					
 			},
 			new String[] {
-					"LEVEL NAME", "", "", ""
+					"LEVEL NAME", "", "", "", ""
 				}
 			) {
 				private static final long serialVersionUID = 218805739056532012L;
 				@SuppressWarnings("unused")
 				Class[] columnTypes = new Class[] {
-					String.class, ButtonColumn.class, ButtonColumn.class, ButtonColumn.class
+					String.class, ButtonColumn.class, ButtonColumn.class, ButtonColumn.class, ButtonColumn.class
 				};
 			boolean[] columnEditables = new boolean[] {
-				true, false
+				true, false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
 		
-		int colWidth = 120;
+		int colWidth = 98;
 		
-		table.setRowHeight(30);
+		table.setRowHeight(29);
 		table.getColumnModel().getColumn(0).setPreferredWidth(275);
 		
 		table.getColumnModel().getColumn(1).setResizable(false);
@@ -190,11 +196,45 @@ public class LevelEditorList extends JPanel {
 		table.getColumnModel().getColumn(3).setMinWidth(colWidth);
 		table.getColumnModel().getColumn(3).setMaxWidth(colWidth);
 		
+		table.getColumnModel().getColumn(4).setResizable(false);
+		table.getColumnModel().getColumn(4).setPreferredWidth(colWidth);
+		table.getColumnModel().getColumn(4).setMinWidth(colWidth);
+		table.getColumnModel().getColumn(4).setMaxWidth(colWidth);
+		
 		new ButtonColumn(table, null, 1);
 		new ButtonColumn(table, null, 2);
 		new ButtonColumn(table, null, 3);
+		new ButtonColumn(table, null, 4);
 		
-		
+		table.addMouseListener(new MouseAdapter(){
+		    public void mouseClicked(MouseEvent e){
+		        // get the coordinates of the mouse click
+				Point p = e.getPoint();
+			    // get the row index and col index that contains that coordinate
+				int col = table.columnAtPoint(p);
+				int row = table.rowAtPoint(p);
+				if(col == 1){
+					System.out.println("Edition de " + table.getValueAt(row, 0));
+				}
+				if(col == 2){
+					System.out.println("Duplication de " + table.getValueAt(row, 0));
+				}
+				if(col == 3){
+					System.out.println("Suppression de " + table.getValueAt(row, 0));
+				}
+				if(col == 4){
+					if(!table.getValueAt(row, 4).equals("Uploaded")){
+						System.out.println("Upload de " + table.getValueAt(row, 0));
+						table.setValueAt("Uploaded", row, 4);
+					}
+					else{
+						System.out.println("niveau déjà uploadé");
+					}
+					
+				}
+		    }  
+		} );
+
 		scrollPane_1.setViewportView(table);
 		this.setLayout(groupLayout);
 		
@@ -202,7 +242,7 @@ public class LevelEditorList extends JPanel {
 	
 	protected void jBtnNewLevelActionPerformed(ActionEvent evt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Ouverture de la fenêtre de création en mode 'nouveau niveau'");
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
@@ -211,4 +251,10 @@ public class LevelEditorList extends JPanel {
 		
 	}
 
+	protected void ActionOnEdit(ActionListener actionListener) {
+		Window.resize(new Dimension(800, 550));
+		Window.affect(new MainMenu());
+		
+	}
+	
 }

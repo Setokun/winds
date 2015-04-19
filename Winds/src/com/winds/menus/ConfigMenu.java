@@ -2,34 +2,126 @@ package com.winds.menus;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.border.SoftBevelBorder;
+
+import com.winds.display.Window;
 
 public class ConfigMenu extends JPanel{
 	private static final long serialVersionUID = -1171508012901068360L;
 	
+	private JButton jBtnBack, btnSave;
+	private JSlider sliderMusic, sliderSounds, sliderResolution;
+	private JLabel title, lblMusic, lblSounds, lblResolution;
+	
 	public ConfigMenu() {
 		this.setPreferredSize(new Dimension(800, 550));
 		
-		JLabel title = new JLabel("Configuration");
+		title = new JLabel("Configuration");
 		title.setFont(new Font("bubble & soap", 0, 36));
 		
-		int titleMargin = 400 - (title.getFontMetrics(title.getFont()).stringWidth(title.getText())/2);
+		jBtnBack = new JButton();
+		jBtnBack.setIcon(new ImageIcon("res/Buttons/Back.png"));
+		jBtnBack.setBorder(new SoftBevelBorder(0));
+		jBtnBack.setBorderPainted(false);
+		jBtnBack.setContentAreaFilled(false);
+		jBtnBack.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jBtnBackActionPerformed(evt);
+            }
+        });
+		jBtnBack.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				jBtnBack.setIcon(new ImageIcon("res/Buttons/Back.png"));
+			}
+			public void mouseEntered(MouseEvent e) {
+				jBtnBack.setIcon(new ImageIcon("res/Buttons/Back_hover.png"));
+			}
+			public void mouseClicked(MouseEvent e) {}
+		});
 		
-		JButton btnBack = new JButton("Back");
+		btnSave = new JButton();
+		btnSave.setIcon(new ImageIcon("res/Buttons/Save.png"));
+		btnSave.setBorder(new SoftBevelBorder(0));
+		btnSave.setBorderPainted(false);
+		btnSave.setContentAreaFilled(false);
+		btnSave.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jBtnSaveActionPerformed(evt);
+            }
+        });
+		btnSave.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				btnSave.setIcon(new ImageIcon("res/Buttons/Save.png"));
+			}
+			public void mouseEntered(MouseEvent e) {
+				btnSave.setIcon(new ImageIcon("res/Buttons/Save_hover.png"));
+			}
+			public void mouseClicked(MouseEvent e) {}
+		});
+		
+		
+		sliderMusic = new JSlider();
+		sliderMusic.setValue(5);
+		sliderMusic.setMaximum(10);
+		lblMusic = new JLabel("Music volume");
+		lblMusic.setFont(new Font("bubble & soap", Font.PLAIN, 30));
+		
+		sliderSounds = new JSlider();
+		sliderSounds.setValue(5); //TODO à récupérer de la BDD en fonction du profil connecté
+		sliderSounds.setMaximum(10);
+		lblSounds = new JLabel("Sounds volume");
+		lblSounds.setFont(new Font("bubble & soap", Font.PLAIN, 30));
+		
+		sliderResolution = new JSlider();
+		sliderResolution.setValue(1);
+		sliderResolution.setMaximum(2);
+		
+		lblResolution = new JLabel("Resolution");
+		lblResolution.setFont(new Font("bubble & soap", Font.PLAIN, 30));
+		
+		
+		
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(titleMargin)
+					.addContainerGap(259, Short.MAX_VALUE)
 					.addComponent(title)
-					.addGap(192)
-					.addComponent(btnBack)
+					.addGap(110)
+					.addComponent(jBtnBack)
+					.addContainerGap())
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(119)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(lblSounds)
+						.addComponent(lblMusic)
+						.addComponent(lblResolution))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(sliderResolution, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(sliderSounds, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(sliderMusic, GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE))
+					.addContainerGap(139, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(701, Short.MAX_VALUE)
+					.addComponent(btnSave)
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -37,11 +129,39 @@ public class ConfigMenu extends JPanel{
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnBack)
+						.addComponent(jBtnBack)
 						.addComponent(title))
-					.addContainerGap(502, Short.MAX_VALUE))
+					.addGap(80)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblMusic)
+						.addComponent(sliderMusic, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(46)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(sliderSounds, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblSounds))
+					.addGap(52)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblResolution)
+						.addComponent(sliderResolution, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(85)
+					.addComponent(btnSave)
+					.addContainerGap())
 		);
+		
 		setLayout(groupLayout);
 		
+	}
+
+	protected void jBtnSaveActionPerformed(ActionEvent evt) {
+		// TODO Auto-generated method stub
+		System.out.println("MAJ des données dans la BDD pour le profil actuel");
+		System.out.println("Volume musique : " + sliderMusic.getValue());
+		System.out.println("Volume effets sonores : " + sliderSounds.getValue());
+		System.out.println("Résolution : " + sliderResolution.getValue());
+	}
+
+	protected void jBtnBackActionPerformed(ActionEvent evt) {
+		Window.resize(new Dimension(800, 550));
+		Window.affect(new MainMenu());
 	}
 }

@@ -51,8 +51,9 @@ public class ButtonColumn extends AbstractCellEditor
 		this.action = action;
 
 		renderButton = new JButton();
-		renderButton.setIcon(new ImageIcon("res/Buttons/Back.png"));
-		renderButton.setFont(new Font("bubble & soap", 0, 14));
+		renderButton.setBorderPainted(false);
+		renderButton.setContentAreaFilled(false);
+		//renderButton.setFont(new Font("bubble & soap", 0, 14));
 		editButton = new JButton();
 		editButton.setFocusPainted( false );
 		editButton.addActionListener( this );

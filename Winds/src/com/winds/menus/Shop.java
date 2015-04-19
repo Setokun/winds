@@ -3,8 +3,10 @@ package com.winds.menus;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -33,11 +35,11 @@ public class Shop  extends JPanel {
 	private JScrollPane scrollPaneNewThemes, scrollPaneNewLevels, scrollPaneCustomLevels, scrollPaneLevelsToModerate;
 	private JTable tableNewThemes, tableNewLevels, tableCustomLevels, tableLevelsToModerate;
 	private GroupLayout gl;
-	private boolean isAdmin = false;
+	private boolean isAdmin = true;
 	// end declarations
 	
 	public Shop() {
-		setBackground(new Color(200,200,200));
+		//setBackground(new Color(200,200,200));
 		this.setPreferredSize(new Dimension(800,550));
 		
 		title = new JLabel("Shop");
@@ -84,10 +86,10 @@ public class Shop  extends JPanel {
 			.addPreferredGap(ComponentPlacement.RELATED, 213, Short.MAX_VALUE)
 			.addComponent(jBtnBack, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE));
 		hGroup.addGroup(gl.createSequentialGroup()
-			.addGap(124)
-			.addComponent(scrollPaneNewThemes, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
+			.addGap(50)
+			.addComponent(scrollPaneNewThemes, GroupLayout.PREFERRED_SIZE, 335, GroupLayout.PREFERRED_SIZE)
 			.addGap(18)
-			.addComponent(scrollPaneNewLevels, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE));
+			.addComponent(scrollPaneNewLevels, GroupLayout.PREFERRED_SIZE, 335, GroupLayout.PREFERRED_SIZE));
 		if(isAdmin){
 		hGroup.addGroup(gl.createSequentialGroup()
 			.addGap(225)
@@ -128,7 +130,9 @@ public class Shop  extends JPanel {
 				.addGroup(vGroup)
 		);
 		
+		int colWidth = 120;
 		
+		//region New Themes table
 		
 		tableNewThemes = new JTable();
 		tableNewThemes.getTableHeader().setBackground(new Color(23,182,255));
@@ -137,15 +141,14 @@ public class Shop  extends JPanel {
 		tableNewThemes.setRowHeight(20);
 		tableNewThemes.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		tableNewThemes.setBackground(Color.WHITE);
-		//tableNewThemes.setFont(new Font("bubble & soap", Font.PLAIN, 14));
 		tableNewThemes.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"NewTheme_1", "install"},
-				{"NewTheme_2", "install"},
-				{"NewTheme_3", "install"},
-				{"NewTheme_4", "install"},
-				{"NewTheme_5", "install"},
-				{"NewTheme_6", "install"},
+				{"NewTheme_1", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewTheme_2", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewTheme_3", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewTheme_4", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewTheme_5", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewTheme_6", new ImageIcon("res/Buttons/Btn_install.png")},
 			},
 			new String[] {
 				"New Themes", ""
@@ -162,11 +165,32 @@ public class Shop  extends JPanel {
 				return columnEditables[column];
 			}
 		});
+		tableNewThemes.setRowHeight(30);
 		tableNewThemes.getColumnModel().getColumn(0).setPreferredWidth(200);
 		tableNewThemes.getColumnModel().getColumn(0).setResizable(false);
 		tableNewThemes.getColumnModel().getColumn(1).setResizable(false);
-		
+		tableNewThemes.getColumnModel().getColumn(1).setPreferredWidth(colWidth);
+		tableNewThemes.getColumnModel().getColumn(1).setMinWidth(colWidth);
+		tableNewThemes.getColumnModel().getColumn(1).setMaxWidth(colWidth);
+		new ButtonColumn(tableNewThemes, null, 1);
+		tableNewThemes.addMouseListener(new MouseAdapter(){
+		    public void mouseClicked(MouseEvent e){
+		        // get the coordinates of the mouse click
+				Point p = e.getPoint();
+			    // get the row index and col index that contains that coordinate
+				int col = tableNewThemes.columnAtPoint(p);
+				int row = tableNewThemes.rowAtPoint(p);
+				if(col == 1){
+					System.out.println("Installation de " + tableNewThemes.getValueAt(row, 0));
+					((DefaultTableModel)tableNewThemes.getModel()).removeRow(row);
+				}
+		    }  
+		} );
 		scrollPaneNewThemes.setViewportView(tableNewThemes);
+		
+		//endregion New Themes table
+		
+		//region New Levels table
 		
 		tableNewLevels = new JTable();
 		tableNewLevels.getTableHeader().setBackground(new Color(23,182,255));
@@ -175,20 +199,19 @@ public class Shop  extends JPanel {
 		tableNewLevels.setRowHeight(20);
 		tableNewLevels.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		tableNewLevels.setBackground(Color.WHITE);
-		//tableNewLevels.setFont(new Font("bubble & soap", Font.PLAIN, 14));
 		tableNewLevels.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"NewOfficialLevel_1", "install"},
-				{"NewOfficialLevel_2", "install"},
-				{"NewOfficialLevel_3", "install"},
-				{"NewOfficialLevel_4", "install"},
-				{"NewOfficialLevel_5", "install"},
-				{"NewOfficialLevel_6", "install"},
-				{"NewOfficialLevel_7", "install"},
-				{"NewOfficialLevel_8", "install"},
-				{"NewOfficialLevel_9", "install"},
-				{"NewOfficialLevel_10", "install"},
-				{"NewOfficialLevel_11", "install"},
+				{"NewOfficialLevel_1", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_2", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_3", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_4", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_5", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_6", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_7", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_8", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_9", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_10", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_11", new ImageIcon("res/Buttons/Btn_install.png")},
 			},
 			new String[] {
 				"New Levels", ""
@@ -202,11 +225,32 @@ public class Shop  extends JPanel {
 				return columnEditables[column];
 			}
 		});
+		tableNewLevels.setRowHeight(30);
 		tableNewLevels.getColumnModel().getColumn(0).setPreferredWidth(200);
 		tableNewLevels.getColumnModel().getColumn(0).setResizable(false);
 		tableNewLevels.getColumnModel().getColumn(1).setResizable(false);
-		
+		tableNewLevels.getColumnModel().getColumn(1).setPreferredWidth(colWidth);
+		tableNewLevels.getColumnModel().getColumn(1).setMinWidth(colWidth);
+		tableNewLevels.getColumnModel().getColumn(1).setMaxWidth(colWidth);
+		new ButtonColumn(tableNewLevels, null, 1);
+		tableNewLevels.addMouseListener(new MouseAdapter(){
+		    public void mouseClicked(MouseEvent e){
+		        // get the coordinates of the mouse click
+				Point p = e.getPoint();
+			    // get the row index and col index that contains that coordinate
+				int col = tableNewLevels.columnAtPoint(p);
+				int row = tableNewLevels.rowAtPoint(p);
+				if(col == 1){
+					System.out.println("Installation de " + tableNewLevels.getValueAt(row, 0));
+					((DefaultTableModel)tableNewLevels.getModel()).removeRow(row);
+				}
+		    }  
+		} );
 		scrollPaneNewLevels.setViewportView(tableNewLevels);
+		
+		//endregion New Levels table
+		
+		//region Custom Levels table
 		
 		tableCustomLevels = new JTable();
 		tableCustomLevels.getTableHeader().setBackground(new Color(23,182,255));
@@ -215,65 +259,122 @@ public class Shop  extends JPanel {
 		tableCustomLevels.setRowHeight(20);
 		tableCustomLevels.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		tableCustomLevels.setBackground(Color.WHITE);
-		//tableCustomLevels.setFont(new Font("bubble & soap", Font.PLAIN, 14));
 		tableCustomLevels.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Custom Level 1", "", "", ""},
-				{"Custom Level 2", "", "", ""},
-				{"Custom Level 3", "", "", ""},
-				{"Custom Level 4", "", "", ""},
-				{"Custom Level 5", "", "", ""},
-				{"Custom Level 6", "", "", ""},
-				{"Custom Level 7", "", "", ""},
-				{"Custom Level 8", "", "", ""},
-				{"Custom Level 9", "", "", ""},
-				{"Custom Level 10", "", "", ""},
-				{"Custom Level 11", "", "", ""},
+				{"Custom Level 1", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 2", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 3", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 4", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 5", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 6", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 7", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 8", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 9", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 10", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 11", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
 			},
 			new String[] {
-				"Custom level name", "", "", ""
+				"Custom level name", "", "", "", ""
 			}
 		) {
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 5700292645347825439L;
 			boolean[] columnEditables = new boolean[] {
-				true, false
+				false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
-		tableCustomLevels.getColumnModel().getColumn(0).setPreferredWidth(200);
+		tableCustomLevels.setRowHeight(30);
+		
+		//region columnSizes
 		tableCustomLevels.getColumnModel().getColumn(0).setResizable(false);
+		
 		tableCustomLevels.getColumnModel().getColumn(1).setResizable(false);
+		tableCustomLevels.getColumnModel().getColumn(1).setPreferredWidth(colWidth);
+		tableCustomLevels.getColumnModel().getColumn(1).setMinWidth(colWidth);
+		tableCustomLevels.getColumnModel().getColumn(1).setMaxWidth(colWidth);
+		
 		tableCustomLevels.getColumnModel().getColumn(2).setResizable(false);
+		tableCustomLevels.getColumnModel().getColumn(2).setPreferredWidth(colWidth);
+		tableCustomLevels.getColumnModel().getColumn(2).setMinWidth(colWidth);
+		tableCustomLevels.getColumnModel().getColumn(2).setMaxWidth(colWidth);
+		
 		tableCustomLevels.getColumnModel().getColumn(3).setResizable(false);
+		tableCustomLevels.getColumnModel().getColumn(3).setPreferredWidth(colWidth);
+		tableCustomLevels.getColumnModel().getColumn(3).setMinWidth(colWidth);
+		tableCustomLevels.getColumnModel().getColumn(3).setMaxWidth(colWidth);
+		
+		tableCustomLevels.getColumnModel().getColumn(4).setPreferredWidth(0);
+		tableCustomLevels.getColumnModel().getColumn(4).setMinWidth(0);
+		tableCustomLevels.getColumnModel().getColumn(4).setMaxWidth(0);
+		//endregion columnSizes
+		
+		new ButtonColumn(tableCustomLevels, null, 1);
+		new ButtonColumn(tableCustomLevels, null, 2);
+		new ButtonColumn(tableCustomLevels, null, 3);
+		tableCustomLevels.addMouseListener(new MouseAdapter(){
+		    public void mouseClicked(MouseEvent e){
+		        // get the coordinates of the mouse click
+				Point p = e.getPoint();
+			    // get the row index and col index that contains that coordinate
+				int col = tableCustomLevels.columnAtPoint(p);
+				int row = tableCustomLevels.rowAtPoint(p);
+				if(col == 1){
+					if(tableCustomLevels.getValueAt(row, col) != null){
+						System.out.println("Installation de " + tableCustomLevels.getValueAt(row, 0));
+						tableCustomLevels.setValueAt(null, row, col);
+						tableCustomLevels.setValueAt(new ImageIcon("res/Buttons/Btn_activate.png"), row, 2);
+						tableCustomLevels.setValueAt(new ImageIcon("res/Buttons/Btn_uninstall.png") , row, 3);
+					}
+				}
+				if(col == 2){
+					if((Boolean)tableCustomLevels.getValueAt(row, 4)){
+						System.out.println("activation de " + tableCustomLevels.getValueAt(row, 0));
+						tableCustomLevels.setValueAt(new ImageIcon("res/Buttons/Btn_desactivate.png") , row, col);
+						tableCustomLevels.setValueAt(false, row, 4);
+					}
+					else{
+						System.out.println("désactivation de " + tableCustomLevels.getValueAt(row, 0));
+						tableCustomLevels.setValueAt(new ImageIcon("res/Buttons/Btn_activate.png") , row, col);
+						tableCustomLevels.setValueAt(true, row, 4);
+					}
+				}
+				if(col == 3){
+					System.out.println("Désinstallation de " + tableCustomLevels.getValueAt(row, 0));
+					tableCustomLevels.setValueAt(null, row, 2);
+					tableCustomLevels.setValueAt(null, row, col);
+					tableCustomLevels.setValueAt(new ImageIcon("res/Buttons/Btn_install.png") , row, 1);
+				}
+		    }  
+		} );
 		
 		scrollPaneCustomLevels.setViewportView(tableCustomLevels);
+		
+		//endregion Custom Levels table
+		
+		//region Levels to moderate table
 		
 		tableLevelsToModerate = new JTable();
 		tableLevelsToModerate.getTableHeader().setBackground(new Color(23,182,255));
 		tableLevelsToModerate.getTableHeader().setFont(new Font("bubble & soap", 0, 20));
 		tableLevelsToModerate.getTableHeader().setForeground(Color.WHITE);
-		tableLevelsToModerate.setRowHeight(20);
+		//tableLevelsToModerate.setRowHeight(20);
 		tableLevelsToModerate.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		tableLevelsToModerate.setBackground(Color.WHITE);
-		//tableLevelsToModerate.setFont(new Font("bubble & soap", Font.PLAIN, 14));
 		tableLevelsToModerate.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Level_to_moderate_1", null},
-				{"Level_to_moderate_2", null},
-				{"Level_to_moderate_3", null},
-				{"Level_to_moderate_4", null},
-				{"Level_to_moderate_5", null},
-				{"Level_to_moderate_6", null},
-				{"Level_to_moderate_7", null},
-				{"Level_to_moderate_8", null},
-				{"Level_to_moderate_9", null},
-				{"Level_to_moderate_10", null},
-				{"Level_to_moderate_11", null},
+				{"Level_to_moderate_1", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"Level_to_moderate_2", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"Level_to_moderate_3", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"Level_to_moderate_4", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"Level_to_moderate_5", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"Level_to_moderate_6", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"Level_to_moderate_7", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"Level_to_moderate_8", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"Level_to_moderate_9", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"Level_to_moderate_10", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"Level_to_moderate_11", new ImageIcon("res/Buttons/Btn_install.png")},
 			},
 			new String[] {
 				"Levels to moderate", ""
@@ -281,17 +382,36 @@ public class Shop  extends JPanel {
 		) {
 			private static final long serialVersionUID = 5700292645347825439L;
 			boolean[] columnEditables = new boolean[] {
-				true, false
+				false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
+		tableLevelsToModerate.setRowHeight(30);
 		tableLevelsToModerate.getColumnModel().getColumn(0).setPreferredWidth(200);
 		tableLevelsToModerate.getColumnModel().getColumn(0).setResizable(false);
 		tableLevelsToModerate.getColumnModel().getColumn(1).setResizable(false);
-		
+		tableLevelsToModerate.getColumnModel().getColumn(1).setPreferredWidth(colWidth);
+		tableLevelsToModerate.getColumnModel().getColumn(1).setMinWidth(colWidth);
+		tableLevelsToModerate.getColumnModel().getColumn(1).setMaxWidth(colWidth);
+		new ButtonColumn(tableLevelsToModerate, null, 1);
+		tableLevelsToModerate.addMouseListener(new MouseAdapter(){
+		    public void mouseClicked(MouseEvent e){
+		        // get the coordinates of the mouse click
+				Point p = e.getPoint();
+			    // get the row index and col index that contains that coordinate
+				int col = tableLevelsToModerate.columnAtPoint(p);
+				int row = tableLevelsToModerate.rowAtPoint(p);
+				if(col == 1){
+					System.out.println("Installation de " + tableLevelsToModerate.getValueAt(row, 0));
+					((DefaultTableModel)tableLevelsToModerate.getModel()).removeRow(row);
+				}
+		    }  
+		} );
 		scrollPaneLevelsToModerate.setViewportView(tableLevelsToModerate);
+		
+		//endregion Levels to moderate table
 		
 		setLayout(gl);
 		
@@ -301,5 +421,6 @@ public class Shop  extends JPanel {
 		Window.resize(new Dimension(800, 550));
 		Window.affect(new MainMenu());
 	}
+	
 
 }

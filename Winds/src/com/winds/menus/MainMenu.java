@@ -149,7 +149,8 @@ public class MainMenu extends JPanel{
     }  
     
     private void jBtnConfigurationActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-    	// TODO add your handling code here:
+    	Window.resize(new Dimension(800, 550));
+		Window.affect(new ConfigMenu());
     }                                                 
     
     private void jBtnShopActionPerformed(java.awt.event.ActionEvent evt) {                                         
