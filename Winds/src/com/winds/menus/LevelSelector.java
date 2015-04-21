@@ -62,8 +62,6 @@ public class LevelSelector extends JPanel{
 			levels[i] = bl;
 		}
 		
-		levelsToDisplay.removeAll(levelsToDisplay);
-		
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
 			levelsToDisplay.add(levels[i]);
 		}

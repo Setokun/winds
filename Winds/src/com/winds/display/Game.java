@@ -20,14 +20,13 @@ public class Game extends Canvas implements Runnable{
 	/*static Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 	static int height = (int)dimension.getHeight();
 	static int width  = (int)dimension.getWidth();*/
+	//public static int WIDTH = width/2, int HEIGHT = height/2;
 	
 	public static int WIDTH = 400;
 	public static int HEIGHT = WIDTH / 4 * 3;
-	//public static int WIDTH = width/2;
-	//public static int HEIGHT = height/2;
 	public static final int SCALE = 2;
 	public final String TITLE = "Winds";
-	private BufferedImage bg = null, pauseImage;
+	private BufferedImage bg = null, pauseImage = null;
 	
 	private boolean running = false;
 	private Thread thread;
@@ -59,6 +58,7 @@ public class Game extends Canvas implements Runnable{
 	    this.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {}
 			public void keyReleased(KeyEvent e) {}
+			@SuppressWarnings("deprecation")
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_Q){
 					thread.stop();
