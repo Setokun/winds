@@ -170,9 +170,15 @@ public class Game extends Canvas implements Runnable{
 		
 		
 		/////////////////////////////////////////
-		if(pause)
+		if(pause){
+			g.setColor(Color.red);
 			g.drawImage(pauseImage, 0, 0, this.getWidth(), this.getHeight(), this);
-		else{
+			if(Window.debug){
+				g.drawRect(297, 185, 180, 40);
+				g.drawRect(217,265,330,40);
+				g.drawRect(260,348,250,40);
+			}
+		}else{
 			/*g.drawImage(bg, 0, 0, this);
 			// affichage du temps écoulé
 			//g.setColor(Color.red);
@@ -202,7 +208,9 @@ public class Game extends Canvas implements Runnable{
 		//image.getGraphics().fillRect(50, 100, 40, 30);
 		//g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
 
-		//g.drawString(lvl.titreNiveau, 150, 50);
+		g.setFont(new Font("bubble & soap", 0, 24));
+		g.drawRect(150, 10, 200, 25);
+		g.drawString(lvl.titreNiveau, 150, 30);
 		
 		/////////////////////////////////////////
 		

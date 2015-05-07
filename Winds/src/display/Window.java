@@ -9,6 +9,7 @@ import menus.MainMenu;
 
 public	 class Window {
 
+	public static final boolean debug = true;
 	private static JFrame main;
 	
 	public static void affect(Component c){

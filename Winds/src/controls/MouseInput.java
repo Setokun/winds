@@ -30,13 +30,13 @@ public class MouseInput extends MouseAdapter{
 		if(Game.getPause()){
 			if(key == InputEvent.BUTTON1_MASK){
 				//System.out.println(mouseX + " " + mouseY);
-				if(mouseX >= 300 && mouseX <= 480 && mouseY >= 195 && mouseY <= 235){
+				if(mouseX >= 297 && mouseX <= 477 && mouseY >= 185 && mouseY <= 225){
 					Game.setPause();
 				}
-				if(mouseX >= 220 && mouseX <= 550 && mouseY >= 280 && mouseY <= 320){
+				if(mouseX >= 217 && mouseX <= 547 && mouseY >= 265 && mouseY <= 305){
 					Game.reafficherMenu();
 				}
-				if(mouseX >= 265 && mouseX <= 515 && mouseY >= 365 && mouseY <= 405){
+				if(mouseX >= 260 && mouseX <= 510 && mouseY >= 348 && mouseY <= 388){
 					System.exit(0);
 				}
 			}

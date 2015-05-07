@@ -2,12 +2,14 @@ package core;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import display.Animation;
 import display.Game;
 import display.Handler;
+import display.Window;
 
 public class Player extends GameObject{
 
@@ -152,12 +154,14 @@ public class Player extends GameObject{
 		
 		//g.fillRect((int)x, (int)y, (int)width, (int)height);
 		
-		/*Graphics2D g2d = (Graphics2D) g;
-		g.setColor(Color.red);
-		g2d.draw(getBounds());
-		g2d.draw(getBoundsRight());
-		g2d.draw(getBoundsLeft());
-		g2d.draw(getBoundsTop());*/
+		if(Window.debug){
+			Graphics2D g2d = (Graphics2D) g;
+			g.setColor(Color.red);
+			g2d.draw(getBounds());
+			g2d.draw(getBoundsRight());
+			g2d.draw(getBoundsLeft());
+			g2d.draw(getBoundsTop());
+		}
 	}
 
 	public Rectangle getBounds() {
