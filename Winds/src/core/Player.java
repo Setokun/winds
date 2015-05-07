@@ -142,7 +142,6 @@ public class Player extends GameObject{
 				}
 			}
 		}
-		
 	}
 
 	public void render(Graphics g) {
@@ -165,16 +164,16 @@ public class Player extends GameObject{
 	}
 
 	public Rectangle getBounds() {
-		return new Rectangle((int) ((int)x+(width/2)-((width/2)/2)), (int) ((int)y+height/2), (int)width/2, (int)height/2);
+		return new Rectangle((int) ((int)x+1), (int) ((int)y+height/2), (int)width-2, (int)height/2);
 	}
 	public Rectangle getBoundsTop() {
-		return new Rectangle((int) ((int)x+(width/2)-((width/2)/2)), (int)y, (int)width/2, (int)height/2);
+		return new Rectangle((int) ((int)x+1), (int)y, (int)width-2, (int)height/2);
 	}
 	public Rectangle getBoundsRight() {
-		return new Rectangle((int) ((int)x+width-5), (int)y+5, (int)5, (int)height-10);
+		return new Rectangle((int) ((int)x+width-1), (int)y+5, (int)1, (int)height-10);
 	}
 	public Rectangle getBoundsLeft() {
-		return new Rectangle((int)x, (int)y+5, (int)5, (int)height-10);
+		return new Rectangle((int)x, (int)y+5, (int)1, (int)height-10);
 	}
 	
 
