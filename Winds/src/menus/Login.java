@@ -59,7 +59,7 @@ public class Login extends JPanel{
         jLblPwd.setText("password");
 
         jBtnQuit.setFont(new Font("bubble & soap", 0, 18));
-        jBtnQuit.setIcon(new ImageIcon("res/Buttons/Quit.png"));
+        jBtnQuit.setIcon(new ImageIcon("resources/Buttons/Quit.png"));
         jBtnQuit.setBorderPainted(false);
         jBtnQuit.setContentAreaFilled(false);
         jBtnQuit.addActionListener(new ActionListener() {
@@ -71,16 +71,16 @@ public class Login extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnQuit.setIcon(new ImageIcon("res/Buttons/Quit.png"));
+				jBtnQuit.setIcon(new ImageIcon("resources/Buttons/Quit.png"));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnQuit.setIcon(new ImageIcon("res/Buttons/Quit_hover.png"));
+				jBtnQuit.setIcon(new ImageIcon("resources/Buttons/Quit_hover.png"));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
         
         jBtnLogOn.setFont(new Font("bubble & soap", 0, 18));
-        jBtnLogOn.setIcon(new ImageIcon("res/Buttons/Logon.png"));
+        jBtnLogOn.setIcon(new ImageIcon("resources/Buttons/Logon.png"));
         jBtnLogOn.setBorderPainted(false);
         jBtnLogOn.setContentAreaFilled(false);
         jBtnLogOn.addActionListener(new ActionListener() {
@@ -92,10 +92,10 @@ public class Login extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnLogOn.setIcon(new ImageIcon("res/Buttons/Logon.png"));
+				jBtnLogOn.setIcon(new ImageIcon("resources/Buttons/Logon.png"));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnLogOn.setIcon(new ImageIcon("res/Buttons/Logon_hover.png"));
+				jBtnLogOn.setIcon(new ImageIcon("resources/Buttons/Logon_hover.png"));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});

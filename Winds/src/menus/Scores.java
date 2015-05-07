@@ -42,7 +42,7 @@ public class Scores extends JPanel {
 		int titleMargin = 400 - (title.getFontMetrics(title.getFont()).stringWidth(title.getText())/2);
 		
 		jBtnBack = new JButton();
-		jBtnBack.setIcon(new javax.swing.ImageIcon("res/Buttons/Back.png"));
+		jBtnBack.setIcon(new javax.swing.ImageIcon("resources/Buttons/Back.png"));
 
 		jBtnBack.setBorder(new javax.swing.border.SoftBevelBorder(0));
 		jBtnBack.setBorderPainted(false);
@@ -56,10 +56,10 @@ public class Scores extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("res/Buttons/Back.png"));
+				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("res/Buttons/Back_hover.png"));
+				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});

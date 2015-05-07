@@ -69,11 +69,11 @@ public class Game extends Canvas implements Runnable{
 		
 		cam = new Camera(0, 0);
 		
-		/////////////// sound initialization
-		bgMusicFilename = "res/Winds_Ice_Cavern.mp3";
+		/////////////// sound initialization ///////////////
+		bgMusicFilename = "resources/Winds_Ice_Cavern.mp3";
 	    bgMusic = new AudioPlayer(bgMusicFilename, true);
 	    bgMusic.play();
-	    ///////////////
+	    ////////////////////////////////////////////////////
 	    LoadImageLevel(level);
 	    this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput(handler));

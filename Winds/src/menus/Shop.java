@@ -47,7 +47,7 @@ public class Shop  extends JPanel {
 		
 		
 		jBtnBack = new JButton();
-		jBtnBack.setIcon(new ImageIcon("res/Buttons/Back.png"));
+		jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
 
 		jBtnBack.setBorder(new SoftBevelBorder(0));
 		jBtnBack.setBorderPainted(false);
@@ -61,10 +61,10 @@ public class Shop  extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("res/Buttons/Back.png"));
+				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("res/Buttons/Back_hover.png"));
+				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
@@ -143,12 +143,12 @@ public class Shop  extends JPanel {
 		tableNewThemes.setBackground(Color.WHITE);
 		tableNewThemes.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"NewTheme_1", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewTheme_2", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewTheme_3", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewTheme_4", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewTheme_5", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewTheme_6", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewTheme_1", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewTheme_2", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewTheme_3", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewTheme_4", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewTheme_5", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewTheme_6", new ImageIcon("resources/Buttons/Btn_install.png")},
 			},
 			new String[] {
 				"New Themes", ""
@@ -201,17 +201,17 @@ public class Shop  extends JPanel {
 		tableNewLevels.setBackground(Color.WHITE);
 		tableNewLevels.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"NewOfficialLevel_1", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_2", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_3", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_4", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_5", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_6", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_7", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_8", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_9", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_10", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_11", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_1", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_2", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_3", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_4", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_5", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_6", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_7", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_8", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_9", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_10", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"NewOfficialLevel_11", new ImageIcon("resources/Buttons/Btn_install.png")},
 			},
 			new String[] {
 				"New Levels", ""
@@ -261,17 +261,17 @@ public class Shop  extends JPanel {
 		tableCustomLevels.setBackground(Color.WHITE);
 		tableCustomLevels.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Custom Level 1", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 2", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 3", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 4", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 5", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 6", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 7", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 8", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 9", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 10", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 11", new ImageIcon("res/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 1", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 2", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 3", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 4", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 5", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 6", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 7", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 8", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 9", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 10", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
+				{"Custom Level 11", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
 			},
 			new String[] {
 				"Custom level name", "", "", "", ""
@@ -324,19 +324,19 @@ public class Shop  extends JPanel {
 					if(tableCustomLevels.getValueAt(row, col) != null){
 						System.out.println("Installation de " + tableCustomLevels.getValueAt(row, 0));
 						tableCustomLevels.setValueAt(null, row, col);
-						tableCustomLevels.setValueAt(new ImageIcon("res/Buttons/Btn_activate.png"), row, 2);
-						tableCustomLevels.setValueAt(new ImageIcon("res/Buttons/Btn_uninstall.png") , row, 3);
+						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png"), row, 2);
+						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_uninstall.png") , row, 3);
 					}
 				}
 				if(col == 2){
 					if((Boolean)tableCustomLevels.getValueAt(row, 4)){
 						System.out.println("activation de " + tableCustomLevels.getValueAt(row, 0));
-						tableCustomLevels.setValueAt(new ImageIcon("res/Buttons/Btn_desactivate.png") , row, col);
+						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_desactivate.png") , row, col);
 						tableCustomLevels.setValueAt(false, row, 4);
 					}
 					else{
 						System.out.println("désactivation de " + tableCustomLevels.getValueAt(row, 0));
-						tableCustomLevels.setValueAt(new ImageIcon("res/Buttons/Btn_activate.png") , row, col);
+						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png") , row, col);
 						tableCustomLevels.setValueAt(true, row, 4);
 					}
 				}
@@ -344,7 +344,7 @@ public class Shop  extends JPanel {
 					System.out.println("Désinstallation de " + tableCustomLevels.getValueAt(row, 0));
 					tableCustomLevels.setValueAt(null, row, 2);
 					tableCustomLevels.setValueAt(null, row, col);
-					tableCustomLevels.setValueAt(new ImageIcon("res/Buttons/Btn_install.png") , row, 1);
+					tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_install.png") , row, 1);
 				}
 		    }  
 		} );
@@ -364,17 +364,17 @@ public class Shop  extends JPanel {
 		tableLevelsToModerate.setBackground(Color.WHITE);
 		tableLevelsToModerate.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Level_to_moderate_1", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"Level_to_moderate_2", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"Level_to_moderate_3", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"Level_to_moderate_4", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"Level_to_moderate_5", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"Level_to_moderate_6", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"Level_to_moderate_7", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"Level_to_moderate_8", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"Level_to_moderate_9", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"Level_to_moderate_10", new ImageIcon("res/Buttons/Btn_install.png")},
-				{"Level_to_moderate_11", new ImageIcon("res/Buttons/Btn_install.png")},
+				{"Level_to_moderate_1", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"Level_to_moderate_2", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"Level_to_moderate_3", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"Level_to_moderate_4", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"Level_to_moderate_5", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"Level_to_moderate_6", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"Level_to_moderate_7", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"Level_to_moderate_8", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"Level_to_moderate_9", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"Level_to_moderate_10", new ImageIcon("resources/Buttons/Btn_install.png")},
+				{"Level_to_moderate_11", new ImageIcon("resources/Buttons/Btn_install.png")},
 			},
 			new String[] {
 				"Levels to moderate", ""
