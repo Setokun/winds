@@ -141,11 +141,13 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	private void tick(){
-		handler.tick();
-		
-		for(int i = 0; i < handler.objects.size(); i++){
-			if(handler.objects.get(i).getId() == ObjectId.Player){
-				cam.tick(handler.objects.get(i));
+		if(!getPause()){
+			handler.tick();
+			
+			for(int i = 0; i < handler.objects.size(); i++){
+				if(handler.objects.get(i).getId() == ObjectId.Player){
+					cam.tick(handler.objects.get(i));
+				}
 			}
 		}
 	}
