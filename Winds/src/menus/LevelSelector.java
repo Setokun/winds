@@ -20,7 +20,6 @@ import javax.swing.LayoutStyle;
 import javax.swing.border.SoftBevelBorder;
 
 import addons.Level;
-import display.Game;
 import display.Window;
 
 public class LevelSelector extends JPanel{
@@ -28,8 +27,8 @@ public class LevelSelector extends JPanel{
 	
     //region Variables declaration
     private JButton jBtnNext, jBtnPrevious, jBtnBack;
-    private JButton jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8;
-    private JButton jButton9, jButton10, jButton11, jButton12, jButton13, jButton14, jButton15;
+    private LevelButton jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8;
+    private LevelButton jButton9, jButton10, jButton11, jButton12, jButton13, jButton14, jButton15;
     
     private JLabel jLblTitle, jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7;
     private JLabel jLabel8, jLabel9, jLabel10, jLabel11, jLabel12, jLabel13, jLabel14, jLabel15, jLblNumPage;
@@ -79,21 +78,21 @@ public class LevelSelector extends JPanel{
         jBtnBack = new JButton();
         jLblTitle = new JLabel();
         
-        jButton1 = new JButton();
-        jButton2 = new JButton();
-        jButton3 = new JButton();
-        jButton4 = new JButton();
-        jButton5 = new JButton();
-        jButton6 = new JButton();
-        jButton7 = new JButton();
-        jButton8 = new JButton();
-        jButton9 = new JButton();
-        jButton10 = new JButton();
-        jButton11 = new JButton();
-        jButton12 = new JButton();
-        jButton13 = new JButton();
-        jButton14 = new JButton();
-        jButton15 = new JButton();
+        jButton1 = new LevelButton();
+        jButton2 = new LevelButton();
+        jButton3 = new LevelButton();
+        jButton4 = new LevelButton();
+        jButton5 = new LevelButton();
+        jButton6 = new LevelButton();
+        jButton7 = new LevelButton();
+        jButton8 = new LevelButton();
+        jButton9 = new LevelButton();
+        jButton10 = new LevelButton();
+        jButton11 = new LevelButton();
+        jButton12 = new LevelButton();
+        jButton13 = new LevelButton();
+        jButton14 = new LevelButton();
+        jButton15 = new LevelButton();
         
         
         jBtnNext = new JButton();
@@ -126,7 +125,7 @@ public class LevelSelector extends JPanel{
         
         Group vGroupTitle = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
         Group vGroup1 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
-        Group vGroup1labels = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
+        Group vGroup1Labels = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
         Group vGroup2 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
         Group vGroup2Labels = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
         Group vGroup3 = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
@@ -175,147 +174,21 @@ public class LevelSelector extends JPanel{
         
         //region : elements preparation
         switch(nbLvlsToDisplay){
-        case 15:
-        	jButton15.setIcon(new javax.swing.ImageIcon(levels.get(14).adresseImage));
-            jButton15.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton15.setBorderPainted(false);
-            jButton15.setContentAreaFilled(false);
-            jButton15.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					Window.resize(new Dimension(800, 600));
-					Window.affect(new Game());
-				}
-			});
-            jLabel15.setText(levels.get(14).titreNiveau);
-            
-            vGroup3.addComponent(jButton15, 64, 64, 64);
-        	vGroup3Labels.addComponent(jLabel15);
-        case 14:
-            jButton14.setIcon(new javax.swing.ImageIcon(levels.get(13).adresseImage));
-            jButton14.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton14.setBorderPainted(false);
-            jButton14.setContentAreaFilled(false);
-            jLabel14.setText(levels.get(13).titreNiveau);
-            
-            vGroup3.addComponent(jButton14, 64, 64, 64);
-    	    vGroup3Labels.addComponent(jLabel14);
-        case 13:
-        	jButton13.setIcon(new javax.swing.ImageIcon(levels.get(12).adresseImage));
-            jButton13.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton13.setBorderPainted(false);
-            jButton13.setContentAreaFilled(false);
-            jLabel13.setText(levels.get(12).titreNiveau);
-            
-            vGroup3.addComponent(jButton13, 64, 64, 64);
-        	vGroup3Labels.addComponent(jLabel13);
-        case 12:
-        	jButton12.setIcon(new javax.swing.ImageIcon(levels.get(11).adresseImage));
-            jButton12.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton12.setBorderPainted(false);
-            jButton12.setContentAreaFilled(false);
-            jLabel12.setText(levels.get(11).titreNiveau);
-            
-            vGroup3.addComponent(jButton12, 64, 64, 64);
-        	vGroup3Labels.addComponent(jLabel12);
-        case 11:
-        	jButton11.setIcon(new javax.swing.ImageIcon(levels.get(10).adresseImage));
-            jButton11.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton11.setBorderPainted(false);
-            jButton11.setContentAreaFilled(false);
-            jLabel11.setText(levels.get(10).titreNiveau);
-            
-            vGroup3.addComponent(jButton11, 64, 64, 64);
-        	vGroup3Labels.addComponent(jLabel11);
-        case 10:
-        	jButton10.setIcon(new javax.swing.ImageIcon(levels.get(9).adresseImage));
-            jButton10.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton10.setBorderPainted(false);
-            jButton10.setContentAreaFilled(false);
-            jLabel10.setText(levels.get(9).titreNiveau);
-            
-            vGroup2Labels.addComponent(jLabel10);
-        	vGroup2.addComponent(jButton10, 64, 64, 64);
-        case 9:
-        	jButton9.setIcon(new javax.swing.ImageIcon(levels.get(8).adresseImage));
-            jButton9.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton9.setBorderPainted(false);
-            jButton9.setContentAreaFilled(false);
-            jLabel9.setText(levels.get(8).titreNiveau);
-            
-            vGroup2.addComponent(jButton9, 64, 64, 64);
-        	vGroup2Labels.addComponent(jLabel9);
-        case 8:
-        	jButton8.setIcon(new javax.swing.ImageIcon(levels.get(7).adresseImage));
-            jButton8.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton8.setBorderPainted(false);
-            jButton8.setContentAreaFilled(false);
-            jLabel8.setText(levels.get(7).titreNiveau);
-            
-            vGroup2.addComponent(jButton8, 64, 64, 64);
-        	vGroup2Labels.addComponent(jLabel8);
-        case 7:
-        	jButton7.setIcon(new javax.swing.ImageIcon(levels.get(6).adresseImage));
-            jButton7.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton7.setBorderPainted(false);
-            jButton7.setContentAreaFilled(false);
-            jLabel7.setText(levels.get(6).titreNiveau);
-            
-            vGroup2.addComponent(jButton7, 64, 64, 64);
-        	vGroup2Labels.addComponent(jLabel7);
-        case 6:
-        	jButton6.setIcon(new javax.swing.ImageIcon(levels.get(5).adresseImage));
-            jButton6.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton6.setBorderPainted(false);
-            jButton6.setContentAreaFilled(false);
-            jLabel6.setText(levels.get(5).titreNiveau);
-            
-            vGroup2.addComponent(jButton6, 64, 64, 64);
-        	vGroup2Labels.addComponent(jLabel6);
-        case 5:
-        	jButton5.setIcon(new javax.swing.ImageIcon(levels.get(4).adresseImage));
-            jButton5.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton5.setBorderPainted(false);
-            jButton5.setContentAreaFilled(false);
-            jLabel5.setText(levels.get(4).titreNiveau);
-            
-            vGroup1.addComponent(jButton5, 64, 64, 64);
-        	vGroup1labels.addComponent(jLabel5);
-        case 4:
-        	jButton4.setIcon(new javax.swing.ImageIcon(levels.get(3).adresseImage));
-            jButton4.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton4.setBorderPainted(false);
-            jButton4.setContentAreaFilled(false);
-            jLabel4.setText(levels.get(3).titreNiveau);
-            
-            vGroup1.addComponent(jButton4, 64, 64, 64);
-        	vGroup1labels.addComponent(jLabel4);
-        case 3:
-        	jButton3.setIcon(new javax.swing.ImageIcon(levels.get(2).adresseImage));
-            jButton3.setBorder(new javax.swing.border.SoftBevelBorder(0));
-            jButton3.setBorderPainted(false);
-            jButton3.setContentAreaFilled(false);
-            jLabel3.setText(levels.get(2).titreNiveau);
-            
-            vGroup1.addComponent(jButton3, 64, 64, 64);
-        	vGroup1labels.addComponent(jLabel3);
-        case 2:
-        	jButton2.setIcon(new javax.swing.ImageIcon(levels.get(1).adresseImage));
-	        jButton2.setBorder(new javax.swing.border.SoftBevelBorder(0));
-	        jButton2.setBorderPainted(false);
-	        jButton2.setContentAreaFilled(false);
-	        jLabel2.setText(levels.get(1).titreNiveau);
-	        
-	        vGroup1.addComponent(jButton2, 64, 64, 64);
-        	vGroup1labels.addComponent(jLabel2);
-        case 1:
-        	jButton1.setIcon(new javax.swing.ImageIcon(levels.get(0).adresseImage));
-	        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(0));
-	        jButton1.setBorderPainted(false);
-	        jButton1.setContentAreaFilled(false);
-	        jLabel1.setText(levels.get(0).titreNiveau);
-	        
-	        vGroup1.addComponent(jButton1, 64, 64, 64);
-        	vGroup1labels.addComponent(jLabel1);
+        case 15: jButton15.affect(levels.get(14), vGroup3, vGroup3Labels, jLabel15);
+        case 14: jButton14.affect(levels.get(13), vGroup3, vGroup3Labels, jLabel14);
+        case 13: jButton13.affect(levels.get(12), vGroup3, vGroup3Labels, jLabel13);
+        case 12: jButton12.affect(levels.get(11), vGroup3, vGroup3Labels, jLabel12);
+        case 11: jButton11.affect(levels.get(10), vGroup3, vGroup3Labels, jLabel11);
+        case 10: jButton10.affect(levels.get(9), vGroup2, vGroup2Labels, jLabel10);
+        case 9: jButton9.affect(levels.get(8), vGroup2, vGroup2Labels, jLabel9);
+        case 8: jButton8.affect(levels.get(7), vGroup2, vGroup2Labels, jLabel8);
+        case 7: jButton7.affect(levels.get(6), vGroup2, vGroup2Labels, jLabel7);
+        case 6: jButton6.affect(levels.get(5), vGroup2, vGroup2Labels, jLabel6);
+        case 5: jButton5.affect(levels.get(4), vGroup1, vGroup1Labels, jLabel5);
+        case 4: jButton4.affect(levels.get(3), vGroup1, vGroup1Labels, jLabel4);
+        case 3: jButton3.affect(levels.get(2), vGroup1, vGroup1Labels, jLabel3);
+        case 2: jButton2.affect(levels.get(1), vGroup1, vGroup1Labels, jLabel2);
+        case 1: jButton1.affect(levels.get(0), vGroup1, vGroup1Labels, jLabel1);
         }
         //endregion
         
@@ -571,7 +444,7 @@ public class LevelSelector extends JPanel{
                 .addGap(50, 50, 50)
                 .addGroup(vGroup1)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(vGroup1labels)
+                .addGroup(vGroup1Labels)
                 .addGap(18, 18, 18)
                 .addGroup(vGroup2)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)

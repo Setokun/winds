@@ -10,6 +10,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import menus.LevelCategorySelector;
+import addons.Level;
 import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
@@ -23,14 +24,11 @@ import core.TransparentBlock;
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
 	
-	// permet d'avoir la taille de l'écran de l'hôte
-	/*static Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-	static int height = (int)dimension.getHeight();
-	static int width  = (int)dimension.getWidth();*/
-	//public static int WIDTH = width/2, int HEIGHT = height/2;
-	
 	public static int WIDTH = 800, HEIGHT = 600;
+	public static Camera cam;
 	public final String TITLE = "Winds";
+	private Level lvl;
+	
 	private BufferedImage bg = null, pauseImage = null, level = null;
 	
 	private static boolean pause = false, running = false;
@@ -40,13 +38,15 @@ public class Game extends Canvas implements Runnable{
 	static AudioPlayer bgMusic;
 	private Handler handler;
 	static Texture tex;
-	public static Camera cam;
+	
 	
 	private int seconds;
 	
 	//private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	
-	public Game(){
+	public Game(Level lvl){
+		this.lvl = lvl;
+		System.out.println(lvl);
 		start();
 	}
 	
@@ -200,7 +200,7 @@ public class Game extends Canvas implements Runnable{
 		//image.getGraphics().fillRect(50, 100, 40, 30);
 		//g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
 
-		//g.drawString("Winds", 150, 150);
+		//g.drawString(lvl.titreNiveau, 150, 50);
 		
 		/////////////////////////////////////////
 		
