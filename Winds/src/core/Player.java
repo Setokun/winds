@@ -2,25 +2,24 @@ package core;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import display.Animation;
 import display.Game;
 import display.Handler;
+import display.Window;
 
 public class Player extends GameObject{
 
 	private float width = 64, height = 64;
 	
 	public static float gravity = 0.03f;
-	
-	public void resetGravity(){
-		gravity = 0;
-	}
-	
-	
-	private final float MAX_SPEED = 4;
+
+	private final float MAX_SPEED = 3;
+	private final float MAX_SPEED_X = 4;
+	private int timeElapsed = 0;
 	
 	private Handler handler;
 	
@@ -34,20 +33,34 @@ public class Player extends GameObject{
 		
 		playerWalk = new Animation(4, tex.bulle[0]);
 	}
-
+	
+	public void unsetGravity(){
+		gravity = 0;
+	}
+	
+	public void resetGravity(){
+		gravity = 0.03f;
+	}
+	
 	@Override
-	public void tick(LinkedList<GameObject> object) {
+	public void tick(LinkedList<GameObject> objects) {
 		x += velX; 
 		y += velY + .005f;
+		timeElapsed++;
 		
 		if(falling && !isActing()){
 			velY += gravity;
 			
-			if(velY > MAX_SPEED)
-				velY = MAX_SPEED;
+			
 		}
 		
-		collision(object);
+		if(velY > MAX_SPEED)
+			velY = MAX_SPEED;
+		
+		if(velX > MAX_SPEED_X)
+			velX = MAX_SPEED_X;
+		
+		collision(objects);
 		
 		playerWalk.runAnimation();
 	}
@@ -56,6 +69,8 @@ public class Player extends GameObject{
 		
 		for(int i = 0; i<handler.objects.size(); i++){
 			GameObject tempObject = handler.objects.get(i);
+			
+			falling = true;
 			
 			if(tempObject.getId() == ObjectId.Block){
 				
@@ -70,7 +85,7 @@ public class Player extends GameObject{
 					y = tempObject.getY()- height;
 					if(Math.abs(this.getVelY()) < 0.4f){
 						velY = 0;
-						Player.gravity = 0;
+						unsetGravity();
 					}
 					else{
 						velY = -(this.getVelY()/1.5f);
@@ -87,8 +102,12 @@ public class Player extends GameObject{
 					falling = false;
 					//System.out.println("touche un bloc normal");
 				}
-				else
+				else{
 					falling = true;
+					if(timeElapsed % 60 == 0){
+						resetGravity();
+					}
+				}
 
 				// RIGHT
 				if(getBoundsRight().intersects(tempObject.getBounds())){	
@@ -140,7 +159,6 @@ public class Player extends GameObject{
 				}
 			}
 		}
-		
 	}
 
 	public void render(Graphics g) {
@@ -152,25 +170,27 @@ public class Player extends GameObject{
 		
 		//g.fillRect((int)x, (int)y, (int)width, (int)height);
 		
-		/*Graphics2D g2d = (Graphics2D) g;
-		g.setColor(Color.red);
-		g2d.draw(getBounds());
-		g2d.draw(getBoundsRight());
-		g2d.draw(getBoundsLeft());
-		g2d.draw(getBoundsTop());*/
+		if(Window.debug){
+			Graphics2D g2d = (Graphics2D) g;
+			g.setColor(Color.red);
+			g2d.draw(getBounds());
+			g2d.draw(getBoundsRight());
+			g2d.draw(getBoundsLeft());
+			g2d.draw(getBoundsTop());
+		}
 	}
 
 	public Rectangle getBounds() {
-		return new Rectangle((int) ((int)x+(width/2)-((width/2)/2)), (int) ((int)y+height/2), (int)width/2, (int)height/2);
+		return new Rectangle((int) ((int)x+8), (int) ((int)y+height/2), (int)width-16, (int)height/2);
 	}
 	public Rectangle getBoundsTop() {
-		return new Rectangle((int) ((int)x+(width/2)-((width/2)/2)), (int)y, (int)width/2, (int)height/2);
+		return new Rectangle((int) ((int)x+8), (int)y, (int)width-16, (int)height/2);
 	}
 	public Rectangle getBoundsRight() {
-		return new Rectangle((int) ((int)x+width-5), (int)y+5, (int)5, (int)height-10);
+		return new Rectangle((int) ((int)x+width-8), (int)y+5, (int)8, (int)height-10);
 	}
 	public Rectangle getBoundsLeft() {
-		return new Rectangle((int)x, (int)y+5, (int)5, (int)height-10);
+		return new Rectangle((int)x, (int)y+5, (int)8, (int)height-10);
 	}
 	
 

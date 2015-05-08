@@ -30,13 +30,13 @@ public class MouseInput extends MouseAdapter{
 		if(Game.getPause()){
 			if(key == InputEvent.BUTTON1_MASK){
 				//System.out.println(mouseX + " " + mouseY);
-				if(mouseX >= 300 && mouseX <= 480 && mouseY >= 195 && mouseY <= 235){
+				if(mouseX >= 297 && mouseX <= 477 && mouseY >= 185 && mouseY <= 225){
 					Game.setPause();
 				}
-				if(mouseX >= 220 && mouseX <= 550 && mouseY >= 280 && mouseY <= 320){
+				if(mouseX >= 217 && mouseX <= 547 && mouseY >= 265 && mouseY <= 305){
 					Game.reafficherMenu();
 				}
-				if(mouseX >= 265 && mouseX <= 515 && mouseY >= 365 && mouseY <= 405){
+				if(mouseX >= 260 && mouseX <= 510 && mouseY >= 348 && mouseY <= 388){
 					System.exit(0);
 				}
 			}
@@ -62,41 +62,43 @@ public class MouseInput extends MouseAdapter{
 						// calcul de la distance
 						Point p1PLayer = new Point(playerX, playerY);
 						Point p2Mouse = new Point(mouseX, mouseY);
-						System.out.println(distance(p1PLayer, p2Mouse));
+						//System.out.println(distance(p1PLayer, p2Mouse));
 						/////////////////////
 						
 						
-						float coefX = 0.5f + (float) (5f / Math.sqrt(Math.abs(mouseX - playerX))) ;
+						float coefX = (float) (Math.abs(mouseX - playerX) / (distance(p1PLayer, p2Mouse)/1.5)) ;
+						//float coefX = 0.5f + (float) (5f / Math.sqrt(Math.abs(mouseX - playerX))) ;
 						if(coefX > 1.0f) coefX = 1.0f;
 						
 						/*float testY = (Math.abs(mouseY - playerY) != 0)? Math.abs(mouseY - playerY) : Math.abs(mouseY - playerY) + 0.001f;
 						float coefY = 1.5f - (1 / testY);
 						if(coefY > 3.0f) coefY = 3.0f;*/
 						
-						float coefY = 0.5f + (float) (5f / Math.sqrt(Math.abs(mouseY - playerY)));
+						float coefY = (float) (Math.abs(mouseY - playerY) / (distance(p1PLayer, p2Mouse)/1.5)) ;
+						//float coefY = 0.5f + (float) (5f / Math.sqrt(Math.abs(mouseY - playerY)));
 						if(coefY > 1.0f) coefY = 1.0f;
 						
 						if((playerX > mouseX) && (playerY > mouseY)){
-							tempObject.setFacingRight(true);
-							tempObject.setFacingDown(true);
+							/*tempObject.setFacingRight(true);
+							tempObject.setFacingDown(true);*/
 							tempObject.setVelX(coefX);
 							tempObject.setVelY(coefY);
 						}
 						if((playerX < mouseX) && (playerY > mouseY)){
-							tempObject.setFacingRight(false);
-							tempObject.setFacingDown(true);
+							/*tempObject.setFacingRight(false);
+							tempObject.setFacingDown(true);*/
 							tempObject.setVelX(-coefX);
 							tempObject.setVelY(coefY);
 						}
 						if((playerX > mouseX) && (playerY < mouseY)){
-							tempObject.setFacingRight(true);
-							tempObject.setFacingDown(false);
+							/*tempObject.setFacingRight(true);
+							tempObject.setFacingDown(false);*/
 							tempObject.setVelX(coefX);
 							tempObject.setVelY(-coefY);
 						}
 						if((playerX < mouseX) && (playerY < mouseY)){
-							tempObject.setFacingRight(false);
-							tempObject.setFacingDown(false);
+							/*tempObject.setFacingRight(false);
+							tempObject.setFacingDown(false);*/
 							tempObject.setVelX(-coefX);
 							tempObject.setVelY(-coefY);
 						}
