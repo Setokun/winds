@@ -16,14 +16,10 @@ public class Player extends GameObject{
 	private float width = 64, height = 64;
 	
 	public static float gravity = 0.03f;
-	
-	public void resetGravity(){
-		gravity = 0;
-	}
-	
-	
-	private final float MAX_SPEED = 4;
-	private final float MAX_SPEED_X = 5;
+
+	private final float MAX_SPEED = 3;
+	private final float MAX_SPEED_X = 4;
+	private int timeElapsed = 0;
 	
 	private Handler handler;
 	
@@ -37,11 +33,20 @@ public class Player extends GameObject{
 		
 		playerWalk = new Animation(4, tex.bulle[0]);
 	}
-
+	
+	public void unsetGravity(){
+		gravity = 0;
+	}
+	
+	public void resetGravity(){
+		gravity = 0.03f;
+	}
+	
 	@Override
-	public void tick(LinkedList<GameObject> object) {
+	public void tick(LinkedList<GameObject> objects) {
 		x += velX; 
 		y += velY + .005f;
+		timeElapsed++;
 		
 		if(falling && !isActing()){
 			velY += gravity;
@@ -55,7 +60,7 @@ public class Player extends GameObject{
 		if(velX > MAX_SPEED_X)
 			velX = MAX_SPEED_X;
 		
-		collision(object);
+		collision(objects);
 		
 		playerWalk.runAnimation();
 	}
@@ -65,8 +70,10 @@ public class Player extends GameObject{
 		for(int i = 0; i<handler.objects.size(); i++){
 			GameObject tempObject = handler.objects.get(i);
 			
+			falling = true;
+			
 			if(tempObject.getId() == ObjectId.Block){
-				falling = true;
+				
 				// TOP
 				if(getBoundsTop().intersects(tempObject.getBounds())){
 					y = tempObject.getY() + 32;
@@ -78,7 +85,7 @@ public class Player extends GameObject{
 					y = tempObject.getY()- height;
 					if(Math.abs(this.getVelY()) < 0.4f){
 						velY = 0;
-						resetGravity();
+						unsetGravity();
 					}
 					else{
 						velY = -(this.getVelY()/1.5f);
@@ -95,8 +102,12 @@ public class Player extends GameObject{
 					falling = false;
 					//System.out.println("touche un bloc normal");
 				}
-				else
+				else{
 					falling = true;
+					if(timeElapsed % 60 == 0){
+						resetGravity();
+					}
+				}
 
 				// RIGHT
 				if(getBoundsRight().intersects(tempObject.getBounds())){	
@@ -170,16 +181,16 @@ public class Player extends GameObject{
 	}
 
 	public Rectangle getBounds() {
-		return new Rectangle((int) ((int)x+5), (int) ((int)y+height/2), (int)width-10, (int)height/2);
+		return new Rectangle((int) ((int)x+8), (int) ((int)y+height/2), (int)width-16, (int)height/2);
 	}
 	public Rectangle getBoundsTop() {
-		return new Rectangle((int) ((int)x+5), (int)y, (int)width-10, (int)height/2);
+		return new Rectangle((int) ((int)x+8), (int)y, (int)width-16, (int)height/2);
 	}
 	public Rectangle getBoundsRight() {
-		return new Rectangle((int) ((int)x+width-5), (int)y+5, (int)5, (int)height-10);
+		return new Rectangle((int) ((int)x+width-8), (int)y+5, (int)8, (int)height-10);
 	}
 	public Rectangle getBoundsLeft() {
-		return new Rectangle((int)x, (int)y+5, (int)5, (int)height-10);
+		return new Rectangle((int)x, (int)y+5, (int)8, (int)height-10);
 	}
 	
 
