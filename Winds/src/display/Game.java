@@ -24,7 +24,7 @@ import core.TransparentBlock;
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
 	
-	public static int WIDTH = 800, HEIGHT = 600;
+	public static int WIDTH = (int) Window.profile.getScreenDimensions().getWidth(), HEIGHT = 600;
 	public static Camera cam;
 	public final String TITLE = "Winds";
 	private Level lvl;
@@ -203,14 +203,11 @@ public class Game extends Canvas implements Runnable{
 			g.setColor(Color.white);
 			g.drawString(seconds/60 + ":" + seconds%60, 32, 32);
 			
+			g.setFont(new Font("bubble & soap", 0, 24));
+			g.drawRect(150, 10, 200, 25);
+			g.drawString(lvl.titreNiveau, 150, 30);
+			
 		}
-		
-		//image.getGraphics().fillRect(50, 100, 40, 30);
-		//g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
-
-		g.setFont(new Font("bubble & soap", 0, 24));
-		g.drawRect(150, 10, 200, 25);
-		g.drawString(lvl.titreNiveau, 150, 30);
 		
 		/////////////////////////////////////////
 		

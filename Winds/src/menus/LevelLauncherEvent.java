@@ -1,12 +1,11 @@
 package menus;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import addons.Level;
 import display.Game;
 import display.Window;
-import addons.Level;
 
 public class LevelLauncherEvent implements ActionListener{
 
@@ -18,7 +17,7 @@ public class LevelLauncherEvent implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		Window.resize(new Dimension(800, 600));
+		Window.resize(Window.profile.getScreenDimensions());
 		Window.affect(new Game(lvl));
 	}
 
