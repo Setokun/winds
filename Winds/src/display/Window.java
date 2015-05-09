@@ -37,6 +37,11 @@ public	 class Window {
 		main.setResizable(false);
 		main.setLocationRelativeTo(null);
 		
+		
+		//DBClass.deleteTestData(); 
+		//DBClass.createStructures(); DBClass.createTestData();
+		
+		
 		profile = Profile.getCurrentPlayer();
 		if(profile == null){
 			main.add(new Login());

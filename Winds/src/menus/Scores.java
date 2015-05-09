@@ -7,8 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -23,6 +22,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import database.DBClass;
+import database.Score;
+import database.Trophy;
 import display.Window;
 
 public class Scores extends JPanel {
@@ -37,59 +38,33 @@ public class Scores extends JPanel {
 	public Scores() {
 		this.setPreferredSize(new Dimension(800,550));
 		
-		
-		//DBClass.deleteTestData(); 
-		//DBClass.createStructures(); DBClass.createTestData();
-		
 		Object[][] results = null, resultsTrophies = null;
 		
-		ResultSet r = DBClass.getScores();
-		int count = 0;
+		ArrayList<Score> r = Score.getScores();
+		int count = r.size();
 		
-		try {
-			while(r.next()){
-				count++;
-			}
-			
-			results = new String[count][5];
-			
-			//System.out.println(count);
-			r = DBClass.getScores();
-			for(int i=0;r.next();i++){
-				results[i][0] =  r.getString("levelName");
-				results[i][1] =  String.valueOf(r.getInt("nbItems"));
-				results[i][2] =  String.valueOf(r.getInt("nbClicks"));
-				results[i][3] =  DBClass.transformIntTimeInString(r.getInt("time"));
-				results[i][4] =  String.valueOf(r.getInt("rank"));
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		results = new String[count][5];
+
+		for(int i=0; i < r.size();i++){
+			results[i][0] =  r.get(i).getLevelName();
+			results[i][1] =  String.valueOf(r.get(i).getNbItems());
+			results[i][2] =  String.valueOf(r.get(i).getClicks());
+			results[i][3] =  DBClass.transformIntTimeInString(r.get(i).getTime());
+			results[i][4] =  String.valueOf(r.get(i).getRank());
 		}
+	
 		
 		
-		ResultSet t = DBClass.getTrophies();
-		count = 0;
+		ArrayList<Trophy> t = Trophy.getTrophies();
+		count = t.size();
 		
-		try {
-			while(t.next()){
-				count++;
-			}
-			
-			resultsTrophies = new String[count][2];
-			
-			//System.out.println(count);
-			t = DBClass.getTrophies();
-			for(int i=0;t.next();i++){
-				//System.out.println(t.getString("description") + " - " + t.getString("achieved"));
-				resultsTrophies[i][0] =  t.getString("description");
-				resultsTrophies[i][1] =  t.getString("achieved");
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		resultsTrophies = new String[count][2];
+
+		for (int i = 0; i < count; i++) {
+			resultsTrophies[i][0] =  t.get(i).getDescription();
+			resultsTrophies[i][1] =  t.get(i).getAchieved();
 		}
-		
+	
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
