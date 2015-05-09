@@ -8,6 +8,8 @@ import java.sql.Statement;
 //import com.mysql.jdbc.*;
 import java.util.Random;
 
+import display.Window;
+
 public class DBClass{    
     public static void executeQuery(String sql) throws ClassNotFoundException, SQLException{       
     	  
@@ -129,7 +131,7 @@ public class DBClass{
     public static  ResultSet getScores(){
 		try {
 			//return DBClass.requestQuery("SELECT * FROM scores WHERE idPlayer="+1);
-			return DBClass.requestQuery("SELECT levels.name AS levelName, nbItems, nbClicks, time, rank FROM scores JOIN levels ON levels.id = scores.idLevel WHERE idPlayer="+1+"ORDER BY levels.id");
+			return DBClass.requestQuery("SELECT levels.name AS levelName, nbItems, nbClicks, time, rank FROM scores JOIN levels ON levels.id = scores.idLevel WHERE idPlayer="+Window.profile.getId()+"ORDER BY levels.id");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -140,7 +142,7 @@ public class DBClass{
     
     public static ResultSet getTrophies(){
     	try {
-			return DBClass.requestQuery("SELECT * FROM trophies WHERE idPlayer="+1);
+			return DBClass.requestQuery("SELECT * FROM trophies WHERE idPlayer="+Window.profile.getId());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

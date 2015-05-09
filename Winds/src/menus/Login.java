@@ -12,11 +12,13 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import accounts.Profile;
 import display.Window;
 
 public class Login extends JPanel{
@@ -151,8 +153,21 @@ public class Login extends JPanel{
     }                                        
 
     private void jBtnLogOnActionPerformed(java.awt.event.ActionEvent evt) {                                          
-    	Window.resize(new Dimension(800, 550));
-		Window.affect(new MainMenu());
+    	
+    	if(jTxtLogin.getText().equals("") || String.valueOf(jPwdPassword.getPassword()).equals(""))
+    		JOptionPane.showMessageDialog(null, "Missing email or password !");
+    	else {
+    		Window.profile = Profile.connect(jTxtLogin.getText(), String.valueOf(jPwdPassword.getPassword()));
+    		
+    		if(Window.profile == null){
+	    		JOptionPane.showConfirmDialog(null, "Bad creditentials, please try again !");
+	    	}else{
+	    		Window.resize(new Dimension(800, 550));
+	    		Window.affect(new MainMenu());
+	    	}
+    	}
+    	
+    	
     }                                         
 
 }

@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -11,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle;
 
+import database.DBClass;
 import display.Window;
 
 public class MainMenu extends JPanel{
@@ -164,6 +166,12 @@ public class MainMenu extends JPanel{
     }                                               
 
     private void jBtnChangeProfileActionPerformed(java.awt.event.ActionEvent evt) {                                                  
+    	try {
+			DBClass.executeQuery("UPDATE users SET current = false");
+		} catch (ClassNotFoundException e) {e.printStackTrace();
+		} catch (SQLException e) {e.printStackTrace();
+		}
+    	Window.profile = null;
     	Window.resize(new Dimension(800, 550));
 		Window.affect(new Login());
     }                                                 

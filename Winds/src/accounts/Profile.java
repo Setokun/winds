@@ -27,6 +27,29 @@ public class Profile {
 		}
 	}
 	
+	public static Profile connect(String email, String password){
+		
+		try {
+			ResultSet r = DBClass.requestQuery("SELECT * FROM users WHERE email='"+email+"' AND password='"+password+"'");
+    		if(r.next()){
+    			Profile p = new Profile();
+    			int id = r.getInt("id");
+    			p.setId(id);
+    			p.setEmail(r.getString("email"));
+    			p.setPassword(r.getString("password"));
+    			p.setUserType(r.getString("userType"));
+    			p.setPseudo(r.getString("pseudo"));
+    			DBClass.executeQuery("UPDATE users SET current=true WHERE id="+id);
+    			return p;
+    		}
+			return null;
+		} catch (ClassNotFoundException e) {e.printStackTrace();
+		} catch (SQLException e) {e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	public static Profile getCurrentPlayer(){ // TODO à tester
     	
     	try {
@@ -41,10 +64,8 @@ public class Profile {
     			return p;
     		}
 			return null;
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (ClassNotFoundException e) {e.printStackTrace();
+		} catch (SQLException e) {e.printStackTrace();
 		}
     	
     	return null;
