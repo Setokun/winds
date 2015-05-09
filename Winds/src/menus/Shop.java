@@ -35,7 +35,6 @@ public class Shop  extends JPanel {
 	private JScrollPane scrollPaneNewThemes, scrollPaneNewLevels, scrollPaneCustomLevels, scrollPaneLevelsToModerate;
 	private JTable tableNewThemes, tableNewLevels, tableCustomLevels, tableLevelsToModerate;
 	private GroupLayout gl;
-	private boolean isAdmin = true;
 	// end declarations
 	
 	public Shop() {
@@ -90,7 +89,7 @@ public class Shop  extends JPanel {
 			.addComponent(scrollPaneNewThemes, GroupLayout.PREFERRED_SIZE, 335, GroupLayout.PREFERRED_SIZE)
 			.addGap(18)
 			.addComponent(scrollPaneNewLevels, GroupLayout.PREFERRED_SIZE, 335, GroupLayout.PREFERRED_SIZE));
-		if(isAdmin){
+		if(Window.profile.getUserType().equals("administrator") || Window.profile.getUserType().equals("moderator")){
 		hGroup.addGroup(gl.createSequentialGroup()
 			.addGap(225)
 			.addComponent(scrollPaneLevelsToModerate, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE));
@@ -117,7 +116,7 @@ public class Shop  extends JPanel {
 			.addComponent(scrollPaneNewThemes, GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE));
 		vGroup.addGap(18)
 			.addComponent(scrollPaneCustomLevels, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE);
-		if(isAdmin){
+		if(Window.profile.getUserType().equals("administrator") || Window.profile.getUserType().equals("moderator")){
 		vGroup.addGap(18)
 			.addComponent(scrollPaneLevelsToModerate, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE);
 		vGroup.addGap(23);

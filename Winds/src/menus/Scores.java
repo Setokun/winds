@@ -38,8 +38,7 @@ public class Scores extends JPanel {
 		this.setPreferredSize(new Dimension(800,550));
 		
 		
-		//DBClass.deleteTestData();
-		
+		//DBClass.deleteTestData(); 
 		//DBClass.createStructures(); DBClass.createTestData();
 		
 		Object[][] results = null, resultsTrophies = null;

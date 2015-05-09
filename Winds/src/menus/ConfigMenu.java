@@ -12,6 +12,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.SoftBevelBorder;
@@ -79,7 +80,7 @@ public class ConfigMenu extends JPanel{
 		
 		
 		sliderMusic = new JSlider();
-		sliderMusic.setValue(5);
+		sliderMusic.setValue(Window.profile.getMusicVolume());
 		sliderMusic.setMaximum(10);
 		sliderMusic.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -95,7 +96,7 @@ public class ConfigMenu extends JPanel{
 		
 		
 		sliderSounds = new JSlider();
-		sliderSounds.setValue(5); //TODO à récupérer de la BDD en fonction du profil connecté
+		sliderSounds.setValue(Window.profile.getSoundEffectsVolume()); //TODO à récupérer de la BDD en fonction du profil connecté
 		sliderSounds.setMaximum(10);
 		sliderSounds.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -111,7 +112,7 @@ public class ConfigMenu extends JPanel{
 		
 		
 		sliderResolution = new JSlider();
-		sliderResolution.setValue(1);
+		sliderResolution.setValue(Window.profile.getResolution());
 		sliderResolution.setMaximum(2);
 		sliderResolution.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -219,11 +220,8 @@ public class ConfigMenu extends JPanel{
 	}
 
 	protected void jBtnSaveActionPerformed(ActionEvent evt) {
-		// TODO Auto-generated method stub
-		System.out.println("MAJ des données dans la BDD pour le profil actuel");
-		System.out.println("Volume musique : " + sliderMusic.getValue());
-		System.out.println("Volume effets sonores : " + sliderSounds.getValue());
-		System.out.println("Résolution : " + sliderResolution.getValue());
+		Window.profile = Window.profile.updateConfiguration(sliderMusic.getValue(), sliderSounds.getValue(), sliderResolution.getValue());
+		JOptionPane.showMessageDialog(null, "Configuration updated !");
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
