@@ -5,10 +5,14 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+import menus.Login;
 import menus.MainMenu;
+import accounts.Profile;
 
 public	 class Window {
 
+	public static Profile profile = null;
+	
 	public static final boolean debug = true;
 	private static JFrame main;
 	
@@ -33,7 +37,13 @@ public	 class Window {
 		main.setResizable(false);
 		main.setLocationRelativeTo(null);
 		
-		main.add(new MainMenu());
+		profile = Profile.getCurrentPlayer();
+		if(profile == null){
+			main.add(new Login());
+		}else{
+			main.add(new MainMenu());
+		}
+		
 		main.setVisible(true);
 		
 		
