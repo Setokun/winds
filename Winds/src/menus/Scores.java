@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -16,10 +18,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
+import database.DBClass;
 import display.Window;
 
 public class Scores extends JPanel {
@@ -33,6 +36,39 @@ public class Scores extends JPanel {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Scores() {
 		this.setPreferredSize(new Dimension(800,550));
+		
+		
+		//DBClass.createScores();
+		//DBClass.deleteTestData();
+		
+		//DBClass.createStructures();
+		//DBClass.createTestData();
+		
+		ResultSet r = DBClass.getScores();
+		int count = 0;
+		Object[][] results = null;
+		try {
+			while(r.next()){
+				count++;
+			}
+			
+			results = new String[count][5];
+			
+			System.out.println(count);
+			r = DBClass.getScores();
+			for(int i=0;r.next();i++){
+				results[i][0] =  r.getString("levelName");
+				results[i][1] =  String.valueOf(r.getInt("nbItems"));
+				results[i][2] =  String.valueOf(r.getInt("nbClicks"));
+				results[i][3] =  DBClass.transformIntTimeInString(r.getInt("time"));
+				results[i][4] =  String.valueOf(r.getInt("rank"));
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
@@ -174,8 +210,9 @@ public class Scores extends JPanel {
 		tableScores.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		tableScores.setBackground(Color.WHITE);
 		tableScores.setFont(new Font("bubble & soap", Font.PLAIN, 20));
+		
 		tableScores.setModel(new DefaultTableModel(
-			new Object[][] {
+			/*new Object[][] {
 				{"Level 1", "10530", "137", "1:27", "327/10560"},
 				{"Level 2", "10530", "137", "1:27", "327/10560"},
 				{"Level 3", "10530", "137", "1:27", "327/10560"},
@@ -206,7 +243,7 @@ public class Scores extends JPanel {
 				{"Level 28", "10530", "137", "1:27", "327/10560"},
 				{"Level 29", "10530", "137", "1:27", "327/10560"},
 				{"Level 30", "10530", "137", "1:27", "327/10560"},
-			},
+			}*/results,
 			new String[] {
 				"LEVEL NAME", "SCORE", "CLICKS", "TIME", "POSITION"
 			}
@@ -246,9 +283,6 @@ public class Scores extends JPanel {
 	}
 
 	public class CenterTableCellRenderer extends DefaultTableCellRenderer {
-	    /**
-		 * 
-		 */
 		private static final long serialVersionUID = 8632281077361047347L;
 
 		public CenterTableCellRenderer() {
@@ -256,4 +290,7 @@ public class Scores extends JPanel {
 	        setVerticalAlignment(CENTER);
 	    }
 	}
+	
+	
+	
 }
