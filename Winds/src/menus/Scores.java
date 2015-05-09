@@ -44,9 +44,11 @@ public class Scores extends JPanel {
 		//DBClass.createStructures();
 		//DBClass.createTestData();
 		
+		Object[][] results = null, resultsTrophies = null;
+		
 		ResultSet r = DBClass.getScores();
 		int count = 0;
-		Object[][] results = null;
+		
 		try {
 			while(r.next()){
 				count++;
@@ -54,7 +56,7 @@ public class Scores extends JPanel {
 			
 			results = new String[count][5];
 			
-			System.out.println(count);
+			//System.out.println(count);
 			r = DBClass.getScores();
 			for(int i=0;r.next();i++){
 				results[i][0] =  r.getString("levelName");
@@ -68,6 +70,28 @@ public class Scores extends JPanel {
 			e1.printStackTrace();
 		}
 		
+		
+		ResultSet t = DBClass.getTrophies();
+		count = 0;
+		
+		try {
+			while(t.next()){
+				count++;
+			}
+			
+			resultsTrophies = new String[count][2];
+			
+			//System.out.println(count);
+			t = DBClass.getTrophies();
+			for(int i=0;t.next();i++){
+				//System.out.println(t.getString("description") + " - " + t.getString("achieved"));
+				resultsTrophies[i][0] =  t.getString("description");
+				resultsTrophies[i][1] =  t.getString("achieved");
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -171,19 +195,7 @@ public class Scores extends JPanel {
 		tableTrophies.setBackground(Color.WHITE);
 		tableTrophies.setFont(new Font("bubble & soap", Font.PLAIN, 18));
 		tableTrophies.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Finish a level in less than 1min", null},
-				{"Finish a level in less than 1min", "OK"},
-				{"Finish a level in less than 1min", null},
-				{"Finish a level in less than 1min", null},
-				{"Finish a level in less than 1min", null},
-				{"Finish a level in less than 1min", null},
-				{"Finish a level in less than 1min", null},
-				{"Finish a level in less than 1min", null},
-				{"Finish a level in less than 1min", null},
-				{"Finish a level in less than 1min", null},
-				{"Finish a level in less than 1min", null},
-			},
+			resultsTrophies,
 			new String[] {
 				"Trophies", "OK"
 			}
@@ -212,38 +224,7 @@ public class Scores extends JPanel {
 		tableScores.setFont(new Font("bubble & soap", Font.PLAIN, 20));
 		
 		tableScores.setModel(new DefaultTableModel(
-			/*new Object[][] {
-				{"Level 1", "10530", "137", "1:27", "327/10560"},
-				{"Level 2", "10530", "137", "1:27", "327/10560"},
-				{"Level 3", "10530", "137", "1:27", "327/10560"},
-				{"Level 4", "10530", "137", "1:27", "327/10560"},
-				{"Level 5", "10530", "137", "1:27", "327/10560"},
-				{"Level 6", "10530", "137", "1:27", "327/10560"},
-				{"Level 7", "10530", "137", "1:27", "327/10560"},
-				{"Level 8", "10530", "137", "1:27", "327/10560"},
-				{"Level 9", "10530", "137", "1:27", "327/10560"},
-				{"Level 10", "10530", "137", "1:27", "327/10560"},
-				{"Level 11", "10530", "137", "1:27", "327/10560"},
-				{"Level 12", "10530", "137", "1:27", "327/10560"},
-				{"Level 13", "10530", "137", "1:27", "327/10560"},
-				{"Level 14", "10530", "137", "1:27", "327/10560"},
-				{"Level 15", "10530", "137", "1:27", "327/10560"},
-				{"Level 16", "10530", "137", "1:27", "327/10560"},
-				{"Level 17", "10530", "137", "1:27", "327/10560"},
-				{"Level 18", "10530", "137", "1:27", "327/10560"},
-				{"Level 19", "10530", "137", "1:27", "327/10560"},
-				{"Level 20", "10530", "137", "1:27", "327/10560"},
-				{"Level 21", "10530", "137", "1:27", "327/10560"},
-				{"Level 22", "10530", "137", "1:27", "327/10560"},
-				{"Level 23", "10530", "137", "1:27", "327/10560"},
-				{"Level 24", "10530", "137", "1:27", "327/10560"},
-				{"Level 25", "10530", "137", "1:27", "327/10560"},
-				{"Level 26", "10530", "137", "1:27", "327/10560"},
-				{"Level 27", "10530", "137", "1:27", "327/10560"},
-				{"Level 28", "10530", "137", "1:27", "327/10560"},
-				{"Level 29", "10530", "137", "1:27", "327/10560"},
-				{"Level 30", "10530", "137", "1:27", "327/10560"},
-			}*/results,
+			results,
 			new String[] {
 				"LEVEL NAME", "SCORE", "CLICKS", "TIME", "POSITION"
 			}
@@ -262,18 +243,16 @@ public class Scores extends JPanel {
 				return columnEditables[column];
 			}
 		});
-		tableScores.getColumnModel().getColumn(0).setResizable(false);
-		tableScores.getColumnModel().getColumn(1).setResizable(false);
-		tableScores.getColumnModel().getColumn(2).setResizable(false);
-		tableScores.getColumnModel().getColumn(3).setResizable(false);
-		tableScores.getColumnModel().getColumn(4).setResizable(false);
+		
+		for (int i = 0; i < 5; i++) {
+			tableScores.getColumnModel().getColumn(i).setResizable(false);
+		}
 		scrollPane.setViewportView(tableScores);
 		
 	}
 	
 	protected void btnUploadMyScoresActionPerformed(ActionEvent evt) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
