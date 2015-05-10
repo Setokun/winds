@@ -21,7 +21,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import database.DBClass;
 import database.Score;
 import database.Trophy;
 import display.Window;
@@ -49,8 +48,8 @@ public class Scores extends JPanel {
 			results[i][0] =  r.get(i).getLevelName();
 			results[i][1] =  String.valueOf(r.get(i).getNbItems());
 			results[i][2] =  String.valueOf(r.get(i).getClicks());
-			results[i][3] =  DBClass.transformIntTimeInString(r.get(i).getTime());
-			results[i][4] =  String.valueOf(r.get(i).getRank());
+			results[i][3] =  Score.transformIntTimeInString(r.get(i).getTime());
+			results[i][4] =  Score.transformPositionInString(r.get(i).getRank(), 1000);
 		}
 	
 		

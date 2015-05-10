@@ -72,7 +72,7 @@ public class Game extends Canvas implements Runnable{
 		/////////////// sound initialization ///////////////
 		bgMusicFilename = "resources/Winds_Ice_Cavern.mp3";
 	    bgMusic = new AudioPlayer(bgMusicFilename, true);
-	    bgMusic.play();
+	    //bgMusic.play();
 	    ////////////////////////////////////////////////////
 	    LoadImageLevel(level);
 	    this.addKeyListener(new KeyInput(handler));

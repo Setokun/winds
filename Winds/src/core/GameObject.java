@@ -2,6 +2,7 @@ package core;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public abstract class GameObject {
@@ -26,6 +27,7 @@ public abstract class GameObject {
 	public abstract void tick(LinkedList<GameObject> object);
 	public abstract void render(Graphics g);
 	public abstract Rectangle getBounds();
+	public abstract ArrayList<Rectangle> getBounds2();
 	
 	public float getX(){
 		return x;

@@ -1,10 +1,14 @@
 package core;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import display.Game;
+import display.Window;
 
 public class Block extends GameObject{
 
@@ -106,6 +110,14 @@ public class Block extends GameObject{
 		if(type == Block.blockType.RONCES_COTE_15) g.drawImage(tex.lvl_ronces[378], (int)x, (int)y, null);
 		if(type == Block.blockType.RONCES_COTE_16) g.drawImage(tex.lvl_ronces[379], (int)x, (int)y, null);
 		
+		if(Window.debug){
+			Graphics2D g2d = (Graphics2D) g;
+			g.setColor(Color.red);
+			for (int i = 0; i < getBounds2().size(); i++) {
+				g2d.draw(getBounds2().get(i));
+			}
+			
+		}
 	}
 
 	@Override
@@ -113,5 +125,14 @@ public class Block extends GameObject{
 		return new Rectangle((int)x, (int)y, 32, 32);
 	}
 
-
+	public ArrayList<Rectangle> getBounds2(){
+		ArrayList<Rectangle> bounds = new ArrayList<Rectangle>();
+		
+		bounds.add(new Rectangle((int)x+4, (int)y, 24, 16));
+		bounds.add(new Rectangle((int)x, (int)y, 8, 32));
+		
+		return bounds;
+	}
+	
+	
 }

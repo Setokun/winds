@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import display.Animation;
@@ -74,55 +75,58 @@ public class Player extends GameObject{
 			
 			if(tempObject.getId() == ObjectId.Block){
 				
-				// TOP
-				if(getBoundsTop().intersects(tempObject.getBounds())){
-					y = tempObject.getY() + 32;
-					velY = -(this.getVelY()/4);
-				}
-				
-				// BOTTOM
-				if(getBounds().intersects(tempObject.getBounds()) && tempObject.getId() == ObjectId.Block){
-					y = tempObject.getY()- height;
-					if(Math.abs(this.getVelY()) < 0.4f){
-						velY = 0;
-						unsetGravity();
+				for (int j = 0; j < tempObject.getBounds2().size(); j++) {
+					// TOP
+					if(getBoundsTop().intersects(tempObject.getBounds2().get(j))){
+						y = tempObject.getBounds2().get(j).y + tempObject.getBounds2().get(j).height;
+						velY = -(this.getVelY()/4);
+					}
+					
+					// BOTTOM
+					if(getBounds().intersects(tempObject.getBounds2().get(j)) && tempObject.getId() == ObjectId.Block){
+						
+						y = tempObject.getBounds2().get(j).y - 64;
+						
+						if(Math.abs(this.getVelY()) < 0.4f){
+							velY = 0;
+							unsetGravity();
+						}
+						else{
+							velY = -(this.getVelY()/1.5f);
+						}
+						
+						if(Math.abs(this.getVelX()) < 0.3f){
+							velX = 0;
+						}
+						else{
+						velX = this.getVelX()/1.2f;
+						}
+						
+						
+						falling = false;
+						//System.out.println("touche un bloc normal");
 					}
 					else{
-						velY = -(this.getVelY()/1.5f);
+						falling = true;
+						if(timeElapsed % 60 == 0){
+							resetGravity();
+						}
 					}
 					
-					if(Math.abs(this.getVelX()) < 0.3f){
-						velX = 0;
-					}
-					else{
-					velX = this.getVelX()/1.2f;
+					// RIGHT
+					if(getBoundsRight().intersects(tempObject.getBounds2().get(j))){	
+						x = tempObject.getBounds2().get(j).x - 64;
+						velX = -(this.getVelX()/2);
 					}
 					
-					
-					falling = false;
-					//System.out.println("touche un bloc normal");
-				}
-				else{
-					falling = true;
-					if(timeElapsed % 60 == 0){
-						resetGravity();
+					// LEFT
+					if(getBoundsLeft().intersects(tempObject.getBounds2().get(j))){ 	
+						x = tempObject.getBounds2().get(j).x + tempObject.getBounds2().get(j).width;
+						velX = -(this.getVelX()/2);
 					}
 				}
-
-				// RIGHT
-				if(getBoundsRight().intersects(tempObject.getBounds())){	
-					x = tempObject.getX() - width;
-					velX = -(this.getVelX()/2);
-				}
-				
-				// LEFT
-				if(getBoundsLeft().intersects(tempObject.getBounds())){ 	
-					x = tempObject.getX() + 32;
-					velX = -(this.getVelX()/2);
-				}
-				
-			}
-			else if(tempObject.getId() == ObjectId.InoffensiveBlock){
+			}}
+			/*else if(tempObject.getId() == ObjectId.InoffensiveBlock){
 				
 				// TOP
 				if(getBoundsTop().intersects(tempObject.getBounds())){
@@ -158,7 +162,8 @@ public class Player extends GameObject{
 					velX = 1;
 				}
 			}
-		}
+		}*/
+		
 	}
 
 	public void render(Graphics g) {
@@ -191,6 +196,12 @@ public class Player extends GameObject{
 	}
 	public Rectangle getBoundsLeft() {
 		return new Rectangle((int)x, (int)y+5, (int)8, (int)height-10);
+	}
+
+	@Override
+	public ArrayList<Rectangle> getBounds2() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

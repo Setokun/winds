@@ -61,4 +61,27 @@ public class Score {
 		return null;
 	}
 	
+	public static  String transformIntTimeInString(int time){
+		String result = "";
+		int hours = time / 3600;
+		int minutes = time / 60;
+		int seconds = time % 60;
+		if(hours> 0){
+			result += hours+":";
+		}
+		
+		result += minutes + ":" + ((seconds > 9)?String.valueOf(seconds):"0"+seconds);
+		
+		return result;
+	}
+    
+    public static String transformPositionInString(int position, int total){
+    	
+    	if(position == 0 || total == 0){
+    		return "---";
+    	}
+    	
+    	return position + "/" + total;
+    }
+	
 }

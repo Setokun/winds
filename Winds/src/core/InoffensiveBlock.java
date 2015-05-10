@@ -2,6 +2,7 @@ package core;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import display.Game;
@@ -46,6 +47,12 @@ public class InoffensiveBlock extends GameObject{
 	@Override
 	public Rectangle getBounds() {
 		return new Rectangle((int)x, (int)y, 32, 32);
+	}
+
+	@Override
+	public ArrayList<Rectangle> getBounds2() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
