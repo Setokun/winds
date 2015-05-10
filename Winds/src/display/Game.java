@@ -6,8 +6,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import menus.LevelCategorySelector;
 import addons.Level;
@@ -61,8 +63,8 @@ public class Game extends Canvas implements Runnable{
 		BufferedImageLoader loader = new BufferedImageLoader();
 		bg = loader.loadImage("/background/pirate3.jpg");
 		pauseImage = loader.loadImage("/background/menu_pause.png");
-		level = loader.loadImage("/levels/level3.png"); // loading the level
-		
+		//level = loader.loadImage("/levels/level3.png"); // loading the level
+		level = loader.loadImage("/levels/bramble_map1.png"); // loading the level
 		
 		
 		handler = new Handler();
@@ -74,7 +76,10 @@ public class Game extends Canvas implements Runnable{
 	    bgMusic = new AudioPlayer(bgMusicFilename, true);
 	    //bgMusic.play();
 	    ////////////////////////////////////////////////////
-	    LoadImageLevel(level);
+	    
+	    //LoadImageLevel(level);
+	    loadImageLevel128(level);
+	    
 	    this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput(handler));
 	    
@@ -313,6 +318,57 @@ public class Game extends Canvas implements Runnable{
 				int blue = (pixel) & 0xff;
 				
 				if(red == 0 && green == 0 && blue == 255) handler.addObject(new Player(xx*32, yy*32, handler, ObjectId.Player));
+			}
+		}
+		
+	}
+	
+	private void loadImageLevel128(BufferedImage image){
+		int w = image.getWidth();
+		int h = image.getHeight();
+		
+		//System.out.println("wdth - height : " + w + " " + h);
+		
+		for(int xx = 0; xx < h; xx++){
+			for(int yy = 0; yy < w; yy++){
+				int pixel = image.getRGB(xx, yy);
+				int red = (pixel >> 16) & 0xff;
+				int green = (pixel >> 8) & 0xff;
+				int blue = (pixel) & 0xff;
+				
+				ArrayList<int[]> bounds = new ArrayList<int[]>();
+				int[] a1 = {0,0,16,32};
+				bounds.add(a1);
+				int[] a2 = {0,0,8,32};
+				bounds.add(a2);
+				
+				if(red == 255 && green == 255 && blue == 255) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_01, ObjectId.Block));
+				if(red == 245 && green == 245 && blue == 245) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_02, ObjectId.Block));
+				if(red == 235 && green == 235 && blue == 235) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_03, ObjectId.Block));
+				if(red == 225 && green == 225 && blue == 225) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_04, ObjectId.Block));
+				if(red == 215 && green == 215 && blue == 215) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_05, ObjectId.Block));
+				if(red == 205 && green == 205 && blue == 205) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_06, ObjectId.Block));
+				if(red == 195 && green == 195 && blue == 195) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_07, ObjectId.Block));
+				if(red == 185 && green == 185 && blue == 185) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_08, ObjectId.Block, bounds));
+				if(red == 175 && green == 175 && blue == 175) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_09, ObjectId.Block));
+				if(red == 165 && green == 165 && blue == 165) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_10, ObjectId.Block));
+				if(red == 155 && green == 155 && blue == 155) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_11, ObjectId.Block));
+				if(red == 145 && green == 145 && blue == 145) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_12, ObjectId.Block));
+				if(red == 135 && green == 135 && blue == 135) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_13, ObjectId.Block));
+				if(red == 125 && green == 125 && blue == 125) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_14, ObjectId.Block));
+				if(red == 115 && green == 115 && blue == 115) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_15, ObjectId.Block));
+				if(red == 105 && green == 105 && blue == 105) handler.addObject(new Block(xx*128, yy*128, Block.blockType.BRAMBLES_16, ObjectId.Block));
+			}
+		}
+		
+		for(int xx = 0; xx < h; xx++){
+			for(int yy = 0; yy < w; yy++){
+				int pixel = image.getRGB(xx, yy);
+				int red = (pixel >> 16) & 0xff;
+				int green = (pixel >> 8) & 0xff;
+				int blue = (pixel) & 0xff;
+				
+				if(red == 0 && green == 0 && blue == 255) handler.addObject(new Player(xx*128, yy*128, handler, ObjectId.Player));
 			}
 		}
 		

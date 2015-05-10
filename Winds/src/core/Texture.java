@@ -6,7 +6,7 @@ import display.BufferedImageLoader;
 
 public class Texture {
 
-	SpriteSheet bs, ps, bu, lj11, lj13, lj15, bib1, bib2, bib3, bib4, ronces;
+	SpriteSheet bs, ps, bu, lj11, lj13, lj15, bib1, bib2, bib3, bib4, ronces, brambles;
 	private BufferedImage block_sheet = null;
 	private BufferedImage player_sheet = null;
 	private BufferedImage bulle_sheet = null;
@@ -18,6 +18,7 @@ public class Texture {
 	private BufferedImage bib_003_sheet = null;
 	private BufferedImage bib_004_sheet = null;
 	private BufferedImage ronces_sheet = null;
+	private BufferedImage brambles_sheet = null;
 	
 	public BufferedImage[] block = new BufferedImage[2];
 	public BufferedImage[] player = new BufferedImage[4];
@@ -30,6 +31,7 @@ public class Texture {
 	public BufferedImage[] lvl_bib3 = new BufferedImage[64];
 	public BufferedImage[] lvl_bib4 = new BufferedImage[64];
 	public BufferedImage[] lvl_ronces = new BufferedImage[384];
+	public BufferedImage[] lvl_brambles = new BufferedImage[16];
 	
 	public Texture(){
 		
@@ -47,6 +49,7 @@ public class Texture {
 			bib_003_sheet = loader.loadImage("/Black-Ice-Battle_003.png");
 			bib_004_sheet = loader.loadImage("/Black-Ice-Battle_004.png");
 			ronces_sheet = loader.loadImage("/ronces.png");
+			brambles_sheet = loader.loadImage("/themes/brambles16.png");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -62,8 +65,11 @@ public class Texture {
 		bib3 = new SpriteSheet(bib_003_sheet);
 		bib4 = new SpriteSheet(bib_004_sheet);
 		ronces = new SpriteSheet(ronces_sheet);
+		brambles = new SpriteSheet(brambles_sheet);
 		
 		getTextures();
+		getTextures128();
+		
 	}
 
 	private void getTextures() {
@@ -76,7 +82,7 @@ public class Texture {
 		//player[3] = ps.grabImage(4, 1, 32, 54); // walking 3
 		
 		bulle[0] = bu.grabImage(1, 1, 64, 64); // idle bubble
-		
+
 		// chargement du spriteSheet lockjaw_11
 		for(int i=1; i<=8; i++){
 			for(int j=1; j<=8; j++){
@@ -143,5 +149,16 @@ public class Texture {
 		
 		
 	}
+	
+	private void getTextures128(){
+		// chargement du spriteSheet themes/brambles16
+		for(int i=1; i<=4; i++){
+			for(int j=1; j<=4; j++){
+				int index = (i-1)*4 + j-1;
+				lvl_brambles[index] = brambles.grabImage(j, i, 128, 128);
+			}
+		}
+	}
+	
 	
 }

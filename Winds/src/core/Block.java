@@ -26,17 +26,32 @@ public class Block extends GameObject{
 		RONCES_COTE_1, RONCES_COTE_2, RONCES_COTE_3, RONCES_COTE_4, 
 		RONCES_COTE_5, RONCES_COTE_6, RONCES_COTE_7, RONCES_COTE_8,
 		RONCES_COTE_9, RONCES_COTE_10, RONCES_COTE_11, RONCES_COTE_12, 
-		RONCES_COTE_13, RONCES_COTE_14, RONCES_COTE_15, RONCES_COTE_16;
+		RONCES_COTE_13, RONCES_COTE_14, RONCES_COTE_15, RONCES_COTE_16,
+		
+		BRAMBLES_01, BRAMBLES_02, BRAMBLES_03, BRAMBLES_04, BRAMBLES_05, BRAMBLES_06, BRAMBLES_07, BRAMBLES_08, 
+		BRAMBLES_09, BRAMBLES_10, BRAMBLES_11, BRAMBLES_12, BRAMBLES_13, BRAMBLES_14, BRAMBLES_15, BRAMBLES_16;
 	}
 	
 	Texture tex = Game.getInstance();
 	private blockType type;
+	private ArrayList<Rectangle> bounds;
 	
 	public Block(float x, float y, blockType type, ObjectId id) {
 		super(x, y, id);
 		this.type = type;
 	}
 
+	public Block(float x, float y, blockType type, ObjectId id, ArrayList<int[]> collisions) {
+		super(x, y, id);
+		this.type = type;
+		this.bounds = new ArrayList<Rectangle>();
+		for (int i = 0; i < collisions.size(); i++) {
+			int[] c = collisions.get(i);
+			this.bounds.add(new Rectangle(c[0], c[1], c[2], c[3]));
+		}
+		
+	}
+	
 	@Override
 	public void tick(LinkedList<GameObject> object) {
 		
@@ -110,14 +125,16 @@ public class Block extends GameObject{
 		if(type == Block.blockType.RONCES_COTE_15) g.drawImage(tex.lvl_ronces[378], (int)x, (int)y, null);
 		if(type == Block.blockType.RONCES_COTE_16) g.drawImage(tex.lvl_ronces[379], (int)x, (int)y, null);
 		
-		if(Window.debug){
+		if(type == Block.blockType.BRAMBLES_08) g.drawImage(tex.lvl_brambles[7], (int)x, (int)y, null);
+		
+		/*if(Window.debug){
 			Graphics2D g2d = (Graphics2D) g;
 			g.setColor(Color.red);
 			for (int i = 0; i < getBounds2().size(); i++) {
 				g2d.draw(getBounds2().get(i));
 			}
 			
-		}
+		}*/
 	}
 
 	@Override
@@ -126,12 +143,7 @@ public class Block extends GameObject{
 	}
 
 	public ArrayList<Rectangle> getBounds2(){
-		ArrayList<Rectangle> bounds = new ArrayList<Rectangle>();
-		
-		bounds.add(new Rectangle((int)x+4, (int)y, 24, 16));
-		bounds.add(new Rectangle((int)x, (int)y, 8, 32));
-		
-		return bounds;
+		return this.bounds;
 	}
 	
 	
