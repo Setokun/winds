@@ -47,7 +47,7 @@ public class Block extends GameObject{
 		this.bounds = new ArrayList<Rectangle>();
 		for (int i = 0; i < collisions.size(); i++) {
 			int[] c = collisions.get(i);
-			this.bounds.add(new Rectangle(c[0], c[1], c[2], c[3]));
+			this.bounds.add(new Rectangle((int) (x + c[0]), (int) (y + c[1]), c[2], c[3]));
 		}
 		
 	}
@@ -125,16 +125,32 @@ public class Block extends GameObject{
 		if(type == Block.blockType.RONCES_COTE_15) g.drawImage(tex.lvl_ronces[378], (int)x, (int)y, null);
 		if(type == Block.blockType.RONCES_COTE_16) g.drawImage(tex.lvl_ronces[379], (int)x, (int)y, null);
 		
-		if(type == Block.blockType.BRAMBLES_08) g.drawImage(tex.lvl_brambles[7], (int)x, (int)y, null);
 		
-		/*if(Window.debug){
+		if(type == Block.blockType.BRAMBLES_01) g.drawImage(tex.lvl_brambles[0], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_02) g.drawImage(tex.lvl_brambles[1], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_03) g.drawImage(tex.lvl_brambles[2], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_04) g.drawImage(tex.lvl_brambles[3], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_05) g.drawImage(tex.lvl_brambles[4], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_06) g.drawImage(tex.lvl_brambles[5], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_07) g.drawImage(tex.lvl_brambles[6], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_08) g.drawImage(tex.lvl_brambles[7], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_09) g.drawImage(tex.lvl_brambles[8], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_10) g.drawImage(tex.lvl_brambles[9], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_11) g.drawImage(tex.lvl_brambles[10], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_12) g.drawImage(tex.lvl_brambles[11], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_13) g.drawImage(tex.lvl_brambles[12], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_14) g.drawImage(tex.lvl_brambles[13], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_15) g.drawImage(tex.lvl_brambles[14], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_16) g.drawImage(tex.lvl_brambles[15], (int)x, (int)y, null);
+		
+		if(Window.debug){
 			Graphics2D g2d = (Graphics2D) g;
 			g.setColor(Color.red);
 			for (int i = 0; i < getBounds2().size(); i++) {
 				g2d.draw(getBounds2().get(i));
 			}
 			
-		}*/
+		}
 	}
 
 	@Override
@@ -144,6 +160,9 @@ public class Block extends GameObject{
 
 	public ArrayList<Rectangle> getBounds2(){
 		return this.bounds;
+		/*ArrayList<Rectangle> bounds = new ArrayList<Rectangle>();
+		bounds.add(new Rectangle(0, 0, 128, 128));
+		return bounds;*/
 	}
 	
 	

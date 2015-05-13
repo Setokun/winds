@@ -6,7 +6,8 @@ import java.util.LinkedList;
 import core.GameObject;
 
 public class Handler {
-public LinkedList<GameObject> objects = new LinkedList<GameObject>();
+	
+	public LinkedList<GameObject> objects = new LinkedList<GameObject>();
 	
 	private GameObject tempObject;
 	
@@ -33,7 +34,4 @@ public LinkedList<GameObject> objects = new LinkedList<GameObject>();
 		this.objects.remove(object);
 	}
 	
-	public void createLevel(){
-		
-	}
 }
