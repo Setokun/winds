@@ -31,7 +31,7 @@ public class Game extends Canvas implements Runnable{
 	public final String TITLE = "Winds";
 	private Level lvl;
 	
-	private BufferedImage bg = null, pauseImage = null, level = null;
+	private BufferedImage bg = null, pauseImage = null;
 	
 	private static boolean pause = false, running = false;
 	
@@ -57,6 +57,9 @@ public class Game extends Canvas implements Runnable{
 		seconds = 0;
 		
 		tex = new Texture();
+		handler = new Handler();
+		cam = new Camera(0, 0);
+		
 		
 		//this.setPreferredSize(new Dimension(800,600));
 		pause = false;
@@ -64,13 +67,7 @@ public class Game extends Canvas implements Runnable{
 		//bg = loader.loadImage("/background/pirate3.jpg");
 		bg = loader.loadImage("/background/2.png");
 		pauseImage = loader.loadImage("/background/menu_pause.png");
-		//level = loader.loadImage("/levels/level3.png"); // loading the level
-		//level = loader.loadImage("/levels/bramble_map1.png"); // loading the level
 		
-		
-		handler = new Handler();
-		
-		cam = new Camera(0, 0);
 		
 		/////////////// sound initialization ///////////////
 		bgMusicFilename = "resources/Winds_Ice_Cavern.mp3";
@@ -91,7 +88,7 @@ public class Game extends Canvas implements Runnable{
 	    		{ 3, 8, 9,10, 8, 4, 1, 8, 4, 0, 0, 3, 9, 8,10, 8, 9, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	    		{11, 0, 0, 0, 0,12, 0, 0,12, 0, 0,11, 0, 0, 0, 0, 0,12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	    		{11,15,16, 0, 0, 6, 4, 0, 6, 8, 8, 5, 0, 0, 0, 0, 0, 6,16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	    		{ 7, 8, 5, 0, 0, 0, 6, 4, 0, 0, 0, 0, 3, 2,15,16, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 7, 8, 5, 0, 0, 0, 6, 4, 0, 0, 0, 0, 3, 2,15,16, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	    		{ 3, 9, 8,10, 8, 4, 0,13, 3, 4, 0, 0, 7,16,12,11, 3, 9, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	    		{ 0, 0, 0, 0, 0,12, 0, 0,14,13, 0, 0, 0,11,12,14,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	    		{ 0, 0, 0, 0, 0,12, 1, 2, 0, 0, 3, 4, 0,11, 6, 8, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -150,7 +147,7 @@ public class Game extends Canvas implements Runnable{
 	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	    		};
 	    
-	    loadImageLevelByMatrix(elements);
+	    loadLevelByMatrix(elements);
 	    
 	    this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput(handler));
@@ -293,7 +290,7 @@ public class Game extends Canvas implements Runnable{
 		bs.show();
 	}
 	
-	private void loadImageLevelByMatrix(int[][] elements){
+	private void loadLevelByMatrix(int[][] elements){
 		
 		
 		//System.out.println("wdth - height : " + w + " " + h);
@@ -375,6 +372,26 @@ public class Game extends Canvas implements Runnable{
 				collisions16.add(new CollisionBox(0,48,120,40, ObjectId.DangerousBlock));
 				collisions16.add(new CollisionBox(64,88,60,40, ObjectId.DangerousBlock));
 				if(elements[i][j] == 16) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_16, collisions16));
+				
+				ArrayList<CollisionBox> collisions17 = new ArrayList<CollisionBox>();
+				collisions17.add(new CollisionBox(0,0,60,128, ObjectId.DangerousBlock));
+				if(elements[i][j] == 17) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_17, collisions17));
+
+				ArrayList<CollisionBox> collisions18 = new ArrayList<CollisionBox>();
+				collisions18.add(new CollisionBox(68,0,60,128, ObjectId.DangerousBlock));
+				if(elements[i][j] == 18) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_18, collisions18));
+				
+				ArrayList<CollisionBox> collisions19 = new ArrayList<CollisionBox>();
+				collisions19.add(new CollisionBox(80,48,28,32, ObjectId.DangerousBlock));
+				collisions19.add(new CollisionBox(108,48,20,40, ObjectId.DangerousBlock));
+				collisions19.add(new CollisionBox(108,40,20,8, ObjectId.Block));
+				if(elements[i][j] == 19) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_19, collisions19));
+
+				ArrayList<CollisionBox> collisions20 = new ArrayList<CollisionBox>();
+				collisions20.add(new CollisionBox(0,40,110,8, ObjectId.Block));
+				collisions20.add(new CollisionBox(0,48,120,40, ObjectId.DangerousBlock));
+				collisions20.add(new CollisionBox(64,88,60,40, ObjectId.DangerousBlock));
+				if(elements[i][j] == 20) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_20, collisions20));
 			}
 		}
 		

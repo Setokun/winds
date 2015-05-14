@@ -27,8 +27,8 @@ public class Block extends GameObject{
 		RONCES_COTE_9, RONCES_COTE_10, RONCES_COTE_11, RONCES_COTE_12, 
 		RONCES_COTE_13, RONCES_COTE_14, RONCES_COTE_15, RONCES_COTE_16,
 		
-		BRAMBLES_01, BRAMBLES_02, BRAMBLES_03, BRAMBLES_04, BRAMBLES_05, BRAMBLES_06, BRAMBLES_07, BRAMBLES_08, 
-		BRAMBLES_09, BRAMBLES_10, BRAMBLES_11, BRAMBLES_12, BRAMBLES_13, BRAMBLES_14, BRAMBLES_15, BRAMBLES_16;
+		BRAMBLES_01, BRAMBLES_02, BRAMBLES_03, BRAMBLES_04, BRAMBLES_05, BRAMBLES_06, BRAMBLES_07, BRAMBLES_08,	BRAMBLES_09, BRAMBLES_10, 
+		BRAMBLES_11, BRAMBLES_12, BRAMBLES_13, BRAMBLES_14, BRAMBLES_15, BRAMBLES_16, BRAMBLES_17, BRAMBLES_18, BRAMBLES_19, BRAMBLES_20;
 	}
 	
 	Texture tex = Game.getInstance();
@@ -41,7 +41,7 @@ public class Block extends GameObject{
 		this.type = type;
 	}
 
-	public Block(float x, float y, blockType type, ObjectId id, ArrayList<int[]> collisions) {
+	/*public Block(float x, float y, blockType type, ObjectId id, ArrayList<int[]> collisions) {
 		super(x, y, id);
 		this.type = type;
 		this.bounds = new ArrayList<Rectangle>();
@@ -50,7 +50,7 @@ public class Block extends GameObject{
 			this.bounds.add(new Rectangle((int) (x + c[0]), (int) (y + c[1]), c[2], c[3]));
 		}
 		
-	}
+	}*/
 	
 	public Block(float x, float y, blockType type, ArrayList<CollisionBox> collisions) {
 		super(x, y, null);
@@ -115,6 +115,10 @@ public class Block extends GameObject{
 		if(type == Block.blockType.BRAMBLES_14) g.drawImage(tex.lvl_brambles[13], (int)x, (int)y, null);
 		if(type == Block.blockType.BRAMBLES_15) g.drawImage(tex.lvl_brambles[14], (int)x, (int)y, null);
 		if(type == Block.blockType.BRAMBLES_16) g.drawImage(tex.lvl_brambles[15], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_17) g.drawImage(tex.lvl_brambles[16], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_18) g.drawImage(tex.lvl_brambles[17], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_19) g.drawImage(tex.lvl_brambles[18], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_20) g.drawImage(tex.lvl_brambles[19], (int)x, (int)y, null);
 		
 		if(Window.debug){
 			Graphics2D g2d = (Graphics2D) g;
