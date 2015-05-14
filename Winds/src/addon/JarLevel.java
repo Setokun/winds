@@ -5,7 +5,7 @@ import annotation.wLevel;
 
 public class JarLevel extends JarItem {
 	
-	public boolean isValid(){
+	/*OK*/public boolean isValid(){
 		wCard aCard = mainClass.getDeclaredAnnotation(wCard.class);
 		wLevel aLevel = mainClass.getDeclaredAnnotation(wLevel.class);		
 		

@@ -10,7 +10,7 @@ public class JarTheme extends JarItem {
 	private ImageIcon logo, background, interactions, sprites32, sprites64, sprites128; 
 	
 	
-	public boolean isValid(){
+	/*to finish*/public boolean isValid(){
 		wCard aCard = mainClass.getDeclaredAnnotation(wCard.class);
 		wTheme aTheme = mainClass.getDeclaredAnnotation(wTheme.class);		
 		
@@ -19,7 +19,20 @@ public class JarTheme extends JarItem {
 			&& sprites32 != null && sprites64 != null && sprites128 != null;
 	}
 	
-	public String toString(){
+	/*to finish*/public boolean equals(Object o){
+		if( !(o instanceof JarTheme) ){ return false; }
+		
+		JarTheme j = (JarTheme) o;
+		return super.equals(o) && getIdDB() == j.getIdDB() //&& music.equals(j.music)
+			&& logo.getDescription().equals(j.logo.getDescription())
+			&& background.getDescription().equals(j.background.getDescription())
+			//&& interactions.getDescription().equals(j.interactions.getDescription())
+			&& sprites32.getDescription().equals(j.sprites32.getDescription())
+			&& sprites64.getDescription().equals(j.sprites64.getDescription())
+			&& sprites128.getDescription().equals(j.sprites128.getDescription());
+	}
+	
+	/*OK*/public String toString(){
 		return "JarTheme {mainClass: \""+ mainClass.getName()
 						+"\", music: \""+ music
 						+"\", logo: \""+ logo.getDescription()
@@ -31,10 +44,10 @@ public class JarTheme extends JarItem {
 	}
 	
 	//region Annotation Getters 
-	public String wThemeToString(){
+	/*OK*/public String wThemeToString(){
 		return "wTheme {idDB: \""+ getIdDB() +"\"}";
 	}
-	public int getIdDB(){
+	/*OK*/public int getIdDB(){
 		return mainClass.getDeclaredAnnotation(wTheme.class).idDB();
 	}
 	//endregion

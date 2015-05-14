@@ -13,14 +13,20 @@ import javax.swing.ImageIcon;
 
 
 public class AddonManager {
-	private static ArrayList<JarTheme> themes = new ArrayList<JarTheme>();
-	private static ArrayList<JarLevel> levels = new ArrayList<JarLevel>();
+	private static ArrayList<JarTheme> themes;
+	private static ArrayList<JarLevel> levels;
+
+	static {
+		themes = new ArrayList<JarTheme>();
+		levels = new ArrayList<JarLevel>();
+		collectThemes();
+		collectLevels();
+	}
 	
-	private static JarTheme loadedTheme;
-	private static JarLevel loadedLevel;
-
-
-	/*OK*/public static void getThemes(){
+	
+	public static void main(String[] args) {}
+	
+	/*OK*/private static void collectThemes(){
 		File folder = new File("bin/resources/themes");
 		File[] items = folder.listFiles();
 		
@@ -31,7 +37,7 @@ public class AddonManager {
 		    }
 		}
 	}
-	/*to finish - music*/public static JarTheme themeValidate(File jarFile){
+	/*to finish - music*/private static JarTheme themeValidate(File jarFile){
 		JarTheme currentTheme = new JarTheme();
 		try {
 			JarFile jar = new JarFile(jarFile);
@@ -87,19 +93,29 @@ public class AddonManager {
 		}
 		return currentTheme.isValid() ? currentTheme : null;
 	}
-
-	public static void getLevels(){
+	/*OK*/public static void addTheme(File jarTheme){
+		JarTheme current = themeValidate(jarTheme);
+		if(current != null && !themes.contains(current)){ themes.add(current); }
+	}
+	/*OK*/public static JarTheme getThemeByID(int idTheme){
+		for (JarTheme theme : themes) {
+			if(theme.getIdDB() == idTheme){ return theme; }
+		}
+		return null;
+	}
+	
+	/*OK*/private static void collectLevels(){
 		File folder = new File("bin/resources/levels");
 		File[] items = folder.listFiles();
 		
 		for (int i = 0; i < items.length; i++){
-		   if (items[i].isFile() && items[i].getName().endsWith(".jar")) {
-			   JarLevel level = levelValidate(items[i]);
-			   if(level != null){ levels.add(level); }
-		   }
+			if (items[i].isFile() && items[i].getName().endsWith(".jar")) {
+		    	JarLevel level = levelValidate(items[i]);
+			    if(level != null){ levels.add(level); }
+			}
 		}
 	}
-	/*OK*/public static JarLevel levelValidate(File jarFile){
+	/*OK*/private static JarLevel levelValidate(File jarFile){
 		JarLevel currentLevel = new JarLevel();
 		try {
 			JarFile jar = new JarFile(jarFile);
@@ -122,6 +138,26 @@ public class AddonManager {
 			System.out.println("Unable to open the JAR file named \""+ jarFile.getName() +"\"");
 		}
 		return currentLevel.isValid() ? currentLevel : null;
+	}
+	/*OK*/public static void addLevel(File jarLevel){
+		JarLevel current = levelValidate(jarLevel);
+		if(current != null && !levels.contains(current)){ levels.add(current); }
+	}
+	/*OK*/public static ArrayList<JarLevel> getLevelByType(String wLevelType){
+		ArrayList<JarLevel> lvls = new ArrayList<JarLevel>();
+		for (JarLevel lvl : levels) {
+			if (lvl.getType() == wLevelType) { lvls.add(lvl); }
+		}
+		return lvls;
+	}
+	
+	public static JarTheme[] getThemes(){
+		JarTheme[] jarThemes = new JarTheme[ themes.size() ];
+		return themes.toArray(jarThemes);
+	}
+	public static JarLevel[] getLevels(){
+		JarLevel[] jarLevels = new JarLevel[ levels.size() ];
+		return levels.toArray(jarLevels);
 	}
 	
 }

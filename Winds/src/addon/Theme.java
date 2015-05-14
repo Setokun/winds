@@ -1,9 +1,10 @@
 package addon;
 
-import annotation.*;
+import annotation.wCard;
+import annotation.wTheme;
 
-@wCard(name = "Pirate", creator = "admin", date = "2015-01-02", description = "Theme pirate")
-@wTheme(idDB = 1)
+@wCard(name = "", creator = "", date = "", description = "")
+@wTheme(idDB = 0)
 public class Theme implements iTheme {
 	private int[][][] spriteCompatibility;
 

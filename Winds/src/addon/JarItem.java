@@ -7,32 +7,41 @@ abstract class JarItem {
 	
 	abstract boolean isValid();
 	
+	/*OK*/public boolean equals(Object o){
+		if( !(o instanceof JarItem) ){ return false; }
+		
+		JarItem j = (JarItem) o;
+		return mainClass.equals(j.mainClass) && getCreator().equals(j.getCreator())
+			&& getDate().equals(j.getDate()) && getName().equals(j.getName())
+			&& getDescription().equals(j.getDescription());
+	}
+	
 	//region Annotation Getters 
-	public String wCardToString(){
+	/*OK*/public String wCardToString(){
 		return "wCard {creator: \""+ getCreator()
 					+"\", date: \""+ getDate()
 					+"\", name: \""+ getName()
 					+"\", description: \""+ getDescription() +"\"}";
 	}
-	public String getCreator(){
+	/*OK*/public String getCreator(){
 		return mainClass.getDeclaredAnnotation(wCard.class).creator();
 	}
-	public String getDate(){
+	/*OK*/public String getDate(){
 		return mainClass.getDeclaredAnnotation(wCard.class).date();
 	}
-	public String getName(){
+	/*OK*/public String getName(){
 		return mainClass.getDeclaredAnnotation(wCard.class).name();
 	}
-	public String getDescription(){
+	/*OK*/public String getDescription(){
 		return mainClass.getDeclaredAnnotation(wCard.class).description();
 	}
 	//endregion
 	
 	//region Getter & Setter 
-	public Class<?> getMainClass() {
+	/*OK*/public Class<?> getMainClass() {
 		return mainClass;
 	}
-	public void setMainClass(Class<?> mainClass) {
+	/*OK*/public void setMainClass(Class<?> mainClass) {
 		this.mainClass = mainClass;
 	}
 	//endregion
