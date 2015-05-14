@@ -123,7 +123,7 @@ public class Block extends GameObject{
 				if(getBounds3().get(i).getId() == ObjectId.DangerousBlock)
 					g2d.setColor(Color.red);
 				if(getBounds3().get(i).getId() == ObjectId.Block)
-					g2d.setColor(Color.blue);
+					g2d.setColor(Color.green);
 				g2d.draw(getBounds3().get(i).getBounds());
 			}
 			

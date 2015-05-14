@@ -91,18 +91,12 @@ public class Player extends GameObject{
 					
 					// TOP
 					if(getBoundsTop().intersects(tempObject.getBounds3().get(j).getBounds())){
-						
-						System.out.println("Contact avec un bloc standard");
-						
 						y = tempObject.getBounds3().get(j).y + tempObject.getBounds3().get(j).height;
 						velY = -(this.getVelY()/4);
 					}
 					
 					// BOTTOM
 					if(getBounds().intersects(tempObject.getBounds3().get(j).getBounds())){
-						
-						System.out.println("Contact avec un bloc standard");
-						
 						y = tempObject.getBounds3().get(j).getBounds().y - 64;
 						
 						if(Math.abs(this.getVelY()) < 0.4f){
@@ -131,18 +125,12 @@ public class Player extends GameObject{
 					
 					// RIGHT
 					if(getBoundsRight().intersects(tempObject.getBounds3().get(j).getBounds())){	
-						
-						System.out.println("Contact avec un bloc standard");
-						
 						x = tempObject.getBounds3().get(j).x - 64;
 						velX = -(this.getVelX()/2);
 					}
 					
 					// LEFT
 					if(getBoundsLeft().intersects(tempObject.getBounds3().get(j))){ 	
-						
-						System.out.println("Contact avec un bloc standard");
-						
 						x = tempObject.getBounds3().get(j).x + tempObject.getBounds3().get(j).width;
 						velX = -(this.getVelX()/2);
 					}
@@ -151,18 +139,12 @@ public class Player extends GameObject{
 					
 					// TOP
 					if(getBoundsTop().intersects(tempObject.getBounds3().get(j).getBounds())){
-						
-						System.out.println("Contact avec un bloc dangereux");
-						
 						y = tempObject.getBounds3().get(j).y + tempObject.getBounds3().get(j).height;
 						velY = -(this.getVelY()/4);
 					}
 					
 					// BOTTOM
 					if(getBounds().intersects(tempObject.getBounds3().get(j).getBounds())){
-						
-						System.out.println("Contact avec un bloc dangereux");
-						
 						y = tempObject.getBounds3().get(j).y - 64;
 						
 						if(Math.abs(this.getVelY()) < 0.4f){
@@ -191,113 +173,20 @@ public class Player extends GameObject{
 					
 					// RIGHT
 					if(getBoundsRight().intersects(tempObject.getBounds3().get(j).getBounds())){	
-						
-						System.out.println("Contact avec un bloc dangereux");						
-						
 						x = tempObject.getBounds3().get(j).x - 64;
 						velX = -(this.getVelX()/2);
 					}
 					
 					// LEFT
 					if(getBoundsLeft().intersects(tempObject.getBounds3().get(j))){ 	
-						
-						System.out.println("Contact avec un bloc dangereux");
-						
 						x = tempObject.getBounds3().get(j).x + tempObject.getBounds3().get(j).getBounds().width;
 						velX = -(this.getVelX()/2);
 					}
 				}
 			}
-			
-			/*if(tempObject.getId() == ObjectId.Block){
-				
-				for (int j = 0; j < tempObject.getBounds2().size(); j++) {
-					// TOP
-					if(getBoundsTop().intersects(tempObject.getBounds2().get(j))){
-						y = tempObject.getBounds2().get(j).y + tempObject.getBounds2().get(j).height;
-						velY = -(this.getVelY()/4);
-					}
-					
-					// BOTTOM
-					if(getBounds().intersects(tempObject.getBounds2().get(j)) && tempObject.getId() == ObjectId.Block){
-						
-						y = tempObject.getBounds2().get(j).y - 64;
-						
-						if(Math.abs(this.getVelY()) < 0.4f){
-							velY = 0;
-							unsetGravity();
-						}
-						else{
-							velY = -(this.getVelY()/1.5f);
-						}
-						
-						if(Math.abs(this.getVelX()) < 0.3f){
-							velX = 0;
-						}
-						else{
-						velX = this.getVelX()/1.2f;
-						}
-						
-						falling = false;
-					}
-					else{
-						falling = true;
-						if(timeElapsed % 60 == 0){
-							resetGravity();
-						}
-					}
-					
-					// RIGHT
-					if(getBoundsRight().intersects(tempObject.getBounds2().get(j))){	
-						x = tempObject.getBounds2().get(j).x - 64;
-						velX = -(this.getVelX()/2);
-					}
-					
-					// LEFT
-					if(getBoundsLeft().intersects(tempObject.getBounds2().get(j))){ 	
-						x = tempObject.getBounds2().get(j).x + tempObject.getBounds2().get(j).width;
-						velX = -(this.getVelX()/2);
-					}
-				}
-			}*/
 		}
-			/*else if(tempObject.getId() == ObjectId.InoffensiveBlock){
-				
-				// TOP
-				if(getBoundsTop().intersects(tempObject.getBounds())){
-					y = tempObject.getY() + 32;
-					velY = 1;
-				}
-				
-				// BOTTOM
-				if(getBounds().intersects(tempObject.getBounds())){
-					y = tempObject.getY()- height ;
-					if(Math.abs(this.getVelY()) < 1){
-						velX = 0;
-						Player.gravity = 0;
-					}
-					else
-						velY = -(this.getVelY()/1.5f);
-					velX = this.getVelX()/1.5f;
-					falling = false;
-					//System.out.println("touche un bloc inoffensif");
-				}
-				else
-					falling = true;
-
-				// RIGHT
-				if(getBoundsRight().intersects(tempObject.getBounds())){	
-					x = tempObject.getX() - width;
-					velX = -1;
-				}
-				
-				// LEFT
-				if(getBoundsLeft().intersects(tempObject.getBounds())){ 	
-					x = tempObject.getX() + 32;
-					velX = 1;
-				}
-			}
-		}*/
+		
+		// 4 instructions to prevent from going outside the playground
 		if(this.getX() <= 0){
 			this.setX(this.getX() + 2);
 			velX = -(this.getVelX()/2);
@@ -307,11 +196,11 @@ public class Player extends GameObject{
 			velY = -(this.getVelY()/2);
 		}
 		
-		if(this.getX() + 64 >= 60*128){
+		if(this.getX() + 72 >= 60*128){
 			this.setX(this.getX() - 2);
 			velX = -(this.getVelX()/2);
 		}
-		if(this.getY() + 64 >= 60*128){
+		if(this.getY() + 92 >= 60*128){
 			this.setY(this.getY() - 2);
 			velY = -(this.getVelY()/2);
 		}
