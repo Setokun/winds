@@ -213,8 +213,6 @@ public class Player extends GameObject{
 		else
 			g.drawImage(tex.bulle[0], (int)x, (int)y, null);
 		
-		//g.fillRect((int)x, (int)y, (int)width, (int)height);
-		
 		if(Window.debug){
 			Graphics2D g2d = (Graphics2D) g;
 			g.setColor(Color.red);
