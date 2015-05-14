@@ -3,7 +3,6 @@ package core;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import display.Game;
 
@@ -23,7 +22,7 @@ public class InoffensiveBlock extends GameObject{
 	}
 
 	@Override
-	public void tick(LinkedList<GameObject> object) {
+	public void tick(ArrayList<GameObject> object) {
 		
 	}
 

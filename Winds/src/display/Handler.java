@@ -1,13 +1,13 @@
 package display;
 
 import java.awt.Graphics;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import core.GameObject;
 
 public class Handler {
 	
-	public LinkedList<GameObject> objects = new LinkedList<GameObject>();
+	public ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	
 	private GameObject tempObject;
 	

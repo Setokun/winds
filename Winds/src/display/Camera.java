@@ -11,8 +11,8 @@ public class Camera {
 		this.y = y;
 	}
 
-	private int largeur_niveau = 1860; // TODO récupérer les largeurs de niveaux depuis le thème
-	private int hauteur_niveau = 1728;
+	private int largeur_niveau = 60*128; // TODO récupérer les largeurs de niveaux depuis le thème
+	private int hauteur_niveau = 60*128;
 	
 	public void tick(GameObject player){
 		if(player.getX() >= Game.WIDTH/2 && player.getX() <= largeur_niveau - Game.WIDTH/2)

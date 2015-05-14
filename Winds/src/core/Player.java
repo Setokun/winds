@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import display.Animation;
 import display.Game;
@@ -44,7 +43,7 @@ public class Player extends GameObject{
 	}
 	
 	@Override
-	public void tick(LinkedList<GameObject> objects) {
+	public void tick(ArrayList<GameObject> objects) {
 		x += velX; 
 		y += velY + .005f;
 		timeElapsed++;
@@ -66,10 +65,21 @@ public class Player extends GameObject{
 		playerWalk.runAnimation();
 	}
 	
-	private void collision(LinkedList<GameObject> object){
+	private void collision(ArrayList<GameObject> object){
 		
 		for(int i = 0; i<handler.objects.size(); i++){
 			GameObject tempObject = handler.objects.get(i);
+			
+			
+			if(Math.abs(tempObject.getY() - this.getY()) > 512 && Math.abs(tempObject.getY() - this.getY()) > 256)
+				i+=4;
+			
+			
+			if(Math.abs(tempObject.getX() - this.getX()) > 256)
+				continue;
+			
+			if(Math.abs(tempObject.getY() - this.getY()) > 256)
+				continue;
 			
 			falling = true;
 			
@@ -162,7 +172,23 @@ public class Player extends GameObject{
 				}
 			}
 		}*/
+		if(this.getX() <= 0){
+			this.setX(this.getX() + 2);
+			velX = -(this.getVelX()/2);
+		}
+		if(this.getY() <= 0){
+			this.setY(this.getY() + 2);
+			velY = -(this.getVelY()/2);
+		}
 		
+		if(this.getX() + 64 >= 60*128){
+			this.setX(this.getX() - 2);
+			velX = -(this.getVelX()/2);
+		}
+		if(this.getY() + 64 >= 60*128){
+			this.setY(this.getY() - 2);
+			velY = -(this.getVelY()/2);
+		}
 	}
 
 	public void render(Graphics g) {
