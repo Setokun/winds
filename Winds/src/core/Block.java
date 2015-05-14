@@ -27,8 +27,9 @@ public class Block extends GameObject{
 		RONCES_COTE_9, RONCES_COTE_10, RONCES_COTE_11, RONCES_COTE_12, 
 		RONCES_COTE_13, RONCES_COTE_14, RONCES_COTE_15, RONCES_COTE_16,
 		
-		BRAMBLES_01, BRAMBLES_02, BRAMBLES_03, BRAMBLES_04, BRAMBLES_05, BRAMBLES_06, BRAMBLES_07, BRAMBLES_08,	BRAMBLES_09, BRAMBLES_10, 
-		BRAMBLES_11, BRAMBLES_12, BRAMBLES_13, BRAMBLES_14, BRAMBLES_15, BRAMBLES_16, BRAMBLES_17, BRAMBLES_18, BRAMBLES_19, BRAMBLES_20;
+		BRAMBLES_01, BRAMBLES_02, BRAMBLES_03, BRAMBLES_04, BRAMBLES_05, BRAMBLES_06, BRAMBLES_07, 
+		BRAMBLES_08, BRAMBLES_09, BRAMBLES_10, BRAMBLES_11, BRAMBLES_12, BRAMBLES_13, BRAMBLES_14, 
+		BRAMBLES_15, BRAMBLES_16, BRAMBLES_17, BRAMBLES_18, BRAMBLES_19, BRAMBLES_20, BRAMBLES_21;
 	}
 	
 	Texture tex = Game.getInstance();
@@ -119,6 +120,7 @@ public class Block extends GameObject{
 		if(type == Block.blockType.BRAMBLES_18) g.drawImage(tex.lvl_brambles[17], (int)x, (int)y, null);
 		if(type == Block.blockType.BRAMBLES_19) g.drawImage(tex.lvl_brambles[18], (int)x, (int)y, null);
 		if(type == Block.blockType.BRAMBLES_20) g.drawImage(tex.lvl_brambles[19], (int)x, (int)y, null);
+		if(type == Block.blockType.BRAMBLES_21) g.drawImage(tex.lvl_brambles[20], (int)x, (int)y, null);
 		
 		if(Window.debug){
 			Graphics2D g2d = (Graphics2D) g;

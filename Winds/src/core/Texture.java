@@ -31,7 +31,7 @@ public class Texture {
 	public BufferedImage[] lvl_bib3 = new BufferedImage[64];
 	public BufferedImage[] lvl_bib4 = new BufferedImage[64];
 	public BufferedImage[] lvl_ronces = new BufferedImage[384];
-	public BufferedImage[] lvl_brambles = new BufferedImage[20];
+	public BufferedImage[] lvl_brambles = new BufferedImage[21];
 	
 	public Texture(){
 		
@@ -49,7 +49,7 @@ public class Texture {
 			bib_003_sheet = loader.loadImage("/Black-Ice-Battle_003.png");
 			bib_004_sheet = loader.loadImage("/Black-Ice-Battle_004.png");
 			ronces_sheet = loader.loadImage("/ronces.png");
-			brambles_sheet = loader.loadImage("/themes/brambles_20.png");
+			brambles_sheet = loader.loadImage("/themes/brambles_21.png");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -152,9 +152,9 @@ public class Texture {
 	
 	private void getTextures128(){
 		// chargement du spriteSheet themes/brambles20
-		for(int i=1; i<=5; i++){
-			for(int j=1; j<=4; j++){
-				int index = (i-1)*4 + j-1;
+		for(int i=1; i<=3; i++){
+			for(int j=1; j<=7; j++){
+				int index = (i-1)*7 + j-1;
 				lvl_brambles[index] = brambles.grabImage(j, i, 128, 128);
 			}
 		}

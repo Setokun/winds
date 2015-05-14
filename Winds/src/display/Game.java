@@ -17,11 +17,9 @@ import controls.KeyInput;
 import controls.MouseInput;
 import core.Block;
 import core.CollisionBox;
-import core.InoffensiveBlock;
 import core.ObjectId;
 import core.Player;
 import core.Texture;
-import core.TransparentBlock;
 
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
@@ -87,9 +85,9 @@ public class Game extends Canvas implements Runnable{
 	    int [][] elements = {
 	    		{ 3, 8, 9,10, 8, 4, 1, 8, 4, 0, 0, 3, 9, 8,10, 8, 9, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	    		{11, 0, 0, 0, 0,12, 0, 0,12, 0, 0,11, 0, 0, 0, 0, 0,12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	    		{11,15,16, 0, 0, 6, 4, 0, 6, 8, 8, 5, 0, 0, 0, 0, 0, 6,16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{11,15,16, 0, 0, 6, 4, 0, 6, 8, 8, 5, 0, 0, 0, 0, 0, 6,21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	    		{ 7, 8, 5, 0, 0, 0, 6, 4, 0, 0, 0, 0, 3, 2,15,16, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	    		{ 3, 9, 8,10, 8, 4, 0,13, 3, 4, 0, 0, 7,16,12,11, 3, 9, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 3, 9, 8,10, 8, 4, 0,13, 3, 4, 0, 0, 7,21,12,11, 3, 9, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	    		{ 0, 0, 0, 0, 0,12, 0, 0,14,13, 0, 0, 0,11,12,14,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	    		{ 0, 0, 0, 0, 0,12, 1, 2, 0, 0, 3, 4, 0,11, 6, 8, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	    		{ 0, 0, 0, 0, 0,12, 0, 0, 0, 0,11, 6, 9, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -374,24 +372,34 @@ public class Game extends Canvas implements Runnable{
 				if(elements[i][j] == 16) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_16, collisions16));
 				
 				ArrayList<CollisionBox> collisions17 = new ArrayList<CollisionBox>();
-				collisions17.add(new CollisionBox(0,0,60,128, ObjectId.DangerousBlock));
+				collisions17.add(new CollisionBox(0,40,16,88, ObjectId.DangerousBlock));
+				collisions17.add(new CollisionBox(16,32,28,96, ObjectId.DangerousBlock));
+				collisions17.add(new CollisionBox(44,56,16,72, ObjectId.DangerousBlock));
 				if(elements[i][j] == 17) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_17, collisions17));
 
 				ArrayList<CollisionBox> collisions18 = new ArrayList<CollisionBox>();
-				collisions18.add(new CollisionBox(68,0,60,128, ObjectId.DangerousBlock));
+				collisions18.add(new CollisionBox(68,40,16,88, ObjectId.DangerousBlock));
+				collisions18.add(new CollisionBox(84,32,28,96, ObjectId.DangerousBlock));
+				collisions18.add(new CollisionBox(112,56,16,72, ObjectId.DangerousBlock));
 				if(elements[i][j] == 18) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_18, collisions18));
 				
 				ArrayList<CollisionBox> collisions19 = new ArrayList<CollisionBox>();
-				collisions19.add(new CollisionBox(80,48,28,32, ObjectId.DangerousBlock));
-				collisions19.add(new CollisionBox(108,48,20,40, ObjectId.DangerousBlock));
-				collisions19.add(new CollisionBox(108,40,20,8, ObjectId.Block));
+				collisions19.add(new CollisionBox(0,64,16,64, ObjectId.DangerousBlock));
+				collisions19.add(new CollisionBox(16,48,112,32, ObjectId.DangerousBlock));
+				collisions19.add(new CollisionBox(16,80,48,48, ObjectId.DangerousBlock));
 				if(elements[i][j] == 19) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_19, collisions19));
 
 				ArrayList<CollisionBox> collisions20 = new ArrayList<CollisionBox>();
-				collisions20.add(new CollisionBox(0,40,110,8, ObjectId.Block));
-				collisions20.add(new CollisionBox(0,48,120,40, ObjectId.DangerousBlock));
-				collisions20.add(new CollisionBox(64,88,60,40, ObjectId.DangerousBlock));
+				collisions20.add(new CollisionBox(16,0,48,48, ObjectId.DangerousBlock));
+				collisions20.add(new CollisionBox(0,48,64,24, ObjectId.DangerousBlock));
+				collisions20.add(new CollisionBox(0,72,48,8, ObjectId.DangerousBlock));
 				if(elements[i][j] == 20) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_20, collisions20));
+				
+				ArrayList<CollisionBox> collisions21 = new ArrayList<CollisionBox>();
+				collisions21.add(new CollisionBox(32,32,80,16, ObjectId.DangerousBlock));
+				collisions21.add(new CollisionBox(0,48,120,32, ObjectId.DangerousBlock));
+				collisions21.add(new CollisionBox(72,80,48,48, ObjectId.DangerousBlock));
+				if(elements[i][j] == 21) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_21, collisions21));
 			}
 		}
 		
