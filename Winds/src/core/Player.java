@@ -102,9 +102,7 @@ public class Player extends GameObject{
 						velX = this.getVelX()/1.2f;
 						}
 						
-						
 						falling = false;
-						//System.out.println("touche un bloc normal");
 					}
 					else{
 						falling = true;
@@ -125,7 +123,8 @@ public class Player extends GameObject{
 						velX = -(this.getVelX()/2);
 					}
 				}
-			}}
+			}
+		}
 			/*else if(tempObject.getId() == ObjectId.InoffensiveBlock){
 				
 				// TOP

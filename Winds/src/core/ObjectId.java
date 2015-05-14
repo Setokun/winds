@@ -4,5 +4,6 @@ public enum ObjectId {
 	Player(),
 	Block(),
 	TransparentBlock(),
-	InoffensiveBlock();
+	InoffensiveBlock(),
+	DangerousBlock();
 }

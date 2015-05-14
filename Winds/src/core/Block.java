@@ -35,6 +35,7 @@ public class Block extends GameObject{
 	Texture tex = Game.getInstance();
 	private blockType type;
 	private ArrayList<Rectangle> bounds;
+	private ArrayList<CollisionBox> bounds3;
 	
 	public Block(float x, float y, blockType type, ObjectId id) {
 		super(x, y, id);
@@ -49,6 +50,14 @@ public class Block extends GameObject{
 			int[] c = collisions.get(i);
 			this.bounds.add(new Rectangle((int) (x + c[0]), (int) (y + c[1]), c[2], c[3]));
 		}
+		
+	}
+	
+	public Block(float x, float y, blockType type, ArrayList<CollisionBox> collisions) {
+		super(x, y, null);
+		this.type = type;
+		this.bounds3 = collisions;
+		
 		
 	}
 	
@@ -165,5 +174,8 @@ public class Block extends GameObject{
 		return bounds;*/
 	}
 	
+	public ArrayList<CollisionBox> getBounds3(){
+		return this.bounds3;
+	}
 	
 }

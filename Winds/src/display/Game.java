@@ -16,6 +16,7 @@ import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
 import core.Block;
+import core.CollisionBox;
 import core.InoffensiveBlock;
 import core.ObjectId;
 import core.Player;
@@ -86,10 +87,10 @@ public class Game extends Canvas implements Runnable{
 		}*/
 	    
 	    int [][] elements = {
-	    		{1,2,3,4,5,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	    		{7,8,9,10,11,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	    		{13,14,15,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	    		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	    		{3,8,9,10,8,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	    		{11,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	    		{11,15,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	    		{7,8,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	    		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	    		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	    		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -461,10 +462,13 @@ public class Game extends Canvas implements Runnable{
 				
 				ArrayList<int[]> bounds1 = new ArrayList<int[]>();int[] a1_1 = {70,32,58,56};bounds1.add(a1_1);
 				if(elements[i][j] == 1) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_01, ObjectId.Block, bounds1));
+				
 				ArrayList<int[]> bounds2 = new ArrayList<int[]>();int[] a2_1 = {0,32,32,56};bounds2.add(a2_1);
 				if(elements[i][j] == 2) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_02, ObjectId.Block, bounds2));
+				
 				ArrayList<int[]> bounds3 = new ArrayList<int[]>();int[] a3_1 = {64,40,64,88};bounds3.add(a3_1);
 				if(elements[i][j] == 3) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_03, ObjectId.Block, bounds3));
+				
 				ArrayList<int[]> bounds4 = new ArrayList<int[]>();int[] a4_1 = {0,40,64,88};bounds4.add(a4_1);
 				if(elements[i][j] == 4) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_04, ObjectId.Block, bounds4));
 				
@@ -501,16 +505,85 @@ public class Game extends Canvas implements Runnable{
 				ArrayList<int[]> bounds14 = new ArrayList<int[]>();int[] a14_1 = {68,0,60,128};bounds14.add(a14_1);
 				if(elements[i][j] == 14) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_14, ObjectId.Block, bounds14));
 				
-				ArrayList<int[]> bounds15 = new ArrayList<int[]>();int[] a15_1 = {80,24,48,56};bounds15.add(a15_1);
+				ArrayList<int[]> bounds15 = new ArrayList<int[]>();int[] a15_1 = {80,40,48,48};bounds15.add(a15_1);
 				if(elements[i][j] == 15) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_15, ObjectId.Block, bounds15));
 				
-				ArrayList<int[]> bounds16 = new ArrayList<int[]>();int[] a16_1 = {0,24,120,64};bounds16.add(a16_1);
+				ArrayList<int[]> bounds16 = new ArrayList<int[]>();int[] a16_1 = {0,40,120,48};bounds16.add(a16_1);
 																   int[] a16_2 = {64,88,60,40};bounds16.add(a16_2);
 				if(elements[i][j] == 16) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_16, ObjectId.Block, bounds16));
 			}
 		}
 		
-		//handler.addObject(new Player(3*128, 3*128, handler, ObjectId.Player));
+		//handler.addObject(new Player(2*128, 1*128, handler, ObjectId.Player));
+		
+	}
+
+	private void loadImageLevelByMatrix2(int[][] elements){
+		
+		
+		//System.out.println("wdth - height : " + w + " " + h);
+		
+		for(int i = 0; i < 60; i++){
+			for(int j = 0; j < 60; j++){
+				
+				ArrayList<CollisionBox> collisions1 = new ArrayList<CollisionBox>();
+				collisions1.add(new CollisionBox(70,32,58,56, ObjectId.DangerousBlock));
+				if(elements[i][j] == 1) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_01, collisions1));
+				
+				ArrayList<CollisionBox> collisions2 = new ArrayList<CollisionBox>();
+				collisions2.add(new CollisionBox(0,32,32,56, ObjectId.DangerousBlock));
+				if(elements[i][j] == 2) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_02, collisions2));
+				
+				ArrayList<CollisionBox> collisions3 = new ArrayList<CollisionBox>();
+				collisions3.add(new CollisionBox(64,40,64,88, ObjectId.DangerousBlock));
+				if(elements[i][j] == 3) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_03, collisions3));
+				
+				ArrayList<int[]> bounds4 = new ArrayList<int[]>();int[] a4_1 = {0,40,64,88};bounds4.add(a4_1);
+				if(elements[i][j] == 4) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_04, ObjectId.Block, bounds4));
+				
+				ArrayList<int[]> bounds5 = new ArrayList<int[]>();int[] a5_1 = {0,32,128,56};bounds5.add(a5_1);
+																  int[] a5_2 = {64,0,64,32};bounds5.add(a5_2);
+				if(elements[i][j] == 5) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_05, ObjectId.Block, bounds5));
+				
+				ArrayList<int[]> bounds6 = new ArrayList<int[]>();int[] a6_1 = {8,32,120,56};bounds6.add(a6_1);
+																  int[] a6_2 = {8,0,56,32};bounds6.add(a6_2);
+				if(elements[i][j] == 6) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_06, ObjectId.Block, bounds6));
+				
+				ArrayList<int[]> bounds7 = new ArrayList<int[]>();int[] a7_1 = {72,32,56,56};bounds7.add(a7_1);
+				  												  int[] a7_2 = {72,0,56,32};bounds7.add(a7_2);
+				if(elements[i][j] == 7) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_07, ObjectId.Block, bounds7));
+				
+				ArrayList<int[]> bounds8 = new ArrayList<int[]>();int[] a8_1 = {0,32,128,56};bounds8.add(a8_1);
+				if(elements[i][j] == 8) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_08, ObjectId.Block, bounds8));
+				
+				ArrayList<int[]> bounds9 = new ArrayList<int[]>();int[] a9_1 = {0,32,128,56};bounds9.add(a9_1);
+				if(elements[i][j] == 9) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_09, ObjectId.Block, bounds9));
+				
+				ArrayList<int[]> bounds10 = new ArrayList<int[]>();int[] a10_1 = {0,32,128,56};bounds10.add(a10_1);
+				if(elements[i][j] == 10) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_10, ObjectId.Block, bounds10));
+				
+				ArrayList<int[]> bounds11 = new ArrayList<int[]>();int[] a11_1 = {72,0,56,128};bounds11.add(a11_1);
+				if(elements[i][j] == 11) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_11, ObjectId.Block, bounds11));
+				
+				ArrayList<int[]> bounds12 = new ArrayList<int[]>();int[] a12_1 = {0,0,56,128};bounds12.add(a12_1);
+				if(elements[i][j] == 12) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_12, ObjectId.Block, bounds12));
+				
+				ArrayList<int[]> bounds13 = new ArrayList<int[]>();int[] a13_1 = {0,0,60,128};bounds13.add(a13_1);
+				if(elements[i][j] == 13) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_13, ObjectId.Block, bounds13));
+				
+				ArrayList<int[]> bounds14 = new ArrayList<int[]>();int[] a14_1 = {68,0,60,128};bounds14.add(a14_1);
+				if(elements[i][j] == 14) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_14, ObjectId.Block, bounds14));
+				
+				ArrayList<int[]> bounds15 = new ArrayList<int[]>();int[] a15_1 = {80,40,48,48};bounds15.add(a15_1);
+				if(elements[i][j] == 15) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_15, ObjectId.Block, bounds15));
+				
+				ArrayList<int[]> bounds16 = new ArrayList<int[]>();int[] a16_1 = {0,40,120,48};bounds16.add(a16_1);
+																   int[] a16_2 = {64,88,60,40};bounds16.add(a16_2);
+				if(elements[i][j] == 16) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_16, ObjectId.Block, bounds16));
+			}
+		}
+		
+		//handler.addObject(new Player(2*128, 1*128, handler, ObjectId.Player));
 		
 	}
 	
