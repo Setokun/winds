@@ -55,8 +55,14 @@ public class Block extends GameObject{
 	public Block(float x, float y, blockType type, ArrayList<CollisionBox> collisions) {
 		super(x, y, null);
 		this.type = type;
-		this.bounds3 = collisions;
-		
+		bounds3 = new ArrayList<CollisionBox>();
+		for (int i = 0; i < collisions.size(); i++) {
+			this.bounds3.add(new CollisionBox((int) (x + collisions.get(i).getX()), 
+											  (int) (y + collisions.get(i).getY()), 
+											  (int) (collisions.get(i).getWidth()), 
+											  (int) (collisions.get(i).getHeight()), 
+											  collisions.get(i).getId()));
+		}
 		
 	}
 	
@@ -70,7 +76,7 @@ public class Block extends GameObject{
 		/*g.setColor(Color.white);
 		g.drawRect((int)x, (int)y, 32, 32);*/
 		
-		if(type == Block.blockType.SIMPLE_BLOCK)
+		/*if(type == Block.blockType.SIMPLE_BLOCK)
 			g.drawImage(tex.lvl_lockjaw13[63], (int)x, (int)y, null);
 		if(type == Block.blockType.FLOOR_BLOCK)
 			g.drawImage(tex.lvl_lockjaw13[62], (int)x, (int)y, null);
@@ -83,8 +89,6 @@ public class Block extends GameObject{
 		if(type == Block.blockType.PIRATE_CAISSE_4) // caisse décorative part 4
 			g.drawImage(tex.lvl_lockjaw11[29], (int)x, (int)y, null);
 		
-		
-		
 		if(type == Block.blockType.ICE_BLOCK_1) g.drawImage(tex.lvl_bib1[0], (int)x, (int)y, null);
 		if(type == Block.blockType.ICE_BLOCK_2) g.drawImage(tex.lvl_bib1[1], (int)x, (int)y, null);
 		if(type == Block.blockType.ICE_BLOCK_3) g.drawImage(tex.lvl_bib1[2], (int)x, (int)y, null);
@@ -92,46 +96,7 @@ public class Block extends GameObject{
 		if(type == Block.blockType.ICE_BLOCK_5) g.drawImage(tex.lvl_bib1[8], (int)x, (int)y, null);
 		if(type == Block.blockType.ICE_BLOCK_6) g.drawImage(tex.lvl_bib1[9], (int)x, (int)y, null);
 		if(type == Block.blockType.ICE_BLOCK_7) g.drawImage(tex.lvl_bib1[10], (int)x, (int)y, null);
-		if(type == Block.blockType.ICE_BLOCK_8) g.drawImage(tex.lvl_bib1[11], (int)x, (int)y, null);
-		
-		
-		if(type == Block.blockType.RONCES_HAUT_1)  g.drawImage(tex.lvl_ronces[19], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_2)  g.drawImage(tex.lvl_ronces[43], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_3)  g.drawImage(tex.lvl_ronces[20], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_4)  g.drawImage(tex.lvl_ronces[44], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_5)  g.drawImage(tex.lvl_ronces[21], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_6)  g.drawImage(tex.lvl_ronces[45], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_7)  g.drawImage(tex.lvl_ronces[308], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_8)  g.drawImage(tex.lvl_ronces[332], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_9)  g.drawImage(tex.lvl_ronces[309], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_10) g.drawImage(tex.lvl_ronces[333], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_11) g.drawImage(tex.lvl_ronces[310], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_12) g.drawImage(tex.lvl_ronces[334], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_13) g.drawImage(tex.lvl_ronces[10], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_14) g.drawImage(tex.lvl_ronces[34], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_15) g.drawImage(tex.lvl_ronces[11], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_16) g.drawImage(tex.lvl_ronces[35], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_17) g.drawImage(tex.lvl_ronces[12], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_18) g.drawImage(tex.lvl_ronces[36], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_19) g.drawImage(tex.lvl_ronces[13], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_HAUT_20) g.drawImage(tex.lvl_ronces[37], (int)x, (int)y, null);
-		
-		if(type == Block.blockType.RONCES_COTE_1) g.drawImage(tex.lvl_ronces[210], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_2) g.drawImage(tex.lvl_ronces[211], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_3) g.drawImage(tex.lvl_ronces[234], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_4) g.drawImage(tex.lvl_ronces[235], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_5) g.drawImage(tex.lvl_ronces[258], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_6) g.drawImage(tex.lvl_ronces[259], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_7) g.drawImage(tex.lvl_ronces[282], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_8) g.drawImage(tex.lvl_ronces[283], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_9) g.drawImage(tex.lvl_ronces[306], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_10) g.drawImage(tex.lvl_ronces[307], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_11) g.drawImage(tex.lvl_ronces[330], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_12) g.drawImage(tex.lvl_ronces[331], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_13) g.drawImage(tex.lvl_ronces[354], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_14) g.drawImage(tex.lvl_ronces[355], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_15) g.drawImage(tex.lvl_ronces[378], (int)x, (int)y, null);
-		if(type == Block.blockType.RONCES_COTE_16) g.drawImage(tex.lvl_ronces[379], (int)x, (int)y, null);
+		if(type == Block.blockType.ICE_BLOCK_8) g.drawImage(tex.lvl_bib1[11], (int)x, (int)y, null);*/
 		
 		
 		if(type == Block.blockType.BRAMBLES_01) g.drawImage(tex.lvl_brambles[0], (int)x, (int)y, null);
@@ -154,8 +119,12 @@ public class Block extends GameObject{
 		if(Window.debug){
 			Graphics2D g2d = (Graphics2D) g;
 			g.setColor(Color.red);
-			for (int i = 0; i < getBounds2().size(); i++) {
-				g2d.draw(getBounds2().get(i));
+			for (int i = 0; i < getBounds3().size(); i++) {
+				if(getBounds3().get(i).getId() == ObjectId.DangerousBlock)
+					g2d.setColor(Color.red);
+				if(getBounds3().get(i).getId() == ObjectId.Block)
+					g2d.setColor(Color.blue);
+				g2d.draw(getBounds3().get(i).getBounds());
 			}
 			
 		}

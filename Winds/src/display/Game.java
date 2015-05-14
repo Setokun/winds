@@ -149,7 +149,7 @@ public class Game extends Canvas implements Runnable{
 	    		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 	    		};
 	    
-	    loadImageLevelByMatrix(elements);
+	    loadImageLevelByMatrix2(elements);
 	    
 	    this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput(handler));
@@ -537,7 +537,8 @@ public class Game extends Canvas implements Runnable{
 				if(elements[i][j] == 2) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_02, collisions2));
 				
 				ArrayList<CollisionBox> collisions3 = new ArrayList<CollisionBox>();
-				collisions3.add(new CollisionBox(64,40,64,88, ObjectId.DangerousBlock));
+				collisions3.add(new CollisionBox(72,48,16,80, ObjectId.DangerousBlock));
+				collisions3.add(new CollisionBox(88,40,40,88, ObjectId.DangerousBlock));
 				if(elements[i][j] == 3) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_03, collisions3));
 				
 				ArrayList<CollisionBox> collisions4 = new ArrayList<CollisionBox>();
@@ -545,7 +546,8 @@ public class Game extends Canvas implements Runnable{
 				if(elements[i][j] == 4) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_04, collisions4));
 				
 			  	ArrayList<CollisionBox> collisions5 = new ArrayList<CollisionBox>();
-				collisions5.add(new CollisionBox(0,32,128,56, ObjectId.DangerousBlock));
+				collisions5.add(new CollisionBox(0,32,112,56, ObjectId.DangerousBlock));
+				collisions5.add(new CollisionBox(112,32,16,48, ObjectId.DangerousBlock));
 				collisions5.add(new CollisionBox(64,0,64,32, ObjectId.DangerousBlock));
 				if(elements[i][j] == 5) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_05, collisions5));
 				
@@ -588,11 +590,14 @@ public class Game extends Canvas implements Runnable{
 				if(elements[i][j] == 14) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_14, collisions14));
 				
 				ArrayList<CollisionBox> collisions15 = new ArrayList<CollisionBox>();
-				collisions15.add(new CollisionBox(80,40,48,48, ObjectId.DangerousBlock));
+				collisions15.add(new CollisionBox(80,48,28,32, ObjectId.DangerousBlock));
+				collisions15.add(new CollisionBox(108,48,20,40, ObjectId.DangerousBlock));
+				collisions15.add(new CollisionBox(108,40,20,8, ObjectId.Block));
 				if(elements[i][j] == 15) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_15, collisions15));
 
 				ArrayList<CollisionBox> collisions16 = new ArrayList<CollisionBox>();
-				collisions16.add(new CollisionBox(0,40,120,48, ObjectId.DangerousBlock));
+				collisions16.add(new CollisionBox(0,40,110,8, ObjectId.Block));
+				collisions16.add(new CollisionBox(0,48,120,40, ObjectId.DangerousBlock));
 				collisions16.add(new CollisionBox(64,88,60,40, ObjectId.DangerousBlock));
 				if(elements[i][j] == 16) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_16, collisions16));
 			}

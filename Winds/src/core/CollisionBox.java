@@ -27,4 +27,12 @@ public class CollisionBox extends Rectangle{
 	public void setWidth(int width){this.width = width;}
 	public void setHeight(int height){this.height = height;}
 	
+	public String toString(){
+		return super.toString() + " " + this.id; 
+	}
+	
+	public Rectangle getBounds(){
+		return new Rectangle(this.x, this.y, this.width, this.height);
+	}
+	
 }

@@ -13,7 +13,7 @@ public	 class Window {
 
 	public static Profile profile = null;
 	
-	public static final boolean debug = false;
+	public static final boolean debug = true;
 	private static JFrame main;
 	
 	public static void affect(Component c){

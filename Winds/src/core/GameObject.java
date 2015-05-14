@@ -27,6 +27,7 @@ public abstract class GameObject {
 	public abstract void render(Graphics g);
 	public abstract Rectangle getBounds();
 	public abstract ArrayList<Rectangle> getBounds2();
+	public abstract ArrayList<CollisionBox> getBounds3();
 	
 	public float getX(){
 		return x;

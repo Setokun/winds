@@ -75,5 +75,11 @@ public class TransparentBlock extends GameObject{
 		return null;
 	}
 
+	@Override
+	public ArrayList<CollisionBox> getBounds3() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

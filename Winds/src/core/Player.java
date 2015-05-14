@@ -83,7 +83,133 @@ public class Player extends GameObject{
 			
 			falling = true;
 			
-			if(tempObject.getId() == ObjectId.Block){
+			if(tempObject.getId() == ObjectId.Player)
+				continue;
+			
+			for (int j = 0; j < tempObject.getBounds3().size(); j++) {
+				if(tempObject.getBounds3().get(j).getId() == ObjectId.Block){
+					
+					// TOP
+					if(getBoundsTop().intersects(tempObject.getBounds3().get(j).getBounds())){
+						
+						System.out.println("Contact avec un bloc standard");
+						
+						y = tempObject.getBounds3().get(j).y + tempObject.getBounds3().get(j).height;
+						velY = -(this.getVelY()/4);
+					}
+					
+					// BOTTOM
+					if(getBounds().intersects(tempObject.getBounds3().get(j).getBounds())){
+						
+						System.out.println("Contact avec un bloc standard");
+						
+						y = tempObject.getBounds3().get(j).getBounds().y - 64;
+						
+						if(Math.abs(this.getVelY()) < 0.4f){
+							velY = 0;
+							unsetGravity();
+						}
+						else{
+							velY = -(this.getVelY()/1.5f);
+						}
+						
+						if(Math.abs(this.getVelX()) < 0.3f){
+							velX = 0;
+						}
+						else{
+						velX = this.getVelX()/1.2f;
+						}
+						
+						falling = false;
+					}
+					else{
+						falling = true;
+						if(timeElapsed % 60 == 0){
+							resetGravity();
+						}
+					}
+					
+					// RIGHT
+					if(getBoundsRight().intersects(tempObject.getBounds3().get(j).getBounds())){	
+						
+						System.out.println("Contact avec un bloc standard");
+						
+						x = tempObject.getBounds3().get(j).x - 64;
+						velX = -(this.getVelX()/2);
+					}
+					
+					// LEFT
+					if(getBoundsLeft().intersects(tempObject.getBounds3().get(j))){ 	
+						
+						System.out.println("Contact avec un bloc standard");
+						
+						x = tempObject.getBounds3().get(j).x + tempObject.getBounds3().get(j).width;
+						velX = -(this.getVelX()/2);
+					}
+				}
+				else if(tempObject.getBounds3().get(j).getId() == ObjectId.DangerousBlock){
+					
+					// TOP
+					if(getBoundsTop().intersects(tempObject.getBounds3().get(j).getBounds())){
+						
+						System.out.println("Contact avec un bloc dangereux");
+						
+						y = tempObject.getBounds3().get(j).y + tempObject.getBounds3().get(j).height;
+						velY = -(this.getVelY()/4);
+					}
+					
+					// BOTTOM
+					if(getBounds().intersects(tempObject.getBounds3().get(j).getBounds())){
+						
+						System.out.println("Contact avec un bloc dangereux");
+						
+						y = tempObject.getBounds3().get(j).y - 64;
+						
+						if(Math.abs(this.getVelY()) < 0.4f){
+							velY = 0;
+							unsetGravity();
+						}
+						else{
+							velY = -(this.getVelY()/1.5f);
+						}
+						
+						if(Math.abs(this.getVelX()) < 0.3f){
+							velX = 0;
+						}
+						else{
+						velX = this.getVelX()/1.2f;
+						}
+						
+						falling = false;
+					}
+					else{
+						falling = true;
+						if(timeElapsed % 60 == 0){
+							resetGravity();
+						}
+					}
+					
+					// RIGHT
+					if(getBoundsRight().intersects(tempObject.getBounds3().get(j).getBounds())){	
+						
+						System.out.println("Contact avec un bloc dangereux");						
+						
+						x = tempObject.getBounds3().get(j).x - 64;
+						velX = -(this.getVelX()/2);
+					}
+					
+					// LEFT
+					if(getBoundsLeft().intersects(tempObject.getBounds3().get(j))){ 	
+						
+						System.out.println("Contact avec un bloc dangereux");
+						
+						x = tempObject.getBounds3().get(j).x + tempObject.getBounds3().get(j).getBounds().width;
+						velX = -(this.getVelX()/2);
+					}
+				}
+			}
+			
+			/*if(tempObject.getId() == ObjectId.Block){
 				
 				for (int j = 0; j < tempObject.getBounds2().size(); j++) {
 					// TOP
@@ -133,7 +259,7 @@ public class Player extends GameObject{
 						velX = -(this.getVelX()/2);
 					}
 				}
-			}
+			}*/
 		}
 			/*else if(tempObject.getId() == ObjectId.InoffensiveBlock){
 				
@@ -225,6 +351,12 @@ public class Player extends GameObject{
 
 	@Override
 	public ArrayList<Rectangle> getBounds2() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<CollisionBox> getBounds3() {
 		// TODO Auto-generated method stub
 		return null;
 	}
