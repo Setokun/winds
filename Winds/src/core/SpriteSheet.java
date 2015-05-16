@@ -1,6 +1,5 @@
 package core;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -10,8 +9,6 @@ public class SpriteSheet {
 	private int width, height, spriteSize;
 	
 	public SpriteSheet(BufferedImage image, int spriteSize){
-		
-
 		this.image = image;
 		this.spriteSize = spriteSize;
 		this.width = image.getWidth(null);
@@ -19,7 +16,7 @@ public class SpriteSheet {
 	}
 	
 	public BufferedImage[] getSprites(){
-		ArrayList<Image> spritesList = new ArrayList<Image>();
+		ArrayList<BufferedImage> spritesList = new ArrayList<BufferedImage>();
 		spritesList.add(null);
 		
 		for(int i=0; i<height; i+=spriteSize){
@@ -32,7 +29,7 @@ public class SpriteSheet {
 		return spritesList.toArray(images);
 	}
 	/*a mettre en private a terme*/
-	public Image grabImage(int col, int row){
+	public BufferedImage grabImage(int col, int row){
 		return image.getSubimage(col, row, spriteSize, spriteSize);
 	}
 	

@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import display.Animation;
-import display.Game;
+import display.BufferedImageLoader;
 import display.Handler;
 import display.Window;
 
@@ -21,17 +21,19 @@ public class Player extends GameObject{
 	private final float MAX_SPEED_X = 4;
 	private int timeElapsed = 0;
 	
+	static BufferedImage bubble;
+	
 	private Handler handler;
 	
-	Texture tex = Game.getInstance();
-	
-	private Animation playerWalk;
+	static {
+		BufferedImageLoader loader = new BufferedImageLoader();
+		SpriteSheet spriteBubble = new SpriteSheet(loader.loadImage("/bulle2.png"), 64);
+		bubble = spriteBubble.grabImage(0, 0);
+	}
 	
 	public Player(float x, float y, Handler handler,ObjectId id) {
 		super(x, y, id);
 		this.handler = handler;
-		
-		playerWalk = new Animation(4, tex.bubble[0]);
 	}
 	
 	public void unsetGravity(){
@@ -61,8 +63,6 @@ public class Player extends GameObject{
 			velX = MAX_SPEED_X;
 		
 		collision(objects);
-		
-		playerWalk.runAnimation();
 	}
 	
 	private void collision(ArrayList<GameObject> object){
@@ -178,10 +178,7 @@ public class Player extends GameObject{
 
 	public void render(Graphics g) {
 		g.setColor(Color.blue);
-		if(velX != 0)
-			playerWalk.drawAnimation(g, (int)x, (int)y);
-		else
-			g.drawImage(tex.bubble[0], (int)x, (int)y, null);
+		g.drawImage(bubble, (int)x, (int)y, null);
 		
 		if(Window.debug){
 			Graphics2D g2d = (Graphics2D) g;

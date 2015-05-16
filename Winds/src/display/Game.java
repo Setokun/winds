@@ -19,7 +19,7 @@ import core.Block;
 import core.CollisionBox;
 import core.ObjectId;
 import core.Player;
-import core.Texture;
+import core.SpriteSheet;
 
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
@@ -31,6 +31,7 @@ public class Game extends Canvas implements Runnable{
 	private Level lvl;
 	
 	private BufferedImage bg = null, pauseImage = null;
+	private BufferedImage brambles_sheet = null;
 	
 	private static boolean pause = false, running = false;
 	
@@ -38,7 +39,7 @@ public class Game extends Canvas implements Runnable{
 	private String bgMusicFilename;
 	static AudioPlayer bgMusic;
 	private Handler handler;
-	static Texture tex;
+	static BufferedImage[] brambles;
 	
 	private int seconds;
 	
@@ -53,7 +54,8 @@ public class Game extends Canvas implements Runnable{
 		seconds = 0;
 		pause = false;
 		
-		tex = new Texture();
+		
+		
 		handler = new Handler();
 		cam = new Camera(0, 0);
 		
@@ -62,13 +64,16 @@ public class Game extends Canvas implements Runnable{
 		//bg = loader.loadImage("/background/pirate3.jpg");
 		bg = loader.loadImage("/background/2.png");
 		pauseImage = loader.loadImage("/background/menu_pause.png");
+		brambles_sheet = loader.loadImage("/themes/brambles_21.png");
+		
+		brambles = new SpriteSheet(brambles_sheet, 128).getSprites();
 		
 		
 		/////////////// sound initialization ///////////////
 		//bgMusicFilename = "resources/Winds_Ice_Cavern.mp3";
 		bgMusicFilename = "resources/Honey.mp3";
 	    bgMusic = new AudioPlayer(bgMusicFilename, true);
-	    bgMusic.play();
+	    //bgMusic.play();
 	    ////////////////////////////////////////////////////
 	    
 	    loadLevelByMatrix(lvl.getMatrix());
@@ -224,108 +229,108 @@ public class Game extends Canvas implements Runnable{
 				
 				ArrayList<CollisionBox> collisions1 = new ArrayList<CollisionBox>();
 				collisions1.add(new CollisionBox(70,32,58,56, ObjectId.DangerousBlock));
-				if(elements[i][j] == 1) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_01, collisions1));
+				if(elements[i][j] == 1) handler.addObject(new Block(j*128, i*128, 1, collisions1));
 				
 				ArrayList<CollisionBox> collisions2 = new ArrayList<CollisionBox>();
 				collisions2.add(new CollisionBox(0,32,32,56, ObjectId.DangerousBlock));
-				if(elements[i][j] == 2) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_02, collisions2));
+				if(elements[i][j] == 2) handler.addObject(new Block(j*128, i*128, 2, collisions2));
 				
 				ArrayList<CollisionBox> collisions3 = new ArrayList<CollisionBox>();
 				collisions3.add(new CollisionBox(72,48,16,80, ObjectId.DangerousBlock));
 				collisions3.add(new CollisionBox(88,40,40,88, ObjectId.DangerousBlock));
-				if(elements[i][j] == 3) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_03, collisions3));
+				if(elements[i][j] == 3) handler.addObject(new Block(j*128, i*128, 3, collisions3));
 				
 				ArrayList<CollisionBox> collisions4 = new ArrayList<CollisionBox>();
 				collisions4.add(new CollisionBox(0,40,56,88, ObjectId.DangerousBlock));
 				collisions4.add(new CollisionBox(56,56,8,72, ObjectId.DangerousBlock));
-				if(elements[i][j] == 4) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_04, collisions4));
+				if(elements[i][j] == 4) handler.addObject(new Block(j*128, i*128, 4, collisions4));
 				
 			  	ArrayList<CollisionBox> collisions5 = new ArrayList<CollisionBox>();
 				collisions5.add(new CollisionBox(0,32,112,56, ObjectId.DangerousBlock));
 				collisions5.add(new CollisionBox(112,32,16,48, ObjectId.DangerousBlock));
 				collisions5.add(new CollisionBox(64,0,64,32, ObjectId.DangerousBlock));
-				if(elements[i][j] == 5) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_05, collisions5));
+				if(elements[i][j] == 5) handler.addObject(new Block(j*128, i*128, 5, collisions5));
 				
 			  	ArrayList<CollisionBox> collisions6 = new ArrayList<CollisionBox>();
 				collisions6.add(new CollisionBox(8,32,16,48, ObjectId.DangerousBlock));
 				collisions6.add(new CollisionBox(24,32,104,56, ObjectId.DangerousBlock));
 				collisions6.add(new CollisionBox(8,0,56,32, ObjectId.DangerousBlock));
-				if(elements[i][j] == 6) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_06, collisions6));
+				if(elements[i][j] == 6) handler.addObject(new Block(j*128, i*128, 6, collisions6));
 				
 				ArrayList<CollisionBox> collisions7 = new ArrayList<CollisionBox>();
 				collisions7.add(new CollisionBox(72,32,56,56, ObjectId.DangerousBlock));
 				collisions7.add(new CollisionBox(72,0,56,32, ObjectId.DangerousBlock));
-				if(elements[i][j] == 7) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_07, collisions7));
+				if(elements[i][j] == 7) handler.addObject(new Block(j*128, i*128, 7, collisions7));
 				
 				ArrayList<CollisionBox> collisions8 = new ArrayList<CollisionBox>();
 				collisions8.add(new CollisionBox(0,32,128,56, ObjectId.DangerousBlock));
-				if(elements[i][j] == 8) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_08, collisions8));
+				if(elements[i][j] == 8) handler.addObject(new Block(j*128, i*128, 8, collisions8));
 
 				ArrayList<CollisionBox> collisions9 = new ArrayList<CollisionBox>();
 				collisions9.add(new CollisionBox(0,32,128,56, ObjectId.DangerousBlock));
-				if(elements[i][j] == 9) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_09, collisions9));
+				if(elements[i][j] == 9) handler.addObject(new Block(j*128, i*128, 9, collisions9));
 
 				ArrayList<CollisionBox> collisions10 = new ArrayList<CollisionBox>();
 				collisions10.add(new CollisionBox(0,32,128,56, ObjectId.DangerousBlock));
-				if(elements[i][j] == 10) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_10, collisions10));
+				if(elements[i][j] == 10) handler.addObject(new Block(j*128, i*128, 10, collisions10));
 
 				ArrayList<CollisionBox> collisions11 = new ArrayList<CollisionBox>();
 				collisions11.add(new CollisionBox(72,0,56,128, ObjectId.DangerousBlock));
-				if(elements[i][j] == 11) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_11, collisions11));
+				if(elements[i][j] == 11) handler.addObject(new Block(j*128, i*128, 11, collisions11));
 
 				ArrayList<CollisionBox> collisions12 = new ArrayList<CollisionBox>();
 				collisions12.add(new CollisionBox(0,0,56,128, ObjectId.DangerousBlock));
-				if(elements[i][j] == 12) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_12, collisions12));
+				if(elements[i][j] == 12) handler.addObject(new Block(j*128, i*128, 12, collisions12));
 
 				ArrayList<CollisionBox> collisions13 = new ArrayList<CollisionBox>();
 				collisions13.add(new CollisionBox(0,0,60,128, ObjectId.DangerousBlock));
-				if(elements[i][j] == 13) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_13, collisions13));
+				if(elements[i][j] == 13) handler.addObject(new Block(j*128, i*128, 13, collisions13));
 
 				ArrayList<CollisionBox> collisions14 = new ArrayList<CollisionBox>();
 				collisions14.add(new CollisionBox(68,0,60,128, ObjectId.DangerousBlock));
-				if(elements[i][j] == 14) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_14, collisions14));
+				if(elements[i][j] == 14) handler.addObject(new Block(j*128, i*128, 14, collisions14));
 				
 				ArrayList<CollisionBox> collisions15 = new ArrayList<CollisionBox>();
 				collisions15.add(new CollisionBox(80,48,28,32, ObjectId.DangerousBlock));
 				collisions15.add(new CollisionBox(108,48,20,40, ObjectId.DangerousBlock));
 				collisions15.add(new CollisionBox(108,40,20,8, ObjectId.Block));
-				if(elements[i][j] == 15) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_15, collisions15));
+				if(elements[i][j] == 15) handler.addObject(new Block(j*128, i*128, 15, collisions15));
 
 				ArrayList<CollisionBox> collisions16 = new ArrayList<CollisionBox>();
 				collisions16.add(new CollisionBox(0,40,110,8, ObjectId.Block));
 				collisions16.add(new CollisionBox(0,48,120,40, ObjectId.DangerousBlock));
 				collisions16.add(new CollisionBox(64,88,60,40, ObjectId.DangerousBlock));
-				if(elements[i][j] == 16) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_16, collisions16));
+				if(elements[i][j] == 16) handler.addObject(new Block(j*128, i*128, 16, collisions16));
 				
 				ArrayList<CollisionBox> collisions17 = new ArrayList<CollisionBox>();
 				collisions17.add(new CollisionBox(0,40,16,88, ObjectId.DangerousBlock));
 				collisions17.add(new CollisionBox(16,32,28,96, ObjectId.DangerousBlock));
 				collisions17.add(new CollisionBox(44,56,16,72, ObjectId.DangerousBlock));
-				if(elements[i][j] == 17) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_17, collisions17));
+				if(elements[i][j] == 17) handler.addObject(new Block(j*128, i*128, 17, collisions17));
 
 				ArrayList<CollisionBox> collisions18 = new ArrayList<CollisionBox>();
 				collisions18.add(new CollisionBox(68,40,16,88, ObjectId.DangerousBlock));
 				collisions18.add(new CollisionBox(84,32,28,96, ObjectId.DangerousBlock));
 				collisions18.add(new CollisionBox(112,56,16,72, ObjectId.DangerousBlock));
-				if(elements[i][j] == 18) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_18, collisions18));
+				if(elements[i][j] == 18) handler.addObject(new Block(j*128, i*128, 18, collisions18));
 				
 				ArrayList<CollisionBox> collisions19 = new ArrayList<CollisionBox>();
 				collisions19.add(new CollisionBox(0,64,16,64, ObjectId.DangerousBlock));
 				collisions19.add(new CollisionBox(16,48,112,32, ObjectId.DangerousBlock));
 				collisions19.add(new CollisionBox(16,80,48,48, ObjectId.DangerousBlock));
-				if(elements[i][j] == 19) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_19, collisions19));
+				if(elements[i][j] == 19) handler.addObject(new Block(j*128, i*128, 19, collisions19));
 
 				ArrayList<CollisionBox> collisions20 = new ArrayList<CollisionBox>();
 				collisions20.add(new CollisionBox(16,0,48,48, ObjectId.DangerousBlock));
 				collisions20.add(new CollisionBox(0,48,64,24, ObjectId.DangerousBlock));
 				collisions20.add(new CollisionBox(0,72,48,8, ObjectId.DangerousBlock));
-				if(elements[i][j] == 20) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_20, collisions20));
+				if(elements[i][j] == 20) handler.addObject(new Block(j*128, i*128, 20, collisions20));
 				
 				ArrayList<CollisionBox> collisions21 = new ArrayList<CollisionBox>();
 				collisions21.add(new CollisionBox(32,32,80,16, ObjectId.DangerousBlock));
 				collisions21.add(new CollisionBox(0,48,120,32, ObjectId.DangerousBlock));
 				collisions21.add(new CollisionBox(72,80,48,48, ObjectId.DangerousBlock));
-				if(elements[i][j] == 21) handler.addObject(new Block(j*128, i*128, Block.blockType.BRAMBLES_21, collisions21));
+				if(elements[i][j] == 21) handler.addObject(new Block(j*128, i*128, 21, collisions21));
 			}
 		}
 		
@@ -334,8 +339,8 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	
-	public static Texture getInstance(){
-		return tex;
+	public static BufferedImage[] getInstance(){
+		return brambles;
 	}
 	
 	public static boolean getPause(){
@@ -348,7 +353,7 @@ public class Game extends Canvas implements Runnable{
 			Game.pause = true;
 		}
 		else{
-			Game.bgMusic.resume();
+			//Game.bgMusic.resume();
 			Game.pause = false;
 		}
 		
