@@ -40,10 +40,7 @@ public class Game extends Canvas implements Runnable{
 	private Handler handler;
 	static Texture tex;
 	
-	
 	private int seconds;
-	
-	//private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	
 	public Game(Level lvl){
 		this.lvl = lvl;
@@ -54,14 +51,13 @@ public class Game extends Canvas implements Runnable{
 	private void init(){
 		
 		seconds = 0;
+		pause = false;
 		
 		tex = new Texture();
 		handler = new Handler();
 		cam = new Camera(0, 0);
 		
-		
-		//this.setPreferredSize(new Dimension(800,600));
-		pause = false;
+
 		BufferedImageLoader loader = new BufferedImageLoader();
 		//bg = loader.loadImage("/background/pirate3.jpg");
 		bg = loader.loadImage("/background/2.png");
@@ -72,7 +68,7 @@ public class Game extends Canvas implements Runnable{
 		//bgMusicFilename = "resources/Winds_Ice_Cavern.mp3";
 		bgMusicFilename = "resources/Honey.mp3";
 	    bgMusic = new AudioPlayer(bgMusicFilename, true);
-	    bgMusic.play();
+	    //bgMusic.play();
 	    ////////////////////////////////////////////////////
 	    
 	    loadLevelByMatrix(lvl.getMatrix());

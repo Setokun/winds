@@ -31,7 +31,7 @@ public class Player extends GameObject{
 		super(x, y, id);
 		this.handler = handler;
 		
-		playerWalk = new Animation(4, tex.bulle[0]);
+		playerWalk = new Animation(4, tex.bubble[0]);
 	}
 	
 	public void unsetGravity(){
@@ -71,33 +71,27 @@ public class Player extends GameObject{
 			GameObject tempObject = handler.objects.get(i);
 			
 			
-			if(Math.abs(tempObject.getY() - this.getY()) > 512 && Math.abs(tempObject.getY() - this.getY()) > 256)
-				i+=4;
-			
-			
-			if(Math.abs(tempObject.getX() - this.getX()) > 256)
-				continue;
-			
-			if(Math.abs(tempObject.getY() - this.getY()) > 256)
-				continue;
+			if(Math.abs(tempObject.getY() - this.getY()) > 512 && Math.abs(tempObject.getY() - this.getY()) > 256) i+=4;
+			if(Math.abs(tempObject.getX() - this.getX()) > 256) continue;
+			if(Math.abs(tempObject.getY() - this.getY()) > 256)	continue;
 			
 			falling = true;
 			
 			if(tempObject.getId() == ObjectId.Player)
 				continue;
 			
-			for (int j = 0; j < tempObject.getBounds3().size(); j++) {
-				if(tempObject.getBounds3().get(j).getId() == ObjectId.Block){
+			for (int j = 0; j < tempObject.getBounds().size(); j++) {
+				if(tempObject.getBounds().get(j).getId() == ObjectId.Block){
 					
-					// TOP
-					if(getBoundsTop().intersects(tempObject.getBounds3().get(j).getBounds())){
-						y = tempObject.getBounds3().get(j).y + tempObject.getBounds3().get(j).height;
+					//////////////////////// TOP \\\\\\\\\\\\\\\\\\\\\\\\
+					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){
+						y = tempObject.getBounds().get(j).y + tempObject.getBounds().get(j).height;
 						velY = -(this.getVelY()/4);
 					}
 					
-					// BOTTOM
-					if(getBounds().intersects(tempObject.getBounds3().get(j).getBounds())){
-						y = tempObject.getBounds3().get(j).getBounds().y - 64;
+					//////////////////////// BOTTOM \\\\\\\\\\\\\\\\\\\\\\\\
+					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
+						y = tempObject.getBounds().get(j).getBounds().y - 64;
 						
 						if(Math.abs(this.getVelY()) < 0.4f){
 							velY = 0;
@@ -123,70 +117,46 @@ public class Player extends GameObject{
 						}
 					}
 					
-					// RIGHT
-					if(getBoundsRight().intersects(tempObject.getBounds3().get(j).getBounds())){	
-						x = tempObject.getBounds3().get(j).x - 64;
+					//////////////////////// RIGHT \\\\\\\\\\\\\\\\\\\\\\\\
+					if(getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())){	
+						x = tempObject.getBounds().get(j).x - 64;
 						velX = -(this.getVelX()/2);
 					}
 					
-					// LEFT
-					if(getBoundsLeft().intersects(tempObject.getBounds3().get(j))){ 	
-						x = tempObject.getBounds3().get(j).x + tempObject.getBounds3().get(j).width;
+					//////////////////////// LEFT \\\\\\\\\\\\\\\\\\\\\\\\
+					if(getBoundsLeft().intersects(tempObject.getBounds().get(j))){ 	
+						x = tempObject.getBounds().get(j).x + tempObject.getBounds().get(j).width;
 						velX = -(this.getVelX()/2);
 					}
 				}
-				else if(tempObject.getBounds3().get(j).getId() == ObjectId.DangerousBlock){
+				
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.DangerousBlock){
 					
 					// TOP
-					if(getBoundsTop().intersects(tempObject.getBounds3().get(j).getBounds())){
-						y = tempObject.getBounds3().get(j).y + tempObject.getBounds3().get(j).height;
-						velY = -(this.getVelY()/4);
-					}
-					
+					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){
+						y = tempObject.getBounds().get(j).y + tempObject.getBounds().get(j).height;
+						velY = -(this.getVelY()*1.5f);
+					}					
 					// BOTTOM
-					if(getBounds().intersects(tempObject.getBounds3().get(j).getBounds())){
-						y = tempObject.getBounds3().get(j).y - 64;
-						
-						if(Math.abs(this.getVelY()) < 0.4f){
-							velY = 0;
-							unsetGravity();
-						}
-						else{
-							velY = -(this.getVelY()/1.5f);
-						}
-						
-						if(Math.abs(this.getVelX()) < 0.3f){
-							velX = 0;
-						}
-						else{
-						velX = this.getVelX()/1.2f;
-						}
-						
-						falling = false;
-					}
-					else{
-						falling = true;
-						if(timeElapsed % 60 == 0){
-							resetGravity();
-						}
-					}
-					
+					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
+						y = tempObject.getBounds().get(j).y - 64;
+						velY = -(this.getVelY()*1.5f);
+					}					
 					// RIGHT
-					if(getBoundsRight().intersects(tempObject.getBounds3().get(j).getBounds())){	
-						x = tempObject.getBounds3().get(j).x - 64;
-						velX = -(this.getVelX()/2);
-					}
-					
+					if(getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())){	
+						x = tempObject.getBounds().get(j).x - 64;
+						velX = -(this.getVelX()*1.5f);
+					}					
 					// LEFT
-					if(getBoundsLeft().intersects(tempObject.getBounds3().get(j))){ 	
-						x = tempObject.getBounds3().get(j).x + tempObject.getBounds3().get(j).getBounds().width;
-						velX = -(this.getVelX()/2);
+					if(getBoundsLeft().intersects(tempObject.getBounds().get(j))){ 	
+						x = tempObject.getBounds().get(j).x + tempObject.getBounds().get(j).getBounds().width;
+						velX = -(this.getVelX()*1.5f);
 					}
 				}
 			}
 		}
 		
-		// 4 instructions to prevent from going outside the playground
+		// 4 instructions to prevent the bubble from going outside the playground
 		if(this.getX() <= 0){
 			this.setX(this.getX() + 2);
 			velX = -(this.getVelX()/2);
@@ -211,19 +181,19 @@ public class Player extends GameObject{
 		if(velX != 0)
 			playerWalk.drawAnimation(g, (int)x, (int)y);
 		else
-			g.drawImage(tex.bulle[0], (int)x, (int)y, null);
+			g.drawImage(tex.bubble[0], (int)x, (int)y, null);
 		
 		if(Window.debug){
 			Graphics2D g2d = (Graphics2D) g;
 			g.setColor(Color.red);
-			g2d.draw(getBounds());
+			g2d.draw(getBoundsBottom());
 			g2d.draw(getBoundsRight());
 			g2d.draw(getBoundsLeft());
 			g2d.draw(getBoundsTop());
 		}
 	}
 
-	public Rectangle getBounds() {
+	public Rectangle getBoundsBottom() {
 		return new Rectangle((int) ((int)x+8), (int) ((int)y+height/2), (int)width-16, (int)height/2);
 	}
 	public Rectangle getBoundsTop() {
@@ -236,15 +206,9 @@ public class Player extends GameObject{
 		return new Rectangle((int)x, (int)y+5, (int)8, (int)height-10);
 	}
 
-	@Override
-	public ArrayList<Rectangle> getBounds2() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public ArrayList<CollisionBox> getBounds3() {
-		// TODO Auto-generated method stub
+	public ArrayList<CollisionBox> getBounds() {
 		return null;
 	}
 	
