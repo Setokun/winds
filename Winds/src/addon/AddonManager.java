@@ -15,6 +15,9 @@ import javax.swing.ImageIcon;
 public class AddonManager {
 	private static ArrayList<JarTheme> themesList;
 	private static ArrayList<JarLevel> levelsList;
+	
+	private static JarTheme loadedTheme;
+	private static JarLevel loadedLevel;
 
 	static {
 		themesList = new ArrayList<JarTheme>();
@@ -23,9 +26,7 @@ public class AddonManager {
 		collectLevels();
 	}
 	
-	
-	public static void main(String[] args) {}
-	
+
 	/*OK*/private static void collectThemes(){
 		File folder = new File("bin/resources/themes");
 		File[] items = folder.listFiles();
@@ -60,30 +61,27 @@ public class AddonManager {
 					
 					if( entry.endsWith(".mp3") ){
 						currentTheme.setMusic("music");
-					}else
-					if( entry.endsWith("logo.png") ){
+					}else {
 						ImageIcon icon = new ImageIcon(fileURL);
-						currentTheme.setLogo(icon);
-					}else
-					if( entry.endsWith("background.jpg") ){
-						ImageIcon icon = new ImageIcon(fileURL);
-						currentTheme.setBackground(icon);
-					}else
-					if( entry.endsWith("interactions.png") ){
-						ImageIcon icon = new ImageIcon(fileURL);
-						currentTheme.setInteractions(icon);
-					}else
-					if( entry.endsWith("spritesheet/128.png") ){
-						ImageIcon icon = new ImageIcon(fileURL);
-						currentTheme.setSprites128(icon);
-					}else
-					if( entry.endsWith("spritesheet/64.png") ){
-						ImageIcon icon = new ImageIcon(fileURL);
-						currentTheme.setSprites64(icon);
-					}else
-					if( entry.endsWith("spritesheet/32.png") ){
-						ImageIcon icon = new ImageIcon(fileURL);
-						currentTheme.setSprites32(icon);
+						
+						if( entry.endsWith("logo.png") ){
+							currentTheme.setLogo(icon);
+						}else
+						if( entry.endsWith("background.jpg") ){
+							currentTheme.setBackground(icon);
+						}else
+						if( entry.endsWith("interactions.png") ){
+							currentTheme.setInteractions(icon);
+						}else
+						if( entry.endsWith("spritesheet/128.png") ){
+							currentTheme.setSprites128(icon);
+						}else
+						if( entry.endsWith("spritesheet/64.png") ){
+							currentTheme.setSprites64(icon);
+						}else
+						if( entry.endsWith("spritesheet/32.png") ){
+							currentTheme.setSprites32(icon);
+						}
 					}
 				}
 			}
@@ -143,16 +141,32 @@ public class AddonManager {
 		JarLevel current = levelValidate(jarLevel);
 		if(current != null && !levelsList.contains(current)){ levelsList.add(current); }
 	}
-	/*OK*/public static JarLevel[] getLevelByType(String wLevelType){
-		ArrayList<JarLevel> lvls = new ArrayList<JarLevel>();
+	/*OK*/public static JarLevel[] getLevelsByType(String wLevelType){
+		ArrayList<JarLevel> levelsList = new ArrayList<JarLevel>();
 		for (JarLevel lvl : levelsList) {
-			if (lvl.getType() == wLevelType) { lvls.add(lvl); }
+			if (lvl.getType() == wLevelType) { levelsList.add(lvl); }
 		}
 		
-		JarLevel[] jarLevels = new JarLevel[ lvls.size() ];
-		return lvls.toArray(jarLevels);
+		JarLevel[] jarLevels = new JarLevel[ levelsList.size() ];
+		return levelsList.toArray(jarLevels);
 	}
 	
+	
+	//region Setters 
+	public static void loadTheme(int index){
+		loadedTheme = themesList.get(index);
+	}
+	public static void loadTheme(JarTheme theme){
+		loadedTheme = theme;
+	}
+	public static void loadLevel(int index){
+		loadedLevel = levelsList.get(index);
+	}
+	public static void loadLevel(JarLevel level){
+		loadedLevel = level;
+	}
+	//endregion
+	//region Getters 
 	public static JarTheme[] getThemes(){
 		JarTheme[] jarThemes = new JarTheme[ themesList.size() ];
 		return themesList.toArray(jarThemes);
@@ -161,5 +175,12 @@ public class AddonManager {
 		JarLevel[] jarLevels = new JarLevel[ levelsList.size() ];
 		return levelsList.toArray(jarLevels);
 	}
+	public static JarTheme getLoadedTheme() {
+		return loadedTheme;
+	}
+	public static JarLevel getLoadedLevel() {
+		return loadedLevel;
+	}
+	//endregion
 	
 }
