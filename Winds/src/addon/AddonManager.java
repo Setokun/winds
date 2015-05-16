@@ -13,12 +13,12 @@ import javax.swing.ImageIcon;
 
 
 public class AddonManager {
-	private static ArrayList<JarTheme> themes;
-	private static ArrayList<JarLevel> levels;
+	private static ArrayList<JarTheme> themesList;
+	private static ArrayList<JarLevel> levelsList;
 
 	static {
-		themes = new ArrayList<JarTheme>();
-		levels = new ArrayList<JarLevel>();
+		themesList = new ArrayList<JarTheme>();
+		levelsList = new ArrayList<JarLevel>();
 		collectThemes();
 		collectLevels();
 	}
@@ -33,7 +33,7 @@ public class AddonManager {
 		for (int i = 0; i < items.length; i++){
 		    if (items[i].isFile() && items[i].getName().endsWith(".jar")) {
 		    	JarTheme theme = themeValidate(items[i]);
-		    	if(theme != null){ themes.add(theme); }
+		    	if(theme != null){ themesList.add(theme); }
 		    }
 		}
 	}
@@ -95,10 +95,10 @@ public class AddonManager {
 	}
 	/*OK*/public static void addTheme(File jarTheme){
 		JarTheme current = themeValidate(jarTheme);
-		if(current != null && !themes.contains(current)){ themes.add(current); }
+		if(current != null && !themesList.contains(current)){ themesList.add(current); }
 	}
 	/*OK*/public static JarTheme getThemeByID(int idTheme){
-		for (JarTheme theme : themes) {
+		for (JarTheme theme : themesList) {
 			if(theme.getIdDB() == idTheme){ return theme; }
 		}
 		return null;
@@ -111,7 +111,7 @@ public class AddonManager {
 		for (int i = 0; i < items.length; i++){
 			if (items[i].isFile() && items[i].getName().endsWith(".jar")) {
 		    	JarLevel level = levelValidate(items[i]);
-			    if(level != null){ levels.add(level); }
+			    if(level != null){ levelsList.add(level); }
 			}
 		}
 	}
@@ -141,23 +141,25 @@ public class AddonManager {
 	}
 	/*OK*/public static void addLevel(File jarLevel){
 		JarLevel current = levelValidate(jarLevel);
-		if(current != null && !levels.contains(current)){ levels.add(current); }
+		if(current != null && !levelsList.contains(current)){ levelsList.add(current); }
 	}
-	/*OK*/public static ArrayList<JarLevel> getLevelByType(String wLevelType){
+	/*OK*/public static JarLevel[] getLevelByType(String wLevelType){
 		ArrayList<JarLevel> lvls = new ArrayList<JarLevel>();
-		for (JarLevel lvl : levels) {
+		for (JarLevel lvl : levelsList) {
 			if (lvl.getType() == wLevelType) { lvls.add(lvl); }
 		}
-		return lvls;
+		
+		JarLevel[] jarLevels = new JarLevel[ lvls.size() ];
+		return lvls.toArray(jarLevels);
 	}
 	
 	public static JarTheme[] getThemes(){
-		JarTheme[] jarThemes = new JarTheme[ themes.size() ];
-		return themes.toArray(jarThemes);
+		JarTheme[] jarThemes = new JarTheme[ themesList.size() ];
+		return themesList.toArray(jarThemes);
 	}
 	public static JarLevel[] getLevels(){
-		JarLevel[] jarLevels = new JarLevel[ levels.size() ];
-		return levels.toArray(jarLevels);
+		JarLevel[] jarLevels = new JarLevel[ levelsList.size() ];
+		return levelsList.toArray(jarLevels);
 	}
 	
 }
