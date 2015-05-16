@@ -3,7 +3,6 @@ package core;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import display.Game;
@@ -19,15 +18,14 @@ public class Block extends GameObject{
 	
 	Texture tex = Game.getInstance();
 	private blockType type;
-	private ArrayList<Rectangle> bounds;
-	private ArrayList<CollisionBox> bounds3;
+	private ArrayList<CollisionBox> collisions;
 	
 	public Block(float x, float y, blockType type, ArrayList<CollisionBox> collisions) {
 		super(x, y, null);
 		this.type = type;
-		bounds3 = new ArrayList<CollisionBox>();
+		this.collisions = new ArrayList<CollisionBox>();
 		for (int i = 0; i < collisions.size(); i++) {
-			this.bounds3.add(new CollisionBox((int) (x + collisions.get(i).getX()), 
+			this.collisions.add(new CollisionBox((int) (x + collisions.get(i).getX()), 
 											  (int) (y + collisions.get(i).getY()), 
 											  (int) (collisions.get(i).getWidth()), 
 											  (int) (collisions.get(i).getHeight()), 
@@ -80,13 +78,8 @@ public class Block extends GameObject{
 		}
 	}
 
-
-	public ArrayList<Rectangle> getBounds2(){
-		return this.bounds;
-	}
-	
 	public ArrayList<CollisionBox> getBounds(){
-		return this.bounds3;
+		return this.collisions;
 	}
 	
 }

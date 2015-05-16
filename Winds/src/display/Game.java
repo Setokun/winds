@@ -68,7 +68,7 @@ public class Game extends Canvas implements Runnable{
 		//bgMusicFilename = "resources/Winds_Ice_Cavern.mp3";
 		bgMusicFilename = "resources/Honey.mp3";
 	    bgMusic = new AudioPlayer(bgMusicFilename, true);
-	    //bgMusic.play();
+	    bgMusic.play();
 	    ////////////////////////////////////////////////////
 	    
 	    loadLevelByMatrix(lvl.getMatrix());
@@ -130,7 +130,7 @@ public class Game extends Canvas implements Runnable{
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
 				if(!pause)seconds++;
-				System.out.println(updates + " updates, fps : " + frames + " Camera : " + cam.getX() + " - " + cam.getY());
+				System.out.println(updates + " updates, fps : " + frames/* + " Camera : " + cam.getX() + " - " + cam.getY()*/);
 				updates = 0;
 				frames = 0;
 			}
