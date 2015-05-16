@@ -3,8 +3,8 @@ package addon;
 import annotation.wCard;
 import annotation.wTheme;
 
-@wCard(name = "", creator = "", date = "", description = "")
-@wTheme(idDB = 0)
+@wCard(name = "Pirate", creator = "admin", date = "2015-01-02", description = "Theme pirate")
+@wTheme(idDB = 1)
 public class Theme implements iTheme {
 	private int[][][] spriteCompatibility;
 
