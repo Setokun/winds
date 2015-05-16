@@ -1,33 +1,24 @@
 package core;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-
-public class Spritesheet {
+public class SpriteSheet {
 
 	private BufferedImage image;
 	private int width, height, spriteSize;
 	
-	public Spritesheet(ImageIcon icon, int spriteSize){
-		BufferedImage bi = new BufferedImage(
-			    icon.getIconWidth(),
-			    icon.getIconHeight(),
-			    BufferedImage.TYPE_INT_RGB);
-		Graphics g = bi.createGraphics();
-		icon.paintIcon(null, g, 0, 0);
-		g.dispose();
+	public SpriteSheet(BufferedImage image, int spriteSize){
+		
 
-		this.image = bi;
+		this.image = image;
 		this.spriteSize = spriteSize;
 		this.width = image.getWidth(null);
 		this.height = image.getHeight(null);
 	}
 	
-	public Image[] getSprites(){
+	public BufferedImage[] getSprites(){
 		ArrayList<Image> spritesList = new ArrayList<Image>();
 		spritesList.add(null);
 		
@@ -37,7 +28,7 @@ public class Spritesheet {
 			}
 		}
 		
-		Image[] images = new Image[ spritesList.size() ];
+		BufferedImage[] images = new BufferedImage[ spritesList.size() ];
 		return spritesList.toArray(images);
 	}
 	/*a mettre en private a terme*/

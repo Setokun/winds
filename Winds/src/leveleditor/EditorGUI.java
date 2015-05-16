@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -25,7 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
 
-import core.Spritesheet;
+import core.SpriteSheet;
 import addon.AddonManager;
 import leveleditor.EditorListener.BackListener;
 import leveleditor.EditorListener.DescriptionListener;
@@ -400,8 +401,8 @@ public class EditorGUI extends JFrame {
 			   gridMatrix.add(Tile.getEmptyMatrix());
 		   }
 	   }else {
-		   ImageIcon icon32 = AddonManager.getLoadedTheme().getSprites32();
-		   Image[] sprites = new Spritesheet(icon32, Tile.SIZE_MATRIX).getSprites();
+		   BufferedImage icon32 = AddonManager.getLoadedTheme().getSprites32();
+		   Image[] sprites = new SpriteSheet(icon32, Tile.SIZE_MATRIX).getSprites();
 		   sprites[0] = Tile.getEmptyMatrix().getIcon().getImage();
 		   
 		   for (int i=0; i<NB_TILES_MATRIX; i++) {

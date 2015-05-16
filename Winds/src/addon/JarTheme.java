@@ -1,5 +1,7 @@
 package addon;
 
+import java.awt.image.BufferedImage;
+
 import javax.swing.ImageIcon;
 
 import annotation.wCard;
@@ -7,7 +9,7 @@ import annotation.wTheme;
 
 public class JarTheme extends JarItem {
 	private String music;
-	private ImageIcon logo, background, interactions, sprites32, sprites64, sprites128; 
+	private BufferedImage logo, background, interactions, sprites32, sprites64, sprites128; 
 	
 	
 	/*to finish*/public boolean isValid(){
@@ -24,23 +26,23 @@ public class JarTheme extends JarItem {
 		
 		JarTheme j = (JarTheme) o;
 		return super.equals(o) && getIdDB() == j.getIdDB() //&& music.equals(j.music)
-			&& logo.getDescription().equals(j.logo.getDescription())
-			&& background.getDescription().equals(j.background.getDescription())
-			//&& interactions.getDescription().equals(j.interactions.getDescription())
-			&& sprites32.getDescription().equals(j.sprites32.getDescription())
-			&& sprites64.getDescription().equals(j.sprites64.getDescription())
-			&& sprites128.getDescription().equals(j.sprites128.getDescription());
+			&& new ImageIcon(logo).getDescription().equals(new ImageIcon(j.logo).getDescription())
+			&& new ImageIcon(background).getDescription().equals(new ImageIcon(j.background).getDescription())
+			//&& new ImageIcon(interactions).getDescription().equals(new ImageIcon(j.interactions).getDescription())
+			&& new ImageIcon(sprites32).getDescription().equals(new ImageIcon(j.sprites32).getDescription())
+			&& new ImageIcon(sprites64).getDescription().equals(new ImageIcon(j.sprites64).getDescription())
+			&& new ImageIcon(sprites128).getDescription().equals(new ImageIcon(j.sprites128).getDescription());
 	}
 	
 	/*OK*/public String toString(){
 		return "JarTheme {mainClass: \""+ mainClass.getName()
 						+"\", music: \""+ music
-						+"\", logo: \""+ logo.getDescription()
-						+"\", background: \""+ background.getDescription()
-						//+"\", interactions: \""+ interactions.getDescription()
-						+"\", spritesheet32: \""+ sprites32.getDescription()
-						+"\", spritesheet64: \""+ sprites64.getDescription()
-						+"\", spritesheet128: \""+ sprites128.getDescription() +"\"}";
+						+"\", logo: \""+ new ImageIcon(logo).getDescription()
+						+"\", background: \""+ new ImageIcon(background).getDescription()
+						//+"\", interactions: \""+ new ImageIcon(interactions).getDescription()
+						+"\", spritesheet32: \""+ new ImageIcon(sprites32).getDescription()
+						+"\", spritesheet64: \""+ new ImageIcon(sprites64).getDescription()
+						+"\", spritesheet128: \""+ new ImageIcon(sprites128).getDescription() +"\"}";
 	}
 	
 	//region Annotation Getters 
@@ -56,22 +58,22 @@ public class JarTheme extends JarItem {
 	public String getMusic() {
 		return music;
 	}
-	public ImageIcon getLogo(){
+	public BufferedImage getLogo(){
 		return logo;
 	}
-	public ImageIcon getBackground() {
+	public BufferedImage getBackground() {
 		return background;
 	}
-	public ImageIcon getInteractions() {
+	public BufferedImage getInteractions() {
 		return interactions;
 	}
-	public ImageIcon getSprites32() {
+	public BufferedImage getSprites32() {
 		return sprites32;
 	}
-	public ImageIcon getSprites64() {
+	public BufferedImage getSprites64() {
 		return sprites64;
 	}
-	public ImageIcon getSprites128() {
+	public BufferedImage getSprites128() {
 		return sprites128;
 	}
 	//endregion
@@ -79,22 +81,22 @@ public class JarTheme extends JarItem {
 	public void setMusic(String music) {
 		this.music = music;
 	}
-	public void setLogo(ImageIcon logo) {
-		this.logo = logo;
+	public void setLogo(BufferedImage icon) {
+		this.logo = icon;
 	}
-	public void setBackground(ImageIcon background) {
+	public void setBackground(BufferedImage background) {
 		this.background = background;
 	}
-	public void setInteractions(ImageIcon interactions) {
+	public void setInteractions(BufferedImage interactions) {
 		this.interactions = interactions;
 	}
-	public void setSprites32(ImageIcon sprites32) {
+	public void setSprites32(BufferedImage sprites32) {
 		this.sprites32 = sprites32;
 	}
-	public void setSprites64(ImageIcon sprites64) {
+	public void setSprites64(BufferedImage sprites64) {
 		this.sprites64 = sprites64;
 	}
-	public void setSprites128(ImageIcon sprites128) {
+	public void setSprites128(BufferedImage sprites128) {
 		this.sprites128 = sprites128;
 	}
 	//endregion

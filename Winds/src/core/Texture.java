@@ -2,6 +2,8 @@ package core;
 
 import java.awt.image.BufferedImage;
 
+import javax.swing.ImageIcon;
+
 import display.BufferedImageLoader;
 
 public class Texture {
@@ -23,8 +25,8 @@ public class Texture {
 			brambles_sheet = loader.loadImage("/themes/brambles_21.png");
 		}catch(Exception e){e.printStackTrace();}
 		
-		spriteBubble = new SpriteSheet(bulle_sheet);
-		brambles = new SpriteSheet(brambles_sheet);
+		spriteBubble = new SpriteSheet(bulle_sheet, 64);
+		brambles = new SpriteSheet(brambles_sheet, 128);
 		
 		getTextures();
 		
@@ -32,12 +34,12 @@ public class Texture {
 
 	private void getTextures() {
 		
-		bubble[0] = spriteBubble.grabImage(1, 1, 64, 64); // idle bubble
+		bubble[0] = (BufferedImage) spriteBubble.grabImage(0, 0);
 
-		for(int i=1; i<=3; i++){
-			for(int j=1; j<=7; j++){
-				int index = (i-1)*7 + j-1;
-				lvl_brambles[index] = brambles.grabImage(j, i, 128, 128);
+		for(int i=0; i<3; i++){
+			for(int j=0; j<7; j++){
+				int index = (i)*7 + j;
+				lvl_brambles[index] = (BufferedImage) brambles.grabImage(j, i);
 			}
 		}
 		

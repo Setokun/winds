@@ -1,5 +1,6 @@
 package addon;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -9,6 +10,7 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 
@@ -62,7 +64,7 @@ public class AddonManager {
 					if( entry.endsWith(".mp3") ){
 						currentTheme.setMusic("music");
 					}else {
-						ImageIcon icon = new ImageIcon(fileURL);
+						BufferedImage icon = ImageIO.read(fileURL);
 						
 						if( entry.endsWith("logo.png") ){
 							currentTheme.setLogo(icon);
