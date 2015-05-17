@@ -191,16 +191,16 @@ public class Player extends GameObject{
 	}
 
 	public Rectangle getBoundsBottom() {
-		return new Rectangle((int) ((int)x+8), (int) ((int)y+height/2), (int)width-16, (int)height/2);
+		return new Rectangle((int) ((int)x+12), (int) ((int)y+height/2), (int)width-24, (int)height/2 - 4);
 	}
 	public Rectangle getBoundsTop() {
-		return new Rectangle((int) ((int)x+8), (int)y, (int)width-16, (int)height/2);
+		return new Rectangle((int) ((int)x+12), (int)y + 4, (int)width-24, (int)height/2 - 4);
 	}
 	public Rectangle getBoundsRight() {
-		return new Rectangle((int) ((int)x+width-8), (int)y+5, (int)8, (int)height-10);
+		return new Rectangle((int) ((int)x+width-12), (int)y+8, (int)8, (int)height-16);
 	}
 	public Rectangle getBoundsLeft() {
-		return new Rectangle((int)x, (int)y+5, (int)8, (int)height-10);
+		return new Rectangle((int)x +4, (int)y+8, (int)8, (int)height-16);
 	}
 
 
