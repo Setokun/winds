@@ -3,7 +3,7 @@ package leveleditor;
 import addon.AddonManager;
 import addon.JarLevel;
 import addon.JarTheme;
-import core.Spritesheet;
+import core.SpriteSheet;
 
 
 public class EditorController {
@@ -22,7 +22,7 @@ public class EditorController {
 		// --------------
 		
 		themeUsed = AddonManager.getLoadedTheme();
-		Spritesheet spritesheet64 = new Spritesheet(themeUsed.getSprites64(), 64);
+		SpriteSheet spritesheet64 = new SpriteSheet(themeUsed.getSprites64(), 64);
 		
 		levelUsed = AddonManager.getLoadedLevel();		
 		int[][] matrix = levelUsed.getMatrix();
