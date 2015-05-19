@@ -79,14 +79,10 @@ public class Game extends Canvas implements Runnable{
 		//bgMusicFilename = "resources/Winds_Ice_Cavern.mp3";
 		bgMusicFilename = "resources/Honey.mp3";
 	    bgMusic = new AudioPlayer(bgMusicFilename, true);
-	    //bgMusic.play();
+	    bgMusic.play();
 	    ////////////////////////////////////////////////////
 	    
-	    int [][] elements = AddonManager.getLoadedLevel().getMatrix();
-	    
-	    
-	    loadLevelByMatrix(elements);
-	    //loadLevelByMatrix(AddonManager.getLoadedLevel().getMatrix());
+	    loadLevelByMatrix(AddonManager.getLoadedLevel().getMatrix());
 	    
 	    System.out.println(handler.objects.size());
 	    
@@ -250,11 +246,13 @@ public class Game extends Canvas implements Runnable{
 				
 				ArrayList<CollisionBox> collisions = new ArrayList<CollisionBox>();
 				for (int k = 0; k < collisionsList[number].length; k++) {
+					ObjectId id = ObjectId.Block;
+					if(collisionsList[number][k][4] == 1) id = ObjectId.DangerousBlock;
 					collisions.add(new CollisionBox(collisionsList[number][k][0],
 													collisionsList[number][k][1],
 													collisionsList[number][k][2],
 													collisionsList[number][k][3],
-													(collisionsList[number][k][4] == 1)?ObjectId.DangerousBlock:ObjectId.Block));
+													id));
 				}
 				
 				handler.addObject(new Block(j*128, i*128, number, collisions));
@@ -281,7 +279,7 @@ public class Game extends Canvas implements Runnable{
 			Game.pause = true;
 		}
 		else{
-			//Game.bgMusic.resume();
+			Game.bgMusic.resume();
 			Game.pause = false;
 		}
 		
