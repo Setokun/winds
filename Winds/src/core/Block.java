@@ -49,16 +49,17 @@ public class Block extends GameObject{
 		
 		
 		if(Window.debug){
-			Graphics2D g2d = (Graphics2D) g;
-			g.setColor(Color.red);
-			for (int i = 0; i < getBounds().size(); i++) {
-				if(getBounds().get(i).getId() == ObjectId.DangerousBlock)
-					g2d.setColor(Color.red);
-				if(getBounds().get(i).getId() == ObjectId.Block)
-					g2d.setColor(Color.green);
-				g2d.draw(getBounds().get(i).getBounds());
+			if(this.getBounds() != null){
+				Graphics2D g2d = (Graphics2D) g;
+				g.setColor(Color.red);
+				for (int i = 0; i < getBounds().size(); i++) {
+					if(getBounds().get(i).getId() == ObjectId.DangerousBlock)
+						g2d.setColor(Color.red);
+					if(getBounds().get(i).getId() == ObjectId.Block)
+						g2d.setColor(Color.green);
+					g2d.draw(getBounds().get(i).getBounds());
+				}
 			}
-			
 		}
 	}
 
