@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import menus.LevelCategorySelector;
+import addon.AddonManager;
 import addons.Level;
 import audio.AudioPlayer;
 import controls.KeyInput;
@@ -59,14 +60,22 @@ public class Game extends Canvas implements Runnable{
 		handler = new Handler();
 		cam = new Camera(0, 0);
 		
+		AddonManager.loadLevel(0);
+	    AddonManager.loadTheme(1);
 
 		BufferedImageLoader loader = new BufferedImageLoader();
 		//bg = loader.loadImage("/background/pirate3.jpg");
-		bg = loader.loadImage("/background/2.png");
+		//bg = loader.loadImage("/background/2.jpg");
+		//bg = loader.loadImage("/background/ruche.jpg");
+		bg = AddonManager.getLoadedTheme().getBackground();
 		pauseImage = loader.loadImage("/background/menu_pause.png");
-		brambles_sheet = loader.loadImage("/themes/brambles_21.png");
+		brambles_sheet = AddonManager.getLoadedTheme().getSprites128();//loader.loadImage("/themes/brambles_21.png");
 		
-		brambles = new SpriteSheet(brambles_sheet, 128).getSprites();
+		
+		
+		
+	    
+	    brambles = new SpriteSheet(AddonManager.getLoadedTheme().getSprites128(), 128).getSprites();
 		
 		
 		/////////////// sound initialization ///////////////
@@ -76,7 +85,74 @@ public class Game extends Canvas implements Runnable{
 	    //bgMusic.play();
 	    ////////////////////////////////////////////////////
 	    
-	    loadLevelByMatrix(lvl.getMatrix());
+	    int [][] elements = {
+	    		{ 1, 3,12,19,15,12,21, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3,12,12,21, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 1, 7, 0,20, 9,16,14, 1, 1, 1, 3,12,12,12,12,21, 4,20,16,14, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 1, 4, 0,14, 2, 7,15,12,21, 1, 4,20, 9,16, 0,14, 6,24, 7,23, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 1, 5, 0,15,12,19, 0, 0,23, 1, 6,14, 2, 7,20,22, 7,25, 4,24, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 1, 6, 0, 0,20, 9,16, 0,15,12,19,15,12,19,15,12,19,26, 6,25, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 1, 7, 0, 0,15,12,19, 0,20,10,11,16,20,16,20,10,11,22, 4,26, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 1, 8, 9,10,11, 9, 9,16,23,17,18, 7,14, 7,14, 1, 1, 1, 6,14, 3,12,12,12,12,21, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 1, 2, 2,17,18, 2, 2, 8,22, 1, 1, 8,22, 7,14, 1, 1, 1, 4,23, 4, 0,20, 9,16,14, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7,14, 1, 1, 1, 6,23, 5, 0,15,12,19,14, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 3,12,12,12,19,14, 3,12,12,13,23, 6,20, 9, 9, 9,22, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 7,20,10,11, 9,22, 4,20,10,11,22, 7,14, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 3,12,19,23, 1, 1, 1, 1, 6,15,12,12,12,13,23, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 4,20, 9,22, 1, 1, 1, 1, 8,10,11,16, 0, 0,14, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 6,15,12,12,12,21, 1, 1, 1, 1, 1, 8,10,11,22, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 8,10,11, 9,16,23, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 1,17,18, 1, 7,14, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 1, 3,12,12,19,15,21, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 1, 4, 0, 0, 0, 0,24, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 1, 5,20, 9, 9,16,25, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 1, 6,15,12,12,19,26, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 1, 8, 9, 9, 9, 9,22, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	    		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	    		};
+	    
+	    
+	    loadLevelByMatrix(elements);
+	    //loadLevelByMatrix(AddonManager.getLoadedLevel().getMatrix());
+	    
+	    System.out.println(handler.objects.size());
 	    
 	    this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput(handler));
@@ -222,115 +298,58 @@ public class Game extends Canvas implements Runnable{
 	private void loadLevelByMatrix(int[][] elements){
 		
 		
-		//System.out.println("wdth - height : " + w + " " + h);
+		int[][][] collisionsList = /*AddonManager.getLoadedTheme().getCollisions();*/{{{}},
+				{{0,0,128,128, 0}},//ok
+				{{0,0,128,8, 0},{120,0,8,128, 0},{0,120,128,8, 0},{0,0,8,128, 0}},//ok
+				{{0,0,28,128, 0},{0,0,128,24, 0},{28,24,16,32, 0}},//ok
+				{{0,0,32,128, 1}},//ok
+				{{0,0,32,128, 1}},//ok 	//5
+				{{0,0,32,128, 1}},//ok
+				{{0,0,28,128, 0}},//ok
+				{{0,0,28,108, 0},{0,108,128,20, 0}},//ok
+				{{0,108,128,20, 0}},//ok
+				{{0,108,128,20, 0},{0,104,128,4, 1}},//ok	//10
+				{{0,108,128,20, 0},{0,104,128,4, 1}},//ok
+				{{0,0,128,24, 0}},//ok
+				{{0,0,32, 24, 0}},//ok
+				{{84,0,44,128, 0}},//ok
+				{{96,0,32,24, 0}},//ok	//15
+				{{0,108,24,20, 0}},//ok
+				{{0,0,128,128, 0}},//ok
+				{{0,0,128,128, 0}},//ok
+				{{0,0,16,24, 0},{16,0,12,16, 0}},//ok
+				{{84,108,44,20, 0}},//ok	//20
+				{{0,0,128,24, 0},{84,24,44,104, 0}},//ok
+				{{0,108,128,20, 0},{84,0,44,128, 0},{72,84,12,24, 0}},
+				{{80,0,48,128, 1}},//ok
+				{{80,0,48,128, 1}},//ok
+				{{80,0,48,128, 1}},//ok	//25
+				{{80,0,48,128, 1}}};//ok
+		
+		int number;
 		
 		for(int i = 0; i < 60; i++){
 			for(int j = 0; j < 60; j++){
 				
-				ArrayList<CollisionBox> collisions1 = new ArrayList<CollisionBox>();
-				collisions1.add(new CollisionBox(70,32,58,56, ObjectId.DangerousBlock));
-				if(elements[i][j] == 1) handler.addObject(new Block(j*128, i*128, 1, collisions1));
+				number = elements[i][j];
 				
-				ArrayList<CollisionBox> collisions2 = new ArrayList<CollisionBox>();
-				collisions2.add(new CollisionBox(0,32,32,56, ObjectId.DangerousBlock));
-				if(elements[i][j] == 2) handler.addObject(new Block(j*128, i*128, 2, collisions2));
+				if (number == 0) {
+					handler.addObject(new Block(j*128, i*128, number, null));
+					continue;
+				}
+				// 0 pour block normal, 1 pour dangerous
 				
-				ArrayList<CollisionBox> collisions3 = new ArrayList<CollisionBox>();
-				collisions3.add(new CollisionBox(72,48,16,80, ObjectId.DangerousBlock));
-				collisions3.add(new CollisionBox(88,40,40,88, ObjectId.DangerousBlock));
-				if(elements[i][j] == 3) handler.addObject(new Block(j*128, i*128, 3, collisions3));
+				ArrayList<CollisionBox> collisions = new ArrayList<CollisionBox>();
+				for (int k = 0; k < collisionsList[number].length; k++) {
+					collisions.add(new CollisionBox(collisionsList[number][k][0],
+													collisionsList[number][k][1],
+													collisionsList[number][k][2],
+													collisionsList[number][k][3],
+													(collisionsList[number][k][4] == 1)?ObjectId.DangerousBlock:ObjectId.Block));
+				}
 				
-				ArrayList<CollisionBox> collisions4 = new ArrayList<CollisionBox>();
-				collisions4.add(new CollisionBox(0,40,56,88, ObjectId.DangerousBlock));
-				collisions4.add(new CollisionBox(56,56,8,72, ObjectId.DangerousBlock));
-				if(elements[i][j] == 4) handler.addObject(new Block(j*128, i*128, 4, collisions4));
+				handler.addObject(new Block(j*128, i*128, number, collisions));
 				
-			  	ArrayList<CollisionBox> collisions5 = new ArrayList<CollisionBox>();
-				collisions5.add(new CollisionBox(0,32,112,56, ObjectId.DangerousBlock));
-				collisions5.add(new CollisionBox(112,32,16,48, ObjectId.DangerousBlock));
-				collisions5.add(new CollisionBox(64,0,64,32, ObjectId.DangerousBlock));
-				if(elements[i][j] == 5) handler.addObject(new Block(j*128, i*128, 5, collisions5));
-				
-			  	ArrayList<CollisionBox> collisions6 = new ArrayList<CollisionBox>();
-				collisions6.add(new CollisionBox(8,32,16,48, ObjectId.DangerousBlock));
-				collisions6.add(new CollisionBox(24,32,104,56, ObjectId.DangerousBlock));
-				collisions6.add(new CollisionBox(8,0,56,32, ObjectId.DangerousBlock));
-				if(elements[i][j] == 6) handler.addObject(new Block(j*128, i*128, 6, collisions6));
-				
-				ArrayList<CollisionBox> collisions7 = new ArrayList<CollisionBox>();
-				collisions7.add(new CollisionBox(72,32,56,56, ObjectId.DangerousBlock));
-				collisions7.add(new CollisionBox(72,0,56,32, ObjectId.DangerousBlock));
-				if(elements[i][j] == 7) handler.addObject(new Block(j*128, i*128, 7, collisions7));
-				
-				ArrayList<CollisionBox> collisions8 = new ArrayList<CollisionBox>();
-				collisions8.add(new CollisionBox(0,32,128,56, ObjectId.DangerousBlock));
-				if(elements[i][j] == 8) handler.addObject(new Block(j*128, i*128, 8, collisions8));
-
-				ArrayList<CollisionBox> collisions9 = new ArrayList<CollisionBox>();
-				collisions9.add(new CollisionBox(0,32,128,56, ObjectId.DangerousBlock));
-				if(elements[i][j] == 9) handler.addObject(new Block(j*128, i*128, 9, collisions9));
-
-				ArrayList<CollisionBox> collisions10 = new ArrayList<CollisionBox>();
-				collisions10.add(new CollisionBox(0,32,128,56, ObjectId.DangerousBlock));
-				if(elements[i][j] == 10) handler.addObject(new Block(j*128, i*128, 10, collisions10));
-
-				ArrayList<CollisionBox> collisions11 = new ArrayList<CollisionBox>();
-				collisions11.add(new CollisionBox(72,0,56,128, ObjectId.DangerousBlock));
-				if(elements[i][j] == 11) handler.addObject(new Block(j*128, i*128, 11, collisions11));
-
-				ArrayList<CollisionBox> collisions12 = new ArrayList<CollisionBox>();
-				collisions12.add(new CollisionBox(0,0,56,128, ObjectId.DangerousBlock));
-				if(elements[i][j] == 12) handler.addObject(new Block(j*128, i*128, 12, collisions12));
-
-				ArrayList<CollisionBox> collisions13 = new ArrayList<CollisionBox>();
-				collisions13.add(new CollisionBox(0,0,60,128, ObjectId.DangerousBlock));
-				if(elements[i][j] == 13) handler.addObject(new Block(j*128, i*128, 13, collisions13));
-
-				ArrayList<CollisionBox> collisions14 = new ArrayList<CollisionBox>();
-				collisions14.add(new CollisionBox(68,0,60,128, ObjectId.DangerousBlock));
-				if(elements[i][j] == 14) handler.addObject(new Block(j*128, i*128, 14, collisions14));
-				
-				ArrayList<CollisionBox> collisions15 = new ArrayList<CollisionBox>();
-				collisions15.add(new CollisionBox(80,48,28,32, ObjectId.DangerousBlock));
-				collisions15.add(new CollisionBox(108,48,20,40, ObjectId.DangerousBlock));
-				collisions15.add(new CollisionBox(108,40,20,8, ObjectId.Block));
-				if(elements[i][j] == 15) handler.addObject(new Block(j*128, i*128, 15, collisions15));
-
-				ArrayList<CollisionBox> collisions16 = new ArrayList<CollisionBox>();
-				collisions16.add(new CollisionBox(0,40,110,8, ObjectId.Block));
-				collisions16.add(new CollisionBox(0,48,120,40, ObjectId.DangerousBlock));
-				collisions16.add(new CollisionBox(64,88,60,40, ObjectId.DangerousBlock));
-				if(elements[i][j] == 16) handler.addObject(new Block(j*128, i*128, 16, collisions16));
-				
-				ArrayList<CollisionBox> collisions17 = new ArrayList<CollisionBox>();
-				collisions17.add(new CollisionBox(0,40,16,88, ObjectId.DangerousBlock));
-				collisions17.add(new CollisionBox(16,32,28,96, ObjectId.DangerousBlock));
-				collisions17.add(new CollisionBox(44,56,16,72, ObjectId.DangerousBlock));
-				if(elements[i][j] == 17) handler.addObject(new Block(j*128, i*128, 17, collisions17));
-
-				ArrayList<CollisionBox> collisions18 = new ArrayList<CollisionBox>();
-				collisions18.add(new CollisionBox(68,40,16,88, ObjectId.DangerousBlock));
-				collisions18.add(new CollisionBox(84,32,28,96, ObjectId.DangerousBlock));
-				collisions18.add(new CollisionBox(112,56,16,72, ObjectId.DangerousBlock));
-				if(elements[i][j] == 18) handler.addObject(new Block(j*128, i*128, 18, collisions18));
-				
-				ArrayList<CollisionBox> collisions19 = new ArrayList<CollisionBox>();
-				collisions19.add(new CollisionBox(0,64,16,64, ObjectId.DangerousBlock));
-				collisions19.add(new CollisionBox(16,48,112,32, ObjectId.DangerousBlock));
-				collisions19.add(new CollisionBox(16,80,48,48, ObjectId.DangerousBlock));
-				if(elements[i][j] == 19) handler.addObject(new Block(j*128, i*128, 19, collisions19));
-
-				ArrayList<CollisionBox> collisions20 = new ArrayList<CollisionBox>();
-				collisions20.add(new CollisionBox(16,0,48,48, ObjectId.DangerousBlock));
-				collisions20.add(new CollisionBox(0,48,64,24, ObjectId.DangerousBlock));
-				collisions20.add(new CollisionBox(0,72,48,8, ObjectId.DangerousBlock));
-				if(elements[i][j] == 20) handler.addObject(new Block(j*128, i*128, 20, collisions20));
-				
-				ArrayList<CollisionBox> collisions21 = new ArrayList<CollisionBox>();
-				collisions21.add(new CollisionBox(32,32,80,16, ObjectId.DangerousBlock));
-				collisions21.add(new CollisionBox(0,48,120,32, ObjectId.DangerousBlock));
-				collisions21.add(new CollisionBox(72,80,48,48, ObjectId.DangerousBlock));
-				if(elements[i][j] == 21) handler.addObject(new Block(j*128, i*128, 21, collisions21));
 			}
 		}
 		

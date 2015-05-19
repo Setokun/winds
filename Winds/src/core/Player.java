@@ -71,13 +71,16 @@ public class Player extends GameObject{
 			GameObject tempObject = handler.objects.get(i);
 			
 			
-			if(Math.abs(tempObject.getY() - this.getY()) > 512 && Math.abs(tempObject.getY() - this.getY()) > 256) i+=4;
-			if(Math.abs(tempObject.getX() - this.getX()) > 256) continue;
-			if(Math.abs(tempObject.getY() - this.getY()) > 256)	continue;
+			//if(Math.abs(tempObject.getY() - this.getY()) > 512 && Math.abs(tempObject.getY() - this.getY()) > 256) i+=4;
+			if(Math.abs(tempObject.getX() - this.getX()) > 128) continue;
+			if(Math.abs(tempObject.getY() - this.getY()) > 128)	continue;
 			
 			falling = true;
 			
 			if(tempObject.getId() == ObjectId.Player)
+				continue;
+			
+			if(tempObject.getBounds() == null)
 				continue;
 			
 			for (int j = 0; j < tempObject.getBounds().size(); j++) {
@@ -85,13 +88,13 @@ public class Player extends GameObject{
 					
 					//////////////////////// TOP \\\\\\\\\\\\\\\\\\\\\\\\
 					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){
-						y = tempObject.getBounds().get(j).y + tempObject.getBounds().get(j).height;
+						y = tempObject.getBounds().get(j).y + tempObject.getBounds().get(j).height -4;
 						velY = -(this.getVelY()/4);
 					}
 					
 					//////////////////////// BOTTOM \\\\\\\\\\\\\\\\\\\\\\\\
 					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
-						y = tempObject.getBounds().get(j).getBounds().y - 64;
+						y = tempObject.getBounds().get(j).getBounds().y - 60;
 						
 						if(Math.abs(this.getVelY()) < 0.4f){
 							velY = 0;
@@ -119,13 +122,13 @@ public class Player extends GameObject{
 					
 					//////////////////////// RIGHT \\\\\\\\\\\\\\\\\\\\\\\\
 					if(getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())){	
-						x = tempObject.getBounds().get(j).x - 64;
+						x = tempObject.getBounds().get(j).x - 60;
 						velX = -(this.getVelX()/2);
 					}
 					
 					//////////////////////// LEFT \\\\\\\\\\\\\\\\\\\\\\\\
 					if(getBoundsLeft().intersects(tempObject.getBounds().get(j))){ 	
-						x = tempObject.getBounds().get(j).x + tempObject.getBounds().get(j).width;
+						x = tempObject.getBounds().get(j).x + tempObject.getBounds().get(j).width -4;
 						velX = -(this.getVelX()/2);
 					}
 				}

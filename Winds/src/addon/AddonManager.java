@@ -11,7 +11,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 
 public class AddonManager {

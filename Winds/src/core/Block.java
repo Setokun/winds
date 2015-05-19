@@ -18,13 +18,17 @@ public class Block extends GameObject{
 	public Block(float x, float y, int numBlock, ArrayList<CollisionBox> collisions) {
 		super(x, y, null);
 		this.numBlock = numBlock;
-		this.collisions = new ArrayList<CollisionBox>();
-		for (int i = 0; i < collisions.size(); i++) {
-			this.collisions.add(new CollisionBox((int) (x + collisions.get(i).getX()), 
-											  (int) (y + collisions.get(i).getY()), 
-											  (int) (collisions.get(i).getWidth()), 
-											  (int) (collisions.get(i).getHeight()), 
-											  collisions.get(i).getId()));
+		
+		if(collisions != null){
+			
+			this.collisions = new ArrayList<CollisionBox>();
+			for (int i = 0; i < collisions.size(); i++) {
+				this.collisions.add(new CollisionBox((int) (x + collisions.get(i).getX()), 
+												  (int) (y + collisions.get(i).getY()), 
+												  (int) (collisions.get(i).getWidth()), 
+												  (int) (collisions.get(i).getHeight()), 
+												  collisions.get(i).getId()));
+			}
 		}
 		
 	}
@@ -38,7 +42,10 @@ public class Block extends GameObject{
 	public void render(Graphics g) {
 		
 		// charge le numéro de la matrice qui correspond au numéro de sprite du thème chargé
-		g.drawImage(bi[numBlock], (int)x, (int)y, null);
+		if(this.numBlock != 0){
+			g.drawImage(bi[numBlock], (int)x, (int)y, null);
+		}
+		
 		
 		
 		if(Window.debug){

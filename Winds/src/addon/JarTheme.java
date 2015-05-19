@@ -1,6 +1,7 @@
 package addon;
 
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
 
 import javax.swing.ImageIcon;
 
@@ -75,6 +76,27 @@ public class JarTheme extends JarItem {
 	}
 	public BufferedImage getSprites128() {
 		return sprites128;
+	}
+	public int[][][] getCollisions(){
+		
+		Field[] fields = mainClass.getDeclaredFields();
+		
+		System.out.println(mainClass.getName());
+		System.out.println(fields.length);
+		
+		for (Field field : fields) {
+			System.out.println(field.getName());
+		}
+		
+		try {
+			Field f = mainClass.getDeclaredField("collisionsList");
+			f.setAccessible(true);
+			return (int[][][]) f.get(null);
+		} catch (NoSuchFieldException e)	 { e.printStackTrace();
+		} catch (SecurityException e)		 { e.printStackTrace();
+		} catch (IllegalArgumentException e) { e.printStackTrace();
+		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
+		return null;
 	}
 	//endregion
 	//region Setters 
