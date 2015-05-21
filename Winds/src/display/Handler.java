@@ -3,6 +3,8 @@ package display;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import audio.AudioPlayer;
+import core.Collectable;
 import core.GameObject;
 
 public class Handler {
@@ -39,11 +41,33 @@ public class Handler {
 			}
 		}
 		
-		objects.get(3600).render(g);
+		//objects.get(3600).render(g);
+		for (int i = 3600; i < objects.size(); i++) {
+			objects.get(i).render(g);
+		}
+		
 	}
 	
 	public void addObject(GameObject object){
 		this.objects.add(object);
+	}
+	
+	public void removeObject(GameObject object){
+		CollectableId cid = ((Collectable) object).getCollectableId();
+		
+		if(cid == CollectableId.coin){
+			String sfxName = "resources/sounds/piece.mp3";
+		    AudioPlayer sfx = new AudioPlayer(sfxName, false);
+		    sfx.play();
+		}
+		else if(cid == CollectableId.life){
+			String sfxName = "resources/sounds/1up.mp3";
+		    AudioPlayer sfx = new AudioPlayer(sfxName, false);
+		    sfx.play();
+		}
+	    
+	    this.objects.remove(object);
+		
 	}
 	
 }

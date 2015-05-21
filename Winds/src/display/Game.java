@@ -17,6 +17,7 @@ import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
 import core.Block;
+import core.Collectable;
 import core.CollisionBox;
 import core.ObjectId;
 import core.Player;
@@ -32,7 +33,7 @@ public class Game extends Canvas implements Runnable{
 	private Level lvl;
 	
 	private BufferedImage bg = null, pauseImage = null;
-	private BufferedImage brambles_sheet = null;
+	//private BufferedImage brambles_sheet = null;
 	
 	private static boolean pause = false, running = false;
 	
@@ -69,7 +70,7 @@ public class Game extends Canvas implements Runnable{
 		//bg = loader.loadImage("/background/ruche.jpg");
 		bg = AddonManager.getLoadedTheme().getBackground();
 		pauseImage = loader.loadImage("/background/menu_pause.png");
-		brambles_sheet = AddonManager.getLoadedTheme().getSprites128();//loader.loadImage("/themes/brambles_21.png");
+		//brambles_sheet = AddonManager.getLoadedTheme().getSprites128();//loader.loadImage("/themes/brambles_21.png");
 		
 
 	    brambles = new SpriteSheet(AddonManager.getLoadedTheme().getSprites128(), 128).getSprites();
@@ -261,6 +262,52 @@ public class Game extends Canvas implements Runnable{
 		}
 		
 		handler.addObject(new Player(2*128, 1*128, handler, ObjectId.Player));
+		
+		handler.addObject(new Collectable(300, 256, CollectableId.coin, ObjectId.Collectable));
+		handler.addObject(new Collectable(320, 512, CollectableId.coin, ObjectId.Collectable));
+		handler.addObject(new Collectable(300, 236, CollectableId.coin, ObjectId.Collectable));
+		handler.addObject(new Collectable(320, 500, CollectableId.coin, ObjectId.Collectable));
+		handler.addObject(new Collectable(230, 256, CollectableId.coin, ObjectId.Collectable));
+		handler.addObject(new Collectable(444, 512, CollectableId.coin, ObjectId.Collectable));
+		handler.addObject(new Collectable(375, 256, CollectableId.coin, ObjectId.Collectable));
+		handler.addObject(new Collectable(170, 650, CollectableId.life, ObjectId.Collectable));
+		
+	}
+	
+	private void loadInteractions(int[][] elements){
+		
+		
+		int[][][] collisionsList = AddonManager.getLoadedTheme().getCollisions();
+		
+		int number;
+		
+		for(int i = 0; i < 60; i++){
+			for(int j = 0; j < 60; j++){
+				
+				number = elements[i][j];
+				
+				if (number == 0) {
+					handler.addObject(new Block(j*128, i*128, number, null));
+					continue;
+				}
+				
+				ArrayList<CollisionBox> collisions = new ArrayList<CollisionBox>();
+				for (int k = 0; k < collisionsList[number].length; k++) {
+					ObjectId id = ObjectId.Block;
+					if(collisionsList[number][k][4] == 1) id = ObjectId.DangerousBlock;
+					if(collisionsList[number][k][4] == 2) id = ObjectId.Interactions;
+					if(collisionsList[number][k][4] == 2) id = ObjectId.Boss;
+					collisions.add(new CollisionBox(collisionsList[number][k][0],
+													collisionsList[number][k][1],
+													collisionsList[number][k][2],
+													collisionsList[number][k][3],
+													id));
+				}
+				
+				handler.addObject(new Block(j*128, i*128, number, collisions));
+				
+			}
+		}
 		
 	}
 	

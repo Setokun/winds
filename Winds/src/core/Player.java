@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import audio.AudioPlayer;
 import display.BufferedImageLoader;
 import display.Handler;
 import display.Window;
@@ -156,6 +157,16 @@ public class Player extends GameObject{
 						velX = -(this.getVelX()*1.5f);
 					}
 				}
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.Collectable){
+
+					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds()) 
+					|| getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())
+					|| getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())
+					|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
+						handler.removeObject(tempObject);
+					}
+				}
+				
 			}
 		}
 		
