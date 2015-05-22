@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -21,6 +20,9 @@ import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 
+import addon.JarLevel;
+import addon.JarTheme;
+import addon.level.LevelCreationDialog;
 import display.Window;
 
 public class LevelEditorList extends JPanel {
@@ -48,16 +50,13 @@ public class LevelEditorList extends JPanel {
             	jBtnNewLevelActionPerformed(evt);
             }
         });
-		jBtnNewLevel.addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
+		jBtnNewLevel.addMouseListener(new MouseAdapter() {
 			public void mouseExited(MouseEvent e) {
 				jBtnNewLevel.setIcon(new ImageIcon("resources/Buttons/NewLevel.png"));
 			}
 			public void mouseEntered(MouseEvent e) {
 				jBtnNewLevel.setIcon(new ImageIcon("resources/Buttons/NewLevel_hover.png"));
 			}
-			public void mouseClicked(MouseEvent e) {}
 		});
 		
 		
@@ -74,16 +73,13 @@ public class LevelEditorList extends JPanel {
                 jBtnBackActionPerformed(evt);
             }
         });
-		jBtnBack.addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
+		jBtnBack.addMouseListener(new MouseAdapter() {
 			public void mouseExited(MouseEvent e) {
 				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
 			}
 			public void mouseEntered(MouseEvent e) {
 				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
 			}
-			public void mouseClicked(MouseEvent e) {}
 		});
 		
 		
@@ -237,8 +233,10 @@ public class LevelEditorList extends JPanel {
 	}
 	
 	protected void jBtnNewLevelActionPerformed(ActionEvent evt) {
-		// TODO Auto-generated method stub
-		System.out.println("Ouverture de la fenêtre de création en mode 'nouveau niveau'");
+		LevelCreationDialog.show(true);
+		String levelName = LevelCreationDialog.getNameChoosen();
+		JarTheme themeUsed = LevelCreationDialog.getThemeChoosen();
+		
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {

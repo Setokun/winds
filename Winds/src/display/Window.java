@@ -9,7 +9,7 @@ import menus.Login;
 import menus.MainMenu;
 import accounts.Profile;
 
-public	 class Window {
+public class Window {
 
 	public static Profile profile = null;
 	
@@ -37,10 +37,8 @@ public	 class Window {
 		main.setResizable(false);
 		main.setLocationRelativeTo(null);
 		
-		
 		//DBClass.deleteTestData(); 
 		//DBClass.createStructures(); DBClass.createTestData();
-		
 		
 		profile = Profile.getCurrentPlayer();
 		if(profile == null){
@@ -49,9 +47,11 @@ public	 class Window {
 			main.add(new MainMenu());
 		}
 		
-		main.setVisible(true);
-		
-		
+		main.setVisible(true);		
+	}
+	
+	public static JFrame getFrame(){
+		return main;
 	}
 	
 }
