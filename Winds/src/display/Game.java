@@ -17,7 +17,9 @@ import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
 import core.Block;
+import core.Boss;
 import core.Collectable;
+import core.CollectableId;
 import core.CollisionBox;
 import core.ObjectId;
 import core.Player;
@@ -48,7 +50,9 @@ public class Game extends Canvas implements Runnable{
 	public Game(Level lvl){
 		this.lvl = lvl;
 		System.out.println(lvl);
-		start();
+		AddonManager.loadLevel(2);
+	    AddonManager.loadTheme(1);
+	    start();
 	}
 	
 	private void init(){
@@ -56,13 +60,10 @@ public class Game extends Canvas implements Runnable{
 		seconds = 0;
 		pause = false;
 		
-		
-		
 		handler = new Handler();
 		cam = new Camera(0, 0);
 		
-		AddonManager.loadLevel(2);
-	    AddonManager.loadTheme(1);
+		
 
 		BufferedImageLoader loader = new BufferedImageLoader();
 		//bg = loader.loadImage("/background/pirate3.jpg");
@@ -261,16 +262,18 @@ public class Game extends Canvas implements Runnable{
 			}
 		}
 		
-		handler.addObject(new Player(2*128, 1*128, handler, ObjectId.Player));
+		handler.addObject(new Player(4*128, 1*128, handler, ObjectId.Player));
 		
-		handler.addObject(new Collectable(300, 256, CollectableId.coin, ObjectId.Collectable));
+		handler.addObject(new Collectable(300, 256, CollectableId.honey, ObjectId.Collectable));
 		handler.addObject(new Collectable(320, 512, CollectableId.coin, ObjectId.Collectable));
-		handler.addObject(new Collectable(300, 236, CollectableId.coin, ObjectId.Collectable));
+		handler.addObject(new Collectable(300, 236, CollectableId.honey, ObjectId.Collectable));
 		handler.addObject(new Collectable(320, 500, CollectableId.coin, ObjectId.Collectable));
 		handler.addObject(new Collectable(230, 256, CollectableId.coin, ObjectId.Collectable));
-		handler.addObject(new Collectable(444, 512, CollectableId.coin, ObjectId.Collectable));
-		handler.addObject(new Collectable(375, 256, CollectableId.coin, ObjectId.Collectable));
+		handler.addObject(new Collectable(444, 512, CollectableId.honey, ObjectId.Collectable));
+		handler.addObject(new Collectable(375, 256, CollectableId.honey, ObjectId.Collectable));
 		handler.addObject(new Collectable(170, 650, CollectableId.life, ObjectId.Collectable));
+		
+		handler.addObject(new Boss(200, 200, ObjectId.Boss));
 		
 	}
 	
