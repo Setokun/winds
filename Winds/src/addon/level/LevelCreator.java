@@ -9,22 +9,24 @@ import java.io.IOException;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
+import javax.swing.JOptionPane;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 
 public class LevelCreator {
-	private String currentPath, sources;
+	private String currentPath, resourcePath, sources;
 	private File javaFile, classFile, jarFile;
 	
-	private String creator, date, description, name, mode, type;
+	private String creator, date, description, name="newCustomLevel", mode, type;
 	private int timeMax, idDB, idTheme;
 	private int[][] matrix, interactions;
 	private boolean uploaded;
 	
-	
+
 	public LevelCreator(){
 		currentPath = getClass().getResource("").getPath().replace("%20", " ");
+		resourcePath = currentPath.replace("addon/level/", "resources/levels/");
 		matrix = new int[0][0];
 		interactions = new int[0][0];
 	}
@@ -33,6 +35,8 @@ public class LevelCreator {
 		createJavaFile();
 		compileJavaFile();
 		createJarFile();
+		moveFileToResources();
+		
 		return jarFile;
 	}
 	
@@ -149,6 +153,22 @@ public class LevelCreator {
 	
 			boolean classFileRemoved = classFile.delete();
 			if( !classFileRemoved ){}
+		}
+	}
+	private void moveFileToResources(){
+		if(jarFile != null){
+			File destFile = new File(resourcePath, name+".jar");
+			if( !destFile.exists() ){
+				jarFile.renameTo(destFile);
+				return;
+			}
+			
+			int response = JOptionPane.showConfirmDialog(null, "Do you want to overwrite this level in resources folder ?",
+					"Level already exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			switch(response){
+				case JOptionPane.YES_OPTION: destFile.delete(); jarFile.renameTo(destFile); break;
+				case JOptionPane.NO_OPTION : jarFile.delete(); break;
+			}
 		}
 	}
 	
