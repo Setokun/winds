@@ -3,9 +3,6 @@ package display;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import audio.AudioPlayer;
-import core.Collectable;
-import core.CollectableId;
 import core.GameObject;
 
 public class Handler {

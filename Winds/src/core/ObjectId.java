@@ -7,5 +7,6 @@ public enum ObjectId {
 	Interactions(),
 	Boss(),
 	Collectable(),
-	Enemy();
+	Enemy(),
+	Arrival();
 }

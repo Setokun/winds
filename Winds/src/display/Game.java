@@ -16,6 +16,7 @@ import addons.Level;
 import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
+import core.Arrival;
 import core.Block;
 import core.Boss;
 import core.Collectable;
@@ -37,18 +38,18 @@ public class Game extends Canvas implements Runnable{
 	private BufferedImage bubulle, gameover;
 	
 	private BufferedImage bg = null, pauseImage = null;
-	//private BufferedImage brambles_sheet = null;
 	
-	private static boolean pause = false, running = false;
+	private static boolean pause = false, running = false, finished, defeat;
 	
 	private Thread thread;
 	private String bgMusicFilename;
-	static AudioPlayer bgMusic;
+	public static AudioPlayer bgMusic;
 	private Handler handler;
-	static BufferedImage[] brambles;
+	static BufferedImage[] instance;
+
 	private Player player;
 	
-	private int seconds;
+	private int seconds, delayVictory, delayGameOver;
 	
 	public Game(Level lvl){
 		this.lvl = lvl;
@@ -60,8 +61,10 @@ public class Game extends Canvas implements Runnable{
 	
 	private void init(){
 		
-		seconds = 0;
+		seconds = 0; delayVictory = 53; delayGameOver = 18;
 		pause = false;
+		finished = false;
+		defeat = false;
 		
 		handler = new Handler();
 		cam = new Camera(0, 0);
@@ -70,15 +73,13 @@ public class Game extends Canvas implements Runnable{
 
 		BufferedImageLoader loader = new BufferedImageLoader();
 		//bg = loader.loadImage("/background/pirate3.jpg");
-		//bg = loader.loadImage("/background/2.jpg");
-		//bg = loader.loadImage("/background/ruche.jpg");
 		bg = AddonManager.getLoadedTheme().getBackground();
 		pauseImage = loader.loadImage("/background/menu_pause.png");
-		//brambles_sheet = AddonManager.getLoadedTheme().getSprites128();//loader.loadImage("/themes/brambles_21.png");
-		bubulle = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
 		gameover = loader.loadImage("/background/gameover.png");
 		
-	    brambles = new SpriteSheet(AddonManager.getLoadedTheme().getSprites128(), 128).getSprites();
+		bubulle = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
+		
+	    instance = new SpriteSheet(AddonManager.getLoadedTheme().getSprites128(), 128).getSprites();
 		
 		
 		/////////////// sound initialization ///////////////
@@ -91,12 +92,11 @@ public class Game extends Canvas implements Runnable{
 	    loadLevelByMatrix(AddonManager.getLoadedLevel().getMatrix());
 	    
 	    player = new Player(4*128, 1*128, handler, ObjectId.Player);
-		//handler.addObject(new Player(4*128, 1*128, handler, ObjectId.Player));
 		handler.addObject(player);
+		handler.addObject(new Arrival(1344, 2360, ObjectId.Arrival));
 	    
 	    loadInteractions(null);
-	    
-	    System.out.println(handler.objects.size());
+
 	    
 	    this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput(handler));
@@ -154,7 +154,10 @@ public class Game extends Canvas implements Runnable{
 			
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
-				if(!getPause() && player.getLife() > 0)seconds++;
+				if(!getPause() && player.getLife() > 0 && !finished)seconds++;
+				if(finished)delayVictory--;
+				if(defeat)delayGameOver--;
+				if(delayVictory == 0 || delayGameOver == 0) goBackToMenu();
 				System.out.println(updates + " updates, fps : " + frames);
 				updates = 0;
 				frames = 0;
@@ -180,67 +183,54 @@ public class Game extends Canvas implements Runnable{
 		this.requestFocus();
 		
 		BufferStrategy bs = this.getBufferStrategy();
-		if(bs == null){
-			// set the number of images prepared before rendering, including the current one
-			this.createBufferStrategy(2);
-			return;
-		}
+		if(bs == null){this.createBufferStrategy(2);return;}
 		Graphics g = bs.getDrawGraphics();
 		Graphics2D g2d = (Graphics2D) g;
+		
 		
 		g.setFont(new Font("bubble & soap", 0, 36));
 		g.setColor(Color.WHITE);
 		
-		
-		/////////////////////////////////////////
+
 		if(pause){
 			g.setColor(Color.red);
 			g.drawImage(pauseImage, 0, 0, this.getWidth(), this.getHeight(), this);
 			if(Window.debug){
-				g.drawRect(297, 185, 180, 40);
+				g.drawRect(297,185,180,40);
 				g.drawRect(217,265,330,40);
 				g.drawRect(260,348,250,40);
 			}
 		}else{
-			
-			//g.setColor(Color.BLACK);
-			//g.fillRect(0, 0, getWidth(), getHeight());
 			
 			// drawing the background
 			g.drawImage(bg, (int)(cam.getX()/4), (int)(cam.getY()/8), this);
 			
 			
 			g2d.translate(cam.getX(), cam.getY());
-			
 			handler.render(g);
-			
 			g2d.translate( -cam.getX(), -cam.getY());
 			
 			
-			// affichage du temps écoulé
+			// draw elapsed time
 			g.setColor(Color.white);
 			g.drawString(seconds/60 + ":" + seconds%60, 32, 32);
 			
 			
-			for (int i = 0; i < player.getLife(); i++) {
-				g.drawImage(bubulle, 30 +i*30, 40, this);
-			}
+			for (int i = 0; i < player.getLife(); i++) {g.drawImage(bubulle, 30 +i*30, 40, this);}
 			
 			if(player.getLife() == 0){
+				if(!defeat){
+					defeat = true;
+					Game.bgMusic.stop();
+					Game.bgMusic = new AudioPlayer("resources/musics/gameover.mp3", false);
+				    Game.bgMusic.play();
+				}
+				
 				g.drawImage(gameover, 0, 0, this);
 			}
 			
-			
-			/*g.setFont(new Font("bubble & soap", 0, 24));
-			g.drawRect(150, 10, 200, 25);
-			g.drawString(lvl.titreNiveau, 150, 30);*/
-			
 		}
-		
-		/////////////////////////////////////////
-		
-		
-		
+
 		g.dispose();
 		bs.show();
 	}
@@ -330,7 +320,7 @@ public class Game extends Canvas implements Runnable{
 	
 	
 	public static BufferedImage[] getInstance(){
-		return brambles;
+		return instance;
 	}
 	
 	public static boolean getPause(){
@@ -349,9 +339,18 @@ public class Game extends Canvas implements Runnable{
 		
 	}
 	
-	public static void reafficherMenu(){
+	public static void goBackToMenu(){
+		Game.bgMusic.stop();
 		Game.running = false;
 		Window.resize(new Dimension(800, 550));
 		Window.affect(new LevelCategorySelector());
 	}
+	
+	public static boolean isFinished(){
+		return finished;
+	}
+	public static void setFinished(){
+		finished = true;
+	}
+	
 }

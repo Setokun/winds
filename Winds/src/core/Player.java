@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import audio.AudioPlayer;
 import display.BufferedImageLoader;
+import display.Game;
 import display.Handler;
 import display.Window;
 
@@ -194,6 +195,21 @@ public class Player extends GameObject{
 							AudioPlayer.playSfx("honey");
 						}
 						handler.removeObject(tempObject);
+					}
+				}
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.Arrival){
+					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds()) 
+					|| getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())
+					|| getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())
+					|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
+						if(!Game.isFinished()){
+							velX = velX / 10;
+							Game.setFinished();
+							Game.bgMusic.stop();
+							Game.bgMusic = new AudioPlayer("resources/musics/victory.mp3", false);
+						    Game.bgMusic.play();
+						}
+						
 					}
 				}
 				
