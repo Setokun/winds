@@ -21,6 +21,7 @@ import core.Boss;
 import core.Collectable;
 import core.CollectableId;
 import core.CollisionBox;
+import core.Enemy;
 import core.ObjectId;
 import core.Player;
 import core.SpriteSheet;
@@ -204,6 +205,7 @@ public class Game extends Canvas implements Runnable{
 			// drawing the background
 			g.drawImage(bg, (int)(cam.getX()/4), (int)(cam.getY()/8), this);
 			
+			
 			g2d.translate(cam.getX(), cam.getY());
 			
 			handler.render(g);
@@ -274,6 +276,7 @@ public class Game extends Canvas implements Runnable{
 		handler.addObject(new Collectable(170, 650, CollectableId.life, ObjectId.Collectable));
 		
 		handler.addObject(new Boss(200, 200, ObjectId.Boss));
+		handler.addObject(new Enemy(300, 500, ObjectId.Enemy, 150));
 		
 	}
 	

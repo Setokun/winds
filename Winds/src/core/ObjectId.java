@@ -6,5 +6,6 @@ public enum ObjectId {
 	DangerousBlock(),
 	Interactions(),
 	Boss(),
-	Collectable();
+	Collectable(),
+	Enemy();
 }
