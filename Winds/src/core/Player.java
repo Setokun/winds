@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import audio.AudioPlayer;
 import display.BufferedImageLoader;
 import display.Handler;
 import display.Window;
@@ -174,6 +175,26 @@ public class Player extends GameObject{
 					|| getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())
 					|| getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())
 					|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
+						CollectableId cid = ((Collectable) tempObject).getCollectableId();
+						
+						if(cid == CollectableId.coin){
+							String sfxName = "resources/sounds/coin.mp3";
+						    AudioPlayer sfx = new AudioPlayer(sfxName, false);
+						    sfx.play();
+						}
+						else if(cid == CollectableId.life){
+							String sfxName = "resources/sounds/1up.mp3";
+						    AudioPlayer sfx = new AudioPlayer(sfxName, false);
+						    sfx.play();
+						    this.life++;
+						    if(this.life>5)
+						    	this.life = 5;
+						}
+						else if(cid == CollectableId.honey){
+							String sfxName = "resources/sounds/honey.mp3";
+						    AudioPlayer sfx = new AudioPlayer(sfxName, false);
+						    sfx.play();
+						}
 						handler.removeObject(tempObject);
 					}
 				}

@@ -284,7 +284,7 @@ public class Game extends Canvas implements Runnable{
 		handler.addObject(new Collectable(230, 256, CollectableId.coin, ObjectId.Collectable));
 		handler.addObject(new Collectable(444, 512, CollectableId.honey, ObjectId.Collectable));
 		handler.addObject(new Collectable(375, 256, CollectableId.honey, ObjectId.Collectable));
-		handler.addObject(new Collectable(170, 650, CollectableId.life, ObjectId.Collectable));
+		handler.addObject(new Collectable(200, 600, CollectableId.life, ObjectId.Collectable));
 		
 		handler.addObject(new Boss(200, 200, ObjectId.Boss));
 		handler.addObject(new Enemy(300, 500, ObjectId.Enemy, 150));

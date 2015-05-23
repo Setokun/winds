@@ -53,26 +53,7 @@ public class Handler {
 	}
 	
 	public void removeObject(GameObject object){
-		CollectableId cid = ((Collectable) object).getCollectableId();
-		
-		if(cid == CollectableId.coin){
-			String sfxName = "resources/sounds/coin.mp3";
-		    AudioPlayer sfx = new AudioPlayer(sfxName, false);
-		    sfx.play();
-		}
-		else if(cid == CollectableId.life){
-			String sfxName = "resources/sounds/1up.mp3";
-		    AudioPlayer sfx = new AudioPlayer(sfxName, false);
-		    sfx.play();
-		}
-		else if(cid == CollectableId.honey){
-			String sfxName = "resources/sounds/honey.mp3";
-		    AudioPlayer sfx = new AudioPlayer(sfxName, false);
-		    sfx.play();
-		}
-	    
 	    this.objects.remove(object);
-		
 	}
 	
 }
