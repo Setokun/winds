@@ -144,6 +144,7 @@ public class Player extends GameObject{
 						velY = 1.5f;
 						velX = this.getVelX()/4;
 						this.life--;
+						AudioPlayer.playSfx("splaf");
 					}
 					// BOTTOM
 					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
@@ -151,6 +152,7 @@ public class Player extends GameObject{
 						velY = -2f;
 						velX = this.getVelX()/4;
 						this.life--;
+						AudioPlayer.playSfx("splaf");
 					}
 					// RIGHT
 					if(getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())){	
@@ -158,6 +160,7 @@ public class Player extends GameObject{
 						velX = -1.5f;
 						velY = this.getVelY()/4;
 						this.life--;
+						AudioPlayer.playSfx("splaf");
 					}
 					// LEFT
 					if(getBoundsLeft().intersects(tempObject.getBounds().get(j))){ 	
@@ -165,6 +168,7 @@ public class Player extends GameObject{
 						velX = 1.5f;
 						velY = this.getVelY()/4;
 						this.life--;
+						AudioPlayer.playSfx("splaf");
 					}
 					
 					
@@ -178,22 +182,16 @@ public class Player extends GameObject{
 						CollectableId cid = ((Collectable) tempObject).getCollectableId();
 						
 						if(cid == CollectableId.coin){
-							String sfxName = "resources/sounds/coin.mp3";
-						    AudioPlayer sfx = new AudioPlayer(sfxName, false);
-						    sfx.play();
+							AudioPlayer.playSfx("coin");
 						}
 						else if(cid == CollectableId.life){
-							String sfxName = "resources/sounds/1up.mp3";
-						    AudioPlayer sfx = new AudioPlayer(sfxName, false);
-						    sfx.play();
+							AudioPlayer.playSfx("1up");
 						    this.life++;
 						    if(this.life>5)
 						    	this.life = 5;
 						}
 						else if(cid == CollectableId.honey){
-							String sfxName = "resources/sounds/honey.mp3";
-						    AudioPlayer sfx = new AudioPlayer(sfxName, false);
-						    sfx.play();
+							AudioPlayer.playSfx("honey");
 						}
 						handler.removeObject(tempObject);
 					}

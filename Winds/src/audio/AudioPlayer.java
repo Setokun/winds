@@ -88,6 +88,12 @@ public class AudioPlayer {
         
     }
     
+    public static void playSfx(String path){
+		String sfxName = "resources/sounds/"+ path +".mp3";
+	    AudioPlayer sfx = new AudioPlayer(sfxName, false);
+	    sfx.play();
+	}
+    
 }
 
 
