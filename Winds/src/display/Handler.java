@@ -41,8 +41,7 @@ public class Handler {
 				tempObject.render(g);
 			}
 		}
-		
-		//objects.get(3600).render(g);
+
 		for (int i = 3600; i < objects.size(); i++) {
 			objects.get(i).render(g);
 		}

@@ -34,6 +34,7 @@ public class Game extends Canvas implements Runnable{
 	public static Camera cam;
 	public final String TITLE = "Winds";
 	private Level lvl;
+	private BufferedImage bubulle;
 	
 	private BufferedImage bg = null, pauseImage = null;
 	//private BufferedImage brambles_sheet = null;
@@ -45,6 +46,7 @@ public class Game extends Canvas implements Runnable{
 	static AudioPlayer bgMusic;
 	private Handler handler;
 	static BufferedImage[] brambles;
+	private Player player;
 	
 	private int seconds;
 	
@@ -73,7 +75,7 @@ public class Game extends Canvas implements Runnable{
 		bg = AddonManager.getLoadedTheme().getBackground();
 		pauseImage = loader.loadImage("/background/menu_pause.png");
 		//brambles_sheet = AddonManager.getLoadedTheme().getSprites128();//loader.loadImage("/themes/brambles_21.png");
-		
+		bubulle = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
 
 	    brambles = new SpriteSheet(AddonManager.getLoadedTheme().getSprites128(), 128).getSprites();
 		
@@ -86,6 +88,12 @@ public class Game extends Canvas implements Runnable{
 	    ////////////////////////////////////////////////////
 	    
 	    loadLevelByMatrix(AddonManager.getLoadedLevel().getMatrix());
+	    
+	    player = new Player(4*128, 1*128, handler, ObjectId.Player);
+		//handler.addObject(new Player(4*128, 1*128, handler, ObjectId.Player));
+		handler.addObject(player);
+	    
+	    loadInteractions(null);
 	    
 	    System.out.println(handler.objects.size());
 	    
@@ -193,14 +201,9 @@ public class Game extends Canvas implements Runnable{
 				g.drawRect(260,348,250,40);
 			}
 		}else{
-			/*g.drawImage(bg, 0, 0, this);
-			// affichage du temps écoulé
-			//g.setColor(Color.red);
-			g.drawString(seconds/60 + ":" + seconds%60, 32, 32);*/
-			////////////////////////
 			
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, getWidth(), getHeight());
+			//g.setColor(Color.BLACK);
+			//g.fillRect(0, 0, getWidth(), getHeight());
 			
 			// drawing the background
 			g.drawImage(bg, (int)(cam.getX()/4), (int)(cam.getY()/8), this);
@@ -216,6 +219,12 @@ public class Game extends Canvas implements Runnable{
 			// affichage du temps écoulé
 			g.setColor(Color.white);
 			g.drawString(seconds/60 + ":" + seconds%60, 32, 32);
+			
+			
+			for (int i = 0; i < player.getLife(); i++) {
+				g.drawImage(bubulle, 30 +i*30, 40, this);
+			}
+			
 			
 			/*g.setFont(new Font("bubble & soap", 0, 24));
 			g.drawRect(150, 10, 200, 25);
@@ -264,7 +273,9 @@ public class Game extends Canvas implements Runnable{
 			}
 		}
 		
-		handler.addObject(new Player(4*128, 1*128, handler, ObjectId.Player));
+	}
+	
+	private void loadInteractions(int[][] elements){
 		
 		handler.addObject(new Collectable(300, 256, CollectableId.honey, ObjectId.Collectable));
 		handler.addObject(new Collectable(320, 512, CollectableId.coin, ObjectId.Collectable));
@@ -278,12 +289,7 @@ public class Game extends Canvas implements Runnable{
 		handler.addObject(new Boss(200, 200, ObjectId.Boss));
 		handler.addObject(new Enemy(300, 500, ObjectId.Enemy, 150));
 		
-	}
-	
-	private void loadInteractions(int[][] elements){
-		
-		
-		int[][][] collisionsList = AddonManager.getLoadedTheme().getCollisions();
+		/*int[][][] collisionsList = AddonManager.getLoadedTheme().getCollisions();
 		
 		int number;
 		
@@ -313,7 +319,7 @@ public class Game extends Canvas implements Runnable{
 				handler.addObject(new Block(j*128, i*128, number, collisions));
 				
 			}
-		}
+		}*/
 		
 	}
 	
