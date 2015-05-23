@@ -141,14 +141,14 @@ public class Player extends GameObject{
 					// TOP
 					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){
 						y = tempObject.getBounds().get(j).y + tempObject.getBounds().get(j).height;
-						velY = -1.5f;
+						velY = 1.5f;
 						velX = this.getVelX()/4;
 						this.life--;
 					}
 					// BOTTOM
 					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
 						y = tempObject.getBounds().get(j).y - 64;
-						velY = 1.5f;
+						velY = -2f;
 						velX = this.getVelX()/4;
 						this.life--;
 					}
