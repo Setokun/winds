@@ -16,9 +16,9 @@ public class Camera {
 	
 	public void tick(GameObject player){
 		if(player.getX() >= Game.WIDTH/2 && player.getX() <= largeur_niveau - Game.WIDTH/2)
-			x = -player.getX() + Game.WIDTH/2;
+			x =(int) (-player.getX() + Game.WIDTH/2);
 		if(player.getY() >= Game.HEIGHT/2 && player.getY() <= hauteur_niveau - Game.HEIGHT/2)
-			y = -player.getY() + Game.HEIGHT/2;
+			y =(int) (-player.getY() + Game.HEIGHT/2);
 	}
 	
 
