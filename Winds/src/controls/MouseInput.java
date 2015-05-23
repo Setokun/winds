@@ -5,6 +5,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import audio.AudioPlayer;
 import core.GameObject;
 import core.ObjectId;
 import core.Player;
@@ -102,6 +103,8 @@ public class MouseInput extends MouseAdapter{
 							tempObject.setVelX(-coefX);
 							tempObject.setVelY(-coefY);
 						}
+						
+						AudioPlayer.playSfx("souffle_air");
 
 //						System.out.println("souris : " + mouseX + ","+ mouseY);
 //						System.out.println("bulle : " + tempObject.getX() + "," + tempObject.getY());
