@@ -34,7 +34,7 @@ public class Game extends Canvas implements Runnable{
 	public static Camera cam;
 	public final String TITLE = "Winds";
 	private Level lvl;
-	private BufferedImage bubulle;
+	private BufferedImage bubulle, gameover;
 	
 	private BufferedImage bg = null, pauseImage = null;
 	//private BufferedImage brambles_sheet = null;
@@ -76,7 +76,8 @@ public class Game extends Canvas implements Runnable{
 		pauseImage = loader.loadImage("/background/menu_pause.png");
 		//brambles_sheet = AddonManager.getLoadedTheme().getSprites128();//loader.loadImage("/themes/brambles_21.png");
 		bubulle = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
-
+		gameover = loader.loadImage("/background/gameover.png");
+		
 	    brambles = new SpriteSheet(AddonManager.getLoadedTheme().getSprites128(), 128).getSprites();
 		
 		
@@ -153,8 +154,8 @@ public class Game extends Canvas implements Runnable{
 			
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
-				if(!pause)seconds++;
-				System.out.println(updates + " updates, fps : " + frames/* + " Camera : " + cam.getX() + " - " + cam.getY()*/);
+				if(!getPause() && player.getLife() > 0)seconds++;
+				System.out.println(updates + " updates, fps : " + frames);
 				updates = 0;
 				frames = 0;
 			}
@@ -163,7 +164,7 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	private void tick(){
-		if(!getPause()){
+		if(!getPause() && player.getLife() > 0){
 			handler.tick();
 			
 			for(int i = 0; i < handler.objects.size(); i++){
@@ -223,6 +224,10 @@ public class Game extends Canvas implements Runnable{
 			
 			for (int i = 0; i < player.getLife(); i++) {
 				g.drawImage(bubulle, 30 +i*30, 40, this);
+			}
+			
+			if(player.getLife() == 0){
+				g.drawImage(gameover, 0, 0, this);
 			}
 			
 			
