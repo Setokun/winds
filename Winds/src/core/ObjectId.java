@@ -8,5 +8,6 @@ public enum ObjectId {
 	Boss(),
 	Collectable(),
 	Enemy(),
-	Arrival();
+	Arrival(),
+	InteractionBlock();
 }
