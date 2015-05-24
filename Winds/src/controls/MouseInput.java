@@ -5,7 +5,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import audio.AudioPlayer;
 import core.GameObject;
 import core.ObjectId;
 import core.Player;
