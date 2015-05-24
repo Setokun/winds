@@ -18,11 +18,8 @@ import controls.KeyInput;
 import controls.MouseInput;
 import core.Arrival;
 import core.Block;
-import core.Boss;
-import core.Collectable;
-import core.CollectableId;
 import core.CollisionBox;
-import core.Enemy;
+import core.InteractionBlock;
 import core.ObjectId;
 import core.Player;
 import core.SpriteSheet;
@@ -35,17 +32,18 @@ public class Game extends Canvas implements Runnable{
 	public static Camera cam;
 	public final String TITLE = "Winds";
 	private Level lvl;
-	private BufferedImage bubulle, gameover;
+	private BufferedImage bubulle, gameover, victory;
 	
 	private BufferedImage bg = null, pauseImage = null;
 	
-	private static boolean pause = false, running = false, finished, defeat;
+	private static boolean pause = false, running = false, finished, defeat, scoreUploaded;
 	
 	private Thread thread;
 	private String bgMusicFilename;
 	public static AudioPlayer bgMusic;
 	private Handler handler;
 	static BufferedImage[] instance;
+	private InteractionBlock interactions;
 
 	private Player player;
 	
@@ -65,10 +63,11 @@ public class Game extends Canvas implements Runnable{
 		pause = false;
 		finished = false;
 		defeat = false;
+		scoreUploaded = false;
 		
 		handler = new Handler();
 		cam = new Camera(0, 0);
-		
+		interactions = new InteractionBlock(handler);
 		
 
 		BufferedImageLoader loader = new BufferedImageLoader();
@@ -76,6 +75,7 @@ public class Game extends Canvas implements Runnable{
 		bg = AddonManager.getLoadedTheme().getBackground();
 		pauseImage = loader.loadImage("/background/menu_pause.png");
 		gameover = loader.loadImage("/background/gameover.png");
+		victory = loader.loadImage("/background/victory.png");
 		
 		bubulle = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
 		
@@ -155,7 +155,13 @@ public class Game extends Canvas implements Runnable{
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
 				if(!getPause() && player.getLife() > 0 && !finished)seconds++;
-				if(finished)delayVictory--;
+				if(finished){
+					if(!scoreUploaded){
+						scoreUploaded = true;
+						System.out.println(this.getFinalScore());
+					}
+					delayVictory--;
+				}
 				if(defeat)delayGameOver--;
 				if(delayVictory == 0 || delayGameOver == 0) goBackToMenu();
 				System.out.println(updates + " updates, fps : " + frames);
@@ -229,6 +235,8 @@ public class Game extends Canvas implements Runnable{
 				g.drawImage(gameover, 0, 0, this);
 			}
 			
+			if(finished) g.drawImage(victory, 0, 0, this);
+			
 		}
 
 		g.dispose();
@@ -272,17 +280,17 @@ public class Game extends Canvas implements Runnable{
 	
 	private void loadInteractions(int[][] elements){
 		
-		handler.addObject(new Collectable(300, 256, CollectableId.honey, ObjectId.Collectable));
-		handler.addObject(new Collectable(320, 512, CollectableId.coin, ObjectId.Collectable));
-		handler.addObject(new Collectable(300, 236, CollectableId.honey, ObjectId.Collectable));
-		handler.addObject(new Collectable(320, 500, CollectableId.coin, ObjectId.Collectable));
-		handler.addObject(new Collectable(230, 256, CollectableId.coin, ObjectId.Collectable));
-		handler.addObject(new Collectable(444, 512, CollectableId.honey, ObjectId.Collectable));
-		handler.addObject(new Collectable(375, 256, CollectableId.honey, ObjectId.Collectable));
-		handler.addObject(new Collectable(200, 600, CollectableId.life, ObjectId.Collectable));
 		
-		handler.addObject(new Boss(200, 200, ObjectId.Boss));
-		handler.addObject(new Enemy(300, 500, ObjectId.Enemy, 150));
+		interactions.loadInteraction(256, 256, 1);
+		interactions.loadInteraction(256, 384, 2);
+		interactions.loadInteraction(640, 256, 2);
+		interactions.loadInteraction(256, 512, 3);
+		interactions.loadInteraction(384, 512, 2);
+		interactions.loadInteraction(8*128, 7*128, 3);
+		interactions.loadInteraction(7*128, 7*128, 1);
+		interactions.loadInteraction(12*128, 2*128, 3);
+		interactions.loadInteraction(15*128, 3*128, 3);
+		
 		
 		/*int[][][] collisionsList = AddonManager.getLoadedTheme().getCollisions();
 		
@@ -351,6 +359,10 @@ public class Game extends Canvas implements Runnable{
 	}
 	public static void setFinished(){
 		finished = true;
+	}
+	
+	private int getFinalScore(){
+		return player.getLife() * 1000 - this.seconds * 100 + player.getCollectables() * 75;
 	}
 	
 }
