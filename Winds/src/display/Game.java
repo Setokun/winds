@@ -31,7 +31,6 @@ public class Game extends Canvas implements Runnable{
 					  HEIGHT = (int) Window.profile.getScreenDimensions().getHeight();
 	public static Camera cam;
 	public final String TITLE = "Winds";
-	private Level lvl;
 	private BufferedImage bubulle, gameover, victory;
 	
 	private BufferedImage bg = null, pauseImage = null;
@@ -49,11 +48,10 @@ public class Game extends Canvas implements Runnable{
 	
 	private int seconds, delayVictory, delayGameOver;
 	
-	public Game(Level lvl){
-		this.lvl = lvl;
-		System.out.println(lvl);
+	public Game(){
 		AddonManager.loadLevel(2);
-	    AddonManager.loadTheme(1);
+		System.out.println("thème n°"+AddonManager.getLoadedLevel().getIdTheme());
+	    AddonManager.loadTheme(AddonManager.getLoadedLevel().getIdTheme());
 	    start();
 	}
 	
