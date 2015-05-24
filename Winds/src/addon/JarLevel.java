@@ -18,6 +18,7 @@ public class JarLevel extends JarItem {
 	public int[][] getMatrix(){
 		try {
 			Field f = mainClass.getDeclaredField("matrix");
+			System.out.println(mainClass.getDeclaredFields().length);
 			f.setAccessible(true);
 			return (int[][]) f.get(null);
 		} catch (NoSuchFieldException e)	 { e.printStackTrace();
@@ -25,6 +26,28 @@ public class JarLevel extends JarItem {
 		} catch (IllegalArgumentException e) { e.printStackTrace();
 		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
 		return null;
+	}
+	public int[][] getInteractions(){
+		try {
+			Field f = mainClass.getDeclaredField("interactions");
+			f.setAccessible(true);
+			return (int[][]) f.get(null);
+		} catch (NoSuchFieldException e)	 { e.printStackTrace();
+		} catch (SecurityException e)		 { e.printStackTrace();
+		} catch (IllegalArgumentException e) { e.printStackTrace();
+		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
+		return null;
+	}
+	public int getTimeMax(){
+		try {
+			Field f = mainClass.getDeclaredField("timeMax");
+			f.setAccessible(true);
+			return (int) f.get(null);
+		} catch (NoSuchFieldException e)	 { e.printStackTrace();
+		} catch (SecurityException e)		 { e.printStackTrace();
+		} catch (IllegalArgumentException e) { e.printStackTrace();
+		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
+		return 0;
 	}
 	//endregion
 	

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 import menus.LevelCategorySelector;
 import addon.AddonManager;
-import addons.Level;
 import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
@@ -49,8 +48,7 @@ public class Game extends Canvas implements Runnable{
 	private int seconds, delayVictory, delayGameOver;
 	
 	public Game(){
-		AddonManager.loadLevel(2);
-		System.out.println("thème n°"+AddonManager.getLoadedLevel().getIdTheme());
+		AddonManager.loadLevel(0);
 	    AddonManager.loadTheme(AddonManager.getLoadedLevel().getIdTheme());
 	    start();
 	}
@@ -94,7 +92,7 @@ public class Game extends Canvas implements Runnable{
 		handler.addObject(new Arrival(1344, 2360, ObjectId.Arrival));
 	    
 		
-		int[][] elements = {
+		int[][] elements = AddonManager.getLoadedLevel().getInteractions();/*{
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				{ 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				{ 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -155,7 +153,7 @@ public class Game extends Canvas implements Runnable{
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-				};
+				};*/
 		
 	    loadInteractions(elements);
 
