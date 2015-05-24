@@ -105,7 +105,7 @@ public class MouseInput extends MouseAdapter{
 								tempObject.setVelY(-coefY);
 							}
 							
-							AudioPlayer.playSfx("souffle_air");
+							//AudioPlayer.playSfx("souffle_air");
 	
 	//						System.out.println("souris : " + mouseX + ","+ mouseY);
 	//						System.out.println("bulle : " + tempObject.getX() + "," + tempObject.getY());
