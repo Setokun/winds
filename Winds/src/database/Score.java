@@ -33,6 +33,10 @@ public class Score {
 	public void setRank(int rank) {this.rank = rank;}
 	public void setNbItems(int nbItems) {this.nbItems = nbItems;}
 	
+	public static void setScore(int id, int score){
+		//TODO créer la méthode d'insertion ou de mise à jour du score du niveau
+	}
+	
 	public static ArrayList<Score> getScores(){
 		try {
 			

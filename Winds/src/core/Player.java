@@ -23,6 +23,7 @@ public class Player extends GameObject{
 	private final float MAX_SPEED_X = 4;
 	private int timeElapsed = 0;
 	private int life;
+	private int collectables;
 	
 	static BufferedImage bubble;
 	
@@ -100,28 +101,17 @@ public class Player extends GameObject{
 					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
 						y = tempObject.getBounds().get(j).getBounds().y - 60;
 						
-						if(Math.abs(this.getVelY()) < 0.4f){
-							velY = 0;
-							unsetGravity();
-						}
-						else{
-							velY = -(this.getVelY()/1.5f);
-						}
+						if(Math.abs(this.getVelY()) < 0.4f){ velY = 0; unsetGravity(); }
+						else{ velY = -(this.getVelY()/1.5f); }
 						
-						if(Math.abs(this.getVelX()) < 0.3f){
-							velX = 0;
-						}
-						else{
-						velX = this.getVelX()/1.2f;
-						}
+						if(Math.abs(this.getVelX()) < 0.3f){ velX = 0; }
+						else{ velX = this.getVelX()/1.2f; }
 						
 						falling = false;
 					}
 					else{
 						falling = true;
-						if(timeElapsed % 60 == 0){
-							resetGravity();
-						}
+						if(timeElapsed % 60 == 0){ resetGravity(); }
 					}
 					
 					//////////////////////// RIGHT \\\\\\\\\\\\\\\\\\\\\\\\
@@ -137,7 +127,8 @@ public class Player extends GameObject{
 					}
 				}
 				
-				else if(tempObject.getBounds().get(j).getId() == ObjectId.DangerousBlock){
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.DangerousBlock 
+						|| tempObject.getBounds().get(j).getId() == ObjectId.Enemy){
 					
 					// TOP
 					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){
@@ -183,7 +174,8 @@ public class Player extends GameObject{
 						CollectableId cid = ((Collectable) tempObject).getCollectableId();
 						
 						if(cid == CollectableId.coin){
-							AudioPlayer.playSfx("coin");
+							AudioPlayer.playSfx("piece");
+							this.collectables++;
 						}
 						else if(cid == CollectableId.life){
 							AudioPlayer.playSfx("1up");
@@ -193,6 +185,7 @@ public class Player extends GameObject{
 						}
 						else if(cid == CollectableId.honey){
 							AudioPlayer.playSfx("honey");
+							this.collectables+=2;
 						}
 						handler.removeObject(tempObject);
 					}
@@ -275,5 +268,9 @@ public class Player extends GameObject{
 	public int getLife(){
 		return this.life;
 	}
-
+	
+	public int getCollectables(){
+		return collectables;
+	}
+	
 }
