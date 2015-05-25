@@ -1,5 +1,6 @@
 package addon;
 
+import java.awt.Point;
 import java.lang.reflect.Field;
 
 import annotation.wCard;
@@ -48,6 +49,17 @@ public class JarLevel extends JarItem {
 		} catch (IllegalArgumentException e) { e.printStackTrace();
 		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
 		return 0;
+	}
+	public Point getStartPosition(){
+		try {
+			Field f = mainClass.getDeclaredField("startPosition");
+			f.setAccessible(true);
+			return (Point) f.get(null);
+		} catch (NoSuchFieldException e)	 { e.printStackTrace();
+		} catch (SecurityException e)		 { e.printStackTrace();
+		} catch (IllegalArgumentException e) { e.printStackTrace();
+		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
+		return null;
 	}
 	//endregion
 	

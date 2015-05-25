@@ -48,10 +48,10 @@ public class InteractionBlock{
 			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50));
 			break;
 		case 5:
-			
+			handler.addObject(new Arrival(x+64, y+56, ObjectId.Arrival));
 			break;
 		case 6:
-			
+			handler.addObject(new Arrival(x+8, y-24, ObjectId.Arrival));
 			break;
 		case 7:
 			
