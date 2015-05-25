@@ -7,7 +7,9 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import audio.AudioPlayer;
 import display.BufferedImageLoader;
+import display.Game;
 import display.Handler;
 import display.Window;
 
@@ -20,6 +22,8 @@ public class Player extends GameObject{
 	private final float MAX_SPEED = 3;
 	private final float MAX_SPEED_X = 4;
 	private int timeElapsed = 0;
+	private int life;
+	private int collectables;
 	
 	static BufferedImage bubble;
 	
@@ -34,6 +38,7 @@ public class Player extends GameObject{
 	public Player(float x, float y, Handler handler,ObjectId id) {
 		super(x, y, id);
 		this.handler = handler;
+		this.life = 3;
 	}
 	
 	public void unsetGravity(){
@@ -96,28 +101,17 @@ public class Player extends GameObject{
 					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
 						y = tempObject.getBounds().get(j).getBounds().y - 60;
 						
-						if(Math.abs(this.getVelY()) < 0.4f){
-							velY = 0;
-							unsetGravity();
-						}
-						else{
-							velY = -(this.getVelY()/1.5f);
-						}
+						if(Math.abs(this.getVelY()) < 0.4f){ velY = 0; unsetGravity(); }
+						else{ velY = -(this.getVelY()/1.5f); }
 						
-						if(Math.abs(this.getVelX()) < 0.3f){
-							velX = 0;
-						}
-						else{
-						velX = this.getVelX()/1.2f;
-						}
+						if(Math.abs(this.getVelX()) < 0.3f){ velX = 0; }
+						else{ velX = this.getVelX()/1.2f; }
 						
 						falling = false;
 					}
 					else{
 						falling = true;
-						if(timeElapsed % 60 == 0){
-							resetGravity();
-						}
+						if(timeElapsed % 60 == 0){ resetGravity(); }
 					}
 					
 					//////////////////////// RIGHT \\\\\\\\\\\\\\\\\\\\\\\\
@@ -133,29 +127,85 @@ public class Player extends GameObject{
 					}
 				}
 				
-				else if(tempObject.getBounds().get(j).getId() == ObjectId.DangerousBlock){
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.DangerousBlock 
+						|| tempObject.getBounds().get(j).getId() == ObjectId.Enemy){
 					
 					// TOP
 					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){
 						y = tempObject.getBounds().get(j).y + tempObject.getBounds().get(j).height;
-						velY = -(this.getVelY()*1.5f);
-					}					
+						velY = 1.5f;
+						velX = this.getVelX()/4;
+						this.life--;
+						AudioPlayer.playSfx("splaf");
+					}
 					// BOTTOM
 					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
 						y = tempObject.getBounds().get(j).y - 64;
-						velY = -(this.getVelY()*1.5f);
-					}					
+						velY = -2f;
+						velX = this.getVelX()/4;
+						this.life--;
+						AudioPlayer.playSfx("splaf");
+					}
 					// RIGHT
 					if(getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())){	
 						x = tempObject.getBounds().get(j).x - 64;
-						velX = -(this.getVelX()*1.5f);
-					}					
+						velX = -1.5f;
+						velY = this.getVelY()/4;
+						this.life--;
+						AudioPlayer.playSfx("splaf");
+					}
 					// LEFT
 					if(getBoundsLeft().intersects(tempObject.getBounds().get(j))){ 	
 						x = tempObject.getBounds().get(j).x + tempObject.getBounds().get(j).getBounds().width;
-						velX = -(this.getVelX()*1.5f);
+						velX = 1.5f;
+						velY = this.getVelY()/4;
+						this.life--;
+						AudioPlayer.playSfx("splaf");
+					}
+					
+					
+				}
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.Collectable){
+
+					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds()) 
+					|| getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())
+					|| getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())
+					|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
+						CollectableId cid = ((Collectable) tempObject).getCollectableId();
+						
+						if(cid == CollectableId.coin){
+							AudioPlayer.playSfx("piece");
+							this.collectables++;
+						}
+						else if(cid == CollectableId.life){
+							AudioPlayer.playSfx("1up");
+						    this.life++;
+						    if(this.life>5)
+						    	this.life = 5;
+						}
+						else if(cid == CollectableId.honey){
+							AudioPlayer.playSfx("honey");
+							this.collectables+=2;
+						}
+						handler.removeObject(tempObject);
 					}
 				}
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.Arrival){
+					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds()) 
+					|| getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())
+					|| getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())
+					|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
+						if(!Game.isFinished()){
+							velX = velX / 10;
+							Game.setFinished();
+							Game.bgMusic.stop();
+							Game.bgMusic = new AudioPlayer("resources/musics/victory.mp3", false);
+						    Game.bgMusic.play();
+						}
+						
+					}
+				}
+				
 			}
 		}
 		
@@ -211,6 +261,16 @@ public class Player extends GameObject{
 	public ArrayList<CollisionBox> getBounds() {
 		return null;
 	}
-	
 
+	public void setLife(int variation){
+		this.life += variation;
+	}
+	public int getLife(){
+		return this.life;
+	}
+	
+	public int getCollectables(){
+		return collectables;
+	}
+	
 }

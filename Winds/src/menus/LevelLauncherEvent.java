@@ -18,7 +18,7 @@ public class LevelLauncherEvent implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		Window.resize(Window.profile.getScreenDimensions());
-		Window.affect(new Game(lvl));
+		Window.affect(new Game());
 	}
 
 }

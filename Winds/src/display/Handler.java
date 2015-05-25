@@ -38,12 +38,19 @@ public class Handler {
 				tempObject.render(g);
 			}
 		}
+
+		for (int i = 3600; i < objects.size(); i++) {
+			objects.get(i).render(g);
+		}
 		
-		objects.get(3600).render(g);
 	}
 	
 	public void addObject(GameObject object){
 		this.objects.add(object);
+	}
+	
+	public void removeObject(GameObject object){
+	    this.objects.remove(object);
 	}
 	
 }

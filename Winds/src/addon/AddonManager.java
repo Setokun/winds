@@ -155,7 +155,11 @@ public class AddonManager {
 	
 	//region Setters 
 	public static void loadTheme(int index){
-		loadedTheme = themesList.get(index);
+		for (int i = 0; i < themesList.size(); i++) {
+			if(themesList.get(i).getIdDB() == index)
+				loadedTheme = themesList.get(i);
+		}
+		//loadedTheme = themesList.get(index);
 	}
 	public static void loadTheme(JarTheme theme){
 		loadedTheme = theme;

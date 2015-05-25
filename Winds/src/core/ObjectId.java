@@ -3,5 +3,11 @@ package core;
 public enum ObjectId {
 	Player(),
 	Block(),
-	DangerousBlock();
+	DangerousBlock(),
+	Interactions(),
+	Boss(),
+	Collectable(),
+	Enemy(),
+	Arrival(),
+	InteractionBlock();
 }

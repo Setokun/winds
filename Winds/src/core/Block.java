@@ -41,7 +41,6 @@ public class Block extends GameObject{
 	@Override
 	public void render(Graphics g) {
 		
-		// charge le numéro de la matrice qui correspond au numéro de sprite du thème chargé
 		if(this.numBlock != 0){
 			g.drawImage(bi[numBlock], (int)x, (int)y, null);
 		}

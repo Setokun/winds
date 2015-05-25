@@ -6,18 +6,20 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import menus.LevelCategorySelector;
 import addon.AddonManager;
-import addons.Level;
 import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
+import core.Arrival;
 import core.Block;
 import core.CollisionBox;
+import core.InteractionBlock;
 import core.ObjectId;
 import core.Player;
 import core.SpriteSheet;
@@ -29,50 +31,53 @@ public class Game extends Canvas implements Runnable{
 					  HEIGHT = (int) Window.profile.getScreenDimensions().getHeight();
 	public static Camera cam;
 	public final String TITLE = "Winds";
-	private Level lvl;
+	private BufferedImage bubulle, gameover, victory;
 	
 	private BufferedImage bg = null, pauseImage = null;
-	private BufferedImage brambles_sheet = null;
 	
-	private static boolean pause = false, running = false;
+	private static boolean pause = false, running = false, finished, defeat, scoreUploaded;
 	
 	private Thread thread;
 	private String bgMusicFilename;
-	static AudioPlayer bgMusic;
+	public static AudioPlayer bgMusic;
 	private Handler handler;
-	static BufferedImage[] brambles;
+	static BufferedImage[] instance;
+	private InteractionBlock interactions;
+
+	private Player player;
 	
-	private int seconds;
+	private int seconds, delayVictory, delayGameOver, timeMax;
 	
-	public Game(Level lvl){
-		this.lvl = lvl;
-		System.out.println(lvl);
-		start();
+	public Game(){
+		AddonManager.loadLevel(1);
+	    AddonManager.loadTheme(AddonManager.getLoadedLevel().getIdTheme());
+	    timeMax = AddonManager.getLoadedLevel().getTimeMax();
+	    start();
 	}
 	
 	private void init(){
 		
-		seconds = 0;
+		seconds = 0; delayVictory = 53; delayGameOver = 20;
 		pause = false;
-		
-		
+		finished = false;
+		defeat = false;
+		scoreUploaded = false;
 		
 		handler = new Handler();
 		cam = new Camera(0, 0);
+		interactions = new InteractionBlock(handler);
 		
-		AddonManager.loadLevel(2);
-	    AddonManager.loadTheme(1);
 
 		BufferedImageLoader loader = new BufferedImageLoader();
 		//bg = loader.loadImage("/background/pirate3.jpg");
-		//bg = loader.loadImage("/background/2.jpg");
-		//bg = loader.loadImage("/background/ruche.jpg");
 		bg = AddonManager.getLoadedTheme().getBackground();
 		pauseImage = loader.loadImage("/background/menu_pause.png");
-		brambles_sheet = AddonManager.getLoadedTheme().getSprites128();//loader.loadImage("/themes/brambles_21.png");
+		gameover = loader.loadImage("/background/gameover.png");
+		victory = loader.loadImage("/background/victory.png");
 		
-
-	    brambles = new SpriteSheet(AddonManager.getLoadedTheme().getSprites128(), 128).getSprites();
+		bubulle = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
+		
+	    instance = new SpriteSheet(AddonManager.getLoadedTheme().getSprites128(), 128).getSprites();
 		
 		
 		/////////////// sound initialization ///////////////
@@ -83,8 +88,16 @@ public class Game extends Canvas implements Runnable{
 	    ////////////////////////////////////////////////////
 	    
 	    loadLevelByMatrix(AddonManager.getLoadedLevel().getMatrix());
+	    Point startPoint = AddonManager.getLoadedLevel().getStartPosition();
+	    player = new Player(startPoint.x*128, startPoint.y*128, handler, ObjectId.Player);
+		handler.addObject(player);
+		
 	    
-	    System.out.println(handler.objects.size());
+		
+		int[][] elements = AddonManager.getLoadedLevel().getInteractions();
+		
+	    loadInteractions(elements);
+
 	    
 	    this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput(handler));
@@ -142,8 +155,18 @@ public class Game extends Canvas implements Runnable{
 			
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
-				if(!pause)seconds++;
-				System.out.println(updates + " updates, fps : " + frames/* + " Camera : " + cam.getX() + " - " + cam.getY()*/);
+				if(!getPause() && player.getLife() > 0 && !finished)seconds++;
+				if(timeMax == seconds) defeat = true;
+				if(finished){
+					if(!scoreUploaded){
+						scoreUploaded = true;
+						System.out.println(this.getFinalScore());
+					}
+					delayVictory--;
+				}
+				if(defeat)delayGameOver--;
+				if(delayVictory == 0 || delayGameOver == 0) goBackToMenu();
+				System.out.println(updates + " updates, fps : " + frames);
 				updates = 0;
 				frames = 0;
 			}
@@ -152,7 +175,7 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	private void tick(){
-		if(!getPause()){
+		if(!getPause() && player.getLife() > 0){
 			handler.tick();
 			
 			for(int i = 0; i < handler.objects.size(); i++){
@@ -168,61 +191,59 @@ public class Game extends Canvas implements Runnable{
 		this.requestFocus();
 		
 		BufferStrategy bs = this.getBufferStrategy();
-		if(bs == null){
-			// set the number of images prepared before rendering, including the current one
-			this.createBufferStrategy(2);
-			return;
-		}
+		if(bs == null){this.createBufferStrategy(2);return;}
 		Graphics g = bs.getDrawGraphics();
 		Graphics2D g2d = (Graphics2D) g;
+		
 		
 		g.setFont(new Font("bubble & soap", 0, 36));
 		g.setColor(Color.WHITE);
 		
-		
-		/////////////////////////////////////////
+
 		if(pause){
 			g.setColor(Color.red);
 			g.drawImage(pauseImage, 0, 0, this.getWidth(), this.getHeight(), this);
 			if(Window.debug){
-				g.drawRect(297, 185, 180, 40);
+				g.drawRect(297,185,180,40);
 				g.drawRect(217,265,330,40);
 				g.drawRect(260,348,250,40);
 			}
 		}else{
-			/*g.drawImage(bg, 0, 0, this);
-			// affichage du temps écoulé
-			//g.setColor(Color.red);
-			g.drawString(seconds/60 + ":" + seconds%60, 32, 32);*/
-			////////////////////////
-			
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, getWidth(), getHeight());
 			
 			// drawing the background
 			g.drawImage(bg, (int)(cam.getX()/4), (int)(cam.getY()/8), this);
 			
+			
 			g2d.translate(cam.getX(), cam.getY());
-			
 			handler.render(g);
-			
 			g2d.translate( -cam.getX(), -cam.getY());
 			
 			
-			// affichage du temps écoulé
-			g.setColor(Color.white);
-			g.drawString(seconds/60 + ":" + seconds%60, 32, 32);
+			// draw elapsed time
+			if((timeMax - seconds) < 10)
+				g.setColor(Color.red);
+			else
+				g.setColor(Color.white);
+			g.drawString((timeMax - seconds)/60 + ":" + (timeMax - seconds)%60, 32, 32);
 			
-			/*g.setFont(new Font("bubble & soap", 0, 24));
-			g.drawRect(150, 10, 200, 25);
-			g.drawString(lvl.titreNiveau, 150, 30);*/
+			
+			for (int i = 0; i < player.getLife(); i++) {g.drawImage(bubulle, 30 +i*30, 40, this);}
+			
+			if(player.getLife() == 0){
+				if(!defeat){
+					defeat = true;
+					Game.bgMusic.stop();
+					Game.bgMusic = new AudioPlayer("resources/musics/gameover.mp3", false);
+				    Game.bgMusic.play();
+				}
+				
+				g.drawImage(gameover, 0, 0, this);
+			}
+			
+			if(finished) g.drawImage(victory, 0, 0, this);
 			
 		}
-		
-		/////////////////////////////////////////
-		
-		
-		
+
 		g.dispose();
 		bs.show();
 	}
@@ -260,13 +281,32 @@ public class Game extends Canvas implements Runnable{
 			}
 		}
 		
-		handler.addObject(new Player(2*128, 1*128, handler, ObjectId.Player));
+	}
+	
+	private void loadInteractions(int[][] elements){
+
+		int number;
+		
+		for(int i = 0; i < 60; i++){
+			for(int j = 0; j < 60; j++){
+				
+				number = elements[i][j];
+				
+				if (number == 0) {
+					//handler.addObject(new Block(j*128, i*128, number, null));
+					continue;
+				}
+				
+				interactions.loadInteraction(j*128, i*128, number);
+				
+			}
+		}
 		
 	}
 	
 	
 	public static BufferedImage[] getInstance(){
-		return brambles;
+		return instance;
 	}
 	
 	public static boolean getPause(){
@@ -285,9 +325,22 @@ public class Game extends Canvas implements Runnable{
 		
 	}
 	
-	public static void reafficherMenu(){
+	public static void goBackToMenu(){
+		Game.bgMusic.stop();
 		Game.running = false;
 		Window.resize(new Dimension(800, 550));
 		Window.affect(new LevelCategorySelector());
 	}
+	
+	public static boolean isFinished(){
+		return finished;
+	}
+	public static void setFinished(){
+		finished = true;
+	}
+	
+	private int getFinalScore(){
+		return player.getLife() * 1000 - this.seconds * 100 + player.getCollectables() * 75;
+	}
+	
 }
