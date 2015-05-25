@@ -49,7 +49,7 @@ public class Game extends Canvas implements Runnable{
 	private int seconds, delayVictory, delayGameOver, timeMax;
 	
 	public Game(){
-		AddonManager.loadLevel(0);
+		AddonManager.loadLevel(1);
 	    AddonManager.loadTheme(AddonManager.getLoadedLevel().getIdTheme());
 	    timeMax = AddonManager.getLoadedLevel().getTimeMax();
 	    start();
@@ -57,7 +57,7 @@ public class Game extends Canvas implements Runnable{
 	
 	private void init(){
 		
-		seconds = 0; delayVictory = 53; delayGameOver = 18;
+		seconds = 0; delayVictory = 53; delayGameOver = 20;
 		pause = false;
 		finished = false;
 		defeat = false;
