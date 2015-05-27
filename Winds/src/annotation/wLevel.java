@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 public @interface wLevel {
 	static final String MODE_NORMAL="normal", MODE_BOSS="boss";
 	static final String TYPE_BASIC="basic", TYPE_TOMODERATE="toModerate",
-						TYPE_CUSTOM="custom", TYPE_MINE="mine";
+						TYPE_CUSTOM="custom", TYPE_MY="my";
 	
 	int idDB();
 	String type();
