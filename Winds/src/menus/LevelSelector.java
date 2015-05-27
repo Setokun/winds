@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Group;
@@ -19,7 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.LayoutStyle;
 import javax.swing.border.SoftBevelBorder;
 
-import addons.Level;
+import addon.AddonManager;
+import addon.JarLevel;
+import annotation.wLevel;
 import display.Window;
 
 public class LevelSelector extends JPanel{
@@ -33,33 +34,29 @@ public class LevelSelector extends JPanel{
     private JLabel jLblTitle, jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7;
     private JLabel jLabel8, jLabel9, jLabel10, jLabel11, jLabel12, jLabel13, jLabel14, jLabel15, jLblNumPage;
     
-    private int compteur, nbElements = 117, nbPages, numPage = 0;
+    private int compteur, nbElements, nbPages, numPage = 0;
     
-    private Level[] levels = new Level[nbElements];
-    private ArrayList<Level> levelsToDisplay = new ArrayList<Level>();
-    
-    private String[] adressesLogo = {"resources/logo-ice-2.png", "resources/logo-pirate-2.png", "resources/logo-ronces-2.png", "resources/logo-honey-2.png"};
-    Random rand = new Random();
-    int indexRand;
+    private JarLevel[] levels = new JarLevel[nbElements];
+    private ArrayList<JarLevel> levelsToDisplay = new ArrayList<JarLevel>();
     
     String title;
     
     //endregion
     
-	public LevelSelector(String title) {
+	public LevelSelector(String category) {
         
-		this.title = title;
+		if(category == wLevel.TYPE_TOMODERATE)	this.title = "Levels to moderate";
+		else									this.title = category + " levels";
 		
-		nbPages = (nbElements / 15) ;
+		levels = AddonManager.getLevelsByType(category);
+		for (int i = 0; i < levels.length; i++) {
+			levels[i].getName();
+		}
+		nbElements = levels.length;
+		
+		nbPages = nbElements / 15;
     	compteur = nbElements % 15;
     	if(compteur == 0 && nbElements != 0) compteur = 15;
-		
-		
-		for(int i=0; i<nbElements; i++){
-			indexRand = rand.nextInt(adressesLogo.length);
-			Level bl = new Level(adressesLogo[indexRand], "level pirate n°" + (i+1));
-			levels[i] = bl;
-		}
 		
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
 			levelsToDisplay.add(levels[i]);
@@ -68,7 +65,7 @@ public class LevelSelector extends JPanel{
 		initComponents(title, numPage, nbPages, levelsToDisplay);
     }
 
-    private void initComponents(String title, int currentPage, int nbPages, ArrayList<Level> levels) {
+    private void initComponents(String title, int currentPage, int nbPages, ArrayList<JarLevel> levels) {
 
     	setPreferredSize(new Dimension(800, 550));
     	
@@ -93,7 +90,6 @@ public class LevelSelector extends JPanel{
         jButton13 = new LevelButton();
         jButton14 = new LevelButton();
         jButton15 = new LevelButton();
-        
         
         jBtnNext = new JButton();
         jBtnPrevious = new JButton();
@@ -160,9 +156,7 @@ public class LevelSelector extends JPanel{
         
         jLblTitle.setFont(new Font("bubble & soap", 0, 36));
         jLblTitle.setText(title);
-        
-        
-        
+
         vGroupTitle.addGroup(layout.createSequentialGroup()
                     .addGap(18, 18, 18)
                     .addComponent(jBtnBack, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE));

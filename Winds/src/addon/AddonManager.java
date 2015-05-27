@@ -143,13 +143,13 @@ public class AddonManager {
 		if(current != null && !levelsList.contains(current)){ levelsList.add(current); }
 	}
 	/*OK*/public static JarLevel[] getLevelsByType(String wLevelType){
-		ArrayList<JarLevel> levelsList = new ArrayList<JarLevel>();
+		ArrayList<JarLevel> list = new ArrayList<JarLevel>();
 		for (JarLevel lvl : levelsList) {
-			if (lvl.getType() == wLevelType) { levelsList.add(lvl); }
+			if (lvl.getType().equals(wLevelType)) { list.add(lvl); }
 		}
-		
-		JarLevel[] jarLevels = new JarLevel[ levelsList.size() ];
-		return levelsList.toArray(jarLevels);
+
+		JarLevel[] jarLevels = new JarLevel[ list.size() ];
+		return list.toArray(jarLevels);
 	}
 	
 	
