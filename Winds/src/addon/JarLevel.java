@@ -1,91 +1,112 @@
 package addon;
 
-import java.awt.Point;
-import java.lang.reflect.Field;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.jar.JarOutputStream;
+import java.util.zip.ZipEntry;
+import javax.swing.JOptionPane;
+import com.google.gson.Gson;
 
-import annotation.wCard;
-import annotation.wLevel;
 
-public class JarLevel extends JarItem {
+public class JarLevel {
+	private static final String fileSourceName = "level.src";
 	
-	/*OK*/public boolean isValid(){
-		wCard aCard = mainClass.getDeclaredAnnotation(wCard.class);
-		wLevel aLevel = mainClass.getDeclaredAnnotation(wLevel.class);		
-		
-		return mainClass != null && aCard != null && aLevel != null;
+	private static String levelResourcePath;
+	private File jar;
+	private Level lvl;
+	
+	static {
+		String currentPath = JarLevel.class.getResource("").getPath().replace("%20", " ");
+		levelResourcePath = currentPath.replace("addon/", "resources/levels/");
 	}
+	
+	//region Constructors 
+	/*OK*/public JarLevel(){}
+	/*OK*/public JarLevel(File jarFile){
+		jar = jarFile;
+		String jsonDecoded = encodeJson(getLevelContent(), false);
+		lvl = new Gson().fromJson(jsonDecoded, Level.class);
+	}
+	//endregion
+	
+	//region Public methods 
+	/*to finish*/public File save(){
+		//String filename =  AddonManager.getThemeByID( lvl.getIdTheme() ).getName() + ".jar";
+		String filename = "Pirate.jar";
+		jar = new File(levelResourcePath, filename);
+		
+		if( needCreateJar() ){
+			String jsonEncoded = encodeJson(lvl.toJson(), true);
+			try {
+				FileOutputStream fileOut = new FileOutputStream(jar);
+				JarOutputStream jarOut = new JarOutputStream(fileOut);
+				jarOut.putNextEntry(new ZipEntry(fileSourceName));
+				jarOut.write( jsonEncoded.getBytes() );
+				jarOut.closeEntry();
+				jarOut.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return jar;
+		}
+		return null;
+	}
+	public boolean isValid(){
+		return jar != null && lvl != null;
+	}
+	//endregion
+	
+	//region Private methods 
+	/*OK*/private boolean needCreateJar(){
+		if( !jar.exists() ){ return true; }
+			
+		int response = JOptionPane.showConfirmDialog(null, "Do you want to overwrite this level in resources folder ?",
+				"Level already exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+		if( response == JOptionPane.NO_OPTION) { return false; }
+		
+		jar.delete();
+		return true;
+	}
+	/*OK*/private String encodeJson(String text, boolean encoding){
+		int offset = encoding ? -1 : 1;
+		char[] cs = text.toCharArray();
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i=0; i<cs.length; i++) {
+			int code = ((int) cs[i]) + offset;
+			sb.append((char) code);
+		}
+		return sb.toString();
+	}
+	/*OK*/private String getLevelContent(){
+		StringBuilder sb = new StringBuilder();
+		InputStream is = null;
+		int bit;
+		
+		try {
+			URL levelURL = new URL("jar:" + jar.toURI().toURL() + "!/"+ fileSourceName);
+			is = levelURL.openConnection().getInputStream();
+			while ((bit = is.read()) != -1) {
+				sb.append( (char) bit );
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return sb.toString();
+	}
+	//endregion
 	
 	//region Getters 
-	public int[][] getMatrix(){
-		try {
-			Field f = mainClass.getDeclaredField("matrix");
-			System.out.println(mainClass.getDeclaredFields().length);
-			f.setAccessible(true);
-			return (int[][]) f.get(null);
-		} catch (NoSuchFieldException e)	 { e.printStackTrace();
-		} catch (SecurityException e)		 { e.printStackTrace();
-		} catch (IllegalArgumentException e) { e.printStackTrace();
-		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
-		return null;
+	public File getJarLevel(){
+		return jar;
 	}
-	public int[][] getInteractions(){
-		try {
-			Field f = mainClass.getDeclaredField("interactions");
-			f.setAccessible(true);
-			return (int[][]) f.get(null);
-		} catch (NoSuchFieldException e)	 { e.printStackTrace();
-		} catch (SecurityException e)		 { e.printStackTrace();
-		} catch (IllegalArgumentException e) { e.printStackTrace();
-		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
-		return null;
-	}
-	public int getTimeMax(){
-		try {
-			Field f = mainClass.getDeclaredField("timeMax");
-			f.setAccessible(true);
-			return (int) f.get(null);
-		} catch (NoSuchFieldException e)	 { e.printStackTrace();
-		} catch (SecurityException e)		 { e.printStackTrace();
-		} catch (IllegalArgumentException e) { e.printStackTrace();
-		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
-		return 0;
-	}
-	public Point getStartPosition(){
-		try {
-			Field f = mainClass.getDeclaredField("startPosition");
-			f.setAccessible(true);
-			return (Point) f.get(null);
-		} catch (NoSuchFieldException e)	 { e.printStackTrace();
-		} catch (SecurityException e)		 { e.printStackTrace();
-		} catch (IllegalArgumentException e) { e.printStackTrace();
-		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
-		return null;
+	public Level getLevel(){
+		return lvl;
 	}
 	//endregion
 	
-	//region Annotation Getters 
-	public String wLevelToString(){
-		return "wLevel {idDB: \""+ getIdDB()
-					+"\", type: \""+ getType()
-					+"\", mode: \""+ getMode()
-					+"\", idTheme: \""+ getIdTheme()
-					+"\", uploaded: \""+ getUploaded() +"\"}";
-	}
-	public int getIdDB(){
-		return mainClass.getDeclaredAnnotation(wLevel.class).idDB();
-	}
-	public String getType(){
-		return mainClass.getDeclaredAnnotation(wLevel.class).type();
-	}
-	public String getMode(){
-		return mainClass.getDeclaredAnnotation(wLevel.class).mode();
-	}
-	public int getIdTheme(){
-		return mainClass.getDeclaredAnnotation(wLevel.class).idTheme();
-	}
-	public boolean getUploaded(){
-		return mainClass.getDeclaredAnnotation(wLevel.class).uploaded();
-	}
-	//endregion
-
 }

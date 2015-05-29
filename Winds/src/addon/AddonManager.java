@@ -115,27 +115,7 @@ public class AddonManager {
 		}
 	}
 	/*OK*/private static JarLevel levelValidate(File jarFile){
-		JarLevel currentLevel = new JarLevel();
-		try {
-			JarFile jar = new JarFile(jarFile);
-			Enumeration<JarEntry> jarEntries = jar.entries();
-			while(jarEntries.hasMoreElements()){
-				String entry = jarEntries.nextElement().getName();
-				
-				if( entry.endsWith(".class") ){
-					String className = entry.replace(".class", "").replace('/', '.');
-					URL[] urls = { new URL("jar:" + jarFile.toURI().toURL() + "!/") };
-				    URLClassLoader ucl = new URLClassLoader(urls);
-				    try {
-						Class<?> levelClass = Class.forName(className, true, ucl);
-						currentLevel.setMainClass(levelClass);
-					} catch (ClassNotFoundException e) { e.printStackTrace(); }
-				}
-			}
-			jar.close();
-		} catch (IOException e) {
-			System.out.println("Unable to open the JAR file named \""+ jarFile.getName() +"\"");
-		}
+		JarLevel currentLevel = new JarLevel(jarFile);
 		return currentLevel.isValid() ? currentLevel : null;
 	}
 	/*OK*/public static void addLevel(File jarLevel){
@@ -145,7 +125,7 @@ public class AddonManager {
 	/*OK*/public static JarLevel[] getLevelsByType(String wLevelType){
 		ArrayList<JarLevel> list = new ArrayList<JarLevel>();
 		for (JarLevel lvl : levelsList) {
-			if (lvl.getType().equals(wLevelType)) { list.add(lvl); }
+			if (lvl.getLevel().getType().equals(wLevelType)) { list.add(lvl); }
 		}
 
 		JarLevel[] jarLevels = new JarLevel[ list.size() ];
