@@ -18,7 +18,7 @@ import javax.swing.LayoutStyle;
 import javax.swing.border.SoftBevelBorder;
 
 import addon.AddonManager;
-import annotation.wLevel;
+import addon.level.Type;
 import display.Window;
 
 public class LevelCategorySelector extends JPanel{
@@ -226,22 +226,22 @@ public class LevelCategorySelector extends JPanel{
 
     private void jBtnBasicLevelsActionPerformed(java.awt.event.ActionEvent evt) {
     	Window.resize(new Dimension(800, 550));
-		Window.affect(new LevelSelector(wLevel.TYPE_BASIC));
+		Window.affect(new LevelSelector(Type.basic));
     }                                               
 
     private void jBtnCustomLevelsActionPerformed(java.awt.event.ActionEvent evt) {
     	Window.resize(new Dimension(800, 550));
-		Window.affect(new LevelSelector(wLevel.TYPE_CUSTOM));
+		Window.affect(new LevelSelector(Type.custom));
     }                                                
 
     private void jBtnMyLevelsActionPerformed(java.awt.event.ActionEvent evt) {
     	Window.resize(new Dimension(800, 550));
-		Window.affect(new LevelSelector(wLevel.TYPE_MY));
+		Window.affect(new LevelSelector(Type.my));
     }                                            
 
     private void jBtnLevelsToModerateActionPerformed(java.awt.event.ActionEvent evt) {
     	Window.resize(new Dimension(800, 550));
-		Window.affect(new LevelSelector(wLevel.TYPE_TOMODERATE));
+		Window.affect(new LevelSelector(Type.toModerate));
     }                                                    
 
 

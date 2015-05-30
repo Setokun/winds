@@ -20,7 +20,7 @@ import javax.swing.border.SoftBevelBorder;
 
 import addon.AddonManager;
 import addon.JarLevel;
-import annotation.wLevel;
+import addon.level.Type;
 import display.Window;
 
 public class LevelSelector extends JPanel{
@@ -36,30 +36,32 @@ public class LevelSelector extends JPanel{
     
     private int compteur, nbElements, nbPages, numPage = 0;
     
-    private JarLevel[] levels = new JarLevel[nbElements];
+    private JarLevel[] jarLevels = new JarLevel[nbElements];
     private ArrayList<JarLevel> levelsToDisplay = new ArrayList<JarLevel>();
     
     String title;
     
     //endregion
     
-	public LevelSelector(String category) {
+	public LevelSelector(Type levelType) {
         
-		if(category == wLevel.TYPE_TOMODERATE)	this.title = "Levels to moderate";
-		else									this.title = category + " levels";
+		if(levelType == Type.basic)		 this.title = "Basic levels";
+		if(levelType == Type.custom)	 this.title = "Custom Levels";
+		if(levelType == Type.my)		 this.title = "My levels";
+		if(levelType == Type.toModerate) this.title = "Levels to moderate";
 		
-		levels = AddonManager.getLevelsByType(category);
-		for (int i = 0; i < levels.length; i++) {
-			levels[i].getName();
+		jarLevels = AddonManager.getLevelsByType(levelType);
+		for (int i = 0; i < jarLevels.length; i++) {
+			jarLevels[i].getLevel().getName();
 		}
-		nbElements = levels.length;
+		nbElements = jarLevels.length;
 		
 		nbPages = nbElements / 15;
     	compteur = nbElements % 15;
     	if(compteur == 0 && nbElements != 0) compteur = 15;
 		
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
-			levelsToDisplay.add(levels[i]);
+			levelsToDisplay.add(jarLevels[i]);
 		}
 		this.removeAll();
 		initComponents(title, numPage, nbPages, levelsToDisplay);
@@ -466,7 +468,7 @@ public class LevelSelector extends JPanel{
 		levelsToDisplay.removeAll(levelsToDisplay);
 		
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
-			levelsToDisplay.add(levels[i]);
+			levelsToDisplay.add(jarLevels[i]);
 		}
 		this.removeAll();
 		initComponents(title, numPage, nbPages, levelsToDisplay);
@@ -478,7 +480,7 @@ public class LevelSelector extends JPanel{
 		levelsToDisplay.removeAll(levelsToDisplay);
 		
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
-			levelsToDisplay.add(levels[i]);
+			levelsToDisplay.add(jarLevels[i]);
 		}
 		this.removeAll();
 		initComponents(title, numPage, nbPages, levelsToDisplay);

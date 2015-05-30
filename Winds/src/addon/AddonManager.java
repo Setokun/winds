@@ -12,13 +12,15 @@ import java.util.jar.JarFile;
 
 import javax.imageio.ImageIO;
 
+import addon.level.Type;
+
 
 public class AddonManager {
 	private static ArrayList<JarTheme> themesList;
 	private static ArrayList<JarLevel> levelsList;
 	
 	private static JarTheme loadedTheme;
-	private static JarLevel loadedLevel;
+	private static Level loadedLevel;
 
 	static {
 		themesList = new ArrayList<JarTheme>();
@@ -122,10 +124,10 @@ public class AddonManager {
 		JarLevel current = levelValidate(jarLevel);
 		if(current != null && !levelsList.contains(current)){ levelsList.add(current); }
 	}
-	/*OK*/public static JarLevel[] getLevelsByType(String wLevelType){
+	/*OK*/public static JarLevel[] getLevelsByType(Type levelType){
 		ArrayList<JarLevel> list = new ArrayList<JarLevel>();
 		for (JarLevel lvl : levelsList) {
-			if (lvl.getLevel().getType().equals(wLevelType)) { list.add(lvl); }
+			if (lvl.getLevel().getType().equals(levelType)) { list.add(lvl); }
 		}
 
 		JarLevel[] jarLevels = new JarLevel[ list.size() ];
@@ -145,10 +147,10 @@ public class AddonManager {
 		loadedTheme = theme;
 	}
 	public static void loadLevel(int index){
-		loadedLevel = levelsList.get(index);
+		loadedLevel = levelsList.get(index).getLevel();
 	}
-	public static void loadLevel(JarLevel level){
-		loadedLevel = level;
+	public static void loadLevel(JarLevel jarLvl){
+		loadedLevel = jarLvl.getLevel();
 	}
 	//endregion
 	//region Getters 
@@ -163,7 +165,7 @@ public class AddonManager {
 	public static JarTheme getLoadedTheme() {
 		return loadedTheme;
 	}
-	public static JarLevel getLoadedLevel() {
+	public static Level getLoadedLevel() {
 		return loadedLevel;
 	}
 	//endregion

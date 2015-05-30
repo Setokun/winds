@@ -1,14 +1,14 @@
 package leveleditor;
 
 import addon.AddonManager;
-import addon.JarLevel;
 import addon.JarTheme;
+import addon.Level;
 import core.SpriteSheet;
 
 
 public class EditorController {
 	static JarTheme themeUsed;
-	static JarLevel levelUsed;
+	static Level levelUsed;
 	
 	static EditorGUI gui;
 	static Tile[] tiles64;

@@ -22,11 +22,11 @@ public class LevelButton extends JButton{
         
 	}
 	
-	public void affect(JarLevel lvl, Group buttonsGroup, Group labelsGroup, JLabel label){
-		BufferedImage logo = AddonManager.getThemeByID(lvl.getIdTheme()).getLogo();
+	public void affect(JarLevel jarLvl, Group buttonsGroup, Group labelsGroup, JLabel label){
+		BufferedImage logo = AddonManager.getThemeByID(jarLvl.getLevel().getIdTheme()).getLogo();
 		setIcon(new ImageIcon(logo));
-		addActionListener(new LevelLauncherEvent(lvl));
-		label.setText(lvl.getName());
+		addActionListener(new LevelLauncherEvent(jarLvl));
+		label.setText(jarLvl.getLevel().getName());
 		buttonsGroup.addComponent(this, 64, 64, 64);
 		labelsGroup.addComponent(label);
 	}

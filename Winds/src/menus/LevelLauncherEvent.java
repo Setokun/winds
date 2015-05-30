@@ -10,16 +10,16 @@ import display.Window;
 
 public class LevelLauncherEvent implements ActionListener{
 
-	private JarLevel lvl;
+	private JarLevel jarLvl;
 	
-	public LevelLauncherEvent(JarLevel lvl) {
-		this.lvl = lvl;
+	public LevelLauncherEvent(JarLevel jarLvl) {
+		this.jarLvl = jarLvl;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		Window.resize(Window.profile.getScreenDimensions());
-		AddonManager.loadLevel(lvl);
+		AddonManager.loadLevel(jarLvl);
 		Window.affect(new Game());
 	}
 
