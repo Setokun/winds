@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.LayoutStyle;
 import javax.swing.border.SoftBevelBorder;
 
+import addon.AddonManager;
 import annotation.wLevel;
 import display.Window;
 
@@ -28,7 +29,9 @@ public class LevelCategorySelector extends JPanel{
     private boolean isModoAdmin;
 	
 	public LevelCategorySelector() {
-        this.isModoAdmin = Window.profile.getUserType().equals("administrator") 
+        AddonManager.getLevels();
+		
+		this.isModoAdmin = Window.profile.getUserType().equals("administrator") 
         				|| Window.profile.getUserType().equals("moderator");
 		initComponents();
     }
