@@ -70,16 +70,16 @@ public class JarLevel {
 		jar.delete();
 		return true;
 	}
-	/*OK*/private String encodeJson(String text, boolean encoding){
-		int offset = encoding ? -1 : 1;
+	/*to finish*/private String encodeJson(String text, boolean encoding){
+		/*int offset = encoding ? -1 : 1;
 		char[] cs = text.toCharArray();
 		StringBuilder sb = new StringBuilder();
 		
 		for (int i=0; i<cs.length; i++) {
 			int code = ((int) cs[i]) + offset;
 			sb.append((char) code);
-		}
-		return sb.toString();
+		}*/
+		return text; //sb.toString(); le temps du dev
 	}
 	/*OK*/private String getLevelContent(){
 		StringBuilder sb = new StringBuilder();
