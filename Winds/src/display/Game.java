@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import menus.LevelCategorySelector;
 import addon.AddonManager;
+import addon.BufferedImageLoader;
 import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;

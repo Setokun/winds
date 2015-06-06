@@ -1,4 +1,4 @@
-package accounts;
+package account;
 
 import java.awt.Dimension;
 import java.sql.ResultSet;

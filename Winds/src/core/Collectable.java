@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import display.BufferedImageLoader;
+import addon.BufferedImageLoader;
 
 public class Collectable extends GameObject{
 

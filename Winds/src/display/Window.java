@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 
 import menus.Login;
 import menus.MainMenu;
-import accounts.Profile;
+import account.Profile;
 
 public class Window {
 

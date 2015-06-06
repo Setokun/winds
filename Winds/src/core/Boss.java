@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import display.BufferedImageLoader;
+import addon.BufferedImageLoader;
 import display.Window;
 
 public class Boss extends GameObject{

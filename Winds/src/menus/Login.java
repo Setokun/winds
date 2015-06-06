@@ -18,7 +18,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-import accounts.Profile;
+import account.Profile;
 import display.Window;
 
 public class Login extends JPanel{

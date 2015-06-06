@@ -1,4 +1,4 @@
-package display;
+package addon;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

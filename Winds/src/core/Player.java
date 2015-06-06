@@ -7,8 +7,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import addon.BufferedImageLoader;
 import audio.AudioPlayer;
-import display.BufferedImageLoader;
 import display.Game;
 import display.Handler;
 import display.Window;
