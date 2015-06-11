@@ -49,7 +49,7 @@ public class Scores extends JPanel {
 			results[i][1] =  String.valueOf(r.get(i).getNbItems());
 			results[i][2] =  String.valueOf(r.get(i).getClicks());
 			results[i][3] =  Score.transformIntTimeInString(r.get(i).getTime());
-			results[i][4] =  Score.transformPositionInString(r.get(i).getRank(), 1000);
+			results[i][4] =  String.valueOf(10000 - r.get(i).getTime() * 100 + r.get(i).getNbItems() * 75 - r.get(i).getClicks() * 10);
 		}
 	
 		
@@ -197,7 +197,7 @@ public class Scores extends JPanel {
 		tableScores.setModel(new DefaultTableModel(
 			results,
 			new String[] {
-				"LEVEL NAME", "SCORE", "CLICKS", "TIME", "POSITION"
+				"LEVEL NAME", "ITEMS", "CLICKS", "TIME", "SCORE"
 			}
 		) {
 			private static final long serialVersionUID = 1093764222025627539L;

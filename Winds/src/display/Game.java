@@ -46,7 +46,7 @@ public class Game extends Canvas implements Runnable{
 	private InteractionBlock interactions;
 
 	private Player player;
-	public static int nbClicks;
+	public static Score score;
 	private int seconds, delayVictory, delayGameOver, timeMax;
 	
 	public Game(){
@@ -58,12 +58,12 @@ public class Game extends Canvas implements Runnable{
 	private void init(){
 		
 		seconds = 0; delayVictory = 53; delayGameOver = 20;
-		nbClicks = 0;
 		pause = false;
 		finished = false;
 		defeat = false;
 		scoreUploaded = false;
 		
+		score = new Score();
 		handler = new Handler();
 		cam = new Camera(0, 0);
 		interactions = new InteractionBlock(handler);
@@ -156,13 +156,16 @@ public class Game extends Canvas implements Runnable{
 			
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
-				if(!getPause() && player.getLife() > 0 && !finished)seconds++;
+				if(!getPause() && player.getLife() > 0 && !finished)
+				{
+					seconds++;
+					score.setTime(seconds);
+				}
 				if(timeMax == seconds) defeat = true;
 				if(finished){
 					if(!scoreUploaded){
 						scoreUploaded = true;
-						Score.setScore(AddonManager.getLoadedLevel().getIdDB(), this.getFinalScore());
-						System.out.println(this.getFinalScore());
+						score.setScore(AddonManager.getLoadedLevel().getIdDB());
 					}
 					delayVictory--;
 				}
@@ -339,10 +342,6 @@ public class Game extends Canvas implements Runnable{
 	}
 	public static void setFinished(){
 		finished = true;
-	}
-	
-	private int getFinalScore(){
-		return 10000 - this.seconds * 100 + player.getCollectables() * 75 - nbClicks*10;
 	}
 	
 }

@@ -23,7 +23,6 @@ public class Player extends GameObject{
 	private final float MAX_SPEED_X = 4;
 	private int timeElapsed = 0;
 	private int life;
-	private int collectables;
 	
 	static BufferedImage bubble;
 	
@@ -175,18 +174,18 @@ public class Player extends GameObject{
 						
 						if(cid == CollectableId.coin){
 							AudioPlayer.playSfx("piece");
-							this.collectables++;
+							Game.score.setNbItems(Game.score.getNbItems()+1);
 						}
 						else if(cid == CollectableId.life){
 							AudioPlayer.playSfx("1up");
-							this.collectables+=10;
+							Game.score.setNbItems(Game.score.getNbItems()+10);
 						    this.life++;
 						    if(this.life>5)
 						    	this.life = 5;
 						}
 						else if(cid == CollectableId.honey){
 							AudioPlayer.playSfx("honey");
-							this.collectables+=2;
+							Game.score.setNbItems(Game.score.getNbItems()+2);
 						}
 						handler.removeObject(tempObject);
 					}
@@ -268,10 +267,6 @@ public class Player extends GameObject{
 	}
 	public int getLife(){
 		return this.life;
-	}
-	
-	public int getCollectables(){
-		return collectables;
 	}
 	
 }
