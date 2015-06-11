@@ -10,4 +10,8 @@ import java.lang.annotation.Target;
 
 public @interface wTheme {
 	int idDB();
+	String creator();
+	String date();
+	String name();
+	String description();
 }
