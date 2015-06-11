@@ -179,6 +179,7 @@ public class Player extends GameObject{
 						}
 						else if(cid == CollectableId.life){
 							AudioPlayer.playSfx("1up");
+							this.collectables+=10;
 						    this.life++;
 						    if(this.life>5)
 						    	this.life = 5;
