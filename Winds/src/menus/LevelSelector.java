@@ -52,7 +52,7 @@ public class LevelSelector extends JPanel{
 		if(levelType == Type.my)		 this.title = "My levels";
 		if(levelType == Type.toModerate) this.title = "Levels to moderate";
 		
-		jarLevels = AddonManager.getLevelsByType(levelType);
+		jarLevels = AddonManager.getJarLevelsByType(levelType);
 		for (int i = 0; i < jarLevels.length; i++) {
 			jarLevels[i].getLevel().getName();
 		}

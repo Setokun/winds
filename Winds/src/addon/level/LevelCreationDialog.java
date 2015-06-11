@@ -36,7 +36,7 @@ public class LevelCreationDialog {
 	public static void show(boolean needThemeChoice){
 		nameChoosen = null;
 		themeChoosen = null;
-		themeNames = getThemeNames( AddonManager.getThemes() );
+		themeNames = getThemeNames( AddonManager.getJarThemes() );
 		new LevelCreationDialog(needThemeChoice);
 	}
 	
@@ -155,7 +155,7 @@ public class LevelCreationDialog {
 		nameChoosen = name.equals("") ? null : name;
 		
 		int indexTheme = cbTheme.getSelectedIndex();
-		themeChoosen = (indexTheme == 0) ? null : AddonManager.getThemes()[indexTheme -1];
+		themeChoosen = (indexTheme == 0) ? null : AddonManager.getJarThemes()[indexTheme -1];
 	}
 	
 	private static String[] getThemeNames(JarTheme[] themes){

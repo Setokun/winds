@@ -50,8 +50,8 @@ public class Game extends Canvas implements Runnable{
 	private int seconds, delayVictory, delayGameOver, timeMax;
 	
 	public Game(){
-	    AddonManager.loadTheme(AddonManager.getLoadedLevel().getIdTheme());
-	    timeMax = AddonManager.getLoadedLevel().getTimeMax();
+	    AddonManager.loadJarTheme(AddonManager.getLoadedJarLevel().getLevel().getIdTheme());
+	    timeMax = AddonManager.getLoadedJarLevel().getLevel().getTimeMax();
 	    start();
 	}
 	
@@ -71,14 +71,14 @@ public class Game extends Canvas implements Runnable{
 
 		BufferedImageLoader loader = new BufferedImageLoader();
 		//bg = loader.loadImage("/background/pirate3.jpg");
-		bg = AddonManager.getLoadedTheme().getBackground();
+		bg = AddonManager.getLoadedJarTheme().getBackground();
 		pauseImage = loader.loadImage("/background/menu_pause.png");
 		gameover = loader.loadImage("/background/gameover.png");
 		victory = loader.loadImage("/background/victory.png");
 		
 		bubulle = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
 		
-	    instance = new SpriteSheet(AddonManager.getLoadedTheme().getSprites128(), 128).getSprites();
+	    instance = new SpriteSheet(AddonManager.getLoadedJarTheme().getSprites128(), 128).getSprites();
 		
 		
 		/////////////// sound initialization ///////////////
@@ -88,14 +88,14 @@ public class Game extends Canvas implements Runnable{
 	    bgMusic.play();
 	    ////////////////////////////////////////////////////
 	    
-	    loadLevelByMatrix(AddonManager.getLoadedLevel().getMatrix());
-	    Point startPoint = AddonManager.getLoadedLevel().getStartPosition();
+	    loadLevelByMatrix(AddonManager.getLoadedJarLevel().getLevel().getMatrix());
+	    Point startPoint = AddonManager.getLoadedJarLevel().getLevel().getStartPosition();
 	    player = new Player(startPoint.x*128, startPoint.y*128, handler, ObjectId.Player);
 		handler.addObject(player);
 		
 	    
 		
-		int[][] elements = AddonManager.getLoadedLevel().getInteractions();
+		int[][] elements = AddonManager.getLoadedJarLevel().getLevel().getInteractions();
 		
 	    loadInteractions(elements);
 
@@ -165,7 +165,7 @@ public class Game extends Canvas implements Runnable{
 				if(finished){
 					if(!scoreUploaded){
 						scoreUploaded = true;
-						score.setScore(AddonManager.getLoadedLevel().getIdDB());
+						score.setScore(AddonManager.getLoadedJarLevel().getLevel().getIdDB());
 					}
 					delayVictory--;
 				}
@@ -256,7 +256,7 @@ public class Game extends Canvas implements Runnable{
 	private void loadLevelByMatrix(int[][] elements){
 		
 		
-		int[][][] collisionsList = AddonManager.getLoadedTheme().getCollisions();
+		int[][][] collisionsList = AddonManager.getLoadedJarTheme().getCollisions();
 		
 		int number;
 		

@@ -31,7 +31,7 @@ public class LevelCategorySelector extends JPanel{
     private boolean isModoAdmin;
 	
 	public LevelCategorySelector() {
-        AddonManager.getLevels();
+        AddonManager.getJarLevels();
 		
 		this.isModoAdmin = Window.profile.getUserType().equals("administrator") 
         				|| Window.profile.getUserType().equals("moderator");

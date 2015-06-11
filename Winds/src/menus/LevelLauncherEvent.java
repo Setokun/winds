@@ -19,7 +19,7 @@ public class LevelLauncherEvent implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		Window.resize(Window.profile.getScreenDimensions());
-		AddonManager.loadLevel(jarLvl);
+		AddonManager.loadJarLevel(jarLvl);
 		Window.affect(new Game());
 	}
 

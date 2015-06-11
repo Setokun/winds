@@ -237,8 +237,8 @@ public class LevelEditorList extends JPanel {
 		JarTheme themeUsed = LevelCreationDialog.getThemeChoosen();
 		*/
 		
-		AddonManager.loadTheme(1);
-		AddonManager.loadLevel(0);
+		AddonManager.loadJarTheme(1);
+		AddonManager.loadJarLevel(0);
 		
 		Window.resize(EditorGUI.DIMENSION);
 		Window.affect(new EditorGUI());

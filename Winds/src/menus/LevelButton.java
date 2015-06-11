@@ -23,7 +23,7 @@ public class LevelButton extends JButton{
 	}
 	
 	public void affect(JarLevel jarLvl, Group buttonsGroup, Group labelsGroup, JLabel label){
-		BufferedImage logo = AddonManager.getThemeByID(jarLvl.getLevel().getIdTheme()).getLogo();
+		BufferedImage logo = AddonManager.getJarThemeByID(jarLvl.getLevel().getIdTheme()).getLogo();
 		setIcon(new ImageIcon(logo));
 		addActionListener(new LevelLauncherEvent(jarLvl));
 		label.setText(jarLvl.getLevel().getName());

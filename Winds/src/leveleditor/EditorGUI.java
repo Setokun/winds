@@ -28,8 +28,8 @@ import leveleditor.EditorListener.DescriptionListener;
 import leveleditor.EditorListener.SaveListener;
 import leveleditor.EditorListener.TimeMaxListener;
 import addon.AddonManager;
+import addon.JarLevel;
 import addon.JarTheme;
-import addon.Level;
 import core.SpriteSheet;
 
 
@@ -56,11 +56,11 @@ public class EditorGUI extends JPanel {
     static Tile tileCurrent;
 
     private JarTheme themeUsed;
-	private Level levelUsed;
+	private JarLevel levelUsed;
 
     public EditorGUI() {
-        themeUsed = AddonManager.getLoadedTheme();
-        levelUsed = AddonManager.getLoadedLevel();
+        themeUsed = AddonManager.getLoadedJarTheme();
+        levelUsed = AddonManager.getLoadedJarLevel();
         
         initComponents();
         initComponentsConfig();
@@ -377,7 +377,7 @@ public class EditorGUI extends JPanel {
     	
     	for(int i=0; i<NB_TILES_MATRIX; i++){
     		for(int j=0; j<NB_TILES_MATRIX; j++){
-    			int index = levelUsed.getMatrix()[i][j];
+    			int index = levelUsed.getLevel().getMatrix()[i][j];
     			gridMatrix.add( index == 0 ? Tile.getEmptyMatrix() :
     				new Tile(Tile.SIZE_MATRIX, index, sprites[index-1]));
     		}
@@ -408,7 +408,7 @@ public class EditorGUI extends JPanel {
 			   gridMatrix.add(Tile.getEmptyMatrix());
 		   }
 	   }else {
-		   BufferedImage icon32 = AddonManager.getLoadedTheme().getSprites32();
+		   BufferedImage icon32 = AddonManager.getLoadedJarTheme().getSprites32();
 		   Image[] sprites = new SpriteSheet(icon32, Tile.SIZE_MATRIX).getSprites();
 		   
 		   //sprites[0] represents an empty matrix tile
