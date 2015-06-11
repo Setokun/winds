@@ -20,9 +20,8 @@ import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 
-import addon.JarLevel;
-import addon.JarTheme;
-import addon.level.LevelCreationDialog;
+import leveleditor.EditorGUI;
+import addon.AddonManager;
 import display.Window;
 
 public class LevelEditorList extends JPanel {
@@ -233,10 +232,16 @@ public class LevelEditorList extends JPanel {
 	}
 	
 	protected void jBtnNewLevelActionPerformed(ActionEvent evt) {
-		LevelCreationDialog.show(true);
+		/*LevelCreationDialog.show(true);
 		String levelName = LevelCreationDialog.getNameChoosen();
 		JarTheme themeUsed = LevelCreationDialog.getThemeChoosen();
+		*/
 		
+		AddonManager.loadTheme(1);
+		AddonManager.loadLevel(0);
+		
+		Window.resize(EditorGUI.DIMENSION);
+		Window.affect(new EditorGUI());
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {

@@ -27,13 +27,11 @@ public class Tile extends JLabel implements Cloneable {
 	static final int SIZE_MATRIX = 32;
 	
 	private static Tile emptyMatrix, emptyLegend;
-	private static final String empty32_path = "leveleditor/empty_32.png",
-								empty64_path = "leveleditor/empty_64.png";
 	
 	static {
 		ClassLoader loader = Tile.class.getClassLoader();
-		ImageIcon icon32 = new ImageIcon( loader.getResource(empty32_path) );
-		ImageIcon icon64 = new ImageIcon( loader.getResource(empty64_path) );
+		ImageIcon icon32 = new ImageIcon( loader.getResource("leveleditor/empty_32.png") );
+		ImageIcon icon64 = new ImageIcon( loader.getResource("leveleditor/empty_64.png") );
 		emptyMatrix = new Tile(SIZE_MATRIX, 0, icon32.getImage());
 		emptyLegend = new Tile(SIZE_LEGEND, 0, icon64.getImage());
 	}

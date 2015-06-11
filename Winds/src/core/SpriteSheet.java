@@ -17,8 +17,7 @@ public class SpriteSheet {
 	
 	public BufferedImage[] getSprites(){
 		ArrayList<BufferedImage> spritesList = new ArrayList<BufferedImage>();
-		spritesList.add(null);
-		
+	
 		for(int i=0; i<height; i+=spriteSize){
 			for(int j=0; j<width; j+=spriteSize){
 				spritesList.add( grabImage(j,i) );

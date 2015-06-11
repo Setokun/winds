@@ -9,13 +9,10 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,19 +23,20 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
 
-import core.SpriteSheet;
-import addon.AddonManager;
 import leveleditor.EditorListener.BackListener;
 import leveleditor.EditorListener.DescriptionListener;
 import leveleditor.EditorListener.SaveListener;
 import leveleditor.EditorListener.TimeMaxListener;
+import addon.AddonManager;
+import addon.JarTheme;
+import addon.Level;
+import core.SpriteSheet;
 
 
-public class EditorGUI extends JFrame {
+public class EditorGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	private final int WIDTH_GUI = 1024;
-	private final int HEIGHT_GUI = 600;
+	public static final Dimension DIMENSION = new Dimension(1024,600);
 	private final int MARGIN_TILES = 1;
 	private final int NB_COLS_LEGEND = 3;
 	private final Cursor CURSOR_HAND = new Cursor(Cursor.HAND_CURSOR);
@@ -48,7 +46,7 @@ public class EditorGUI extends JFrame {
 	
 	private JButton btnSave, btnBack, btnEmpty;
     private JLabel lblCurrent, lblDescription, lblLevel, lblTheme, lblTimeMax;
-	private JPanel root, header, labels, fields, description, legend, current;
+	private JPanel header, labels, fields, description, legend, current;
     private JPanel gridMatrix, gridSprites, gridInteractions;
     private JScrollPane scrollMatrix, scrollSprites, scrollInteractions;
     private JSeparator sep1, sep2;
@@ -57,27 +55,24 @@ public class EditorGUI extends JFrame {
     private JTextField txtLevel, txtTheme, txtTimeMax;
     static Tile tileCurrent;
 
-    private static Tile[] tileMatrix;
-    private static Tile[] tileSprites;
-    private static Tile[] tileObjects;
+    private JarTheme themeUsed;
+	private Level levelUsed;
 
     public EditorGUI() {
+        themeUsed = AddonManager.getLoadedTheme();
+        levelUsed = AddonManager.getLoadedLevel();
+        
         initComponents();
         initComponentsConfig();
         initStructure();
-        initFrame();
+        
+        initSprites();
+        initInteractions();
+        initMatrix();
     }
 
     //region GUI Initialisation 
-    /*OK*/private void initFrame(){
-		getContentPane().add(root);
-		setSize(WIDTH_GUI, HEIGHT_GUI);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-    
     /*OK*/private void initComponents(){
-    	root = new JPanel();
     	initHeaderComponents();
     	initMatrixComponents();
     	initLegendComponents();        
@@ -352,8 +347,8 @@ public class EditorGUI extends JFrame {
                 .addComponent(tabPane, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         
-        GroupLayout grpRoot = new GroupLayout(root);
-        root.setLayout(grpRoot);
+        GroupLayout grpRoot = new GroupLayout(this);
+        this.setLayout(grpRoot);
         grpRoot.setHorizontalGroup(
             grpRoot.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addComponent(header, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -377,7 +372,26 @@ public class EditorGUI extends JFrame {
     }
     //endregion
     
-   public int[][] extractMatrix(){
+    private void initMatrix(){
+    	Image[] sprites = new SpriteSheet(themeUsed.getSprites32(), Tile.SIZE_MATRIX).getSprites();
+    	
+    	for(int i=0; i<NB_TILES_MATRIX; i++){
+    		for(int j=0; j<NB_TILES_MATRIX; j++){
+    			int index = levelUsed.getMatrix()[i][j];
+    			gridMatrix.add( index == 0 ? Tile.getEmptyMatrix() :
+    				new Tile(Tile.SIZE_MATRIX, index, sprites[index-1]));
+    		}
+    	}
+    }
+    private void initSprites(){
+		Image[] sprites = new SpriteSheet(themeUsed.getSprites64(), Tile.SIZE_LEGEND).getSprites();
+		for (int i=0; i<sprites.length; i++) {
+			gridSprites.add(new Tile(Tile.SIZE_LEGEND, i+1, sprites[i]));
+		}
+    }
+    private void initInteractions(){}
+    
+    public int[][] extractMatrix(){
 	   Component[] components = gridMatrix.getComponents();
    
 	   int[][] matrix = new int[NB_TILES_MATRIX][NB_TILES_MATRIX];
@@ -388,13 +402,6 @@ public class EditorGUI extends JFrame {
 	   return matrix;
    }
    
-   public void setSprites(Image[] sprites){
-	   sprites[0] = Tile.getEmptyLegend().getIcon().getImage();
-	   for (int i=0; i<sprites.length; i++) {
-		   Tile t = new Tile(64, i+1, sprites[i]);
-		   gridSprites.add(t);
-	   }
-   }
    public void setMatrix(int[][] matrix){
 	   if(matrix == null){
 		   for (int i=0; i<NB_TILES_MATRIX*NB_TILES_MATRIX; i++) {
@@ -403,13 +410,13 @@ public class EditorGUI extends JFrame {
 	   }else {
 		   BufferedImage icon32 = AddonManager.getLoadedTheme().getSprites32();
 		   Image[] sprites = new SpriteSheet(icon32, Tile.SIZE_MATRIX).getSprites();
-		   sprites[0] = Tile.getEmptyMatrix().getIcon().getImage();
 		   
+		   //sprites[0] represents an empty matrix tile
 		   for (int i=0; i<NB_TILES_MATRIX; i++) {
 			   for (int j=0; j<NB_TILES_MATRIX; j++) {
 				   int index = matrix[i][j];
-				   Tile t = new Tile(Tile.SIZE_MATRIX, index, sprites[index]);
-				   gridMatrix.add(t);
+				   gridMatrix.add(index == 0 ? Tile.getEmptyMatrix() :
+					   new Tile(Tile.SIZE_MATRIX, index, sprites[index]) );
 			   }
 		   }
 	   }
