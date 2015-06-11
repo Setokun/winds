@@ -66,6 +66,7 @@ public class MouseInput extends MouseAdapter{
 							//System.out.println(distance(p1PLayer, p2Mouse));
 							/////////////////////
 							
+							Game.nbClicks++;
 							
 							float coefX = (float) (Math.abs(mouseX - playerX) / (distance(p1PLayer, p2Mouse)/1.5)) ;
 							//float coefX = 0.5f + (float) (5f / Math.sqrt(Math.abs(mouseX - playerX))) ;

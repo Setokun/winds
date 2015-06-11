@@ -23,6 +23,7 @@ import core.InteractionBlock;
 import core.ObjectId;
 import core.Player;
 import core.SpriteSheet;
+import database.Score;
 
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
@@ -45,7 +46,7 @@ public class Game extends Canvas implements Runnable{
 	private InteractionBlock interactions;
 
 	private Player player;
-	
+	public static int nbClicks;
 	private int seconds, delayVictory, delayGameOver, timeMax;
 	
 	public Game(){
@@ -57,6 +58,7 @@ public class Game extends Canvas implements Runnable{
 	private void init(){
 		
 		seconds = 0; delayVictory = 53; delayGameOver = 20;
+		nbClicks = 0;
 		pause = false;
 		finished = false;
 		defeat = false;
@@ -159,6 +161,7 @@ public class Game extends Canvas implements Runnable{
 				if(finished){
 					if(!scoreUploaded){
 						scoreUploaded = true;
+						Score.setScore(AddonManager.getLoadedLevel().getIdDB(), this.getFinalScore());
 						System.out.println(this.getFinalScore());
 					}
 					delayVictory--;
@@ -339,7 +342,7 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	private int getFinalScore(){
-		return player.getLife() * 1000 - this.seconds * 100 + player.getCollectables() * 75;
+		return 10000 - this.seconds * 100 + player.getCollectables() * 75 - nbClicks*10;
 	}
 	
 }

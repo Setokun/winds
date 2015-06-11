@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 public class Level {
 	private String creator, date, name, description;
 	private int idTheme;
+	private int idDB;
 	private Mode mode;
 	private Type type;
 	private boolean uploaded;
@@ -41,6 +42,9 @@ public class Level {
 	}
 	public int getIdTheme() {
 		return idTheme;
+	}
+	public int getIdDB() {
+		return idDB;
 	}
 	public Mode getMode() {
 		return mode;
@@ -79,6 +83,9 @@ public class Level {
 	}
 	public void setIdTheme(int idTheme) {
 		this.idTheme = idTheme;
+	}
+	public void setIdDB(int idLevel) {
+		this.idDB = idLevel;
 	}
 	public void setMode(Mode mode) {
 		this.mode = mode;
