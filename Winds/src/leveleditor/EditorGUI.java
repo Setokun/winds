@@ -6,8 +6,10 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -56,11 +58,19 @@ public class EditorGUI extends JPanel {
 	private JarLevel jarLevelUsed;
 	private JarTheme jarThemeUsed;
 	static Image[] images32, images64;
+	Font windsPolice24 = null;
 
 		
     public EditorGUI(JarLevel jl, JarTheme jt) {
         jarLevelUsed = jl;
         jarThemeUsed = jt;        
+        
+        
+    	try {
+    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
+		}
         
         initComponents();
         initComponentsConfig();
@@ -124,7 +134,7 @@ public class EditorGUI extends JPanel {
     /*OK*/private void initHeaderConfig(){
     	btnSave.setText("Save");
     	btnSave.setCursor(CURSOR_HAND);
-    	btnSave.setFont(new Font("bubble & soap", 0, 24));
+    	btnSave.setFont(windsPolice24);
         btnSave.addActionListener(new SaveListener());
 
         sep1.setOrientation(SwingConstants.VERTICAL);
@@ -167,7 +177,7 @@ public class EditorGUI extends JPanel {
 
         btnBack.setText("Back");
         btnBack.setCursor(CURSOR_HAND);
-        btnBack.setFont(new Font("bubble & soap", 0, 24)); // NOI18N
+        btnBack.setFont(windsPolice24);
         btnBack.addActionListener(new BackListener());
     }
     /*OK*/private void initMatrixConfig(){

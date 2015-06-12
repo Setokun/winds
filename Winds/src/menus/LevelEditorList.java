@@ -3,11 +3,13 @@ package menus;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -22,7 +24,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 
 import leveleditor.EditorGUI;
-import addon.AddonManager;
 import addon.JarLevel;
 import addon.JarTheme;
 import addon.Level;
@@ -39,8 +40,17 @@ public class LevelEditorList extends JPanel {
 	public LevelEditorList() {
 		this.setPreferredSize(new Dimension(800,550));
 		
+		Font windsPolice36 = null, windsPolice18 = null;
+    	try {
+    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,18F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice18 = new Font ("Serif", Font.BOLD, 18);
+    		windsPolice36 = new Font ("Serif", Font.BOLD, 36);
+		}
+		
 		title = new JLabel("Level Editor List");
-		title.setFont(new Font("bubble & soap", 0, 36));
+		title.setFont(windsPolice36);
 		
 		int titleMargin = 400 - (title.getFontMetrics(title.getFont()).stringWidth(title.getText())/2);
 		
@@ -122,14 +132,14 @@ public class LevelEditorList extends JPanel {
 		
 		table = new JTable();
 		table.getTableHeader().setBackground(new Color(23,182,255));
-		table.getTableHeader().setFont(new Font("bubble & soap", 0, 20));
+		table.getTableHeader().setFont(windsPolice18);
 		table.getTableHeader().setForeground(Color.WHITE);
 		
 		// penser à virer les bordures du header
 		
 		table.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		table.setBackground(Color.WHITE);
-		table.setFont(new Font("bubble & soap", Font.PLAIN, 16));
+		table.setFont(windsPolice18);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 					{"Level 1", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
