@@ -2,7 +2,9 @@ package display;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import menus.Login;
@@ -36,6 +38,9 @@ public class Window {
 		main.setSize(new Dimension(800, 550));
 		main.setResizable(false);
 		main.setLocationRelativeTo(null);
+		try {
+			main.setIconImage(ImageIO.read(Window.class.getClass().getResource("/bubulle.png")));
+		} catch (IOException e) { e.printStackTrace(); }
 		
 		//DBClass.deleteTestData(); 
 		//DBClass.createStructures(); DBClass.createTestData();
