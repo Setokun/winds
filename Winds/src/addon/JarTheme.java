@@ -41,10 +41,10 @@ public class JarTheme {
 	public String toString(){
 		return "JarTheme {mainClass: \""+ mainClass.getName()
 						+"\", wTheme: \""+ wThemeToString()
-						+"\", music: \""+ music
-						+"\", logo: \""+ new ImageIcon(logo).getDescription()
+						//+"\", music: \""+ music
+						+"\", logo: \""+ (logo==null ? "null" : logo.getClass().getName())
 						+"\", background: \""+ new ImageIcon(background).getDescription()
-						+"\", interactions: \""+ new ImageIcon(interactions).getDescription()
+						//+"\", interactions: \""+ new ImageIcon(interactions).getDescription()
 						+"\", spritesheet32: \""+ new ImageIcon(sprites32).getDescription()
 						+"\", spritesheet64: \""+ new ImageIcon(sprites64).getDescription()
 						+"\", spritesheet128: \""+ new ImageIcon(sprites128).getDescription() +"\"}";
