@@ -142,27 +142,22 @@ public class EditorGUI extends JPanel {
         txtLevel.setFocusable(false);
         txtLevel.setHorizontalAlignment(JTextField.CENTER);
         txtLevel.setText("level_name");
-        // 16 caractères max
-        txtLevel.setText("WWWWWWWWWWWWWWWWW");
-        //
 
         txtTheme.setEditable(false);
         txtTheme.setFocusable(false);
         txtTheme.setHorizontalAlignment(JTextField.CENTER);
-        // 16 caractères max
-        txtTheme.setText("WWWWWWWWWWWWWWWWW");
-        //
         
         txtTimeMax.setText(PROMPT_TIMEMAX);
         txtTimeMax.setCursor(CURSOR_HAND);
+        txtTimeMax.setForeground(Color.GRAY);
         txtTimeMax.setHorizontalAlignment(JTextField.CENTER);
         txtTimeMax.addKeyListener(new TimeMaxListener());
         txtTimeMax.addMouseListener(new TimeMaxListener());
-        // 3 caractères max pour 16 min passée
-        
+                
         lblDescription.setText("Level description :");
 
         areaDescription.setText(PROMPT_DESCRIPTION);
+        areaDescription.setForeground(Color.GRAY);
         areaDescription.setLineWrap(true);
         areaDescription.setWrapStyleWord(true);
         areaDescription.setCursor(CURSOR_HAND);
