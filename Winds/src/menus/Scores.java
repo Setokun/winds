@@ -3,10 +3,12 @@ package menus;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
@@ -35,6 +37,16 @@ public class Scores extends JPanel {
 	
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Scores() {
+		
+		Font windsPolice48 = null, windsPolice18 = null;;
+    	try {
+    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,18F);
+    		windsPolice48 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,48F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice18 = new Font ("Serif", Font.BOLD, 18);
+    		windsPolice48 = new Font ("Serif", Font.BOLD, 48);
+		}
+		
 		this.setPreferredSize(new Dimension(800,550));
 		
 		Object[][] results = null, resultsTrophies = null;
@@ -68,7 +80,7 @@ public class Scores extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		
 		title = new JLabel("Scores");
-		title.setFont(new Font("bubble & soap", 0, 50));
+		title.setFont(windsPolice48);
 		
 		int titleMargin = 400 - (title.getFontMetrics(title.getFont()).stringWidth(title.getText())/2);
 		
@@ -159,12 +171,12 @@ public class Scores extends JPanel {
 		
 		tableTrophies = new JTable();
 		tableTrophies.getTableHeader().setBackground(new Color(23,182,255));
-		tableTrophies.getTableHeader().setFont(new Font("bubble & soap", 0, 20));
+		tableTrophies.getTableHeader().setFont(windsPolice18);
 		tableTrophies.getTableHeader().setForeground(Color.WHITE);
 		tableTrophies.setRowHeight(30);
 		tableTrophies.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		tableTrophies.setBackground(Color.WHITE);
-		tableTrophies.setFont(new Font("bubble & soap", Font.PLAIN, 18));
+		tableTrophies.setFont(windsPolice18);
 		tableTrophies.setModel(new DefaultTableModel(
 			resultsTrophies,
 			new String[] {
@@ -187,12 +199,12 @@ public class Scores extends JPanel {
 		
 		tableScores = new JTable();
 		tableScores.getTableHeader().setBackground(new Color(23,182,255));
-		tableScores.getTableHeader().setFont(new Font("bubble & soap", 0, 20));
+		tableScores.getTableHeader().setFont(windsPolice18);
 		tableScores.getTableHeader().setForeground(Color.WHITE);
 		tableScores.setRowHeight(30);
 		tableScores.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		tableScores.setBackground(Color.WHITE);
-		tableScores.setFont(new Font("bubble & soap", Font.PLAIN, 20));
+		tableScores.setFont(windsPolice18);
 		
 		tableScores.setModel(new DefaultTableModel(
 			results,

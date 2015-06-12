@@ -2,10 +2,12 @@ package menus;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -39,6 +41,15 @@ public class Login extends JPanel{
                         
     private void initComponents() {
 
+    	Font windsPolice24 = null, windsPolice36 = null;;
+    	try {
+    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
+    		windsPolice36 = new Font ("Serif", Font.BOLD, 36);
+		}
+    	
         title = new JLabel();
         jLblLogin = new JLabel();
         jTxtLogin = new JTextField();
@@ -47,20 +58,20 @@ public class Login extends JPanel{
         jBtnQuit = new JButton();
         jBtnLogOn = new JButton();
 
-        title.setFont(new Font("bubble & soap", 0, 36));
+        title.setFont(windsPolice36);
         title.setText("authentification");
 
         int titleMargin = 400 - (title.getFontMetrics(title.getFont()).stringWidth(title.getText())/2);
         
         jTxtLogin.setFont(new Font("Tahoma", 0, 14));
 
-        jLblLogin.setFont(new Font("bubble & soap", 0, 24));
+        jLblLogin.setFont(windsPolice24);
         jLblLogin.setText("Login");
 
-        jLblPwd.setFont(new Font("bubble & soap", 0, 24));
+        jLblPwd.setFont(windsPolice24);
         jLblPwd.setText("password");
 
-        jBtnQuit.setFont(new Font("bubble & soap", 0, 18));
+        jBtnQuit.setFont(windsPolice24);// TODO ou 18
         jBtnQuit.setIcon(new ImageIcon("resources/Buttons/Quit.png"));
         jBtnQuit.setBorderPainted(false);
         jBtnQuit.setContentAreaFilled(false);
@@ -81,7 +92,7 @@ public class Login extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
         
-        jBtnLogOn.setFont(new Font("bubble & soap", 0, 18));
+        jBtnLogOn.setFont(windsPolice24);// TODO ou 18
         jBtnLogOn.setIcon(new ImageIcon("resources/Buttons/Logon.png"));
         jBtnLogOn.setBorderPainted(false);
         jBtnLogOn.setContentAreaFilled(false);

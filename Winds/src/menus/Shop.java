@@ -3,12 +3,14 @@ package menus;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -38,11 +40,20 @@ public class Shop  extends JPanel {
 	// end declarations
 	
 	public Shop() {
-		//setBackground(new Color(200,200,200));
+		
+		Font windsPolice48 = null, windsPolice18 = null;;
+    	try {
+    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,18F);
+    		windsPolice48 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,48F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice18 = new Font ("Serif", Font.BOLD, 18);
+    		windsPolice48 = new Font ("Serif", Font.BOLD, 48);
+		}
+		
 		this.setPreferredSize(new Dimension(800,550));
 		
 		title = new JLabel("Shop");
-		title.setFont(new Font("bubble & soap", 0, 50));
+		title.setFont(windsPolice48);
 		
 		
 		jBtnBack = new JButton();
@@ -135,7 +146,7 @@ public class Shop  extends JPanel {
 		
 		tableNewThemes = new JTable();
 		tableNewThemes.getTableHeader().setBackground(new Color(23,182,255));
-		tableNewThemes.getTableHeader().setFont(new Font("bubble & soap", 0, 20));
+		tableNewThemes.getTableHeader().setFont(windsPolice18);
 		tableNewThemes.getTableHeader().setForeground(Color.WHITE);
 		tableNewThemes.setRowHeight(20);
 		tableNewThemes.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
@@ -193,7 +204,7 @@ public class Shop  extends JPanel {
 		
 		tableNewLevels = new JTable();
 		tableNewLevels.getTableHeader().setBackground(new Color(23,182,255));
-		tableNewLevels.getTableHeader().setFont(new Font("bubble & soap", 0, 20));
+		tableNewLevels.getTableHeader().setFont(windsPolice18);
 		tableNewLevels.getTableHeader().setForeground(Color.WHITE);
 		tableNewLevels.setRowHeight(20);
 		tableNewLevels.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
@@ -253,7 +264,7 @@ public class Shop  extends JPanel {
 		
 		tableCustomLevels = new JTable();
 		tableCustomLevels.getTableHeader().setBackground(new Color(23,182,255));
-		tableCustomLevels.getTableHeader().setFont(new Font("bubble & soap", 0, 20));
+		tableCustomLevels.getTableHeader().setFont(windsPolice18);
 		tableCustomLevels.getTableHeader().setForeground(Color.WHITE);
 		tableCustomLevels.setRowHeight(20);
 		tableCustomLevels.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
@@ -321,7 +332,7 @@ public class Shop  extends JPanel {
 				int row = tableCustomLevels.rowAtPoint(p);
 				if(col == 1){
 					if(tableCustomLevels.getValueAt(row, col) != null){
-						System.out.println("Installation de " + tableCustomLevels.getValueAt(row, 0));
+						System.out.println("Installation de " + tableCustomLevels.getValueAt(row, 0));//TODO
 						tableCustomLevels.setValueAt(null, row, col);
 						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png"), row, 2);
 						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_uninstall.png") , row, 3);
@@ -329,18 +340,18 @@ public class Shop  extends JPanel {
 				}
 				if(col == 2){
 					if((Boolean)tableCustomLevels.getValueAt(row, 4)){
-						System.out.println("activation de " + tableCustomLevels.getValueAt(row, 0));
+						System.out.println("activation de " + tableCustomLevels.getValueAt(row, 0));//TODO
 						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_desactivate.png") , row, col);
 						tableCustomLevels.setValueAt(false, row, 4);
 					}
 					else{
-						System.out.println("désactivation de " + tableCustomLevels.getValueAt(row, 0));
+						System.out.println("désactivation de " + tableCustomLevels.getValueAt(row, 0));//TODO
 						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png") , row, col);
 						tableCustomLevels.setValueAt(true, row, 4);
 					}
 				}
 				if(col == 3){
-					System.out.println("Désinstallation de " + tableCustomLevels.getValueAt(row, 0));
+					System.out.println("Désinstallation de " + tableCustomLevels.getValueAt(row, 0));//TODO
 					tableCustomLevels.setValueAt(null, row, 2);
 					tableCustomLevels.setValueAt(null, row, col);
 					tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_install.png") , row, 1);
@@ -356,7 +367,7 @@ public class Shop  extends JPanel {
 		
 		tableLevelsToModerate = new JTable();
 		tableLevelsToModerate.getTableHeader().setBackground(new Color(23,182,255));
-		tableLevelsToModerate.getTableHeader().setFont(new Font("bubble & soap", 0, 20));
+		tableLevelsToModerate.getTableHeader().setFont(windsPolice18);
 		tableLevelsToModerate.getTableHeader().setForeground(Color.WHITE);
 		//tableLevelsToModerate.setRowHeight(20);
 		tableLevelsToModerate.setDefaultRenderer(Object.class, new CenterTableCellRenderer());

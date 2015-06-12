@@ -2,10 +2,12 @@ package menus;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
@@ -38,6 +40,15 @@ public class LevelCategorySelector extends JPanel{
 
 	private void initComponents() {
 
+		Font windsPolice24 = null, windsPolice36 = null;;
+    	try {
+    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
+    		windsPolice36 = new Font ("Serif", Font.BOLD, 36);
+		}
+		
         jBtnBack = new JButton();
         jBtnBasicLevels = new JButton();
         jBtnCustomLevels = new JButton();
@@ -47,7 +58,7 @@ public class LevelCategorySelector extends JPanel{
 
         setPreferredSize(new Dimension(800, 550));
 
-        jBtnBack.setFont(new Font("bubble & soap", 0, 24));
+        jBtnBack.setFont(windsPolice24);
         jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
         jBtnBack.setBorder(new SoftBevelBorder(0));
         jBtnBack.setBorderPainted(false);
@@ -70,7 +81,7 @@ public class LevelCategorySelector extends JPanel{
 		});
         
         
-        jBtnBasicLevels.setFont(new Font("bubble & soap", 0, 24));
+        jBtnBasicLevels.setFont(windsPolice24);
         jBtnBasicLevels.setIcon(new ImageIcon("resources/Buttons/BasicLevels.png"));
         jBtnBasicLevels.setBorder(new SoftBevelBorder(0));
         jBtnBasicLevels.setBorderPainted(false);
@@ -92,7 +103,7 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
         
-        jBtnCustomLevels.setFont(new Font("bubble & soap", 0, 24));
+        jBtnCustomLevels.setFont(windsPolice24);
         jBtnCustomLevels.setIcon(new ImageIcon("resources/Buttons/CustomLevels.png"));
         jBtnCustomLevels.setBorder(new SoftBevelBorder(0));
         jBtnCustomLevels.setBorderPainted(false);
@@ -114,7 +125,7 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
         
-        jBtnMyLevels.setFont(new Font("bubble & soap", 0, 24));
+        jBtnMyLevels.setFont(windsPolice24);
         jBtnMyLevels.setIcon(new ImageIcon("resources/Buttons/MyLevels.png"));
         jBtnMyLevels.setBorder(new SoftBevelBorder(0));
         jBtnMyLevels.setBorderPainted(false);
@@ -136,7 +147,7 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
         
-        jBtnLevelsToModerate.setFont(new Font("bubble & soap", 0, 24));
+        jBtnLevelsToModerate.setFont(windsPolice24);
         jBtnLevelsToModerate.setIcon(new ImageIcon("resources/Buttons/LevelsToModerate.png"));
         jBtnLevelsToModerate.setBorder(new SoftBevelBorder(0));
         jBtnLevelsToModerate.setBorderPainted(false);
@@ -158,7 +169,7 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
         
-        jLblTitle.setFont(new Font("bubble & soap", 0, 36));
+        jLblTitle.setFont(windsPolice36);
         jLblTitle.setText("Please select a category :");
         
         

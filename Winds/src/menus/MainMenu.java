@@ -2,8 +2,10 @@ package menus;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.swing.GroupLayout;
@@ -26,7 +28,15 @@ public class MainMenu extends JPanel{
     }
                         
     private void initComponents() {
-
+    	Font windsPolice48 = null, windsPolice18 = null;;
+    	try {
+    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,18F);
+    		windsPolice48 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,48F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice18 = new Font ("Serif", Font.BOLD, 18);
+    		windsPolice48 = new Font ("Serif", Font.BOLD, 48);
+		}
+    	
         jLblTitle = new JLabel();
         jBtnPlay = new JButton();
         jBtnScores = new JButton();
@@ -36,10 +46,10 @@ public class MainMenu extends JPanel{
         jBtnChangeProfile = new JButton();
         jBtnQuit = new JButton();
 
-        jLblTitle.setFont(new Font("bubble & soap", 0, 48));
+        jLblTitle.setFont(windsPolice48);
         jLblTitle.setText("Winds");
 
-        jBtnPlay.setFont(new Font("bubble & soap", 0, 18));
+        jBtnPlay.setFont(windsPolice18);
         jBtnPlay.setText("Play");
         jBtnPlay.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -47,7 +57,7 @@ public class MainMenu extends JPanel{
             }
         });
 
-        jBtnScores.setFont(new Font("bubble & soap", 0, 18));
+        jBtnScores.setFont(windsPolice18);
         jBtnScores.setText("Scores");
         jBtnScores.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -55,7 +65,7 @@ public class MainMenu extends JPanel{
             }
         });
 
-        jBtnConfiguration.setFont(new Font("bubble & soap", 0, 18));
+        jBtnConfiguration.setFont(windsPolice18);
         jBtnConfiguration.setText("Configuration");
         jBtnConfiguration.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -63,7 +73,7 @@ public class MainMenu extends JPanel{
             }
         });
 
-        jBtnShop.setFont(new Font("bubble & soap", 0, 18));
+        jBtnShop.setFont(windsPolice18);
         jBtnShop.setText("shop");
         jBtnShop.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -71,7 +81,7 @@ public class MainMenu extends JPanel{
             }
         });
 
-        jBtnLevelEditor.setFont(new Font("bubble & soap", 0, 18));
+        jBtnLevelEditor.setFont(windsPolice18);
         jBtnLevelEditor.setText("level editor");
         jBtnLevelEditor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -79,7 +89,7 @@ public class MainMenu extends JPanel{
             }
         });
 
-        jBtnChangeProfile.setFont(new Font("bubble & soap", 0, 18));
+        jBtnChangeProfile.setFont(windsPolice18);
         jBtnChangeProfile.setText("Change Profile");
         jBtnChangeProfile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -87,7 +97,7 @@ public class MainMenu extends JPanel{
             }
         });
 
-        jBtnQuit.setFont(new Font("bubble & soap", 0, 18));
+        jBtnQuit.setFont(windsPolice18);
         jBtnQuit.setText("Quit");
         jBtnQuit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {

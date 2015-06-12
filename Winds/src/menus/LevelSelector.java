@@ -2,10 +2,12 @@ package menus;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
@@ -69,6 +71,15 @@ public class LevelSelector extends JPanel{
 
     private void initComponents(String title, int currentPage, int nbPages, ArrayList<JarLevel> levels) {
 
+    	Font windsPolice24 = null, windsPolice36 = null;;
+    	try {
+    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
+    		windsPolice36 = new Font ("Serif", Font.BOLD, 36);
+		}
+    	
     	setPreferredSize(new Dimension(800, 550));
     	
     	int nbLvlsToDisplay = levelsToDisplay.size();
@@ -134,7 +145,7 @@ public class LevelSelector extends JPanel{
         //endregion
 	    
         //region : header
-        jBtnBack.setFont(new Font("bubble & soap", 0, 24));
+        jBtnBack.setFont(windsPolice24);
         jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
         jBtnBack.setBorder(new SoftBevelBorder(0));
         jBtnBack.setBorderPainted(false);
@@ -156,7 +167,7 @@ public class LevelSelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
         
-        jLblTitle.setFont(new Font("bubble & soap", 0, 36));
+        jLblTitle.setFont(windsPolice36);
         jLblTitle.setText(title);
 
         vGroupTitle.addGroup(layout.createSequentialGroup()
@@ -380,7 +391,7 @@ public class LevelSelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
         
-        jLblNumPage.setFont(new java.awt.Font("bubble & soap", 0, 24));
+        jLblNumPage.setFont(windsPolice24);
         jLblNumPage.setText((currentPage+1)+"/"+(nbPages+1));
         //endregion
         

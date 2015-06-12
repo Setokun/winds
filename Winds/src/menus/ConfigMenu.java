@@ -2,10 +2,12 @@ package menus;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -29,10 +31,19 @@ public class ConfigMenu extends JPanel{
 	private JLabel title, lblMusic, lblSounds, lblResolution, lblDisplayMusicvolume, lblDisplaySoundsvolume, lblDisplayResolution;
 	
 	public ConfigMenu() {
+		Font windsPolice30 = null, windsPolice36 = null;;
+    	try {
+    		windsPolice30 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,30F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice30 = new Font ("Serif", Font.BOLD, 30);
+			windsPolice36 = new Font ("Serif", Font.BOLD, 36);
+		}
+    	
 		this.setPreferredSize(new Dimension(800, 550));
 		
 		title = new JLabel("Configuration");
-		title.setFont(new Font("bubble & soap", 0, 36));
+		title.setFont(windsPolice36);
 		
 		jBtnBack = new JButton();
 		jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
@@ -89,7 +100,7 @@ public class ConfigMenu extends JPanel{
 			}
 		});
 		lblMusic = new JLabel("Music volume");
-		lblMusic.setFont(new Font("bubble & soap", Font.PLAIN, 30));
+		lblMusic.setFont(windsPolice30);
 		lblDisplayMusicvolume = new JLabel();
 		lblDisplayMusicvolume.setText(String.valueOf(sliderMusic.getValue()));
 		lblDisplayMusicvolume.setFont(new Font("bubble & soap", Font.PLAIN, 30));
@@ -105,7 +116,7 @@ public class ConfigMenu extends JPanel{
 			}
 		});
 		lblSounds = new JLabel("Sounds volume");
-		lblSounds.setFont(new Font("bubble & soap", Font.PLAIN, 30));
+		lblSounds.setFont(windsPolice30);
 		lblDisplaySoundsvolume = new JLabel();
 		lblDisplaySoundsvolume.setText(String.valueOf(sliderSounds.getValue()));
 		lblDisplaySoundsvolume.setFont(new Font("bubble & soap", Font.PLAIN, 30));
@@ -131,7 +142,7 @@ public class ConfigMenu extends JPanel{
 			}
 		});
 		lblResolution = new JLabel("Resolution");
-		lblResolution.setFont(new Font("bubble & soap", Font.PLAIN, 30));
+		lblResolution.setFont(windsPolice30);
 		lblDisplayResolution = new JLabel();
 		switch(sliderResolution.getValue()){
 		case 0:
@@ -144,7 +155,7 @@ public class ConfigMenu extends JPanel{
 			lblDisplayResolution.setText("1024x768");
 			break;
 		}
-		lblDisplayResolution.setFont(new Font("bubble & soap", Font.PLAIN, 30));
+		lblDisplayResolution.setFont(windsPolice30);
 		
 		
 		
