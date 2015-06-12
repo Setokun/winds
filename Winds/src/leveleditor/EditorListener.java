@@ -1,5 +1,7 @@
 package leveleditor;
 
+import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -25,7 +27,10 @@ public class EditorListener {
 		
 		public void mousePressed(MouseEvent e) {
 			field = (JTextField) e.getSource();
-			if( field.getText().equals(EditorGUI.PROMPT_TIMEMAX) ){ field.setText(null); }
+			if( field.getText().equals(EditorGUI.PROMPT_TIMEMAX) ){
+				field.setText(null);
+				field.setForeground(Color.BLACK);
+			}
 		}
 		
 		public void keyTyped(KeyEvent e) {
@@ -74,8 +79,12 @@ public class EditorListener {
 	
 	/*OK*/public static class TileMatrixListener extends MouseAdapter {
 		public void mouseReleased(MouseEvent e) {
+			Tile current = EditorGUI.tileCurrent;
+			int index = current.getIndex();
+			Image img = index != 0 ? EditorGUI.images32[index] : Tile.getEmptyMatrix().getIcon().getImage();
+			
 			Tile source = (Tile) e.getSource();
-			source.updateFrom(EditorGUI.tileCurrent);
+			source.updateFrom(index, img);
 		}
 	}
 

@@ -24,11 +24,13 @@ public class JarLevel {
 	}
 	
 	//region Constructors 
-	/*OK*/public JarLevel(){}
+	/*OK*/public JarLevel(Level lvl){
+		this.lvl = lvl;
+	}
 	/*OK*/public JarLevel(File jarFile){
-		jar = jarFile;
+		this.jar = jarFile;
 		String jsonDecoded = encodeJson(getLevelContent(), false);
-		lvl = new Gson().fromJson(jsonDecoded, Level.class);
+		this.lvl = new Gson().fromJson(jsonDecoded, Level.class);
 	}
 	//endregion
 	
@@ -56,6 +58,9 @@ public class JarLevel {
 	}
 	public boolean isValid(){
 		return jar != null && lvl != null;
+	}
+	public String toString(){
+		return "JarLevel {jar: \""+ (jar==null ? "null" : jar.toURI()) +"\", lvl: \""+ lvl.toString() +"\"}";
 	}
 	//endregion
 	
@@ -101,7 +106,7 @@ public class JarLevel {
 	//endregion
 	
 	//region Getters 
-	public File getJarLevel(){
+	public File getFile(){
 		return jar;
 	}
 	public Level getLevel(){

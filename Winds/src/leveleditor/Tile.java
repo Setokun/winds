@@ -3,7 +3,6 @@ package leveleditor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -68,10 +67,14 @@ public class Tile extends JLabel implements Cloneable {
 		return null;
 	}
 	
+	
+	public void updateFrom(int index, Image img){
+		this.index = index;
+		this.icon = new ImageIcon(img);
+		setIcon(icon);
+	}
 	public void updateFrom(Tile source){
-		this.index = source.index;
-		this.icon = source.icon;
-		setIcon(source.icon);
+		updateFrom(source.index, source.icon.getImage());		
 	}
 	
 	public void paintComponent(Graphics g){

@@ -14,6 +14,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,6 +23,10 @@ import javax.swing.table.DefaultTableModel;
 
 import leveleditor.EditorGUI;
 import addon.AddonManager;
+import addon.JarLevel;
+import addon.JarTheme;
+import addon.Level;
+import addon.level.LevelCreationDialog;
 import display.Window;
 
 public class LevelEditorList extends JPanel {
@@ -232,16 +237,20 @@ public class LevelEditorList extends JPanel {
 	}
 	
 	protected void jBtnNewLevelActionPerformed(ActionEvent evt) {
-		/*LevelCreationDialog.show(true);
+		LevelCreationDialog.show(true);
 		String levelName = LevelCreationDialog.getNameChoosen();
 		JarTheme themeUsed = LevelCreationDialog.getThemeChoosen();
-		*/
 		
-		AddonManager.loadJarTheme(1);
-		AddonManager.loadJarLevel(0);
+		if(levelName == null || themeUsed == null){
+			JOptionPane.showMessageDialog(
+					Window.getFrame(), "Mandatory fields missing",
+					"Warning", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 		
+		Level lvl = new Level(levelName, themeUsed.getIdDB());
 		Window.resize(EditorGUI.DIMENSION);
-		Window.affect(new EditorGUI());
+		Window.affect(new EditorGUI(new JarLevel(lvl), themeUsed));
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {

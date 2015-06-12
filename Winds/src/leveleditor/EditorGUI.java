@@ -8,7 +8,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -27,7 +26,6 @@ import leveleditor.EditorListener.BackListener;
 import leveleditor.EditorListener.DescriptionListener;
 import leveleditor.EditorListener.SaveListener;
 import leveleditor.EditorListener.TimeMaxListener;
-import addon.AddonManager;
 import addon.JarLevel;
 import addon.JarTheme;
 import core.SpriteSheet;
@@ -37,10 +35,10 @@ public class EditorGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	public static final Dimension DIMENSION = new Dimension(1024,600);
+	public static final int NB_TILES_MATRIX = 60;
 	private final int MARGIN_TILES = 1;
 	private final int NB_COLS_LEGEND = 3;
 	private final Cursor CURSOR_HAND = new Cursor(Cursor.HAND_CURSOR);
-	static final int NB_TILES_MATRIX = 60;
 	static final String PROMPT_TIMEMAX = "Number of seconds";
 	static final String PROMPT_DESCRIPTION = "Input your level description here";
 	
@@ -55,20 +53,26 @@ public class EditorGUI extends JPanel {
     private JTextField txtLevel, txtTheme, txtTimeMax;
     static Tile tileCurrent;
 
-    private JarTheme themeUsed;
-	private JarLevel levelUsed;
+	private JarLevel jarLevelUsed;
+	private JarTheme jarThemeUsed;
+	static Image[] images32, images64;
 
-    public EditorGUI() {
-        themeUsed = AddonManager.getLoadedJarTheme();
-        levelUsed = AddonManager.getLoadedJarLevel();
+		
+    public EditorGUI(JarLevel jl, JarTheme jt) {
+        jarLevelUsed = jl;
+        jarThemeUsed = jt;        
         
         initComponents();
         initComponentsConfig();
         initStructure();
         
+        initImageTiles();
+        initMatrix();
         initSprites();
         initInteractions();
-        initMatrix();
+        
+        txtLevel.setText(jl.getLevel().getName());
+        txtTheme.setText(jt.getName());
     }
 
     //region GUI Initialisation 
@@ -372,21 +376,28 @@ public class EditorGUI extends JPanel {
     }
     //endregion
     
-    private void initMatrix(){
-    	Image[] sprites = new SpriteSheet(themeUsed.getSprites32(), Tile.SIZE_MATRIX).getSprites();
+    //region Methods 
+    private void initImageTiles(){
+    	images32 = new SpriteSheet(
+    			jarThemeUsed.getSprites32(),
+    			Tile.SIZE_MATRIX).getSprites();
     	
+    	images64 = new SpriteSheet(
+    			jarThemeUsed.getSprites64(),
+    			Tile.SIZE_LEGEND).getSprites();
+    }
+    private void initMatrix(){
     	for(int i=0; i<NB_TILES_MATRIX; i++){
     		for(int j=0; j<NB_TILES_MATRIX; j++){
-    			int index = levelUsed.getLevel().getMatrix()[i][j];
+    			int index = jarLevelUsed.getLevel().getMatrix()[i][j];
     			gridMatrix.add( index == 0 ? Tile.getEmptyMatrix() :
-    				new Tile(Tile.SIZE_MATRIX, index, sprites[index-1]));
+    				new Tile(Tile.SIZE_MATRIX, index, images32[index]));
     		}
     	}
     }
     private void initSprites(){
-		Image[] sprites = new SpriteSheet(themeUsed.getSprites64(), Tile.SIZE_LEGEND).getSprites();
-		for (int i=0; i<sprites.length; i++) {
-			gridSprites.add(new Tile(Tile.SIZE_LEGEND, i+1, sprites[i]));
+		for (int i=1; i<images64.length; i++) {
+			gridSprites.add(new Tile(Tile.SIZE_LEGEND, i, images64[i]));
 		}
     }
     private void initInteractions(){}
@@ -401,25 +412,6 @@ public class EditorGUI extends JPanel {
 	   }
 	   return matrix;
    }
-   
-   public void setMatrix(int[][] matrix){
-	   if(matrix == null){
-		   for (int i=0; i<NB_TILES_MATRIX*NB_TILES_MATRIX; i++) {
-			   gridMatrix.add(Tile.getEmptyMatrix());
-		   }
-	   }else {
-		   BufferedImage icon32 = AddonManager.getLoadedJarTheme().getSprites32();
-		   Image[] sprites = new SpriteSheet(icon32, Tile.SIZE_MATRIX).getSprites();
-		   
-		   //sprites[0] represents an empty matrix tile
-		   for (int i=0; i<NB_TILES_MATRIX; i++) {
-			   for (int j=0; j<NB_TILES_MATRIX; j++) {
-				   int index = matrix[i][j];
-				   gridMatrix.add(index == 0 ? Tile.getEmptyMatrix() :
-					   new Tile(Tile.SIZE_MATRIX, index, sprites[index]) );
-			   }
-		   }
-	   }
-   }
-   
+    //endregion
+    
 }
