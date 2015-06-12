@@ -1,8 +1,14 @@
 package addon;
 
 import java.awt.Point;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+import leveleditor.EditorGUI;
+import account.Profile;
 import addon.level.Mode;
 import addon.level.Type;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -20,10 +26,34 @@ public class Level {
 	private int[][] interactions;
 	private int timeMax;
 	
+	public Level(){
+		updateDate();
+		name = "my new level";
+		creator = Profile.getCurrentPlayer().getPseudo();
+		mode = Mode.Normal;
+		type = Type.my;
+		uploaded = false;
+		startPosition = new Point(2,2);
+		matrix = new int[EditorGUI.NB_TILES_MATRIX][EditorGUI.NB_TILES_MATRIX];
+		interactions = new int[EditorGUI.NB_TILES_MATRIX][EditorGUI.NB_TILES_MATRIX];
+		timeMax = 999;
+	}
+	public Level(String levelName, int idTheme){
+		this();
+		this.name = levelName;
+		this.idTheme = idTheme;
+	}
+	
 	//region Public methods 
 	public String toJson(){
 		Gson gson = new GsonBuilder().serializeNulls().create();
 		return gson.toJson(this);
+	}
+	public void updateDate(){
+		date = ZonedDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+	}
+	public String toString(){
+		return "Level "+ toJson();
 	}
 	//endregion
 	
