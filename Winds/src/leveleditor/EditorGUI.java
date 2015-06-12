@@ -36,7 +36,6 @@ import core.SpriteSheet;
 public class EditorGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	public static final Dimension DIMENSION = new Dimension(1024,600);
 	public static final int NB_TILES_MATRIX = 60;
 	private final int MARGIN_TILES = 1;
 	private final int NB_COLS_LEGEND = 3;
@@ -157,12 +156,14 @@ public class EditorGUI extends JPanel {
         txtTheme.setFocusable(false);
         txtTheme.setHorizontalAlignment(JTextField.CENTER);
         
+        
         txtTimeMax.setText(PROMPT_TIMEMAX);
         txtTimeMax.setCursor(CURSOR_HAND);
         txtTimeMax.setForeground(Color.GRAY);
         txtTimeMax.setHorizontalAlignment(JTextField.CENTER);
-        txtTimeMax.addKeyListener(new TimeMaxListener());
-        txtTimeMax.addMouseListener(new TimeMaxListener());
+        TimeMaxListener tml = new TimeMaxListener();
+        txtTimeMax.addKeyListener(tml);
+        txtTimeMax.addFocusListener(tml);
                 
         lblDescription.setText("Level description :");
 
