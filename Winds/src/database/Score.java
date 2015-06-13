@@ -8,28 +8,31 @@ import display.Window;
 
 public class Score {
 	private int id;
+	private int idLevel;
 	private String levelName;
-	private int clicks;
+	private int nbClicks;
 	private int nbItems;
 	private int time;
 	
 	public Score(){}
 	public Score(int clicks ,int nbItems, int time){
-		this.clicks = clicks;
+		this.nbClicks = clicks;
 		this.nbItems = nbItems;
 		this.time = time;
 	}
 
 	public int getId() {return id;}
+	public int getIdLevel() {return idLevel;}
 	public String getLevelName() {return levelName;}
-	public int getScore() {return 10000 - time * 100 + nbItems * 75 - clicks * 10;}
-	public int getClicks() {return clicks;}
+	public int getScore() {return 10000 - time * 100 + nbItems * 75 - nbClicks * 10;}
+	public int getClicks() {return nbClicks;}
 	public int getTime() {return time;}
 	public int getNbItems() {return nbItems;}
 	
 	public void setId(int id) {this.id = id;}
+	public void setIdLevel(int idLevel) {this.idLevel = idLevel;}
 	public void setLevelName(String levelName) {this.levelName = levelName;}
-	public void setClicks(int clicks) {this.clicks = clicks;}
+	public void setClicks(int clicks) {this.nbClicks = clicks;}
 	public void setTime(int time) {this.time = time;}
 	public void setNbItems(int nbItems) {this.nbItems = nbItems;}
 	
@@ -49,11 +52,11 @@ public class Score {
 				}
 				
 				if(oldScore != null && this.getScore() > oldScore.getScore()){
-					DBClass.executeQuery("UPDATE scores SET nbItems = "+this.nbItems+", nbClicks="+this.clicks+", time="+this.time+" WHERE id="+idLevel);
+					DBClass.executeQuery("UPDATE scores SET nbItems = "+this.nbItems+", nbClicks="+this.nbClicks+", time="+this.time+" WHERE id="+idLevel);
 				}
 			}
 			else{
-				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems, rank) VALUES ('"+Window.profile.getId()+"','"+idLevel+"', '"+time+"', '"+clicks+"', '"+nbItems+"', 0)");
+				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems, rank) VALUES ('"+Window.profile.getId()+"','"+idLevel+"', '"+time+"', '"+nbClicks+"', '"+nbItems+"', 0)");
 			}
 			
 		} catch (ClassNotFoundException | SQLException e) {
@@ -103,13 +106,8 @@ public class Score {
 		return result;
 	}
     
-    /*public static String transformPositionInString(int position, int total){
-    	
-    	if(position == 0 || total == 0){
-    		return "---";
-    	}
-    	
-    	return position + "/" + total;
-    }*/
+	public String toString(){
+		return "id:"+idLevel+",levelName:"+levelName+",clicks:"+nbClicks+",nbItems:"+nbItems+",time:"+time;
+	}
 	
 }

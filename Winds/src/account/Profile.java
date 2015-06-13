@@ -125,4 +125,8 @@ public class Profile {
     	return null;	
     }
 	
+	public String toString(){
+		return "email : " + email + ",password : "+password;
+	}
+	
 }
