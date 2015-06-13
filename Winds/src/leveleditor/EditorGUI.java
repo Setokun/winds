@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.KeyboardFocusManager;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
@@ -158,24 +159,30 @@ public class EditorGUI extends JPanel {
         
         
         txtTimeMax.setText(PROMPT_TIMEMAX);
+        txtTimeMax.setToolTipText("maximum allowed : 999 seconds");
         txtTimeMax.setCursor(CURSOR_HAND);
         txtTimeMax.setForeground(Color.GRAY);
         txtTimeMax.setHorizontalAlignment(JTextField.CENTER);
         TimeMaxListener tml = new TimeMaxListener();
         txtTimeMax.addKeyListener(tml);
         txtTimeMax.addFocusListener(tml);
-                
+        
         lblDescription.setText("Level description :");
-
+        
         areaDescription.setText(PROMPT_DESCRIPTION);
+        areaDescription.setToolTipText("maximum allowed : 255 characters");
         areaDescription.setForeground(Color.GRAY);
         areaDescription.setLineWrap(true);
         areaDescription.setWrapStyleWord(true);
         areaDescription.setCursor(CURSOR_HAND);
-        areaDescription.addKeyListener(new DescriptionListener());
+        DescriptionListener dl = new DescriptionListener();
+        areaDescription.addKeyListener(dl);
+        areaDescription.addFocusListener(dl);
+        areaDescription.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
+        areaDescription.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);
         
         sep2.setOrientation(SwingConstants.VERTICAL);
-
+        
         btnBack.setText("Back");
         btnBack.setCursor(CURSOR_HAND);
         btnBack.setFont(windsPolice24);
