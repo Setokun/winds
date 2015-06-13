@@ -4,14 +4,18 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import menus.LevelEditorList;
+import display.Window;
 
 public class EditorListener {
 	
@@ -21,46 +25,76 @@ public class EditorListener {
 		}
 	}
 	
-	public static class TimeMaxListener extends MouseAdapter implements KeyListener {
+	/*OK*/public static class TimeMaxListener extends KeyAdapter implements FocusListener {
 		private final int maxChar = 3;
 		private JTextField field;
 		
-		public void mousePressed(MouseEvent e) {
+		public void keyTyped(KeyEvent e) {
+			char car = e.getKeyChar();
+			int code = e.getKeyCode();
+			
+			boolean isMaxLength = field.getText().length() == maxChar,
+					isZeroFirstChar = field.getText().length() == 0 && car == '0',
+					allowedKey = Character.isDigit(car)
+							  || code == KeyEvent.VK_LEFT	|| code == KeyEvent.VK_RIGHT
+							  || code == KeyEvent.VK_DELETE || code == KeyEvent.VK_BACK_SPACE;
+			
+			if(isMaxLength || !allowedKey || isZeroFirstChar)	e.consume();
+		}
+		public void keyReleased(KeyEvent e){
+			if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				field.transferFocus();
+		}
+
+		public void focusGained(FocusEvent e) {
 			field = (JTextField) e.getSource();
 			if( field.getText().equals(EditorGUI.PROMPT_TIMEMAX) ){
 				field.setText(null);
 				field.setForeground(Color.BLACK);
 			}
 		}
-		
-		public void keyTyped(KeyEvent e) {
-			field = (JTextField) e.getSource();
-			if(e.getKeyCode() == e.VK_ESCAPE){ field.transferFocus(); }
-
-		}
-		public void keyPressed(KeyEvent e) {}
-		public void keyReleased(KeyEvent e) {}
-
-	}
-	
-	public static class DescriptionListener extends KeyAdapter {
-		private final int maxChar = 255;
-		
-		public void keyTyped(KeyEvent e) {
-			JTextArea area = (JTextArea) e.getSource();
-			if(e.getKeyCode() == e.VK_ESCAPE){ area.transferFocus(); }
-			
-			if(area.getText().length() != maxChar){
-				
+		public void focusLost(FocusEvent e) {
+			if( field.getText().equals("") ){
+				field.setText(EditorGUI.PROMPT_TIMEMAX);
+				field.setForeground(Color.GRAY);
 			}
 			
+		}
+
+	}
+	
+	public static class DescriptionListener extends KeyAdapter implements FocusListener {
+		private final int maxChar = 255;
+		JTextArea area;
+		
+		public void keyTyped(KeyEvent e) {
+			if(area.getText().length() == maxChar)	e.consume();
+		}
+		public void keyReleased(KeyEvent e){
+			if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+				area.transferFocus();
+		}
+		
+		public void focusGained(FocusEvent e) {
+			area = (JTextArea) e.getSource();
+			if( area.getText().equals(EditorGUI.PROMPT_DESCRIPTION) ){
+				area.setForeground(Color.BLACK);
+				area.setText(null);
+			}
+		}		
+		public void focusLost(FocusEvent e) {
+			if( area.getText().equals("") ){
+				area.setForeground(Color.GRAY);
+				area.setText(EditorGUI.PROMPT_DESCRIPTION);
+			}
 			
 		}
 	}
 	
-	public static class BackListener implements ActionListener {
+	/*OK*/public static class BackListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.exit(0);
+			Window.resize(Window.DIM_STANDARD);
+			Window.affect(new LevelEditorList());
 		}
 	}
 
