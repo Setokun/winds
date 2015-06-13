@@ -10,6 +10,7 @@ import java.awt.FontFormatException;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.KeyboardFocusManager;
+import java.awt.Point;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
@@ -31,6 +32,7 @@ import leveleditor.EditorListener.SaveListener;
 import leveleditor.EditorListener.TimeMaxListener;
 import addon.JarLevel;
 import addon.JarTheme;
+import addon.Level;
 import core.SpriteSheet;
 
 
@@ -83,6 +85,12 @@ public class EditorGUI extends JPanel {
         
         txtLevel.setText(jl.getLevel().getName());
         txtTheme.setText(jt.getName());
+        
+        int time = jl.getLevel().getTimeMax();
+        if(time != 0){
+        	txtTimeMax.setText( String.valueOf(time) );
+        	txtTimeMax.setForeground(Color.BLACK);
+        }
     }
 
     //region GUI Initialisation 
@@ -135,7 +143,7 @@ public class EditorGUI extends JPanel {
     	btnSave.setText("Save");
     	btnSave.setCursor(CURSOR_HAND);
     	btnSave.setFont(windsPolice24);
-        btnSave.addActionListener(new SaveListener());
+        btnSave.addActionListener(new SaveListener(this));
 
         sep1.setOrientation(SwingConstants.VERTICAL);
 
@@ -415,16 +423,39 @@ public class EditorGUI extends JPanel {
     }
     private void initInteractions(){}
     
-    public int[][] extractMatrix(){
+    public void saveJarLevel(){
+    	String timeMax = txtTimeMax.getText();
+    	int time = timeMax.equals(PROMPT_TIMEMAX) ? 1 : Integer.valueOf( timeMax ).intValue();
+    	String description = null;
+    	if(!areaDescription.getText().equals(PROMPT_DESCRIPTION))  description = areaDescription.getText();
+    	
+    	Level lvl = jarLevelUsed.getLevel();
+    	lvl.updateDate();
+    	lvl.setDescription( description );
+    	lvl.setTimeMax( time );
+    	lvl.setStartPosition( getStartPosition() );
+    	lvl.setMatrix( extractMatrix() );
+    	lvl.setInteractions( extractInteractions() );
+    	jarLevelUsed.save();    	
+    }
+    private Point getStartPosition(){
+    	return new Point(2,2);
+    }
+    private int[][] extractMatrix(){
 	   Component[] components = gridMatrix.getComponents();
-   
+	   
 	   int[][] matrix = new int[NB_TILES_MATRIX][NB_TILES_MATRIX];
 	   for(int i=0; i<NB_TILES_MATRIX; i++){
-		   Tile tile = (Tile) components[i];
-		   //matrix[i] = tile.getIndexSprite();
+		   for(int j=0; j<NB_TILES_MATRIX; j++){
+			   Tile tile = (Tile) components[ i+j ];
+			   matrix[i][j] = tile.getIndex();
+		   }
 	   }
 	   return matrix;
    }
+    private int[][] extractInteractions(){
+    	return new int[][] {{0}};
+    }
     //endregion
-    
+ 
 }

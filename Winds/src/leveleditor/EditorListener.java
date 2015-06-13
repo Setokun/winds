@@ -15,13 +15,20 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import menus.LevelEditorList;
+import addon.JarLevel;
 import display.Window;
 
 public class EditorListener {
 	
 	public static class SaveListener implements ActionListener {
+		EditorGUI gui;
+		
+		public SaveListener(EditorGUI gui){
+			this.gui = gui;
+		}
+		
 		public void actionPerformed(ActionEvent e) {
-			System.exit(0);
+			gui.saveJarLevel();
 		}
 	}
 	
@@ -63,7 +70,7 @@ public class EditorListener {
 
 	}
 	
-	public static class DescriptionListener extends KeyAdapter implements FocusListener {
+	/*OK*/public static class DescriptionListener extends KeyAdapter implements FocusListener {
 		private final int maxChar = 255;
 		JTextArea area;
 		

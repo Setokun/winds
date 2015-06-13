@@ -35,29 +35,13 @@ public class JarLevel {
 	//endregion
 	
 	//region Public methods 
-	/*to finish*/public File save(){
-		//String filename =  AddonManager.getThemeByID( lvl.getIdTheme() ).getName() + ".jar";
-		String filename = "Pirate.jar";
-		jar = new File(levelResourcePath, filename);
-		
-		if( needCreateJar() ){
-			String jsonEncoded = encodeJson(lvl.toJson(), true);
-			try {
-				FileOutputStream fileOut = new FileOutputStream(jar);
-				JarOutputStream jarOut = new JarOutputStream(fileOut);
-				jarOut.putNextEntry(new ZipEntry(fileSourceName));
-				jarOut.write( jsonEncoded.getBytes() );
-				jarOut.closeEntry();
-				jarOut.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return jar;
-		}
-		return null;
+	/*to finish*/public JarLevel save(){
+		createFile();
+		writeFile();
+		return this;
 	}
 	public boolean isValid(){
-		return jar != null && lvl != null;
+		return jar != null && jar.exists() && lvl != null;
 	}
 	public String toString(){
 		return "JarLevel {jar: \""+ (jar==null ? "null" : jar.toURI()) +"\", lvl: \""+ lvl.toString() +"\"}";
@@ -65,15 +49,32 @@ public class JarLevel {
 	//endregion
 	
 	//region Private methods 
-	/*OK*/private boolean needCreateJar(){
-		if( !jar.exists() ){ return true; }
-			
-		int response = JOptionPane.showConfirmDialog(null, "Do you want to overwrite this level in resources folder ?",
-				"Level already exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-		if( response == JOptionPane.NO_OPTION) { return false; }
+	private void createFile(){
+		if(jar != null && jar.exists())	 return;
 		
-		jar.delete();
-		return true;
+		// first save - need to create the file
+		String themeName = AddonManager.getJarThemeByID( lvl.getIdTheme() ).getName();
+		int i = 0;
+		String name;
+		
+		do {
+			i++;
+			name = themeName +"_"+ i +".jar";
+			jar = new File(levelResourcePath, name);
+		} while( jar.exists() );
+	}
+	private void writeFile(){
+		String jsonEncoded = encodeJson(lvl.toJson(), true);
+		try {
+			FileOutputStream fileOut = new FileOutputStream(jar);
+			JarOutputStream jarOut = new JarOutputStream(fileOut);
+			jarOut.putNextEntry( new ZipEntry(fileSourceName) );
+			jarOut.write( jsonEncoded.getBytes() );
+			jarOut.closeEntry();
+			jarOut.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	/*to finish*/private String encodeJson(String text, boolean encoding){
 		/*int offset = encoding ? -1 : 1;
