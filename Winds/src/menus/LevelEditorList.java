@@ -24,10 +24,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 
 import leveleditor.EditorGUI;
+import addon.AddonManager;
 import addon.JarLevel;
 import addon.JarTheme;
 import addon.Level;
-import addon.level.LevelCreationDialog;
 import display.Window;
 
 public class LevelEditorList extends JPanel {
@@ -247,9 +247,14 @@ public class LevelEditorList extends JPanel {
 	}
 	
 	protected void jBtnNewLevelActionPerformed(ActionEvent evt) {
-		LevelCreationDialog.show(true);
+		/*LevelCreationDialog.show(true);
 		String levelName = LevelCreationDialog.getNameChoosen();
-		JarTheme themeUsed = LevelCreationDialog.getThemeChoosen();
+		JarTheme themeUsed = LevelCreationDialog.getThemeChoosen();*/
+		
+		// pour les tests dansz EditorGUI
+		String levelName = "aaaaaaa";
+		JarTheme themeUsed = AddonManager.getJarThemes()[2];
+		//
 		
 		if(levelName == null || themeUsed == null){
 			JOptionPane.showMessageDialog(
@@ -259,7 +264,7 @@ public class LevelEditorList extends JPanel {
 		}
 		
 		Level lvl = new Level(levelName, themeUsed.getIdDB());
-		Window.resize(EditorGUI.DIMENSION);
+		Window.resize(Window.DIM_EDITOR);
 		Window.affect(new EditorGUI(new JarLevel(lvl), themeUsed));
 	}
 
