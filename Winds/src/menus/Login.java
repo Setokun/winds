@@ -164,14 +164,27 @@ public class Login extends JPanel{
     }                                        
 
     private void jBtnLogOnActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    	String email = "", password = "";
+    	email = jTxtLogin.getText();
+    	password = String.valueOf(jPwdPassword.getPassword());
     	
-    	if(jTxtLogin.getText().equals("") || String.valueOf(jPwdPassword.getPassword()).equals(""))
+    	if(email.equals("") || password.equals(""))
     		JOptionPane.showMessageDialog(null, "Missing email or password !");
     	else {
-    		Window.profile = Profile.connect(jTxtLogin.getText(), String.valueOf(jPwdPassword.getPassword()));
+    		Window.profile = Profile.connect(email, password);
     		
     		if(Window.profile == null){
-	    		JOptionPane.showConfirmDialog(null, "Bad creditentials, please try again !");
+    			int result = Profile.insertOrUpdateProfile(email, password);
+    			System.out.println(result);
+    			if(result == 2){
+    				JOptionPane.showMessageDialog(null, "Bad creditentials, please try again !");
+    			}
+    			else if(result == 1 || result == 3){
+    				Window.profile = Profile.connect(email, password);
+    				Window.resize(new Dimension(800, 550));
+    	    		Window.affect(new MainMenu());
+    			}
+	    		
 	    	}else{
 	    		Window.resize(new Dimension(800, 550));
 	    		Window.affect(new MainMenu());

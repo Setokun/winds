@@ -1,6 +1,7 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -31,7 +32,6 @@ public class ServerConnection {
 	        
 	        Gson gson = new Gson();
 	        profile = gson.fromJson(in, Profile.class);
-	        System.out.println(profile.toString());
 	        in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -202,7 +202,11 @@ public class ServerConnection {
 		
 	}
 
-	/*TODO*/public static void uploadScores(ArrayList<Score> scores){
+	/*TODO en cours*/public static void uploadScores(String email, String password, ArrayList<Score> scores){
+		String infosToUpload = "[{\"idLevel\":1, \"time\":37, \"nbClicks\":76, \"nbItems\":58}]";
+		
+		String url = "http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=uploadScores";
+        
 		
 	}
 }
