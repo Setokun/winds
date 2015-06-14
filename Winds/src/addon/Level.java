@@ -35,8 +35,6 @@ public class Level {
 		uploaded = false;
 		startPosition = new Point(2,2);
 		matrix = new int[EditorGUI.NB_TILES_MATRIX][EditorGUI.NB_TILES_MATRIX];
-		interactions = new int[EditorGUI.NB_TILES_MATRIX][EditorGUI.NB_TILES_MATRIX];
-		timeMax = 999;
 	}
 	public Level(String levelName, int idTheme){
 		this();

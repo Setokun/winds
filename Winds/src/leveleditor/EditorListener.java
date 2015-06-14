@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -33,7 +34,7 @@ public class EditorListener {
 	}
 	
 	/*OK*/public static class TimeMaxListener extends KeyAdapter implements FocusListener {
-		private final int maxChar = 3;
+		private static final int maxChar = 3;
 		private JTextField field;
 		
 		public void keyTyped(KeyEvent e) {
@@ -49,8 +50,9 @@ public class EditorListener {
 			if(isMaxLength || !allowedKey || isZeroFirstChar)	e.consume();
 		}
 		public void keyReleased(KeyEvent e){
-			if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
-				field.transferFocus();
+			boolean transferKey = e.getKeyCode() == KeyEvent.VK_ESCAPE
+							   || e.getKeyCode() == KeyEvent.VK_ENTER;
+			if(transferKey)  field.transferFocus();
 		}
 
 		public void focusGained(FocusEvent e) {
@@ -64,8 +66,14 @@ public class EditorListener {
 			if( field.getText().equals("") ){
 				field.setText(EditorGUI.PROMPT_TIMEMAX);
 				field.setForeground(Color.GRAY);
+				return;
 			}
 			
+			int time = Integer.valueOf( field.getText() ).intValue();
+			if(time < EditorGUI.MINIMUM_TIME){
+				JOptionPane.showMessageDialog(null, "Specified time must be greater than 30 seconds", "Invalid time", JOptionPane.INFORMATION_MESSAGE);
+				field.setText( String.valueOf(EditorGUI.MINIMUM_TIME) );
+			}			
 		}
 
 	}

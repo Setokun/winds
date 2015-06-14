@@ -1,6 +1,5 @@
 package leveleditor;
 
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -17,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -39,6 +39,7 @@ import core.SpriteSheet;
 public class EditorGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
+	public static final int MINIMUM_TIME = 30;
 	public static final int NB_TILES_MATRIX = 60;
 	private final int MARGIN_TILES = 1;
 	private final int NB_COLS_LEGEND = 3;
@@ -167,7 +168,7 @@ public class EditorGUI extends JPanel {
         
         
         txtTimeMax.setText(PROMPT_TIMEMAX);
-        txtTimeMax.setToolTipText("maximum allowed : 999 seconds");
+        txtTimeMax.setToolTipText("minimum allowed :  "+ MINIMUM_TIME +"seconds\nmaximum allowed : 999 seconds");
         txtTimeMax.setCursor(CURSOR_HAND);
         txtTimeMax.setForeground(Color.GRAY);
         txtTimeMax.setHorizontalAlignment(JTextField.CENTER);
@@ -423,20 +424,25 @@ public class EditorGUI extends JPanel {
     }
     private void initInteractions(){}
     
-    public void saveJarLevel(){
-    	String timeMax = txtTimeMax.getText();
-    	int time = timeMax.equals(PROMPT_TIMEMAX) ? 1 : Integer.valueOf( timeMax ).intValue();
-    	String description = null;
-    	if(!areaDescription.getText().equals(PROMPT_DESCRIPTION))  description = areaDescription.getText();
+    public boolean saveJarLevel(){
+    	String timeMaxValue = txtTimeMax.getText();
+    	String descriptionValue = areaDescription.getText();
     	
+    	if(timeMaxValue.equals(PROMPT_TIMEMAX) || descriptionValue.equals(PROMPT_DESCRIPTION)){
+    		JOptionPane.showMessageDialog(this, "Mandatory fields missing", "Warning", JOptionPane.WARNING_MESSAGE);
+    		return false;
+    	}
+    	
+    	int timeMax = Integer.valueOf( timeMaxValue ).intValue();
     	Level lvl = jarLevelUsed.getLevel();
     	lvl.updateDate();
-    	lvl.setDescription( description );
-    	lvl.setTimeMax( time );
+    	lvl.setDescription( descriptionValue );
+    	lvl.setTimeMax( timeMax );
     	lvl.setStartPosition( getStartPosition() );
     	lvl.setMatrix( extractMatrix() );
     	lvl.setInteractions( extractInteractions() );
-    	jarLevelUsed.save();    	
+    	jarLevelUsed.save();
+    	return true;
     }
     private Point getStartPosition(){
     	return new Point(2,2);
