@@ -39,17 +39,9 @@ public class JarLevel {
 	//endregion
 	
 	//region Public methods 
-	/*OK*/public JarLevel save(){
+	/*OK*/public boolean save(){
 		createFile();
-		
-		boolean writable = canWriteFile();
-		String message = writable ? "Level saved" : "Unavailable writing access rights on the levels folder";
-		String title   = writable ? "Saving level succeeded" : "Saving level failed";
-		int image	   = writable ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE;
-		
-		if(writable){ writeFile(); }
-		JOptionPane.showMessageDialog(Window.getFrame(), message, title, image);
-		return writable ? this : null;
+		return writeFile();
 	}
 	public boolean isValid(){
 		return jar != null && jar.exists() && lvl != null;
@@ -60,10 +52,10 @@ public class JarLevel {
 	//endregion
 	
 	//region Private methods 
-	private void createFile(){
+	/*OK*/private void createFile(){
 		if(jar != null && jar.exists())	 return;
 		
-		// first save - need to create the file
+		// first save - need to create the physical file
 		String themeName = AddonManager.getJarThemeByID( lvl.getIdTheme() ).getName();
 		int i = 0;
 		String name;
@@ -74,20 +66,32 @@ public class JarLevel {
 			jar = new File(levelResourcePath, name);
 		} while( jar.exists() );
 	}
-	private boolean canWriteFile(){
-		return false;
-	}
-	private void writeFile(){
-		String jsonEncoded = encodeJson(lvl.toJson(), true);
+	/*OK*/private boolean writeFile(){
+		String json = encodeJson(lvl.toJson(), true);
+		String writable = canWriteFile(json);
+		
+		if( !writable.equals("OK") ){
+			JOptionPane.showMessageDialog(Window.getFrame(),
+				"Unable to save this level :\n"+ writable,
+				"Saving level failed", JOptionPane.WARNING_MESSAGE);
+			return false;
+		}		
+		
 		try {
 			FileOutputStream fileOut = new FileOutputStream(jar);
 			JarOutputStream jarOut = new JarOutputStream(fileOut);
 			jarOut.putNextEntry( new ZipEntry(fileSourceName) );
-			jarOut.write( jsonEncoded.getBytes() );
+			jarOut.write( json.getBytes() );
 			jarOut.closeEntry();
 			jarOut.close();
+			JOptionPane.showMessageDialog(Window.getFrame(), "Level saved",
+				"Saving level succeeded", JOptionPane.INFORMATION_MESSAGE);
+			return true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(Window.getFrame(),
+				"Unable to save this level :\n"+ e.getMessage(),
+				"Saving level failed", JOptionPane.WARNING_MESSAGE);
+			return false;
 		}
 	}
 	/*to finish*/private String encodeJson(String text, boolean encoding){
@@ -100,6 +104,16 @@ public class JarLevel {
 			sb.append((char) code);
 		}*/
 		return text; //sb.toString(); le temps du dev
+	}
+	/*OK*/private String canWriteFile(String json){
+		File levelsFolder = new File(levelResourcePath);
+		
+		if( !levelsFolder.canWrite() )
+			return "No writing access rights onto levels folder";
+		if(json.length() >= (int) levelsFolder.getFreeSpace())
+			return "Not enough free space into HDD";
+		
+		return "OK";
 	}
 	/*OK*/private String getLevelContent(){
 		StringBuilder sb = new StringBuilder();
