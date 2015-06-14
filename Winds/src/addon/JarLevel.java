@@ -43,10 +43,16 @@ public class JarLevel {
 		createFile();
 		return writeFile();
 	}
-	public boolean isValid(){
+	/*OK*/public boolean isValid(){
 		return jar != null && jar.exists() && lvl != null;
 	}
-	public String toString(){
+	/*OK*/public boolean equals(Object obj) {
+		if( !(obj instanceof JarLevel) )  return false;
+		
+		JarLevel jl = (JarLevel) obj;
+		return jar.getAbsolutePath()== jl.jar.getAbsolutePath();
+	}
+	/*OK*/public String toString(){
 		return "JarLevel {jar: \""+ (jar==null ? "null" : jar.toURI()) +"\", lvl: \""+ lvl.toString() +"\"}";
 	}
 	//endregion

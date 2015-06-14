@@ -424,13 +424,13 @@ public class EditorGUI extends JPanel {
     }
     private void initInteractions(){}
     
-    public boolean saveJarLevel(){
+    public JarLevel saveJarLevel(){
     	String timeMaxValue = txtTimeMax.getText();
     	String descriptionValue = areaDescription.getText();
     	
     	if(timeMaxValue.equals(PROMPT_TIMEMAX) || descriptionValue.equals(PROMPT_DESCRIPTION)){
     		JOptionPane.showMessageDialog(this, "Mandatory fields missing", "Warning", JOptionPane.WARNING_MESSAGE);
-    		return false;
+    		return null;
     	}
     	
     	int timeMax = Integer.valueOf( timeMaxValue ).intValue();
@@ -442,8 +442,8 @@ public class EditorGUI extends JPanel {
     	lvl.setMatrix( extractMatrix() );
     	lvl.setInteractions( extractInteractions() );
     	
-    	jarLevelUsed.save();
-    	return true;
+    	return jarLevelUsed.save() ? jarLevelUsed : null;
+    	
     }
     private Point getStartPosition(){
     	return new Point(2,2);

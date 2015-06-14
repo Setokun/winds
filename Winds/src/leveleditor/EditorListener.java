@@ -16,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import menus.LevelEditorList;
+import addon.AddonManager;
 import addon.JarLevel;
 import display.Window;
 
@@ -29,7 +30,8 @@ public class EditorListener {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			gui.saveJarLevel();
+			JarLevel jar = gui.saveJarLevel();
+			if(jar != null)  AddonManager.addJarLevel(jar.getFile());
 		}
 	}
 	
