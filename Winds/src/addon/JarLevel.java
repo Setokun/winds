@@ -7,8 +7,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
+
 import javax.swing.JOptionPane;
+
 import com.google.gson.Gson;
+
+import display.Window;
 
 
 public class JarLevel {
@@ -35,10 +39,17 @@ public class JarLevel {
 	//endregion
 	
 	//region Public methods 
-	/*to finish*/public JarLevel save(){
+	/*OK*/public JarLevel save(){
 		createFile();
-		writeFile();
-		return this;
+		
+		boolean writable = canWriteFile();
+		String message = writable ? "Level saved" : "Unavailable writing access rights on the levels folder";
+		String title   = writable ? "Saving level succeeded" : "Saving level failed";
+		int image	   = writable ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE;
+		
+		if(writable){ writeFile(); }
+		JOptionPane.showMessageDialog(Window.getFrame(), message, title, image);
+		return writable ? this : null;
 	}
 	public boolean isValid(){
 		return jar != null && jar.exists() && lvl != null;
@@ -62,6 +73,9 @@ public class JarLevel {
 			name = themeName +"_"+ i +".jar";
 			jar = new File(levelResourcePath, name);
 		} while( jar.exists() );
+	}
+	private boolean canWriteFile(){
+		return false;
 	}
 	private void writeFile(){
 		String jsonEncoded = encodeJson(lvl.toJson(), true);

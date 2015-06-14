@@ -441,6 +441,7 @@ public class EditorGUI extends JPanel {
     	lvl.setStartPosition( getStartPosition() );
     	lvl.setMatrix( extractMatrix() );
     	lvl.setInteractions( extractInteractions() );
+    	
     	jarLevelUsed.save();
     	return true;
     }

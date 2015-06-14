@@ -21,7 +21,7 @@ import display.Window;
 
 public class EditorListener {
 	
-	public static class SaveListener implements ActionListener {
+	/*OK*/public static class SaveListener implements ActionListener {
 		EditorGUI gui;
 		
 		public SaveListener(EditorGUI gui){
