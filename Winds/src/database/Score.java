@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import server.ServerConnection;
 import display.Window;
 
 public class Score {
@@ -65,7 +66,7 @@ public class Score {
 		
 	}
 	
-	public static ArrayList<Score> getScores(){
+	public static ArrayList<Score> getLocalScores(){
 		try {
 			
 			ResultSet r = DBClass.requestQuery("SELECT levels.name AS levelName, nbItems, nbClicks, time, rank FROM scores JOIN levels ON levels.id = scores.idLevel WHERE idPlayer="+Window.profile.getId()+"ORDER BY levels.id");
@@ -91,6 +92,46 @@ public class Score {
 		}
 		return null;
 	}
+	
+	public static Object[][] getFormattedScores(){
+		Object[][] results = null;
+		
+		ArrayList<Score> r = null;
+		try {
+			r = ServerConnection.getScores(Window.profile.getEmail(), Window.profile.getPassword());
+		} catch (Exception e) {
+			r = Score.getLocalScores();
+		}
+		int nbScores = r.size();
+		
+		results = new String[nbScores][5];
+
+		for(int i=0; i < r.size();i++){
+			results[i][0] =  r.get(i).getLevelName();
+			results[i][1] =  String.valueOf(r.get(i).getNbItems());
+			results[i][2] =  String.valueOf(r.get(i).getClicks());
+			results[i][3] =  Score.transformIntTimeInString(r.get(i).getTime());
+			results[i][4] =  String.valueOf(10000 - r.get(i).getTime() * 100 + r.get(i).getNbItems() * 75 - r.get(i).getClicks() * 10);
+		}
+		return results;
+	}
+	
+	public static Object[][] getFormattedTrophies(){
+		
+		Object[][] results = null;
+		
+		ArrayList<Trophy> t = Trophy.getTrophies();
+		int count = t.size();
+		
+		results = new String[count][2];
+
+		for (int i = 0; i < count; i++) {
+			results[i][0] =  t.get(i).getDescription();
+			results[i][1] =  t.get(i).getAchieved();
+		}
+		return results;
+	}
+	
 	
 	public static  String transformIntTimeInString(int time){
 		String result = "";
