@@ -195,8 +195,8 @@ public class ServerConnection {
 	/*TODO en cours*/public static void uploadScores(String email, String password, ArrayList<Score> scores){
 		String infosToUpload = "[{\"idLevel\":1, \"time\":37, \"nbClicks\":76, \"nbItems\":58}]";
 		
-		String url = "http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=uploadScores";
-        
+		String url = "http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=uploadScores&scores="+infosToUpload;
+        System.out.println(url);
 		
 	}
 }
