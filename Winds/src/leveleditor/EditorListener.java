@@ -28,7 +28,6 @@ public class EditorListener {
 		public SaveListener(EditorGUI gui){
 			this.gui = gui;
 		}
-		
 		public void actionPerformed(ActionEvent e) {
 			JarLevel jar = gui.saveJarLevel();
 			if(jar != null)  AddonManager.addJarLevel(jar.getFile());
@@ -110,17 +109,23 @@ public class EditorListener {
 	
 	/*OK*/public static class BackListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Window.resize(Window.DIM_STANDARD);
-			Window.affect(new LevelEditorList());
+			int response = JOptionPane.showConfirmDialog(Window.getFrame(),
+				"Do you really want to quit the level editor ?\nThe"
+				+ " unsaved modifications are going to be lost.",
+				"Need confirmation", JOptionPane.OK_CANCEL_OPTION);
+			if(response == JOptionPane.OK_OPTION){
+				Window.resize(Window.DIM_STANDARD);
+				Window.affect(new LevelEditorList());
+			}
 		}
 	}
-
+	
 	/*OK*/public static class EmptyListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {
 			EditorGUI.tileCurrent.updateFrom(Tile.getEmptyLegend());
 		}
 	}
-
+	
 	/*OK*/public static class TileLegendListener extends MouseAdapter {
 		public void mouseReleased(MouseEvent e) {
 			Tile source = (Tile) e.getSource();
