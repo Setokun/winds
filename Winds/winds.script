@@ -21,7 +21,7 @@ INSERT INTO LEVELS VALUES(2,'Hive 1','level ruche 1','2015-05-13 00:00:00.000000
 INSERT INTO THEMES VALUES(1,'pirate','pirate','2015-04-30 00:05:00.000000000',5)
 INSERT INTO THEMES VALUES(2,'honey','honey','2015-04-30 00:05:00.000000000',5)
 INSERT INTO THEMES VALUES(3,'brambles','brambles','2015-04-30 00:05:00.000000000',5)
-INSERT INTO USERS VALUES(1,'player1@winds.net','player1','player1',NULL,'player',TRUE,5,5,1)
+INSERT INTO USERS VALUES(1,'player1@winds.net','player','player1',NULL,'player',TRUE,5,5,1)
 INSERT INTO TROPHIES VALUES(1,'Achieve the first level')
 INSERT INTO TROPHIES VALUES(2,'Achieve 10 levels')
 INSERT INTO TROPHIES VALUES(3,'Achieve a level without being touched')

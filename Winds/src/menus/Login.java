@@ -175,7 +175,6 @@ public class Login extends JPanel{
     		
     		if(Window.profile == null){
     			int result = Profile.insertOrUpdateProfile(email, password);
-    			System.out.println(result);
     			if(result == 2){
     				JOptionPane.showMessageDialog(null, "Bad creditentials, please try again !");
     			}

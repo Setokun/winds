@@ -90,7 +90,7 @@ public class Profile {
 				if(isExistingEmail(email)){
 					Profile profile = connectFromServer(email, password);
 					if(profile.getEmail() != null){
-						DBClass.executeQuery("UPDATE users set password='"+password+"' WHERE email='"+email+"'");
+						DBClass.executeQuery("UPDATE users set password='"+password+"', current=true WHERE email='"+email+"'");
 						return 1;
 					}else{
 						return 2;
