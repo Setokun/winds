@@ -15,15 +15,13 @@ import com.google.gson.GsonBuilder;
 
 public class Level {
 	private String creator, date, name, description;
-	private int idTheme;
-	private int idDB;
+	private int idDB, idTheme;
 	private Mode mode;
 	private Type type;
 	private boolean uploaded;
 	
-	private Point startPosition;
-	private int[][] matrix;
-	private int[][] interactions;
+	private Point startPosition, endPosition;
+	private int[][] matrix, interactions;
 	private int timeMax;
 	
 	public Level(){
@@ -33,8 +31,9 @@ public class Level {
 		mode = Mode.Normal;
 		type = Type.my;
 		uploaded = false;
-		startPosition = new Point(2,2);
+		startPosition = new Point(1,1);
 		matrix = new int[EditorGUI.NB_TILES_MATRIX][EditorGUI.NB_TILES_MATRIX];
+		interactions = new int[EditorGUI.NB_TILES_MATRIX][EditorGUI.NB_TILES_MATRIX];
 	}
 	public Level(String levelName, int idTheme){
 		this();
@@ -86,6 +85,9 @@ public class Level {
 	public Point getStartPosition(){
 		return startPosition;
 	}
+	public Point getEndPosition(){
+		return endPosition;
+	}
 	public int[][] getMatrix() {
 		return matrix;
 	}
@@ -126,6 +128,9 @@ public class Level {
 	}
 	public void setStartPosition(Point startPosition){
 		this.startPosition = startPosition;
+	}
+	public void setEndPosition(Point endPosition){
+		this.endPosition = endPosition;
 	}
 	public void setMatrix(int[][] matrix) {
 		this.matrix = matrix;
