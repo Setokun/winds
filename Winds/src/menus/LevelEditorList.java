@@ -1,7 +1,6 @@
 package menus;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Point;
@@ -24,10 +23,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 
 import leveleditor.EditorGUI;
-import addon.AddonManager;
 import addon.JarLevel;
 import addon.JarTheme;
 import addon.Level;
+import addon.level.LevelCreationDialog;
 import display.Window;
 
 public class LevelEditorList extends JPanel {
@@ -38,7 +37,7 @@ public class LevelEditorList extends JPanel {
 	
 	@SuppressWarnings("rawtypes")
 	public LevelEditorList() {
-		this.setPreferredSize(new Dimension(800,550));
+		this.setPreferredSize(Window.DIM_STANDARD);
 		
 		Font windsPolice36 = null, windsPolice18 = null;
     	try {
@@ -247,14 +246,9 @@ public class LevelEditorList extends JPanel {
 	}
 	
 	protected void jBtnNewLevelActionPerformed(ActionEvent evt) {
-		/*LevelCreationDialog.show(true);
+		LevelCreationDialog.show(true);
 		String levelName = LevelCreationDialog.getNameChoosen();
-		JarTheme themeUsed = LevelCreationDialog.getThemeChoosen();*/
-		
-		// pour les tests dansz EditorGUI
-		String levelName = "aaaaaaa";
-		JarTheme themeUsed = AddonManager.getJarThemes()[2];
-		//
+		JarTheme themeUsed = LevelCreationDialog.getThemeChoosen();
 		
 		if(levelName == null || themeUsed == null){
 			JOptionPane.showMessageDialog(
