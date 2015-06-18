@@ -1,7 +1,6 @@
 package menus;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Point;
@@ -38,7 +37,7 @@ public class LevelEditorList extends JPanel {
 	
 	@SuppressWarnings("rawtypes")
 	public LevelEditorList() {
-		this.setPreferredSize(new Dimension(800,550));
+		this.setPreferredSize(Window.DIM_STANDARD);
 		
 		Font windsPolice36 = null, windsPolice18 = null;
     	try {
@@ -259,18 +258,17 @@ public class LevelEditorList extends JPanel {
 		}
 		
 		Level lvl = new Level(levelName, themeUsed.getIdDB());
-		Window.resize(EditorGUI.DIMENSION);
+		Window.resize(Window.DIM_EDITOR);
 		Window.affect(new EditorGUI(new JarLevel(lvl), themeUsed));
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
-		Window.resize(new Dimension(800, 550));
+		Window.resize(Window.DIM_STANDARD);
 		Window.affect(new MainMenu());
-		
 	}
 
 	protected void ActionOnEdit(ActionListener actionListener) {
-		Window.resize(new Dimension(800, 550));
+		Window.resize(Window.DIM_STANDARD);
 		Window.affect(new MainMenu());
 		
 	}

@@ -36,12 +36,16 @@ public class Tile extends JLabel implements Cloneable {
 	}
 	
 	
-	private int index;
+	private int position, index;
 	private ImageIcon icon;
 	
 	public Tile(int tileSize, int index, Image img){
+		this(tileSize, -1, index, img);
+	}
+	public Tile(int tileSize, int position, int index, Image img){
 		super();
 		
+		this.position = position;
 		this.index = index;
 		this.icon = img == null ? null : new ImageIcon(img);
 		
@@ -66,7 +70,12 @@ public class Tile extends JLabel implements Cloneable {
 		}
 		return null;
 	}
-	
+	public String toString(){
+		return "Tile : {position: "+ position
+					+", index: "+ index
+					+", icon: "+ icon.toString()
+					+", parent: " + super.toString() +"}";
+	}
 	
 	public void updateFrom(int index, Image img){
 		this.index = index;
@@ -84,22 +93,31 @@ public class Tile extends JLabel implements Cloneable {
         }
     }
 
+	//region Getters
+	public int getPosition(){
+		return position;
+	}
 	public int getIndex(){
 		return index;
 	}
 	public ImageIcon getIcon() {
 		return icon;
 	}
+	//endregion
 	
-	public String toString(){
-		return "Tile : {index: "+ index +", icon: "+ icon.toString() +", parent: " + super.toString() +"}";
-	}
-
+	//region Empty tiles
 	static Tile getEmptyMatrix(){
-		return emptyMatrix.clone();
+		Tile t = emptyMatrix.clone();
+		t.position = -1;
+		return t;
+	}
+	static Tile getEmptyMatrix(int position){
+		Tile t = emptyMatrix.clone();
+		t.position = position;
+		return t;
 	}
 	static Tile getEmptyLegend(){
 		return emptyLegend.clone();
 	}
-
+	//endregion
 }

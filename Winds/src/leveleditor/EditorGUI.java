@@ -1,6 +1,5 @@
 package leveleditor;
 
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -9,12 +8,16 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.KeyboardFocusManager;
+import java.awt.Point;
 import java.io.IOException;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -30,13 +33,14 @@ import leveleditor.EditorListener.SaveListener;
 import leveleditor.EditorListener.TimeMaxListener;
 import addon.JarLevel;
 import addon.JarTheme;
+import addon.Level;
 import core.SpriteSheet;
 
 
 public class EditorGUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
-	public static final Dimension DIMENSION = new Dimension(1024,600);
+	public static final int MINIMUM_TIME = 30;
 	public static final int NB_TILES_MATRIX = 60;
 	private final int MARGIN_TILES = 1;
 	private final int NB_COLS_LEGEND = 3;
@@ -46,8 +50,10 @@ public class EditorGUI extends JPanel {
 	
 	private JButton btnSave, btnBack, btnEmpty;
     private JLabel lblCurrent, lblDescription, lblLevel, lblTheme, lblTimeMax;
-	private JPanel header, labels, fields, description, legend, current;
-    private JPanel gridMatrix, gridSprites, gridInteractions;
+	private JPanel header, labels, fields, description, legend;
+	static JPanel current;
+	private static JPanel gridMatrix;
+    private JPanel gridSprites, gridInteractions;
     private JScrollPane scrollMatrix, scrollSprites, scrollInteractions;
     private JSeparator sep1, sep2;
     private JTabbedPane tabPane;
@@ -57,14 +63,16 @@ public class EditorGUI extends JPanel {
 
 	private JarLevel jarLevelUsed;
 	private JarTheme jarThemeUsed;
+	static Map<Point, Integer[]> compatibility;
+	
 	static Image[] images32, images64;
 	Font windsPolice24 = null;
 
 		
     public EditorGUI(JarLevel jl, JarTheme jt) {
         jarLevelUsed = jl;
-        jarThemeUsed = jt;        
-        
+        jarThemeUsed = jt;
+        compatibility = jt.getCompatibility();        
         
     	try {
     		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
@@ -83,6 +91,12 @@ public class EditorGUI extends JPanel {
         
         txtLevel.setText(jl.getLevel().getName());
         txtTheme.setText(jt.getName());
+        
+        int time = jl.getLevel().getTimeMax();
+        if(time != 0){
+        	txtTimeMax.setText( String.valueOf(time) );
+        	txtTimeMax.setForeground(Color.BLACK);
+        }
     }
 
     //region GUI Initialisation 
@@ -135,7 +149,7 @@ public class EditorGUI extends JPanel {
     	btnSave.setText("Save");
     	btnSave.setCursor(CURSOR_HAND);
     	btnSave.setFont(windsPolice24);
-        btnSave.addActionListener(new SaveListener());
+        btnSave.addActionListener(new SaveListener(this));
 
         sep1.setOrientation(SwingConstants.VERTICAL);
 
@@ -157,24 +171,32 @@ public class EditorGUI extends JPanel {
         txtTheme.setFocusable(false);
         txtTheme.setHorizontalAlignment(JTextField.CENTER);
         
+        
         txtTimeMax.setText(PROMPT_TIMEMAX);
+        txtTimeMax.setToolTipText("minimum allowed :  "+ MINIMUM_TIME +"seconds\nmaximum allowed : 999 seconds");
         txtTimeMax.setCursor(CURSOR_HAND);
         txtTimeMax.setForeground(Color.GRAY);
         txtTimeMax.setHorizontalAlignment(JTextField.CENTER);
-        txtTimeMax.addKeyListener(new TimeMaxListener());
-        txtTimeMax.addMouseListener(new TimeMaxListener());
-                
+        TimeMaxListener tml = new TimeMaxListener();
+        txtTimeMax.addKeyListener(tml);
+        txtTimeMax.addFocusListener(tml);
+        
         lblDescription.setText("Level description :");
-
+        
         areaDescription.setText(PROMPT_DESCRIPTION);
+        areaDescription.setToolTipText("maximum allowed : 255 characters");
         areaDescription.setForeground(Color.GRAY);
         areaDescription.setLineWrap(true);
         areaDescription.setWrapStyleWord(true);
         areaDescription.setCursor(CURSOR_HAND);
-        areaDescription.addKeyListener(new DescriptionListener());
+        DescriptionListener dl = new DescriptionListener();
+        areaDescription.addKeyListener(dl);
+        areaDescription.addFocusListener(dl);
+        areaDescription.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null);
+        areaDescription.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null);
         
         sep2.setOrientation(SwingConstants.VERTICAL);
-
+        
         btnBack.setText("Back");
         btnBack.setCursor(CURSOR_HAND);
         btnBack.setFont(windsPolice24);
@@ -189,6 +211,7 @@ public class EditorGUI extends JPanel {
     	GridLayout layLegend = new GridLayout(0, NB_COLS_LEGEND, MARGIN_TILES, MARGIN_TILES);
     	
     	current.setBorder(BorderFactory.createLineBorder(new Color(204, 204, 204)));
+    	current.setOpaque(true);
 
         lblCurrent.setText("Current selected tile");
         lblCurrent.setAlignmentY(0.0F);
@@ -394,9 +417,10 @@ public class EditorGUI extends JPanel {
     private void initMatrix(){
     	for(int i=0; i<NB_TILES_MATRIX; i++){
     		for(int j=0; j<NB_TILES_MATRIX; j++){
+    			int position = i*60 + j;
     			int index = jarLevelUsed.getLevel().getMatrix()[i][j];
-    			gridMatrix.add( index == 0 ? Tile.getEmptyMatrix() :
-    				new Tile(Tile.SIZE_MATRIX, index, images32[index]));
+    			gridMatrix.add( index == 0 ? Tile.getEmptyMatrix(position) :
+    				new Tile(Tile.SIZE_MATRIX, position, index, images32[index]));
     		}
     	}
     }
@@ -407,16 +431,60 @@ public class EditorGUI extends JPanel {
     }
     private void initInteractions(){}
     
+    public JarLevel saveJarLevel(){
+    	String timeMaxValue = txtTimeMax.getText();
+    	String descriptionValue = areaDescription.getText();
+    	
+    	if(timeMaxValue.equals(PROMPT_TIMEMAX) || descriptionValue.equals(PROMPT_DESCRIPTION)){
+    		JOptionPane.showMessageDialog(this, "Mandatory fields missing", "Warning", JOptionPane.WARNING_MESSAGE);
+    		return null;
+    	}
+    	
+    	int timeMax = Integer.valueOf( timeMaxValue ).intValue();
+    	Level lvl = jarLevelUsed.getLevel();
+    	lvl.updateDate();
+    	lvl.setDescription( descriptionValue );
+    	lvl.setTimeMax( timeMax );
+    	lvl.setStartPosition( getStartPosition() );
+    	lvl.setMatrix( extractMatrix() );
+    	lvl.setInteractions( extractInteractions() );
+    	
+    	return jarLevelUsed.save() ? jarLevelUsed : null;
+    	
+    }
+    /*OK*/static Tile[] getNeighboors(int position){
+    	int max = NB_TILES_MATRIX * NB_TILES_MATRIX;
+    	Tile[] ts = new Tile[4];
+    	
+    	ts[0] = position-NB_TILES_MATRIX < 0	  ? null :
+    		(Tile) gridMatrix.getComponent(position-NB_TILES_MATRIX); 	// top
+    	ts[1] = (position+1)%NB_TILES_MATRIX == 0 ? null :
+    		(Tile) gridMatrix.getComponent(position+1);					// right
+    	ts[2] = (position+NB_TILES_MATRIX >= max) ? null :
+    		(Tile) gridMatrix.getComponent(position+NB_TILES_MATRIX);	// bottom
+    	ts[3] = (position-1)%NB_TILES_MATRIX == NB_TILES_MATRIX-1 ||
+    			(position-1)%NB_TILES_MATRIX == -1 ? null :
+    		(Tile) gridMatrix.getComponent(position-1);					// left
+    	return ts;
+    }
+    private Point getStartPosition(){
+    	return new Point(2,2);
+    }
     public int[][] extractMatrix(){
 	   Component[] components = gridMatrix.getComponents();
-   
+	   
 	   int[][] matrix = new int[NB_TILES_MATRIX][NB_TILES_MATRIX];
 	   for(int i=0; i<NB_TILES_MATRIX; i++){
-		   Tile tile = (Tile) components[i];
-		   //matrix[i] = tile.getIndexSprite();
+		   for(int j=0; j<NB_TILES_MATRIX; j++){
+			   Tile tile = (Tile) components[ i*60 +j ];
+			   matrix[i][j] = tile.getIndex();
+		   }
 	   }
 	   return matrix;
    }
+    private int[][] extractInteractions(){
+    	return new int[][] {{0}};
+    }
     //endregion
-    
+
 }

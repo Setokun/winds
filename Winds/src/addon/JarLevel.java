@@ -7,8 +7,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
+
 import javax.swing.JOptionPane;
+
 import com.google.gson.Gson;
+
+import display.Window;
 
 
 public class JarLevel {
@@ -35,45 +39,66 @@ public class JarLevel {
 	//endregion
 	
 	//region Public methods 
-	/*to finish*/public File save(){
-		//String filename =  AddonManager.getThemeByID( lvl.getIdTheme() ).getName() + ".jar";
-		String filename = "Pirate.jar";
-		jar = new File(levelResourcePath, filename);
+	/*OK*/public boolean save(){
+		createFile();
+		return writeFile();
+	}
+	/*OK*/public boolean isValid(){
+		return jar != null && jar.exists() && lvl != null;
+	}
+	/*OK*/public boolean equals(Object obj) {
+		if( !(obj instanceof JarLevel) )  return false;
 		
-		if( needCreateJar() ){
-			String jsonEncoded = encodeJson(lvl.toJson(), true);
-			try {
-				FileOutputStream fileOut = new FileOutputStream(jar);
-				JarOutputStream jarOut = new JarOutputStream(fileOut);
-				jarOut.putNextEntry(new ZipEntry(fileSourceName));
-				jarOut.write( jsonEncoded.getBytes() );
-				jarOut.closeEntry();
-				jarOut.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return jar;
-		}
-		return null;
+		JarLevel jl = (JarLevel) obj;
+		return jar.getAbsolutePath()== jl.jar.getAbsolutePath();
 	}
-	public boolean isValid(){
-		return jar != null && lvl != null;
-	}
-	public String toString(){
+	/*OK*/public String toString(){
 		return "JarLevel {jar: \""+ (jar==null ? "null" : jar.toURI()) +"\", lvl: \""+ lvl.toString() +"\"}";
 	}
 	//endregion
 	
 	//region Private methods 
-	/*OK*/private boolean needCreateJar(){
-		if( !jar.exists() ){ return true; }
-			
-		int response = JOptionPane.showConfirmDialog(null, "Do you want to overwrite this level in resources folder ?",
-				"Level already exists", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-		if( response == JOptionPane.NO_OPTION) { return false; }
+	/*OK*/private void createFile(){
+		if(jar != null && jar.exists())	 return;
 		
-		jar.delete();
-		return true;
+		// first save - need to create the physical file
+		String themeName = AddonManager.getJarThemeByID( lvl.getIdTheme() ).getName();
+		int i = 0;
+		String name;
+		
+		do {
+			i++;
+			name = themeName +"_"+ i +".jar";
+			jar = new File(levelResourcePath, name);
+		} while( jar.exists() );
+	}
+	/*OK*/private boolean writeFile(){
+		String json = encodeJson(lvl.toJson(), true);
+		String writable = canWriteFile(json);
+		
+		if( !writable.equals("OK") ){
+			JOptionPane.showMessageDialog(Window.getFrame(),
+				"Unable to save this level :\n"+ writable,
+				"Saving level failed", JOptionPane.WARNING_MESSAGE);
+			return false;
+		}		
+		
+		try {
+			FileOutputStream fileOut = new FileOutputStream(jar);
+			JarOutputStream jarOut = new JarOutputStream(fileOut);
+			jarOut.putNextEntry( new ZipEntry(fileSourceName) );
+			jarOut.write( json.getBytes() );
+			jarOut.closeEntry();
+			jarOut.close();
+			JOptionPane.showMessageDialog(Window.getFrame(), "Level saved",
+				"Saving level succeeded", JOptionPane.INFORMATION_MESSAGE);
+			return true;
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(Window.getFrame(),
+				"Unable to save this level :\n"+ e.getMessage(),
+				"Saving level failed", JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
 	}
 	/*to finish*/private String encodeJson(String text, boolean encoding){
 		/*int offset = encoding ? -1 : 1;
@@ -85,6 +110,16 @@ public class JarLevel {
 			sb.append((char) code);
 		}*/
 		return text; //sb.toString(); le temps du dev
+	}
+	/*OK*/private String canWriteFile(String json){
+		File levelsFolder = new File(levelResourcePath);
+		
+		if( !levelsFolder.canWrite() )
+			return "No writing access rights onto levels folder";
+		if(json.length() >= (int) levelsFolder.getFreeSpace())
+			return "Not enough free space into HDD";
+		
+		return "OK";
 	}
 	/*OK*/private String getLevelContent(){
 		StringBuilder sb = new StringBuilder();
