@@ -2,6 +2,7 @@ package leveleditor;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -10,10 +11,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
 import menus.LevelEditorList;
 import addon.AddonManager;
@@ -136,11 +140,54 @@ public class EditorListener {
 	/*OK*/public static class TileMatrixListener extends MouseAdapter {
 		public void mouseReleased(MouseEvent e) {
 			Tile current = EditorGUI.tileCurrent;
-			int index = current.getIndex();
-			Image img = index != 0 ? EditorGUI.images32[index] : Tile.getEmptyMatrix().getIcon().getImage();
-			
 			Tile source = (Tile) e.getSource();
-			source.updateFrom(index, img);
+			Tile[] neighboors = EditorGUI.getNeighboors(source.getPosition());
+			
+			if( allowedTile(current, neighboors) ){
+				int index = current.getIndex();
+				Image img = index != 0 ? EditorGUI.images32[index] : Tile.getEmptyMatrix().getIcon().getImage();
+				source.updateFrom(index, img);
+				return;
+			}
+			
+			notifyForbiddenTile();
+		}
+		private void notifyForbiddenTile(){
+			JPanel pnl = EditorGUI.current;
+			Color oldColor = pnl.getBackground();
+			
+			pnl.setBackground(new Color(240,125,125));
+			new Timer(200, new ActionListener() {	// milliseconds
+				public void actionPerformed(ActionEvent e) {
+					pnl.setBackground(oldColor);
+					((Timer) e.getSource()).stop();
+				}
+			}).start();
+		}
+		private boolean allowedTile(Tile current, Tile[] neighboors){
+			int currentIndex = current.getIndex();
+			if(currentIndex == 0)  return true;
+			
+			Map<Point, Integer[]> compatibility = EditorGUI.compatibility;
+			for(int i=0; i<neighboors.length; i++){
+				Tile side = neighboors[i];
+				
+				// out of matrix bounds : all tiles allowed
+				if(side == null)  continue;
+				// side is an empty tile
+				if(side.getIndex() == 0)  continue;
+				
+				Integer[] compatibles = compatibility.get(new Point(currentIndex,i));
+				boolean found = false;
+				for(int j=0; j<compatibles.length; j++){
+					if(compatibles[j].intValue() == side.getIndex()){
+						found = true;
+						break;
+					}
+				}
+				if( !found )  return false;
+			}
+			return true;
 		}
 	}
 

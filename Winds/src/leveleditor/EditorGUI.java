@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.io.IOException;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -49,8 +50,10 @@ public class EditorGUI extends JPanel {
 	
 	private JButton btnSave, btnBack, btnEmpty;
     private JLabel lblCurrent, lblDescription, lblLevel, lblTheme, lblTimeMax;
-	private JPanel header, labels, fields, description, legend, current;
-    private JPanel gridMatrix, gridSprites, gridInteractions;
+	private JPanel header, labels, fields, description, legend;
+	static JPanel current;
+	private static JPanel gridMatrix;
+    private JPanel gridSprites, gridInteractions;
     private JScrollPane scrollMatrix, scrollSprites, scrollInteractions;
     private JSeparator sep1, sep2;
     private JTabbedPane tabPane;
@@ -60,14 +63,16 @@ public class EditorGUI extends JPanel {
 
 	private JarLevel jarLevelUsed;
 	private JarTheme jarThemeUsed;
+	static Map<Point, Integer[]> compatibility;
+	
 	static Image[] images32, images64;
 	Font windsPolice24 = null;
 
 		
     public EditorGUI(JarLevel jl, JarTheme jt) {
         jarLevelUsed = jl;
-        jarThemeUsed = jt;        
-        
+        jarThemeUsed = jt;
+        compatibility = jt.getCompatibility();        
         
     	try {
     		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
@@ -206,6 +211,7 @@ public class EditorGUI extends JPanel {
     	GridLayout layLegend = new GridLayout(0, NB_COLS_LEGEND, MARGIN_TILES, MARGIN_TILES);
     	
     	current.setBorder(BorderFactory.createLineBorder(new Color(204, 204, 204)));
+    	current.setOpaque(true);
 
         lblCurrent.setText("Current selected tile");
         lblCurrent.setAlignmentY(0.0F);
@@ -411,9 +417,10 @@ public class EditorGUI extends JPanel {
     private void initMatrix(){
     	for(int i=0; i<NB_TILES_MATRIX; i++){
     		for(int j=0; j<NB_TILES_MATRIX; j++){
+    			int position = i*60 + j;
     			int index = jarLevelUsed.getLevel().getMatrix()[i][j];
-    			gridMatrix.add( index == 0 ? Tile.getEmptyMatrix() :
-    				new Tile(Tile.SIZE_MATRIX, index, images32[index]));
+    			gridMatrix.add( index == 0 ? Tile.getEmptyMatrix(position) :
+    				new Tile(Tile.SIZE_MATRIX, position, index, images32[index]));
     		}
     	}
     }
@@ -445,16 +452,31 @@ public class EditorGUI extends JPanel {
     	return jarLevelUsed.save() ? jarLevelUsed : null;
     	
     }
+    /*OK*/static Tile[] getNeighboors(int position){
+    	int max = NB_TILES_MATRIX * NB_TILES_MATRIX;
+    	Tile[] ts = new Tile[4];
+    	
+    	ts[0] = position-NB_TILES_MATRIX < 0	  ? null :
+    		(Tile) gridMatrix.getComponent(position-NB_TILES_MATRIX); 	// top
+    	ts[1] = (position+1)%NB_TILES_MATRIX == 0 ? null :
+    		(Tile) gridMatrix.getComponent(position+1);					// right
+    	ts[2] = (position+NB_TILES_MATRIX >= max) ? null :
+    		(Tile) gridMatrix.getComponent(position+NB_TILES_MATRIX);	// bottom
+    	ts[3] = (position-1)%NB_TILES_MATRIX == NB_TILES_MATRIX-1 ||
+    			(position-1)%NB_TILES_MATRIX == -1 ? null :
+    		(Tile) gridMatrix.getComponent(position-1);					// left
+    	return ts;
+    }
     private Point getStartPosition(){
     	return new Point(2,2);
     }
-    private int[][] extractMatrix(){
+    public int[][] extractMatrix(){
 	   Component[] components = gridMatrix.getComponents();
 	   
 	   int[][] matrix = new int[NB_TILES_MATRIX][NB_TILES_MATRIX];
 	   for(int i=0; i<NB_TILES_MATRIX; i++){
 		   for(int j=0; j<NB_TILES_MATRIX; j++){
-			   Tile tile = (Tile) components[ i+j ];
+			   Tile tile = (Tile) components[ i*60 +j ];
 			   matrix[i][j] = tile.getIndex();
 		   }
 	   }
@@ -464,5 +486,5 @@ public class EditorGUI extends JPanel {
     	return new int[][] {{0}};
     }
     //endregion
- 
+
 }
