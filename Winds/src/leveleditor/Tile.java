@@ -11,14 +11,6 @@ import leveleditor.EditorListener.TileLegendListener;
 import leveleditor.EditorListener.TileMatrixListener;
 
 
-/*
-image de fond redimensionnée aléatoirement
-
-compatibilité de sprites
-int[][][] -> index de la tile / index du coté (top, left,...) concerné / tableau des index des tiles compatibles 
-*/
-
-
 public class Tile extends JLabel implements Cloneable {
 	private static final long serialVersionUID = 1L;
 	
