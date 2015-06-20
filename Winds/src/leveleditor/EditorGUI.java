@@ -39,19 +39,19 @@ import core.SpriteSheet;
 
 public class EditorGUI extends JPanel {
 	private static final long serialVersionUID = -4428661135236351743L;
-	public static final int MINIMUM_TIME = 60;
-	public static final int NB_TILES_MATRIX = 60;
-	public static final String PROMPT_TIMEMAX = "Number of seconds";
-	public static final String PROMPT_DESCRIPTION = "Input your level description here";
+	public  static final int MINIMUM_TIME = 60;
+	public  static final int NB_TILES_MATRIX = 60;
+	public  static final String PROMPT_TIMEMAX = "Number of seconds";
+	public  static final String PROMPT_DESCRIPTION = "Input your level description here";
 	
 	private final int MARGIN_TILES = 1;
 	private final int NB_COLS_LEGEND = 3;
 	private final Cursor CURSOR_HAND = new Cursor(Cursor.HAND_CURSOR);
 	
-	public static JPanel current;
-    public static Tile tileCurrent;
-    public static Image[] images64;
-    public static Map<Point, Integer[]> compatibility;
+	public  static JPanel current;
+    public  static Tile tileCurrent;
+    public  static Image[] backImages, frontImages;
+    public  static Map<Point, Integer[]> compatibility;
     private static JPanel gridMatrix;
 		
 	private JButton btnSave, btnBack, btnEmpty;
@@ -72,7 +72,7 @@ public class EditorGUI extends JPanel {
         jarLevelUsed = jl;
         jarThemeUsed = jt;
         compatibility = jt.getCompatibility();
-        images64 = new SpriteSheet( jt.getSprites64(), Tile.SIZE).getSprites();
+        backImages = new SpriteSheet( jt.getSprites64(), Tile.SIZE).getSprites();
         
         initComponents();
         initComponentsConfig();
@@ -121,7 +121,7 @@ public class EditorGUI extends JPanel {
     	legend = new JPanel();
         current = new JPanel();
         lblCurrent = new JLabel();
-        tileCurrent = Tile.getEmptyLegend();
+        tileCurrent = Tile.createEmptyLegend();
         tabPane = new JTabbedPane();
         gridSprites = new JPanel();
         scrollSprites = new JScrollPane();
@@ -401,17 +401,29 @@ public class EditorGUI extends JPanel {
     		for(int j=0; j<NB_TILES_MATRIX; j++){
     			int position = i*NB_TILES_MATRIX + j;
     			int index = jarLevelUsed.getLevel().getMatrix()[i][j];
-    			gridMatrix.add( index == 0 ? Tile.getEmptyMatrix(position) :
-    				new Tile(Tile.MATRIX, position, index, images64[index]));
+    			gridMatrix.add( index == 0 ? Tile.createEmptyMatrix(position) :
+    				Tile.createMatrix(backImages[index], null, index, position));
     		}
     	}
     }
     /*OK*/private void initSprites(){
-		for (int i=1; i<images64.length; i++) {
-			gridSprites.add(new Tile(Tile.LEGEND, i, images64[i]));
-		}
+		for (int i=1; i<backImages.length; i++)
+			gridSprites.add( Tile.createSprite(backImages[i],i) );
     }
-    private void initInteractions(){}
+    private void initInteractions(){
+    	/*ClassLoader loader = EditorGUI.class.getClassLoader();
+    	ImageIcon front64 = new ImageIcon( loader.getResource("leveleditor/brambles_interactions.png") );
+    	Image img = front64.getImage();
+    	BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+    	
+    	frontImages = new SpriteSheet( bimage, Tile.SIZE).getSprites();
+    	
+    	for (int i=1; i<frontImages.length; i++)
+			gridInteractions.add( Tile.initInteraction(frontImages[i], i, null) );*/
+    }
     
     /*OK*/public JarLevel saveJarLevel(){
     	String timeMaxValue = txtTimeMax.getText();
