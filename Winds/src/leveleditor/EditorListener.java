@@ -1,7 +1,6 @@
 package leveleditor;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -138,15 +137,15 @@ public class EditorListener {
 	}
 	
 	/*OK*/public static class TileMatrixListener extends MouseAdapter {
+		final int delay = 200;	// milliseconds
+		
 		public void mouseReleased(MouseEvent e) {
 			Tile current = EditorGUI.tileCurrent;
 			Tile source = (Tile) e.getSource();
 			Tile[] neighboors = EditorGUI.getNeighboors(source.getPosition());
 			
 			if( allowedTile(current, neighboors) ){
-				int index = current.getIndex();
-				Image img = index != 0 ? EditorGUI.images32[index] : Tile.getEmptyMatrix().getIcon().getImage();
-				source.updateFrom(index, img);
+				source.updateFrom(current);
 				return;
 			}
 			
@@ -157,7 +156,7 @@ public class EditorListener {
 			Color oldColor = pnl.getBackground();
 			
 			pnl.setBackground(new Color(240,125,125));
-			new Timer(200, new ActionListener() {	// milliseconds
+			new Timer(delay, new ActionListener() {	
 				public void actionPerformed(ActionEvent e) {
 					pnl.setBackground(oldColor);
 					((Timer) e.getSource()).stop();

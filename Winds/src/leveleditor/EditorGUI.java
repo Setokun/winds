@@ -97,6 +97,8 @@ public class EditorGUI extends JPanel {
         	txtTimeMax.setText( String.valueOf(time) );
         	txtTimeMax.setForeground(Color.BLACK);
         }
+
+        System.out.println( (Tile) gridMatrix.getComponent(0) );
     }
 
     //region GUI Initialisation 
@@ -406,27 +408,23 @@ public class EditorGUI extends JPanel {
     
     //region Methods 
     private void initImageTiles(){
-    	images32 = new SpriteSheet(
-    			jarThemeUsed.getSprites32(),
-    			Tile.SIZE_MATRIX).getSprites();
-    	
     	images64 = new SpriteSheet(
     			jarThemeUsed.getSprites64(),
-    			Tile.SIZE_LEGEND).getSprites();
+    			Tile.SIZE).getSprites();
     }
     private void initMatrix(){
     	for(int i=0; i<NB_TILES_MATRIX; i++){
     		for(int j=0; j<NB_TILES_MATRIX; j++){
-    			int position = i*60 + j;
+    			int position = i*NB_TILES_MATRIX + j;
     			int index = jarLevelUsed.getLevel().getMatrix()[i][j];
     			gridMatrix.add( index == 0 ? Tile.getEmptyMatrix(position) :
-    				new Tile(Tile.SIZE_MATRIX, position, index, images32[index]));
+    				new Tile(Tile.MATRIX, position, index, images64[index]));
     		}
     	}
     }
     private void initSprites(){
 		for (int i=1; i<images64.length; i++) {
-			gridSprites.add(new Tile(Tile.SIZE_LEGEND, i, images64[i]));
+			gridSprites.add(new Tile(Tile.LEGEND, i, images64[i]));
 		}
     }
     private void initInteractions(){}
@@ -476,7 +474,7 @@ public class EditorGUI extends JPanel {
 	   int[][] matrix = new int[NB_TILES_MATRIX][NB_TILES_MATRIX];
 	   for(int i=0; i<NB_TILES_MATRIX; i++){
 		   for(int j=0; j<NB_TILES_MATRIX; j++){
-			   Tile tile = (Tile) components[ i*60 +j ];
+			   Tile tile = (Tile) components[ i*NB_TILES_MATRIX +j ];
 			   matrix[i][j] = tile.getIndex();
 		   }
 	   }

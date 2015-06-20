@@ -14,41 +14,40 @@ import leveleditor.EditorListener.TileMatrixListener;
 public class Tile extends JLabel implements Cloneable {
 	private static final long serialVersionUID = 1L;
 	
-	static final int SIZE_LEGEND = 64;
-	static final int SIZE_MATRIX = 32;
-	
-	private static Tile emptyMatrix, emptyLegend;
+	static final int LEGEND=0, MATRIX=1;
+	static final int SIZE = 64;
+	static private final Dimension DIM = new Dimension(SIZE,SIZE);
+	static private Tile emptyMatrix, emptyLegend;
 	
 	static {
 		ClassLoader loader = Tile.class.getClassLoader();
-		ImageIcon icon32 = new ImageIcon( loader.getResource("leveleditor/empty_32.png") );
 		ImageIcon icon64 = new ImageIcon( loader.getResource("leveleditor/empty_64.png") );
-		emptyMatrix = new Tile(SIZE_MATRIX, 0, icon32.getImage());
-		emptyLegend = new Tile(SIZE_LEGEND, 0, icon64.getImage());
+		emptyMatrix = new Tile(MATRIX, 0, icon64.getImage());
+		emptyLegend = new Tile(LEGEND, 0, icon64.getImage());
 	}
 	
 	
-	private int position, index;
+	private int type, position, index;
 	private ImageIcon icon;
 	
-	public Tile(int tileSize, int index, Image img){
-		this(tileSize, -1, index, img);
+	public Tile(int tileType, int index, Image img){
+		this(tileType, -1, index, img);
 	}
-	public Tile(int tileSize, int position, int index, Image img){
+	public Tile(int tileType, int position, int index, Image img){
 		super();
 		
+		this.type = tileType;
 		this.position = position;
 		this.index = index;
 		this.icon = img == null ? null : new ImageIcon(img);
 		
-		Dimension tileDim = new Dimension(tileSize, tileSize);
-		setMinimumSize(tileDim);
-		setPreferredSize(tileDim);
-		setMaximumSize(tileDim);
+		setMinimumSize(DIM);
+		setPreferredSize(DIM);
+		setMaximumSize(DIM);
 		setIcon(icon);
 		
-		if(tileSize == SIZE_LEGEND){ this.addMouseListener(new TileLegendListener()); }
-		if(tileSize == SIZE_MATRIX){ this.addMouseListener(new TileMatrixListener()); }
+		if(tileType == LEGEND){ this.addMouseListener(new TileLegendListener()); }
+		if(tileType == MATRIX){ this.addMouseListener(new TileMatrixListener()); }
 	}
 	
 	public Tile clone(){
@@ -63,19 +62,17 @@ public class Tile extends JLabel implements Cloneable {
 		return null;
 	}
 	public String toString(){
-		return "Tile : {position: "+ position
+		return "Tile : {type: "+ (type == 1 ? "legend" : "matrix")
+					+", position: "+ position
 					+", index: "+ index
 					+", icon: "+ icon.toString()
 					+", parent: " + super.toString() +"}";
 	}
 	
-	public void updateFrom(int index, Image img){
-		this.index = index;
-		this.icon = new ImageIcon(img);
-		setIcon(icon);
-	}
 	public void updateFrom(Tile source){
-		updateFrom(source.index, source.icon.getImage());		
+		this.index = source.index;
+		this.icon  = source.icon;
+		setIcon(icon);
 	}
 	
 	public void paintComponent(Graphics g){
@@ -85,7 +82,10 @@ public class Tile extends JLabel implements Cloneable {
         }
     }
 
-	//region Getters
+	//region Getters 
+	public int getType(){
+		return type;
+	}
 	public int getPosition(){
 		return position;
 	}
@@ -109,7 +109,14 @@ public class Tile extends JLabel implements Cloneable {
 		return t;
 	}
 	static Tile getEmptyLegend(){
-		return emptyLegend.clone();
+		Tile t = emptyLegend.clone();
+		t.position = -1;
+		return t;
+	}
+	static Tile getEmptyLegend(int position){
+		Tile t = emptyLegend.clone();
+		t.position = position;
+		return t;
 	}
 	//endregion
 }
