@@ -26,7 +26,7 @@ import display.Window;
 public class EditorListener {
 	
 	/*OK*/public static class SaveListener implements ActionListener {
-		EditorGUI gui;
+		private EditorGUI gui;
 		
 		public SaveListener(EditorGUI gui){
 			this.gui = gui;
@@ -38,7 +38,7 @@ public class EditorListener {
 	}
 	
 	/*OK*/public static class TimeMaxListener extends KeyAdapter implements FocusListener {
-		private static final int maxChar = 3;
+		private final int maxChar = 3;
 		private JTextField field;
 		
 		public void keyTyped(KeyEvent e) {
@@ -75,16 +75,17 @@ public class EditorListener {
 			
 			int time = Integer.valueOf( field.getText() ).intValue();
 			if(time < EditorGUI.MINIMUM_TIME){
-				JOptionPane.showMessageDialog(null, "Specified time must be greater than 30 seconds", "Invalid time", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Specified time must be greater than "
+						+ EditorGUI.MINIMUM_TIME +" seconds", "Invalid time",
+						JOptionPane.INFORMATION_MESSAGE);
 				field.setText( String.valueOf(EditorGUI.MINIMUM_TIME) );
 			}			
 		}
-
 	}
 	
 	/*OK*/public static class DescriptionListener extends KeyAdapter implements FocusListener {
 		private final int maxChar = 255;
-		JTextArea area;
+		private JTextArea area;
 		
 		public void keyTyped(KeyEvent e) {
 			if(area.getText().length() == maxChar)	e.consume();
@@ -137,7 +138,7 @@ public class EditorListener {
 	}
 	
 	/*OK*/public static class TileMatrixListener extends MouseAdapter {
-		final int delay = 200;	// milliseconds
+		private final int delay = 200;	// milliseconds
 		
 		public void mouseReleased(MouseEvent e) {
 			Tile current = EditorGUI.tileCurrent;
