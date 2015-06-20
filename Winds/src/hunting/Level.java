@@ -1,29 +1,23 @@
 package hunting;
 
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.Dimension;
 
 
 public class Level {
-	// basé sur l'algorithme du gif sur le drop
-	private int[][] matrix;
-	private Rectangle[] obstacles;
+	private final Dimension matrixDim = new Dimension(60,60);
+	private int[][] matrix, walls;
 	
 	public Level(){
-		matrix = new int[8][14];
-		
-		obstacles = new Rectangle[]{
-			new Rectangle(3,1,1,5),
-			new Rectangle(6,5,3,1),
-			new Rectangle(8,5,1,3),
-			new Rectangle(10,0,1,3),
-			new Rectangle(10,2,2,1)
-		};
+		matrix = new int[60][60];
+		walls = new int[0][0];	// x1, y1, x2, y2
 	}
 	public int[][] getMatrix(){
 		return matrix;
 	}
-	public Rectangle[] getObstacles(){
-		return obstacles;
+	public Dimension getMatrixDimension(){
+		return matrixDim;
+	}
+	public int[][] getWalls(){
+		return walls;
 	}
 }

@@ -1,140 +1,112 @@
 package hunting;
 
 import java.awt.Point;
-import java.util.Comparator;
-import java.util.LinkedList;
 
 public class Hunt {
-	int[][] matrix;
-	Point origin, target;
-	AlgoList items, analyzed;
+	Level lvl;
+	Point origin, current, target;
+	int[][] weight, estim;			// x, y
+	boolean[][] closed;				// x, y
+	Point[][] previous;				// x, y, [currentX,currentY]
+	int counter=0, nbCols, nbRows;	// x, y
+	final int INFINITE = (Integer.MAX_VALUE /2) -1;
 	
-	public Hunt(int[][] matrix, Point origin, Point target){
-		this.matrix = matrix;
-		this.origin = origin;
-		this.target = target;
+	/*OK*/public Hunt(Level lvl, Point origin, Point target){
+		this.lvl = lvl;
+		this.origin  = origin;
+		this.current = origin;
+		this.target  = target;		
 		
-		items = new AlgoList();
-		analyzed = new AlgoList();
-		initItemsList();
+		initItems();
+		do {
+			getMinWeightPoint();
+			updateNeighboors();
+			closed[current.x][current.y] = true;
+			counter++;
+		} while( !current.equals(target) /*&& counter < (nbRows*nbCols)*/ );
 	}
-	private void initItemsList(){
-		int len = matrix.length;
-		for (int x=0; x<len; x++) {
-			for (int y= 0; y<len; y++) {
-				AlgoItem item = new AlgoItem(new Point(x,y));
-				item.estimation = (int) Math.abs(target.getX() - x)
-							 	+ (int) Math.abs(target.getY() - y);
-				item.cost = 1;
-				items.add(item);
+	/*OK*/private void initItems(){
+		nbRows = (int) lvl.getMatrixDimension().getHeight();
+		nbCols = (int) lvl.getMatrixDimension().getWidth();
+		
+		// weights 
+		weight = new int[nbCols][nbRows];
+		for (int y=0; y<nbRows; y++)
+			for (int x=0; x<nbCols; x++)
+				weight[x][y] = INFINITE;
+		weight[origin.x][origin.y] = 0;
+		
+		// estimations
+		estim = new int[nbCols][nbRows];
+		for (int y=0; y<nbRows; y++)
+			for (int x=0; x<nbCols; x++)
+				estim[x][y] = Math.abs(target.x - x) + Math.abs(target.y - y);
+
+		closed = new boolean[nbCols][nbRows];
+		previous = new Point[nbCols][nbRows];
+		
+		int[][] walls = lvl.getWalls();
+		for (int i=0; i< walls.length; i++) {
+			int[] data = walls[i];
+			int x1=data[0], y1=data[1];
+			while (x1 <= data[2]){
+				estim[x1][data[1]] = INFINITE;
+				closed[x1++][data[1]] = true;
+			}
+			while (y1 <= data[3]){
+				estim[data[0]][y1] = INFINITE;
+				closed[data[0]][y1++] = true;
 			}
 		}
 		
-		AlgoItem originItem = items.get(origin);
-		originItem.weight = 0;
-		items.set(origin, originItem);
-		items.sortByWeight();
+		//displayStep();
 	}
-	public Point getNextMove(){
-		AlgoItem current = null;
-		while ( (current = items.pollFirst()) != null) {
-			analyzed.add(current);
-			updateNeighboors(current);
-			if(current.getCoordo().equals(target)){ break; }
-			items.sortByWeight();
-		}
-		
-		AlgoList trace = new AlgoList();
-		AlgoItem last = analyzed.peekLast();
-		while(last != null){
-			trace.add(last);
-			last = last.getPrevious();
-		}
-		trace.pollLast();
-		
-		return trace.peekLast().getCoordo();
-	}
-	private void updateNeighboors(AlgoItem current){
-		Point cTop		= new Point((int)current.getCoordo().getX(), (int)current.getCoordo().getY()-1 );
-		Point cRight	= new Point((int)current.getCoordo().getX()+1, (int)current.getCoordo().getY() );
-		Point cBottom	= new Point((int)current.getCoordo().getX(), (int)current.getCoordo().getY()+1 );
-		Point cLeft	= new Point((int)current.getCoordo().getX()-1, (int)current.getCoordo().getY() );
-		
-		updateOneNeighboor(current, cTop);
-		updateOneNeighboor(current, cRight);
-		updateOneNeighboor(current, cBottom);
-		updateOneNeighboor(current, cLeft);
-	}
-	private void updateOneNeighboor(AlgoItem current, Point c){
-		AlgoItem ai	= items.get(c);
-		if(ai != null){
-			ai.calculateWeight(current);
-			items.set(c, ai);
-		}
-	}
-	private static class AlgoItem {
-		public int estimation, cost;
-		public Integer weight;
-		public Point c;
-		public AlgoItem previous;
-		
-		public AlgoItem(Point c){
-			this.c = c;
-		}
-		
-		public void calculateWeight(AlgoItem current){
-			int sum = estimation + cost;
-			if(weight == null || sum < weight){
-				weight = sum;
-				previous = current;
-			}
-		}
-		
-		public Point getCoordo(){
-			return c;
-		}
-		public AlgoItem getPrevious(){
-			return previous;
-		}
-		public String toString(){
-			String prev = (previous == null) ? null : previous.getCoordo().toString();					
-			return "Item {x:"+ c.getX() +", y:"+ c.getY() +", estimation:"+ estimation
-					+", cost:"+ cost +", weight:"+ weight +", previous:"+ prev +"}";
-		}
-	}
-	private static class AlgoList extends LinkedList<AlgoItem>{
-		private static final long serialVersionUID = -7947454604235897176L;
-		
-		public AlgoItem get(Point c){
-			AlgoItem item = null;
-			for (int i=0; i<size(); i++) {
-				AlgoItem ai = get(i);
-				if(ai.c.equals(c)){
-					item = ai;
-					break;
-				}
-			}
-			return item;
-		}
-		public void set(Point c, AlgoItem item){
-			for (int i=0; i<size(); i++) {
-				AlgoItem ai = get(i);
-				if(ai.c.equals(c)){
-					set(i, item);
-					break;
+	/*OK*/private void getMinWeightPoint(){
+		int cost, minCost=INFINITE;
+		for(int y=0; y<nbRows; y++){
+			for(int x=0; x<nbCols; x++){
+				if( !closed[x][y] ){
+					cost = weight[x][y] + estim[x][y];
+					if(cost < minCost){
+						current = new Point(x,y);
+						minCost = cost;
+					}
 				}
 			}
 		}
-		public void sortByWeight(){
-			sort(new Comparator<AlgoItem>() {
-				@Override
-				public int compare(AlgoItem item1, AlgoItem item2) {
-					if(item1.weight == null && item2.weight == null){ return 0; }
-					if(item1.weight != null && item2.weight == null){ return -1; }
-					if(item1.weight == null && item2.weight != null){ return 1; }
-					return item1.weight.compareTo(item2.weight);
-				}
-			});
+	}
+	/*OK*/private void updateNeighboors(){
+		int x=current.x, y=current.y, w=weight[x][y];
+		
+		updateNeighboor(x+1, y, w);
+		updateNeighboor(x, y+1, w);
+		updateNeighboor(x-1, y, w);
+		updateNeighboor(x, y-1, w);
+	}
+	/*OK*/private void updateNeighboor(int x, int y, int w){
+		if(existsNeighboor(x,y) && !closed[x][y]){
+			if(w+1 < weight[x][y]){
+				weight[x][y] = w+1;
+				previous[x][y] = current;
+			}
 		}
 	}
+	/*OK*/private boolean existsNeighboor(int x, int y){
+		return 0 <= x && x < nbCols
+			&& 0 <= y && y < nbRows;
+	}
+	/*OK*/private Point nextPoint(){
+		Point next=null, prev = previous[target.x][target.y];
+
+		while (!prev.equals(origin)){
+			next = prev;
+			// write here a syso of prev to trace the route
+			prev = previous[prev.x][prev.y];
+		}
+		return next;
+	}
+	/*OK*/public static Point getNextMove(Level lvl, Point origin, Point target) {
+		return new Hunt(lvl, origin, target).nextPoint();
+	}
+	
 }
