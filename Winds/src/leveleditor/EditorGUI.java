@@ -38,71 +38,59 @@ import core.SpriteSheet;
 
 
 public class EditorGUI extends JPanel {
-	private static final long serialVersionUID = 1L;
-	
-	public static final int MINIMUM_TIME = 30;
+	private static final long serialVersionUID = -4428661135236351743L;
+	public static final int MINIMUM_TIME = 60;
 	public static final int NB_TILES_MATRIX = 60;
+	public static final String PROMPT_TIMEMAX = "Number of seconds";
+	public static final String PROMPT_DESCRIPTION = "Input your level description here";
+	
 	private final int MARGIN_TILES = 1;
 	private final int NB_COLS_LEGEND = 3;
 	private final Cursor CURSOR_HAND = new Cursor(Cursor.HAND_CURSOR);
-	static final String PROMPT_TIMEMAX = "Number of seconds";
-	static final String PROMPT_DESCRIPTION = "Input your level description here";
 	
+	public static JPanel current;
+    public static Tile tileCurrent;
+    public static Image[] images64;
+    public static Map<Point, Integer[]> compatibility;
+    private static JPanel gridMatrix;
+		
 	private JButton btnSave, btnBack, btnEmpty;
     private JLabel lblCurrent, lblDescription, lblLevel, lblTheme, lblTimeMax;
-	private JPanel header, labels, fields, description, legend;
-	static JPanel current;
-	private static JPanel gridMatrix;
+	private JPanel header, labels, fields, description, legend;	
     private JPanel gridSprites, gridInteractions;
     private JScrollPane scrollMatrix, scrollSprites, scrollInteractions;
     private JSeparator sep1, sep2;
     private JTabbedPane tabPane;
     private JTextArea areaDescription;
     private JTextField txtLevel, txtTheme, txtTimeMax;
-    static Tile tileCurrent;
-
 	private JarLevel jarLevelUsed;
 	private JarTheme jarThemeUsed;
-	static Map<Point, Integer[]> compatibility;
+	private Font windsPolice24 = null;
 	
-	static Image[] images32, images64;
-	Font windsPolice24 = null;
-
-		
-    public EditorGUI(JarLevel jl, JarTheme jt) {
+	
+    /*OK*/public EditorGUI(JarLevel jl, JarTheme jt) {
         jarLevelUsed = jl;
         jarThemeUsed = jt;
-        compatibility = jt.getCompatibility();        
-        
-    	try {
-    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
-		} catch (FontFormatException | IOException e) {
-			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
-		}
+        compatibility = jt.getCompatibility();
+        images64 = new SpriteSheet( jt.getSprites64(), Tile.SIZE).getSprites();
         
         initComponents();
         initComponentsConfig();
         initStructure();
         
-        initImageTiles();
         initMatrix();
         initSprites();
         initInteractions();
-        
-        txtLevel.setText(jl.getLevel().getName());
-        txtTheme.setText(jt.getName());
-        
-        int time = jl.getLevel().getTimeMax();
-        if(time != 0){
-        	txtTimeMax.setText( String.valueOf(time) );
-        	txtTimeMax.setForeground(Color.BLACK);
-        }
-
-        System.out.println( (Tile) gridMatrix.getComponent(0) );
     }
 
     //region GUI Initialisation 
     /*OK*/private void initComponents(){
+    	try {
+    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
+		}
+    	
     	initHeaderComponents();
     	initMatrixComponents();
     	initLegendComponents();        
@@ -167,21 +155,22 @@ public class EditorGUI extends JPanel {
         txtLevel.setEditable(false);
         txtLevel.setFocusable(false);
         txtLevel.setHorizontalAlignment(JTextField.CENTER);
-        txtLevel.setText("level_name");
+        txtLevel.setText(jarLevelUsed.getLevel().getName());
 
         txtTheme.setEditable(false);
         txtTheme.setFocusable(false);
         txtTheme.setHorizontalAlignment(JTextField.CENTER);
+        txtTheme.setText(jarThemeUsed.getName());
         
-        
-        txtTimeMax.setText(PROMPT_TIMEMAX);
         txtTimeMax.setToolTipText("minimum allowed :  "+ MINIMUM_TIME +"seconds\nmaximum allowed : 999 seconds");
         txtTimeMax.setCursor(CURSOR_HAND);
-        txtTimeMax.setForeground(Color.GRAY);
         txtTimeMax.setHorizontalAlignment(JTextField.CENTER);
         TimeMaxListener tml = new TimeMaxListener();
         txtTimeMax.addKeyListener(tml);
         txtTimeMax.addFocusListener(tml);
+        int time = jarLevelUsed.getLevel().getTimeMax();
+    	txtTimeMax.setText(time != 0 ? String.valueOf(time) : PROMPT_TIMEMAX);
+    	txtTimeMax.setForeground(time != 0 ? Color.BLACK : Color.GRAY);
         
         lblDescription.setText("Level description :");
         
@@ -407,12 +396,7 @@ public class EditorGUI extends JPanel {
     //endregion
     
     //region Methods 
-    private void initImageTiles(){
-    	images64 = new SpriteSheet(
-    			jarThemeUsed.getSprites64(),
-    			Tile.SIZE).getSprites();
-    }
-    private void initMatrix(){
+    /*OK*/private void initMatrix(){
     	for(int i=0; i<NB_TILES_MATRIX; i++){
     		for(int j=0; j<NB_TILES_MATRIX; j++){
     			int position = i*NB_TILES_MATRIX + j;
@@ -422,14 +406,14 @@ public class EditorGUI extends JPanel {
     		}
     	}
     }
-    private void initSprites(){
+    /*OK*/private void initSprites(){
 		for (int i=1; i<images64.length; i++) {
 			gridSprites.add(new Tile(Tile.LEGEND, i, images64[i]));
 		}
     }
     private void initInteractions(){}
     
-    public JarLevel saveJarLevel(){
+    /*OK*/public JarLevel saveJarLevel(){
     	String timeMaxValue = txtTimeMax.getText();
     	String descriptionValue = areaDescription.getText();
     	
@@ -448,27 +432,26 @@ public class EditorGUI extends JPanel {
     	lvl.setInteractions( extractInteractions() );
     	
     	return jarLevelUsed.save() ? jarLevelUsed : null;
-    	
     }
     /*OK*/static Tile[] getNeighboors(int position){
-    	int max = NB_TILES_MATRIX * NB_TILES_MATRIX;
-    	Tile[] ts = new Tile[4];
+    	int nbTilesPerRow = NB_TILES_MATRIX,
+    		nbMaxTiles = NB_TILES_MATRIX*NB_TILES_MATRIX;
     	
-    	ts[0] = position-NB_TILES_MATRIX < 0	  ? null :
-    		(Tile) gridMatrix.getComponent(position-NB_TILES_MATRIX); 	// top
-    	ts[1] = (position+1)%NB_TILES_MATRIX == 0 ? null :
-    		(Tile) gridMatrix.getComponent(position+1);					// right
-    	ts[2] = (position+NB_TILES_MATRIX >= max) ? null :
-    		(Tile) gridMatrix.getComponent(position+NB_TILES_MATRIX);	// bottom
-    	ts[3] = (position-1)%NB_TILES_MATRIX == NB_TILES_MATRIX-1 ||
-    			(position-1)%NB_TILES_MATRIX == -1 ? null :
-    		(Tile) gridMatrix.getComponent(position-1);					// left
+    	Tile[] ts = new Tile[4];	// top, right, bottom, left
+    	int[] index = new int[]{ position - nbTilesPerRow, position + 1,
+    							 position + nbTilesPerRow, position - 1 };
+    	boolean[] test = new boolean[]{ index[0] < 0, index[1] % nbTilesPerRow == 0, index[2] >= nbMaxTiles,
+    			index[3] % nbTilesPerRow == nbTilesPerRow-1 || index[3] % nbTilesPerRow == -1};
+    	
+    	for (int i=0; i<4 ;i++)
+    		ts[i] = test[i] ? null : (Tile) gridMatrix.getComponent(index[i]);
+
     	return ts;
     }
     private Point getStartPosition(){
     	return new Point(2,2);
     }
-    public int[][] extractMatrix(){
+    /*OK*/public int[][] extractMatrix(){
 	   Component[] components = gridMatrix.getComponents();
 	   
 	   int[][] matrix = new int[NB_TILES_MATRIX][NB_TILES_MATRIX];
