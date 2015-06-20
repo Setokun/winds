@@ -12,12 +12,13 @@ import leveleditor.EditorListener.TileMatrixListener;
 
 
 public class Tile extends JLabel implements Cloneable {
-	private static final long serialVersionUID = 1L;
-	
-	static final int LEGEND=0, MATRIX=1;
-	static final int SIZE = 64;
-	static private final Dimension DIM = new Dimension(SIZE,SIZE);
-	static private Tile emptyMatrix, emptyLegend;
+	public static final int LEGEND=0, MATRIX=1, SIZE=64;
+	private static final long serialVersionUID = -6388677825551701561L;
+	private static final Dimension DIM = new Dimension(SIZE,SIZE);
+	private static Tile emptyMatrix, emptyLegend;
+		
+	private int type, position, index;
+	private ImageIcon icon;
 	
 	static {
 		ClassLoader loader = Tile.class.getClassLoader();
@@ -26,14 +27,10 @@ public class Tile extends JLabel implements Cloneable {
 		emptyLegend = new Tile(LEGEND, 0, icon64.getImage());
 	}
 	
-	
-	private int type, position, index;
-	private ImageIcon icon;
-	
-	public Tile(int tileType, int index, Image img){
+	/*OK*/public Tile(int tileType, int index, Image img){
 		this(tileType, -1, index, img);
 	}
-	public Tile(int tileType, int position, int index, Image img){
+	/*OK*/public Tile(int tileType, int position, int index, Image img){
 		super();
 		
 		this.type = tileType;
@@ -50,7 +47,8 @@ public class Tile extends JLabel implements Cloneable {
 		if(tileType == MATRIX){ this.addMouseListener(new TileMatrixListener()); }
 	}
 	
-	public Tile clone(){
+	//region Methods 
+	/*OK*/public Tile clone(){
 		try {
 			Tile c = (Tile) super.clone();
 			c.icon = this.icon;
@@ -61,26 +59,25 @@ public class Tile extends JLabel implements Cloneable {
 		}
 		return null;
 	}
-	public String toString(){
+	/*OK*/public String toString(){
 		return "Tile : {type: "+ (type == 1 ? "legend" : "matrix")
 					+", position: "+ position
 					+", index: "+ index
 					+", icon: "+ icon.toString()
 					+", parent: " + super.toString() +"}";
 	}
-	
-	public void updateFrom(Tile source){
+	/*OK*/public void updateFrom(Tile source){
 		this.index = source.index;
 		this.icon  = source.icon;
 		setIcon(icon);
-	}
-	
-	public void paintComponent(Graphics g){
+	}	
+	/*OK*/public void paintComponent(Graphics g){
         super.paintComponent(g);
         if(icon != null){
         	g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
     }
+	//endregion
 
 	//region Getters 
 	public int getType(){
@@ -113,10 +110,6 @@ public class Tile extends JLabel implements Cloneable {
 		t.position = -1;
 		return t;
 	}
-	static Tile getEmptyLegend(int position){
-		Tile t = emptyLegend.clone();
-		t.position = position;
-		return t;
-	}
 	//endregion
+
 }
