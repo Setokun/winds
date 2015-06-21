@@ -145,7 +145,7 @@ public class EditorListener {
 			Tile source = (Tile) e.getSource();
 			Tile[] neighboors = EditorGUI.getNeighboors(source.getPosition());
 			
-			if( allowedTile(current, neighboors) ){
+			if( allowedBackTile(current, neighboors) ){
 				source.updateFrom(current);
 				return;
 			}
@@ -164,8 +164,8 @@ public class EditorListener {
 				}
 			}).start();
 		}
-		private boolean allowedTile(Tile current, Tile[] neighboors){
-			int currentIndex = current.getIndex();
+		private boolean allowedBackTile(Tile current, Tile[] neighboors){
+			int currentIndex = current.getBackIndex();
 			if(currentIndex == 0)  return true;
 			
 			Map<Point, Integer[]> compatibility = EditorGUI.compatibility;
@@ -175,17 +175,19 @@ public class EditorListener {
 				// out of matrix bounds : all tiles allowed
 				if(side == null)  continue;
 				// side is an empty tile
-				if(side.getIndex() == 0)  continue;
+				if(side.getBackIndex() == 0)  continue;
 				
 				Integer[] compatibles = compatibility.get(new Point(currentIndex,i));
-				boolean found = false;
-				for(int j=0; j<compatibles.length; j++){
-					if(compatibles[j].intValue() == side.getIndex()){
-						found = true;
-						break;
+				if(compatibles != null){
+					boolean found = false;
+					for(int j=0; j<compatibles.length; j++){
+						if(compatibles[j].intValue() == side.getBackIndex()){
+							found = true;
+							break;
+						}
 					}
+					if( !found )  return false;
 				}
-				if( !found )  return false;
 			}
 			return true;
 		}
