@@ -22,15 +22,15 @@ public class Tile extends JLabel implements Cloneable {
 	private static Tile emptyMatrix, emptyLegend;	
 	
 	private String tips;
-	private int type, position, index;
+	private int type, position, backIndex, frontIndex;
 	private Image backImage, frontImage;
 	private ImageIcon mixed;
 	
 	static {
 		ClassLoader loader = Tile.class.getClassLoader();
 		ImageIcon empty = new ImageIcon( loader.getResource("leveleditor/empty_64.png") );
-		emptyMatrix = new Tile(MATRIX, empty.getImage(), null, 0, -1, null);
-		emptyLegend = new Tile(LEGEND, empty.getImage(), null, 0, -1, null);
+		emptyMatrix = new Tile(MATRIX, empty.getImage(), null, 0, -1, -1, null);
+		emptyLegend = new Tile(LEGEND, empty.getImage(), null, 0, -1, -1, null);
 	}
 	
 	//region Constructors - OK 
@@ -45,27 +45,28 @@ public class Tile extends JLabel implements Cloneable {
 		t.position = position;
 		return t;
 	}	
-	/*OK*/static Tile createMatrix(Image back, Image front, int index, int position){
-		return new Tile(MATRIX, back, front, index, position, null);
+	/*OK*/static Tile createMatrix(Image backImage, Image frontImage, int backIndex, int frontIndex, int position){
+		return new Tile(MATRIX, backImage, frontImage, backIndex, frontIndex, position, null);
 	}
-	/*OK*/static Tile createSprite(Image back, int index){
-		return new Tile(LEGEND, back, null, index, -1, null);
+	/*OK*/static Tile createSprite(Image backImage, int backIndex){
+		return new Tile(LEGEND, backImage, null, backIndex, -1, -1, null);
 	}
-	/*OK*/static Tile createInteraction(Image front, int index, String tips){
-		return new Tile(LEGEND, null, front, index, -1, null);
+	/*OK*/static Tile createInteraction(Image frontImage, int frontIndex, String tips){
+		return new Tile(LEGEND, null, frontImage, -1, frontIndex, -1, tips);
 	}		
 	//endregion
 	
-	private Tile(int type, Image back, Image front, int index, int position, String tips){
+	private Tile(int type, Image backImage, Image frontImage, int backIndex, int frontIndex, int position, String tips){
 		super();
 		
 		this.tips = tips;
 		this.type = type;
 		this.position = position;
-		this.index = index;
-		this.backImage = back;
-		this.frontImage = front;
-		this.mixed = new ImageIcon( mixImages() );
+		this.backIndex = backIndex;
+		this.frontIndex = frontIndex;
+		this.backImage = backImage;
+		this.frontImage = frontImage;
+		this.mixed = mixImages();
 		
 		setMinimumSize(DIM);
 		setPreferredSize(DIM);
@@ -76,17 +77,17 @@ public class Tile extends JLabel implements Cloneable {
 		if(type == LEGEND){ this.addMouseListener(new TileLegendListener()); }
 		if(type == MATRIX){ this.addMouseListener(new TileMatrixListener()); }
 	}
-	private BufferedImage mixImages(){
-		BufferedImage mix = createTransparentBackImage();
+	private ImageIcon mixImages(){
+		BufferedImage mix = createTransparentImage();
 		Graphics g = mix.getGraphics();
 		
 		if(backImage != null)   g.drawImage(backImage, 0, 0, SIZE, SIZE, this);
 		if(frontImage != null)  g.drawImage(frontImage, 0, 0, SIZE, SIZE, this);
 		
 		g.dispose();
-		return mix;
+		return new ImageIcon(mix);
 	}
-	private BufferedImage createTransparentBackImage(){
+	/*OK*/private static BufferedImage createTransparentImage(){
 		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setComposite(AlphaComposite.Clear);
@@ -99,8 +100,14 @@ public class Tile extends JLabel implements Cloneable {
 	public Tile clone(){
 		try {
 			Tile c = (Tile) super.clone();
+			c.tips = this.tips;
+			c.type = this.type;
+			c.position = this.position;
+			c.backIndex = this.backIndex;
+			c.frontIndex = this.frontIndex;
 			c.backImage = this.backImage;
-			c.index = this.index;
+			c.frontImage = this.frontImage;
+			c.mixImages();
 			return c;
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
@@ -108,19 +115,38 @@ public class Tile extends JLabel implements Cloneable {
 		return null;
 	}
 	public String toString(){
-		return "Tile : {type: "+ (type == 1 ? "legend" : "matrix")
+		return "Tile : {tips: "+ tips
+					+", type: "+ (type == 1 ? "legend" : "matrix")
 					+", position: "+ position
-					+", index: "+ index
-					+", icon: "+ backImage.toString()
+					+", backIndex: "+ backIndex
+					+", frontIndex: "+ frontIndex
+					+", backImage: "+ (backImage == null ? "null" : backImage)
+					+", frontImage: " + (frontImage == null ? "null" : frontImage)
+					+", mixed: "+ mixed.toString()
 					+", parent: " + super.toString() +"}";
 	}
 	public void updateFrom(Tile source){
-		this.index = source.index;
-		if(source.backImage  != null)  this.backImage  = source.backImage;
-		if(source.frontImage != null)  this.frontImage = source.frontImage;
-		this.mixed = new ImageIcon( mixImages() );
+		backIndex = source.backIndex;
+		frontIndex = source.frontIndex;
+		
+		//region Update restrictions 
+		if(source.backIndex == 0){
+			frontImage = null;
+			frontIndex = -1;
+		}
+		if(this.type == LEGEND){
+			backImage  = source.backImage;
+			frontImage = source.frontImage;
+		}
+		if(this.type == MATRIX){
+			if(source.backImage  != null)  backImage  = source.backImage;
+			if(source.frontImage != null)  frontImage = source.frontImage;
+		}
+		//endregion
+		
+		mixed = mixImages();
 		setIcon(mixed);
-	}	
+	}
 	public void paintComponent(Graphics g){
         super.paintComponent(g);
         if(mixed != null){
@@ -136,14 +162,17 @@ public class Tile extends JLabel implements Cloneable {
 	public int getPosition(){
 		return position;
 	}
-	public int getIndex(){
-		return index;
+	public int getBackIndex(){
+		return backIndex;
 	}
-	public ImageIcon getBackImage() {
-		return new ImageIcon(backImage);
+	public int getFrontIndex(){
+		return frontIndex;
 	}
-	public ImageIcon getFrontImage(){
-		return new ImageIcon(frontImage);
+	public Image getBackImage() {
+		return backImage;
+	}
+	public Image getFrontImage(){
+		return frontImage;
 	}
 	//endregion
 

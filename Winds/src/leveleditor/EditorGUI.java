@@ -6,15 +6,18 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -72,7 +75,8 @@ public class EditorGUI extends JPanel {
         jarLevelUsed = jl;
         jarThemeUsed = jt;
         compatibility = jt.getCompatibility();
-        backImages = new SpriteSheet( jt.getSprites64(), Tile.SIZE).getSprites();
+        backImages  = new SpriteSheet( jt.getSprites64(), Tile.SIZE).getSprites();
+        //frontImages = new SpriteSheet( jt.getInteractions64(), Tile.SIZE).getSprites();
         
         initComponents();
         initComponentsConfig();
@@ -221,6 +225,7 @@ public class EditorGUI extends JPanel {
 
         gridInteractions.setLayout(layLegend);
         scrollInteractions.setViewportView(gridInteractions);
+        scrollInteractions.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         tabPane.addTab("Interactions", scrollInteractions);
 
         btnEmpty.setText("Select empty tile");
@@ -396,13 +401,18 @@ public class EditorGUI extends JPanel {
     //endregion
     
     //region Methods 
-    /*OK*/private void initMatrix(){
+    /* todo
+     * remplacer le frontIndex à 0 par l'index dans la matrice d'interactions
+    */
+    private void initMatrix(){
     	for(int i=0; i<NB_TILES_MATRIX; i++){
     		for(int j=0; j<NB_TILES_MATRIX; j++){
     			int position = i*NB_TILES_MATRIX + j;
     			int index = jarLevelUsed.getLevel().getMatrix()[i][j];
     			gridMatrix.add( index == 0 ? Tile.createEmptyMatrix(position) :
-    				Tile.createMatrix(backImages[index], null, index, position));
+    				Tile.createMatrix(backImages[index], null, index,
+    						0
+    						, position));
     		}
     	}
     }
@@ -411,18 +421,17 @@ public class EditorGUI extends JPanel {
 			gridSprites.add( Tile.createSprite(backImages[i],i) );
     }
     private void initInteractions(){
-    	/*ClassLoader loader = EditorGUI.class.getClassLoader();
+    	ClassLoader loader = EditorGUI.class.getClassLoader();
     	ImageIcon front64 = new ImageIcon( loader.getResource("leveleditor/brambles_interactions.png") );
     	Image img = front64.getImage();
     	BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D bGr = bimage.createGraphics();
+        Graphics bGr = bimage.getGraphics();
         bGr.drawImage(img, 0, 0, null);
         bGr.dispose();
     	
     	frontImages = new SpriteSheet( bimage, Tile.SIZE).getSprites();
-    	
     	for (int i=1; i<frontImages.length; i++)
-			gridInteractions.add( Tile.initInteraction(frontImages[i], i, null) );*/
+			gridInteractions.add( Tile.createInteraction(frontImages[i], i, null) );
     }
     
     /*OK*/public JarLevel saveJarLevel(){
@@ -453,7 +462,7 @@ public class EditorGUI extends JPanel {
     	int[] index = new int[]{ position - nbTilesPerRow, position + 1,
     							 position + nbTilesPerRow, position - 1 };
     	boolean[] test = new boolean[]{ index[0] < 0, index[1] % nbTilesPerRow == 0, index[2] >= nbMaxTiles,
-    			index[3] % nbTilesPerRow == nbTilesPerRow-1 || index[3] % nbTilesPerRow == -1};
+    						index[3] % nbTilesPerRow == nbTilesPerRow-1 || index[3] % nbTilesPerRow == -1};
     	
     	for (int i=0; i<4 ;i++)
     		ts[i] = test[i] ? null : (Tile) gridMatrix.getComponent(index[i]);
@@ -470,11 +479,11 @@ public class EditorGUI extends JPanel {
 	   for(int i=0; i<NB_TILES_MATRIX; i++){
 		   for(int j=0; j<NB_TILES_MATRIX; j++){
 			   Tile tile = (Tile) components[ i*NB_TILES_MATRIX +j ];
-			   matrix[i][j] = tile.getIndex();
+			   matrix[i][j] = tile.getBackIndex();
 		   }
 	   }
 	   return matrix;
-   }
+    }
     private int[][] extractInteractions(){
     	return new int[][] {{0}};
     }
