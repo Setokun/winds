@@ -401,7 +401,7 @@ public class EditorGUI extends JPanel {
     //endregion
     
     //region Methods 
-    /* todo
+    /* todo 
      * remplacer le frontIndex à 0 par l'index dans la matrice d'interactions
     */
     private void initMatrix(){
@@ -420,6 +420,9 @@ public class EditorGUI extends JPanel {
 		for (int i=1; i<backImages.length; i++)
 			gridSprites.add( Tile.createSprite(backImages[i],i) );
     }
+    /* todo 
+     * supprimer le 1er paragraphe pour la gestion du chargement des interactions
+    */
     private void initInteractions(){
     	ClassLoader loader = EditorGUI.class.getClassLoader();
     	ImageIcon front64 = new ImageIcon( loader.getResource("leveleditor/brambles_interactions.png") );
@@ -451,7 +454,7 @@ public class EditorGUI extends JPanel {
     	lvl.setStartPosition( getStartPosition() );
     	lvl.setMatrix( extractMatrix() );
     	lvl.setInteractions( extractInteractions() );
-    	
+
     	return jarLevelUsed.save() ? jarLevelUsed : null;
     }
     /*OK*/static Tile[] getNeighboors(int position){
@@ -472,20 +475,29 @@ public class EditorGUI extends JPanel {
     private Point getStartPosition(){
     	return new Point(2,2);
     }
-    /*OK*/public int[][] extractMatrix(){
-	   Component[] components = gridMatrix.getComponents();
-	   
-	   int[][] matrix = new int[NB_TILES_MATRIX][NB_TILES_MATRIX];
-	   for(int i=0; i<NB_TILES_MATRIX; i++){
-		   for(int j=0; j<NB_TILES_MATRIX; j++){
-			   Tile tile = (Tile) components[ i*NB_TILES_MATRIX +j ];
-			   matrix[i][j] = tile.getBackIndex();
-		   }
-	   }
-	   return matrix;
+    /*OK*/private int[][] extractMatrix(){
+    	Component[] components = gridMatrix.getComponents();
+  	   
+    	int[][] matrix = new int[NB_TILES_MATRIX][NB_TILES_MATRIX];
+    	for(int i=0; i<NB_TILES_MATRIX; i++){
+    		for(int j=0; j<NB_TILES_MATRIX; j++){
+    			Tile tile = (Tile) components[ i*NB_TILES_MATRIX +j ];
+    			matrix[i][j] = tile.getBackIndex();
+    		}
+    	}
+    	return matrix;
     }
-    private int[][] extractInteractions(){
-    	return new int[][] {{0}};
+    /*OK*/private int[][] extractInteractions(){
+    	Component[] components = gridMatrix.getComponents();
+   	   
+    	int[][] matrix = new int[NB_TILES_MATRIX][NB_TILES_MATRIX];
+    	for(int i=0; i<NB_TILES_MATRIX; i++){
+    		for(int j=0; j<NB_TILES_MATRIX; j++){
+    			Tile tile = (Tile) components[ i*NB_TILES_MATRIX +j ];
+    			matrix[i][j] = tile.getFrontIndex();
+    		}
+    	}
+    	return matrix;
     }
     //endregion
 
