@@ -125,7 +125,7 @@ public class EditorGUI extends JPanel {
     	legend = new JPanel();
         current = new JPanel();
         lblCurrent = new JLabel();
-        tileCurrent = Tile.createEmptyLegend();
+        tileCurrent = Tile.createEmptyCurrent();
         tabPane = new JTabbedPane();
         gridSprites = new JPanel();
         scrollSprites = new JScrollPane();

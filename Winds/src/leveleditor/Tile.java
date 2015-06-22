@@ -17,10 +17,10 @@ import leveleditor.EditorListener.TileMatrixListener;
 
 public class Tile extends JLabel implements Cloneable {
 	public  static final int SIZE=64, DEFAULT=0;
-	private static final int MATRIX=0, LEGEND=1;
+	private static final int MATRIX=0, CURRENT=1, LEGEND=2;
 	private static final long serialVersionUID = -6388677825551701561L;
 	private static final Dimension DIM = new Dimension(SIZE,SIZE);
-	private static Tile emptyMatrix, emptyLegend;	
+	private static Tile emptyMatrix, emptyCurrent;	
 	
 	private String tips;
 	private int type, position, backIndex, frontIndex;
@@ -30,13 +30,13 @@ public class Tile extends JLabel implements Cloneable {
 	static {
 		ClassLoader loader = Tile.class.getClassLoader();
 		ImageIcon empty = new ImageIcon( loader.getResource("leveleditor/empty_64.png") );
-		emptyMatrix = new Tile(MATRIX, empty.getImage(), null, DEFAULT, DEFAULT, DEFAULT, null);
-		emptyLegend = new Tile(LEGEND, empty.getImage(), null, DEFAULT, DEFAULT, DEFAULT, null);
+		emptyMatrix  = new Tile(MATRIX,  empty.getImage(), createTransparentImage(), DEFAULT, DEFAULT, DEFAULT, null);
+		emptyCurrent = new Tile(CURRENT, empty.getImage(), createTransparentImage(), DEFAULT, DEFAULT, DEFAULT, null);
 	}
 	
 	//region Constructors - OK 
-	/*OK*/static Tile createEmptyLegend(){
-		return emptyLegend.clone();
+	/*OK*/static Tile createEmptyCurrent(){
+		return emptyCurrent.clone();
 	}
 	/*OK*/static Tile createEmptyMatrix(){
 		return emptyMatrix.clone();
@@ -90,21 +90,22 @@ public class Tile extends JLabel implements Cloneable {
 	}
 	/*OK*/private BufferedImage createBlankImage(){
 		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
-		if(this.type == LEGEND){
-			Graphics g = bi.getGraphics();
-			g.setColor(Color.WHITE);
-			g.fillRect(0, 0, SIZE, SIZE);
-			g.dispose();
-		}else{
-			Graphics2D g2d = bi.createGraphics();
-			g2d.setComposite(AlphaComposite.Clear);
-			g2d.fillRect(0, 0, SIZE, SIZE);
-			g2d.dispose();
-		}
+		Graphics g = bi.getGraphics();
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, SIZE, SIZE);
+		g.dispose();
+		return bi;
+	}
+	/*OK*/private static BufferedImage createTransparentImage(){
+		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setComposite(AlphaComposite.Clear);
+		g2d.fillRect(0, 0, SIZE, SIZE);
+		g2d.dispose();
 		return bi;
 	}
 	
-	//region Methods 
+	//region Methods
 	public Tile clone(){
 		try {
 			Tile c = (Tile) super.clone();
@@ -134,27 +135,47 @@ public class Tile extends JLabel implements Cloneable {
 					+", parent: " + super.toString() +"}";
 	}
 	public void updateFrom(Tile source){
-		backIndex = source.backIndex;
-		frontIndex = source.frontIndex;
-		
-		//region Update restrictions 
-		if(source.backIndex == DEFAULT){
-			frontImage = null;
-			frontIndex = DEFAULT;
+		// update the current tile to become empty
+		if(this.type == CURRENT && source.type == CURRENT){
+			updateFromEmpty();
+			
+		}else{
+			// update the current tile from a legend tile
+			if(this.type == CURRENT && source.type == LEGEND)
+				updateFromLegend(source);
+			
+			// update a matrix tile from the current tile
+			if(this.type == MATRIX && source.type == CURRENT)
+				updateFromCurrent(source);
 		}
-		if(this.type == LEGEND){
-			backImage  = source.backImage;
-			frontImage = source.frontImage;
-		}
-		if(this.type == MATRIX){
-			if(source.backImage  != null)  backImage  = source.backImage;
-			if(source.frontImage != null)  frontImage = source.frontImage;
-		}
-		//endregion
 		
 		mixed = mixImages();
 		setIcon(mixed);
 	}
+	
+	private void updateFromLegend(Tile source){
+		backIndex  = source.backIndex;
+		backImage  = source.backImage;
+		frontIndex = source.frontIndex;
+		frontImage = source.frontImage;
+	}
+	private void updateFromEmpty(){
+		backIndex  = emptyCurrent.backIndex;
+		backImage  = emptyCurrent.backImage;
+		frontIndex = emptyCurrent.frontIndex;
+		frontImage = emptyCurrent.frontImage;
+	}
+	private void updateFromCurrent(Tile source){
+		if(source.backImage != null){
+			backIndex = source.backIndex;
+			backImage = source.backImage;
+		}
+		if(source.frontImage != null) {
+			frontIndex = source.frontIndex;
+			frontImage = source.frontImage;
+		}
+	}
+	
 	/*OK*/public void paintComponent(Graphics g){
         super.paintComponent(g);
         if(mixed != null){

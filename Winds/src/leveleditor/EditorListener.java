@@ -126,7 +126,7 @@ public class EditorListener {
 	
 	/*OK*/public static class EmptyListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {
-			EditorGUI.tileCurrent.updateFrom(Tile.createEmptyLegend());
+			EditorGUI.tileCurrent.updateFrom(Tile.createEmptyCurrent());
 		}
 	}
 	
