@@ -54,7 +54,8 @@ public class EditorGUI extends JPanel {
 	public  static JPanel current;
     public  static Tile tileCurrent;
     public  static Image[] backImages, frontImages;
-    public  static Map<Point, Integer[]> compatibility;
+    public  static Map<Point, Integer[]> spritesComp;
+    public  static int[][] intersComp;
     private static JPanel gridMatrix;
 		
 	private JButton btnSave, btnBack, btnEmpty;
@@ -69,12 +70,15 @@ public class EditorGUI extends JPanel {
 	private JarLevel jarLevelUsed;
 	private JarTheme jarThemeUsed;
 	private Font windsPolice24 = null;
+	private String[] intersTips;
 	
 	
     /*OK*/public EditorGUI(JarLevel jl, JarTheme jt) {
         jarLevelUsed = jl;
         jarThemeUsed = jt;
-        compatibility = jt.getCompatibility();
+        spritesComp = jt.getSpritesCompatibility();
+        intersComp  = jt.getInteractionsCompatibility();
+        intersTips  = jt.getInteractionTips();
         backImages  = new SpriteSheet( jt.getSprites64(), Tile.SIZE).getSprites();
         //frontImages = new SpriteSheet( jt.getInteractions64(), Tile.SIZE).getSprites();
         
@@ -434,7 +438,7 @@ public class EditorGUI extends JPanel {
     	
     	frontImages = new SpriteSheet( bimage, Tile.SIZE).getSprites();
     	for (int i=1; i<frontImages.length; i++)
-			gridInteractions.add( Tile.createInteraction(frontImages[i], i, null) );
+			gridInteractions.add( Tile.createInteraction(frontImages[i], i, intersTips[i-1]) );
     }
     
     /*OK*/public JarLevel saveJarLevel(){

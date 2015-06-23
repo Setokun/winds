@@ -99,7 +99,7 @@ public class JarTheme {
 		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
 		return null;
 	}
-	public Map<Point, Integer[]> getCompatibility(){
+	public Map<Point, Integer[]> getSpritesCompatibility(){
 		// test
 		Map<Point, Integer[]> compatibility = new HashMap<Point, Integer[]>();
 		
@@ -209,6 +209,25 @@ public class JarTheme {
 		compatibility.put(new Point(21,3), new Integer[]{1,3,6,7,8,9,10,19});
 		
 		return compatibility;
+	}
+	public int[][] getInteractionsCompatibility(){
+		return new int[][]{
+			
+		};
+	}
+	public String[] getInteractionTips(){
+		return new String[]{
+			"3 mobs",
+			"3 mobs",
+			"3 mobs",
+			"3 mobs",
+			"4 coins",
+			"1 mob",
+			"Arrival",
+			"1 flower",
+			"1 life",
+			"16 coins"
+		};
 	}
 	//endregion
 	//region Member getters - OK 

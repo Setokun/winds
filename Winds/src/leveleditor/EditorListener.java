@@ -168,7 +168,7 @@ public class EditorListener {
 			int currentIndex = current.getBackIndex();
 			if(currentIndex == 0)  return true;
 			
-			Map<Point, Integer[]> compatibility = EditorGUI.compatibility;
+			Map<Point, Integer[]> compatibility = EditorGUI.spritesComp;
 			for(int i=0; i<neighboors.length; i++){
 				Tile side = neighboors[i];
 				
