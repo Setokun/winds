@@ -91,7 +91,7 @@ public class Tile extends JLabel implements Cloneable {
 	/*OK*/private BufferedImage createBlankImage(){
 		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = bi.getGraphics();
-		g.setColor(Color.WHITE);
+		g.setColor(new Color(238, 238, 238));
 		g.fillRect(0, 0, SIZE, SIZE);
 		g.dispose();
 		return bi;
