@@ -1,12 +1,11 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -188,7 +187,19 @@ public class ServerConnection {
 	}
 	
 	/*TODO*/public static void downloadTheme(int idTheme){
-		
+		try {
+			  URLConnection ucon = new URL("http://www.winds-game.com/resources/brambles.jar" ).openConnection();
+			  FileOutputStream fos = new FileOutputStream("C:\\Users\\Stephane\\Downloads\\test.jar" );
+			  InputStream in = ucon.getInputStream();
+			  int b = 0;
+			  while ((b = in.read())!= -1)
+			    fos.write(b);
+			  fos.close();
+			  System.out.println("téléchargement terminé !!");
+			}
+			catch (Exception e){
+			  System.out.println(e);
+			}
 	}
 	
 	/*TODO*/public static void downloadLevel(int idLevel){
