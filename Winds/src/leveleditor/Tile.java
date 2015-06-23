@@ -173,6 +173,10 @@ public class Tile extends JLabel implements Cloneable {
 		if(source.frontImage != null) {
 			frontIndex = source.frontIndex;
 			frontImage = source.frontImage;
+			if(this.backImage == emptyCurrent.backImage){
+				backIndex = emptyCurrent.backIndex;
+				backImage = createBlankImage();
+			}
 		}
 	}
 	
