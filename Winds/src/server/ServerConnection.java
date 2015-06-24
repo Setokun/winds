@@ -18,6 +18,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ import database.Score;
 import database.ThemeData;
 
 public class ServerConnection {
-	private static final String URL_API_SERVER = "http://localhost/Winds/page/test.php";
+	private static final String URL_API_SERVER = "http://www.winds-game.com/API.php";
 	private static final int TIMEOUT = 6; // seconds
 	
 	/*OK*/public static Profile downloadProfile(String email, String password){
@@ -221,90 +222,29 @@ public class ServerConnection {
 		
 	}
 
-	/*TODO en cours*/
-	public static void uploadScores(String email, String password, ArrayList<Score> scores){
-		String infosToUpload = "[{\"idLevel\":1, \"time\":32, \"nbClicks\":69, \"nbItems\":100}]";
+	/*TODO reste à formater les scores passés en paramètre*/
+	public void uploadScores(String email, String password, ArrayList<Score> scores){
+		String infosToUpload = "[{%22idLevel%22:1, %22time%22:32, %22nbClicks%22:67, %22nbItems%22:102}, {%22idLevel%22:4, %22time%22:37, %22nbClicks%22:68, %22nbItems%22:57}]";
+		
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("action", "uploadScores");
+		params.put("email", email);
+		params.put("password", password);
+		params.put("scores", infosToUpload);
 
-		int nbModified = 0;
+		List<String> response = new ArrayList<String>();
 		
-		List<String> keys = new ArrayList<String>();
-		keys.add("email");
-		keys.add("password");
-		keys.add("action");
-		keys.add("scores");
-		
-		List<String> values = new ArrayList<String>();
-		values.add(email);
-		values.add(password);
-		values.add("uploadScores");
-		values.add(infosToUpload);
-		
-		try {
-			ServerConnection.post("http://www.winds-game.com/API.php", keys, values);
-		} catch (IOException e1) {e1.printStackTrace();}
-		
-		/*String monUrl = "http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=uploadScores&scores="+infosToUpload;
-		URL url;
-		try {
-			url = new URL(monUrl);
-			URLConnection yc = url.openConnection();
-			BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-        
-			nbModified = new JsonParser().parse(in).getAsInt();
-			System.out.println(monUrl);
-			System.out.println(nbModified);
-			in.close();
-			
-		} catch (IOException e) { e.printStackTrace(); }*/
+		try { 	response = sendRequest(params); } 
+		catch (Exception e) { e.printStackTrace(); }
+
+		for(int i=0; i<response.size(); i++){
+			System.out.println(response.get(i));
+		}
 		
 	}
 	
-	public static String post(String adress,List<String> keys,List<String> values) throws IOException{
-		String result = "";
-		OutputStreamWriter writer = null;
-		BufferedReader reader = null;
-		try {
-		//encodage des paramètres de la requête
-		String data="";
-		for(int i=0;i<keys.size();i++){
-			if (i!=0) data += "&amp;";
-			data +=URLEncoder.encode(keys.get(i), "UTF-8")+"="+URLEncoder.encode(values.get(i), "UTF-8");
-		}
-		System.out.println(data);
-		//création de la connection
-		URL url = new URL(adress);
-		URLConnection conn = url.openConnection();
-		conn.setDoOutput(true);
-		 
-		 
-		//envoi de la requête
-		writer = new OutputStreamWriter(conn.getOutputStream());
-		System.out.println(writer);
-		writer.write(data);
-		writer.flush();
-		 
-		 
-		 
-		 
-		//lecture de la réponse
-		reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		String ligne;
-		while ((ligne = reader.readLine()) != null) {
-		result+=ligne;
-		}
-		}catch (Exception e) {
-		e.printStackTrace();
-		}finally{
-		try{writer.close();}catch(Exception e){}
-		try{reader.close();}catch(Exception e){}
-		}
-		return result;
-		}
-	
-	
-	
 	public List<String> sendRequest(Map<String, String> params) throws Exception {
-		ServerRequest req = new ServerRequest();
+		ServerRequest req = new ServerRequest("POST");
 		for(Map.Entry<String, String> entry : params.entrySet()){
 			req.addParameter(entry.getKey(), entry.getValue());
 		}
@@ -312,13 +252,11 @@ public class ServerConnection {
 	}
 	public List<String> uploadFile(String filepath) throws Exception {
 		File uploadFile = new File(filepath);
-		ServerRequest req = new ServerRequest();
+		ServerRequest req = new ServerRequest("POST");
 		req.addFile("hello1", uploadFile);
 		return req.finish();
 	}
-	public void downloadFile(){
-		
-	}
+
 	
 	private class ServerRequest {
 	    private final String boundary;
@@ -332,13 +270,13 @@ public class ServerConnection {
 	     * Initializes a new HTTP POST request with content-type equals to multipart/form-data
 	     * @throws Exception
 	     */
-	    /*OK*/public ServerRequest() throws Exception {
+	    /*OK*/public ServerRequest(String method) throws Exception {
 	    	boundary = String.valueOf(System.currentTimeMillis());
 	    	URL url = new URL(ServerConnection.URL_API_SERVER);
 	    	try {
 	    		
 		        cnx = (HttpURLConnection) url.openConnection();
-		        cnx.setRequestMethod("POST");
+		        cnx.setRequestMethod(method);
 		        cnx.setConnectTimeout(ServerConnection.TIMEOUT * 1000);
 	        	cnx.setUseCaches(false);
 	        	cnx.setDoOutput(true);
