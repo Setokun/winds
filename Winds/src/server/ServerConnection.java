@@ -1,16 +1,25 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import account.Profile;
 import addon.JarLevel;
@@ -25,6 +34,8 @@ import database.Score;
 import database.ThemeData;
 
 public class ServerConnection {
+	private static final String URL_API_SERVER = "http://localhost/Winds/page/test.php";
+	private static final int TIMEOUT = 6; // seconds
 	
 	/*OK*/public static Profile downloadProfile(String email, String password){
 		
@@ -289,5 +300,137 @@ public class ServerConnection {
 		}
 		return result;
 		}
+	
+	
+	
+	public List<String> sendRequest(Map<String, String> params) throws Exception {
+		ServerRequest req = new ServerRequest();
+		for(Map.Entry<String, String> entry : params.entrySet()){
+			req.addParameter(entry.getKey(), entry.getValue());
+		}
+		return req.finish();
+	}
+	public List<String> uploadFile(String filepath) throws Exception {
+		File uploadFile = new File(filepath);
+		ServerRequest req = new ServerRequest();
+		req.addFile("hello1", uploadFile);
+		return req.finish();
+	}
+	public void downloadFile(){
+		
+	}
+	
+	private class ServerRequest {
+	    private final String boundary;
+	    private static final String EOL = "\r\n";
+	    private HttpURLConnection cnx;
+	    private OutputStream outputStream;
+	    private PrintWriter writer;
+	    // penser au timeout a la lecture de flux avec un finally cnx.disconnect
+	    
+	    /**
+	     * Initializes a new HTTP POST request with content-type equals to multipart/form-data
+	     * @throws Exception
+	     */
+	    /*OK*/public ServerRequest() throws Exception {
+	    	boundary = String.valueOf(System.currentTimeMillis());
+	    	URL url = new URL(ServerConnection.URL_API_SERVER);
+	    	try {
+	    		
+		        cnx = (HttpURLConnection) url.openConnection();
+		        cnx.setRequestMethod("POST");
+		        cnx.setConnectTimeout(ServerConnection.TIMEOUT * 1000);
+	        	cnx.setUseCaches(false);
+	        	cnx.setDoOutput(true);
+		        cnx.setDoInput(true);
+		        cnx.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+		        cnx.setRequestProperty("User-Agent", "Winds Agent");
+		        outputStream = cnx.getOutputStream();
+		        writer = new PrintWriter(new OutputStreamWriter(outputStream, "UTF-8"), true);
+		        
+	        } catch(ConnectException e) {
+	        	throw new Exception("Failure of the connection with Winds server");
+	        } catch(UnknownHostException e) {
+	        	throw new Exception("Bad Winds server URL");
+	        } catch(SocketTimeoutException e) {
+	        	throw new Exception("Winds server connection timeout reached");
+	        } catch(IllegalStateException e) {
+	        	throw new Exception("Already connected to Winds server");
+	        } finally{
+	        	if(cnx != null){ cnx.disconnect(); }
+	        }	        
+	    }
+	 
+	    /**
+	     * Adds a parameter to the request
+	     * @param name field name
+	     * @param value field value
+	     */
+	    /*OK*/public void addParameter(String name, String value) {
+	        writer.append("--" + boundary).append(EOL);
+	        writer.append("Content-Disposition: form-data; name=\"" + name + "\"").append(EOL);
+	        writer.append("Content-Type: text/plain; charset=UTF-8").append(EOL);
+	        writer.append(EOL).append(value).append(EOL);
+	        writer.flush();
+	    }
+	    /**
+	     * Adds a upload file section to the request
+	     * @param fileKey key to find in $_FILE on Winds server
+	     * @param uploadFile a File to be uploaded
+	     * @throws IOException
+	     */
+	    /*OK*/public void addFile(String fileKey, File uploadFile) throws IOException {
+	        String fileName = uploadFile.getName();
+	        writer.append("--" + boundary).append(EOL);
+	        writer.append("Content-Disposition: form-data; name=\""+ fileKey +"\"; filename=\""+ fileName +"\"").append(EOL);
+	        writer.append("Content-Type: "+ URLConnection.guessContentTypeFromName(fileName)).append(EOL);
+	        writer.append("Content-Transfer-Encoding: binary").append(EOL);
+	        writer.append(EOL);
+	        writer.flush();
+	 
+	        FileInputStream inputStream = new FileInputStream(uploadFile);
+	        byte[] buffer = new byte[4096];
+	        int bytesRead = -1;
+	        while ((bytesRead = inputStream.read(buffer)) != -1) {
+	            outputStream.write(buffer, 0, bytesRead);
+	        }
+	        outputStream.flush();
+	        inputStream.close();
+	         
+	        writer.append(EOL);
+	        writer.flush();    
+	    }
+	 
+	    /**
+	     * Completes the request and receives response from the server.
+	     * @return a list of Strings as response in case the server returned status OK, otherwise an exception is thrown.
+	     * @throws Exception
+	     */
+	    public List<String> finish() throws Exception {
+	        List<String> response = new ArrayList<String>();
+	 
+	        writer.append(EOL).flush();
+	        writer.append("--" + boundary + "--").append(EOL);
+	        writer.close();
+	 
+	        // checks server's status code first
+	        int status = cnx.getResponseCode();
+	        if (status == HttpURLConnection.HTTP_OK) {
+	            BufferedReader reader = new BufferedReader(new InputStreamReader(
+	                    cnx.getInputStream()));
+	            String line = null;
+	            while ((line = reader.readLine()) != null) {
+	                response.add(line);
+	            }
+	            reader.close();
+	            cnx.disconnect();
+	        } else {
+	        	cnx.disconnect();
+	            throw new Exception("Winds server returned non-OK status: " + status);
+	        }
+	 
+	        return response;
+	    }
+	}
 	
 }
