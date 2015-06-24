@@ -38,14 +38,11 @@ public class Tile extends JLabel implements Cloneable {
 	/*OK*/static Tile createEmptyCurrent(){
 		return emptyCurrent.clone();
 	}
-	/*OK*/static Tile createEmptyMatrix(){
-		return emptyMatrix.clone();
-	}
 	/*OK*/static Tile createEmptyMatrix(int position){
 		Tile t = emptyMatrix.clone();
 		t.position = position;
 		return t;
-	}	
+	}
 	/*OK*/static Tile createMatrix(Image backImage, Image frontImage, int backIndex, int frontIndex, int position){
 		return new Tile(MATRIX, backImage, frontImage, backIndex, frontIndex, position, null);
 	}
@@ -57,7 +54,7 @@ public class Tile extends JLabel implements Cloneable {
 	}		
 	//endregion
 	
-	/*OK*/private Tile(int type, Image backImage, Image frontImage, int backIndex, int frontIndex, int position, String tips){
+	private Tile(int type, Image backImage, Image frontImage, int backIndex, int frontIndex, int position, String tips){
 		super();
 		
 		this.tips = tips;
@@ -65,6 +62,7 @@ public class Tile extends JLabel implements Cloneable {
 		this.position = position;
 		this.backIndex = backIndex;
 		this.frontIndex = frontIndex;
+		
 		this.backImage = backImage;
 		this.frontImage = frontImage;
 		this.mixed = mixImages();
@@ -81,7 +79,7 @@ public class Tile extends JLabel implements Cloneable {
 	/*OK*/private ImageIcon mixImages(){
 		BufferedImage mix = createBlankImage();
 		Graphics g = mix.getGraphics();
-		
+
 		if(backImage != null)   g.drawImage(backImage, 0, 0, SIZE, SIZE, this);
 		if(frontImage != null)  g.drawImage(frontImage, 0, 0, SIZE, SIZE, this);
 		
@@ -124,53 +122,48 @@ public class Tile extends JLabel implements Cloneable {
 		return null;
 	}
 	public String toString(){
-		return "Tile : {tips: "+ tips
-					+", type: "+ (type == 1 ? "legend" : "matrix")
+		return "Tile [tips: "+ tips
+					+", type: "+ ((type == 0) ? "matrix" : (type == 1) ? "current" : "legend")
 					+", position: "+ position
 					+", backIndex: "+ backIndex
 					+", frontIndex: "+ frontIndex
 					+", backImage: "+ (backImage == null ? "null" : backImage)
 					+", frontImage: " + (frontImage == null ? "null" : frontImage)
 					+", mixed: "+ mixed.toString()
-					+", parent: " + super.toString() +"}";
+					+", parent: " + super.toString() +"]";
 	}
-	public void updateFrom(Tile source){
-		// update the current tile to become empty
-		if(this.type == CURRENT && source.type == CURRENT){
-			updateFromEmpty();
-			
-		}else{
-			// update the current tile from a legend tile
-			if(this.type == CURRENT && source.type == LEGEND)
-				updateFromLegend(source);
-			
-			// update a matrix tile from the current tile
-			if(this.type == MATRIX && source.type == CURRENT)
-				updateFromCurrent(source);
-		}
+	/*OK*/public void updateFrom(Tile source){
+		if(this.type == CURRENT && source.type == CURRENT)	updateFromEmpty();
+		if(this.type == CURRENT && source.type == LEGEND)	updateCurrentFromLegend(source);
+		if(this.type == MATRIX  && source.type == CURRENT)	updateMatrixFromCurrent(source);
 		
-		mixed = mixImages();
+		mixed = this.mixImages();
 		setIcon(mixed);
 	}
 	
-	private void updateFromLegend(Tile source){
-		backIndex  = source.backIndex;
-		backImage  = source.backImage;
-		frontIndex = source.frontIndex;
-		frontImage = source.frontImage;
-	}
-	private void updateFromEmpty(){
+	/*OK*/private void updateFromEmpty(){
 		backIndex  = emptyCurrent.backIndex;
 		backImage  = emptyCurrent.backImage;
 		frontIndex = emptyCurrent.frontIndex;
 		frontImage = emptyCurrent.frontImage;
 	}
-	private void updateFromCurrent(Tile source){
-		if(source.backImage != null){
+	/*OK*/private void updateCurrentFromLegend(Tile source){
+		backIndex  = source.backIndex;
+		backImage  = source.backImage;
+		frontIndex = source.frontIndex;
+		frontImage = source.frontImage;
+	}
+	/*OK*/private void updateMatrixFromCurrent(Tile source){
+		if(source.backIndex == DEFAULT && source.frontIndex == DEFAULT){
+			updateFromEmpty();
+			return;
+		}
+		
+		if(source.backIndex != DEFAULT){
 			backIndex = source.backIndex;
 			backImage = source.backImage;
 		}
-		if(source.frontImage != null) {
+		if(source.frontIndex != DEFAULT) {
 			frontIndex = source.frontIndex;
 			frontImage = source.frontImage;
 			if(this.backImage == emptyCurrent.backImage){
@@ -182,9 +175,8 @@ public class Tile extends JLabel implements Cloneable {
 	
 	/*OK*/public void paintComponent(Graphics g){
         super.paintComponent(g);
-        if(mixed != null){
+        if(mixed != null)
         	g.drawImage(mixed.getImage(), 0, 0, getWidth(), getHeight(), this);
-        }
     }
 	//endregion
 	
