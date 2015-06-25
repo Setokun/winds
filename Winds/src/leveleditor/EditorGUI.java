@@ -73,7 +73,7 @@ public class EditorGUI extends JPanel {
 	private String[] intersTips;
 	
 	
-    /*OK*/public EditorGUI(JarLevel jl, JarTheme jt) {
+    public EditorGUI(JarLevel jl, JarTheme jt) {
         jarLevelUsed = jl;
         jarThemeUsed = jt;
         spritesComp = jt.getSpritesCompatibility();
@@ -81,6 +81,7 @@ public class EditorGUI extends JPanel {
         intersTips  = jt.getInteractionTips();
         backImages  = new SpriteSheet( jt.getSprites64(), Tile.SIZE).getSprites();
         //frontImages = new SpriteSheet( jt.getInteractions64(), Tile.SIZE).getSprites();
+        test_loadInteractions();
         
         initComponents();
         initComponentsConfig();
@@ -404,30 +405,7 @@ public class EditorGUI extends JPanel {
     }
     //endregion
     
-    //region Methods 
-    /* todo 
-     * remplacer le frontIndex à 0 par l'index dans la matrice d'interactions
-    */
-    private void initMatrix(){
-    	for(int i=0; i<NB_TILES_MATRIX; i++){
-    		for(int j=0; j<NB_TILES_MATRIX; j++){
-    			int position = i*NB_TILES_MATRIX + j;
-    			int index = jarLevelUsed.getLevel().getMatrix()[i][j];
-    			gridMatrix.add( index == 0 ? Tile.createEmptyMatrix(position) :
-    				Tile.createMatrix(backImages[index], null, index,
-    						0
-    						, position));
-    		}
-    	}
-    }
-    /*OK*/private void initSprites(){
-		for (int i=1; i<backImages.length; i++)
-			gridSprites.add( Tile.createSprite(backImages[i],i) );
-    }
-    /* todo 
-     * supprimer le 1er paragraphe pour la gestion du chargement des interactions
-    */
-    private void initInteractions(){
+    private void test_loadInteractions(){
     	ClassLoader loader = EditorGUI.class.getClassLoader();
     	ImageIcon front64 = new ImageIcon( loader.getResource("leveleditor/brambles_interactions.png") );
     	Image img = front64.getImage();
@@ -435,8 +413,32 @@ public class EditorGUI extends JPanel {
         Graphics bGr = bimage.getGraphics();
         bGr.drawImage(img, 0, 0, null);
         bGr.dispose();
+        
+        frontImages = new SpriteSheet( bimage, Tile.SIZE).getSprites();
+    }
+    //region Methods 
+    /*OK*/private void initMatrix(){
+    	int[][] matrix = jarLevelUsed.getLevel().getMatrix();
+    	int[][] inters = jarLevelUsed.getLevel().getInteractions();
     	
-    	frontImages = new SpriteSheet( bimage, Tile.SIZE).getSprites();
+    	for(int i=0; i<NB_TILES_MATRIX; i++){
+    		for(int j=0; j<NB_TILES_MATRIX; j++){
+    			int position = i*NB_TILES_MATRIX + j;
+    			int indexBack = matrix[i][j];
+    			int indexFront = inters[i][j];
+    			gridMatrix.add(indexBack == 0 && indexFront == 0 ?
+					Tile.createEmptyMatrix(position) :
+					Tile.createMatrix(backImages[indexBack],
+						frontImages[indexFront], indexBack,
+						indexFront, position));
+    		}
+    	}
+    }
+    /*OK*/private void initSprites(){
+		for (int i=1; i<backImages.length; i++)
+			gridSprites.add( Tile.createSprite(backImages[i],i) );
+    }
+    /*OK*/private void initInteractions(){
     	for (int i=1; i<frontImages.length; i++)
 			gridInteractions.add( Tile.createInteraction(frontImages[i], i, intersTips[i-1]) );
     }
