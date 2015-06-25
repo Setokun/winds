@@ -81,9 +81,6 @@ public class AddonManager {
 						}else
 						if( entry.endsWith("spritesheet/64.png") ){
 							current.setSprites64(icon);
-						}else
-						if( entry.endsWith("spritesheet/32.png") ){
-							current.setSprites32(icon);
 						}
 					}
 				}

@@ -80,8 +80,7 @@ public class EditorGUI extends JPanel {
         intersComp  = jt.getInteractionsCompatibility();
         intersTips  = jt.getInteractionTips();
         backImages  = new SpriteSheet( jt.getSprites64(), Tile.SIZE).getSprites();
-        //frontImages = new SpriteSheet( jt.getInteractions64(), Tile.SIZE).getSprites();
-        test_loadInteractions();
+        frontImages = new SpriteSheet( jt.getInteractions(), Tile.SIZE).getSprites();
         
         initComponents();
         initComponentsConfig();
@@ -405,17 +404,6 @@ public class EditorGUI extends JPanel {
     }
     //endregion
     
-    private void test_loadInteractions(){
-    	ClassLoader loader = EditorGUI.class.getClassLoader();
-    	ImageIcon front64 = new ImageIcon( loader.getResource("leveleditor/brambles_interactions.png") );
-    	Image img = front64.getImage();
-    	BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        Graphics bGr = bimage.getGraphics();
-        bGr.drawImage(img, 0, 0, null);
-        bGr.dispose();
-        
-        frontImages = new SpriteSheet( bimage, Tile.SIZE).getSprites();
-    }
     //region Methods 
     /*OK*/private void initMatrix(){
     	int[][] matrix = jarLevelUsed.getLevel().getMatrix();
