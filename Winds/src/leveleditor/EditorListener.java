@@ -145,25 +145,15 @@ public class EditorListener {
 			Tile source = (Tile) e.getSource();
 			Tile[] neighboors = EditorGUI.getNeighboors(source.getPosition());
 			
-			if( allowedBackTile(current, neighboors) ){
-				source.updateFrom(current);
+			if( !allowedBackTile(current, neighboors) ){
+				notifyForbiddenTile();
 				return;
 			}
 			
-			notifyForbiddenTile();
+			source.updateFrom(current);
+			updateInteractionSingletons(source);
 		}
-		private void notifyForbiddenTile(){
-			JPanel pnl = EditorGUI.current;
-			Color oldColor = pnl.getBackground();
-			
-			pnl.setBackground(new Color(240,125,125));
-			new Timer(delay, new ActionListener() {	
-				public void actionPerformed(ActionEvent e) {
-					pnl.setBackground(oldColor);
-					((Timer) e.getSource()).stop();
-				}
-			}).start();
-		}
+		
 		private boolean allowedBackTile(Tile current, Tile[] neighboors){
 			int currentIndex = current.getBackIndex();
 			if(currentIndex == 0)  return true;
@@ -190,6 +180,38 @@ public class EditorListener {
 				}
 			}
 			return true;
+		}
+		private void notifyForbiddenTile(){
+			JPanel pnl = EditorGUI.current;
+			Color oldColor = pnl.getBackground();
+			
+			pnl.setBackground(new Color(240,125,125));
+			new Timer(delay, new ActionListener() {	
+				public void actionPerformed(ActionEvent e) {
+					pnl.setBackground(oldColor);
+					((Timer) e.getSource()).stop();
+				}
+			}).start();
+		}
+		private void updateInteractionSingletons(Tile current){
+			// updates departure
+			if( current.isDeparture() )
+				EditorGUI.setDeparture(current);
+			
+			// updates arrival
+			else if( current.isArrival() )
+				EditorGUI.setArrival(current);
+			
+			// checks for updating departure or arrival
+			else if( current.isEmptyInteraction() ){
+				boolean isDeparturePosition = EditorGUI.getDeparture() != null &&
+						current.getPosition() == EditorGUI.getDeparture().getPosition();
+				boolean isArrivalPosition = EditorGUI.getArrival() != null &&
+						current.getPosition() == EditorGUI.getArrival().getPosition();
+				
+				if(isDeparturePosition)			EditorGUI.setDeparture(null);
+				else if(isArrivalPosition)		EditorGUI.setArrival(null);
+			}
 		}
 	}
 

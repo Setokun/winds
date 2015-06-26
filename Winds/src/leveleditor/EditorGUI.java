@@ -52,7 +52,7 @@ public class EditorGUI extends JPanel {
 	private final Cursor CURSOR_HAND = new Cursor(Cursor.HAND_CURSOR);
 	
 	public  static JPanel current;
-    public  static Tile tileCurrent;
+    public  static Tile tileCurrent, departure, arrival;
     public  static Image[] backImages, frontImages;
     public  static Map<Point, Integer[]> spritesComp;
     public  static int[][] intersComp;
@@ -73,7 +73,7 @@ public class EditorGUI extends JPanel {
 	private String[] intersTips;
 	
 	
-    public EditorGUI(JarLevel jl, JarTheme jt) {
+	/*OK*/public EditorGUI(JarLevel jl, JarTheme jt) {
         jarLevelUsed = jl;
         jarThemeUsed = jt;
         spritesComp = jt.getSpritesCompatibility();
@@ -446,6 +446,7 @@ public class EditorGUI extends JPanel {
     	lvl.setDescription( descriptionValue );
     	lvl.setTimeMax( timeMax );
     	lvl.setStartPosition( getStartPosition() );
+    	lvl.setEndPosition( getEndPosition() );
     	lvl.setMatrix( extractMatrix() );
     	lvl.setInteractions( extractInteractions() );
 
@@ -466,8 +467,23 @@ public class EditorGUI extends JPanel {
 
     	return ts;
     }
-    private Point getStartPosition(){
-    	return new Point(2,2);
+    /*OK*/private Point getStartPosition(){
+    	Point p = null;
+    	if(departure != null){
+    		int x = departure.getPosition() % NB_TILES_MATRIX,
+    			y = (int) (departure.getPosition() / NB_TILES_MATRIX);
+    		p = new Point(x,y);
+    	}
+    	return p;
+    }
+    /*OK*/private Point getEndPosition(){
+    	Point p = null;
+    	if(arrival != null){
+    		int x = arrival.getPosition() % NB_TILES_MATRIX,
+    			y = (int) (arrival.getPosition() / NB_TILES_MATRIX);
+    		p = new Point(x,y);
+    	}
+    	return p;
     }
     /*OK*/private int[][] extractMatrix(){
     	Component[] components = gridMatrix.getComponents();
@@ -492,6 +508,43 @@ public class EditorGUI extends JPanel {
     		}
     	}
     	return matrix;
+    }
+    //endregion
+    
+    //region Getters & Setters 
+    static Tile getDeparture(){
+    	return departure;
+    }
+    static Tile getArrival(){
+    	return arrival;
+    }
+    /*OK*/static void setDeparture(Tile newDeparture){
+    	if(arrival != null && arrival.equals(newDeparture))
+    		arrival = null;
+    	
+    	if(departure == null)
+    		departure = newDeparture;
+    	
+    	else if( !departure.equals(newDeparture) ){
+    		int position = departure.getPosition();
+    		Tile exDep = (Tile) gridMatrix.getComponent(position);
+    		exDep.removeInteraction();
+    		departure = newDeparture;
+    	}
+    }
+    /*OK*/static void setArrival(Tile newArrival){
+    	if(departure != null && departure.equals(newArrival))
+    		departure = null;
+    	
+    	if(arrival == null)
+    		arrival = newArrival;
+    	
+    	else if( !arrival.equals(newArrival) ){
+    		int position = arrival.getPosition();
+    		Tile exArr = (Tile) gridMatrix.getComponent(position);
+    		exArr.removeInteraction();
+    		arrival = newArrival;
+    	}
     }
     //endregion
 

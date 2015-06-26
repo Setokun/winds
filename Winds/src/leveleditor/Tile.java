@@ -54,7 +54,7 @@ public class Tile extends JLabel implements Cloneable {
 	}		
 	//endregion
 	
-	private Tile(int type, Image backImage, Image frontImage, int backIndex, int frontIndex, int position, String tips){
+	/*OK*/private Tile(int type, Image backImage, Image frontImage, int backIndex, int frontIndex, int position, String tips){
 		super();
 		
 		this.tips = tips;
@@ -104,7 +104,14 @@ public class Tile extends JLabel implements Cloneable {
 	}
 	
 	//region Methods
-	public Tile clone(){
+	/*OK*/public boolean equals(Object obj){
+		if( !(obj instanceof Tile) )  return false;
+		
+		Tile t = (Tile) obj;
+		return tips == t.tips && type == t.type && position == t.position
+			&& backIndex == t.backIndex && frontIndex == t.frontIndex;
+	}
+	/*OK*/public Tile clone(){
 		try {
 			Tile c = (Tile) super.clone();
 			c.tips = this.tips;
@@ -121,7 +128,7 @@ public class Tile extends JLabel implements Cloneable {
 		}
 		return null;
 	}
-	public String toString(){
+	/*OK*/public String toString(){
 		return "Tile [tips: "+ tips
 					+", type: "+ ((type == 0) ? "matrix" : (type == 1) ? "current" : "legend")
 					+", position: "+ position
@@ -131,6 +138,32 @@ public class Tile extends JLabel implements Cloneable {
 					+", frontImage: " + (frontImage == null ? "null" : frontImage)
 					+", mixed: "+ mixed.toString()
 					+", parent: " + super.toString() +"]";
+	}
+	/*OK*/public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        if(mixed != null)
+        	g.drawImage(mixed.getImage(), 0, 0, getWidth(), getHeight(), this);
+    }
+	
+	/*OK*/public boolean isDeparture(){
+		return frontIndex == 1;
+	}
+	/*OK*/public boolean isArrival(){
+		return frontIndex == 2;
+	}
+	/*OK*/public boolean isEmptyInteraction(){
+		return frontIndex == DEFAULT;
+	}
+	/*OK*/public void removeInteraction(){
+		frontIndex = emptyCurrent.frontIndex;
+		frontImage = emptyCurrent.frontImage;
+		if(backIndex == DEFAULT){
+			backIndex  = emptyCurrent.backIndex;
+			backImage  = emptyCurrent.backImage;
+		}
+		
+		mixed = this.mixImages();
+		setIcon(mixed);
 	}
 	/*OK*/public void updateFrom(Tile source){
 		if(this.type == CURRENT && source.type == CURRENT)	updateFromEmpty();
@@ -172,12 +205,6 @@ public class Tile extends JLabel implements Cloneable {
 			}
 		}
 	}
-	
-	/*OK*/public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        if(mixed != null)
-        	g.drawImage(mixed.getImage(), 0, 0, getWidth(), getHeight(), this);
-    }
 	//endregion
 	
 	//region Getters 
@@ -200,6 +227,5 @@ public class Tile extends JLabel implements Cloneable {
 		return frontImage;
 	}
 	//endregion
-
 
 }
