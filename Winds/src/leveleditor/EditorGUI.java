@@ -439,6 +439,11 @@ public class EditorGUI extends JPanel {
     		JOptionPane.showMessageDialog(this, "Mandatory fields missing", "Warning", JOptionPane.WARNING_MESSAGE);
     		return null;
     	}
+    	if(departure == null || arrival == null){
+    		JOptionPane.showMessageDialog(this, "The departure and arrival\nof this level must be set.",
+    				"Warning", JOptionPane.WARNING_MESSAGE);
+    		return null;
+    	}
     	
     	int timeMax = Integer.valueOf( timeMaxValue ).intValue();
     	Level lvl = jarLevelUsed.getLevel();
