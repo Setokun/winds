@@ -10,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -41,9 +40,8 @@ public class LevelEditorList extends JPanel {
 	private JTable table;
 	private JScrollPane scroll;
 	private int titleMargin;
-
 	
-	public LevelEditorList() {
+	/*OK*/public LevelEditorList() {
 		initComponents();
 		initComponentsConfig();
 		initStructure();
@@ -55,7 +53,8 @@ public class LevelEditorList extends JPanel {
 		this.setPreferredSize(Window.DIM_STANDARD);		
 	}	
 
-	private void initComponents(){
+	//region Initialisation 
+	/*OK*/private void initComponents(){
 		title = new JLabel();
 		btnNewLevel = new JButton();
 		btnBack = new JButton();
@@ -63,7 +62,7 @@ public class LevelEditorList extends JPanel {
 		scroll = new JScrollPane();
 		groupLayout = new GroupLayout(this);
 	}
-	private void initComponentsConfig() {
+	/*OK*/private void initComponentsConfig() {
     	try {
     		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,18F);
     		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
@@ -110,7 +109,7 @@ public class LevelEditorList extends JPanel {
 		
 		scroll.setViewportView(table);
 	}
-	private void initStructure() {
+	/*OK*/private void initStructure() {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -143,7 +142,7 @@ public class LevelEditorList extends JPanel {
 					.addContainerGap(149, Short.MAX_VALUE))
 		);
 	}
-	private void initTableConfig(){
+	/*OK*/private void initTableConfig(){
 		table.getTableHeader().setBackground(new Color(23,182,255));
 		table.getTableHeader().setFont(windsPolice18);
 		table.getTableHeader().setForeground(Color.WHITE);
@@ -165,7 +164,7 @@ public class LevelEditorList extends JPanel {
 		    }  
 		} );
 	}
-	private void initTableData(){
+	/*OK*/private void initTableData(){
 		JarLevel[] jars = AddonManager.getJarLevelsByType(Type.my);
 		
 		DefaultTableModel model = new DefaultTableModel(){
@@ -176,12 +175,11 @@ public class LevelEditorList extends JPanel {
 					ButtonColumn.class, ButtonColumn.class,
 					ButtonColumn.class, ButtonColumn.class };
 			boolean[] columnEditables = new boolean[]{
-					  false, true, false, false, false, false };
+					  false, false, false, false, false, false };
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		};
-		
 		model.setColumnIdentifiers(new String[]{ "", "LEVEL NAME", "", "", "", "" });
 		for(int i=0; i<jars.length; i++)
 			model.addRow(new Object[]{
@@ -212,13 +210,17 @@ public class LevelEditorList extends JPanel {
 		new ButtonColumn(table, null, 4);
 		new ButtonColumn(table, null, 5);
 	}
+	//endregion
 	
-	private JarLevel getJarLevelAtPoint(Point p){
+	//region Methods 
+	/*OK*/private JarLevel getJarLevelAtPoint(Point p){
 		if(p == null)	return null;
 		return (JarLevel) table.getValueAt((int) p.x, (int) p.y);
 	}
+	//endregion
 	
-	protected void btnNewClicked(ActionEvent evt) {
+	//region Button Events 
+	/*OK*/private void btnNewClicked(ActionEvent evt) {
 		//LevelCreationDialog.show(true);
 		String levelName = "aaa";//LevelCreationDialog.getNameChoosen();
 		JarTheme themeUsed = AddonManager.getJarThemeByID(3);//LevelCreationDialog.getThemeChoosen();
@@ -235,17 +237,21 @@ public class LevelEditorList extends JPanel {
 		Window.resize(Window.DIM_EDITOR);
 		Window.affect(new EditorGUI(new JarLevel(lvl), themeUsed));
 	}
-	protected void btnBackClicked(ActionEvent evt) {
+	/*OK*/private void btnBackClicked(ActionEvent evt) {
 		Window.resize(Window.DIM_STANDARD);
 		Window.affect(new MainMenu());
 	}
-	
-	private void btnEditClicked(ActionEvent evt){
+	/*OK*/private void btnEditClicked(ActionEvent evt){
 		JarLevel jarL = getJarLevelAtPoint((Point) evt.getSource());
+		JarTheme jarT = AddonManager.getJarThemeByID(jarL.getLevel().getIdTheme());
 		
+		Window.resize(Window.DIM_EDITOR);
+		Window.affect(new EditorGUI(jarL, jarT));
 	}
 	private void btnDuplicateClicked(ActionEvent evt){
 		JarLevel jar = getJarLevelAtPoint((Point) evt.getSource());
+		
+		
 		
 	}
 	private void btnDeleteClicked(ActionEvent evt){
@@ -256,4 +262,6 @@ public class LevelEditorList extends JPanel {
 		JarLevel jar = getJarLevelAtPoint((Point) evt.getSource());
 		
 	}
+	//endregion
+
 }
