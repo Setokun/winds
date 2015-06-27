@@ -181,9 +181,7 @@ public class AddonManager {
 		int nbLevels = levels.length;
 		int[] ids = new int[nbLevels];
 		for (int i = 0; i < nbLevels; i++) {
-			int test = levels[i].getLevel().getIdDB();
-			System.out.println(test);
-			ids[i] = test;
+			ids[i] = levels[i].getLevel().getIdDB();
 		}
 		return ids;
 	}
