@@ -6,18 +6,15 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -74,7 +71,7 @@ public class EditorGUI extends JPanel {
 	
 	
 	/*OK*/public EditorGUI(JarLevel jl, JarTheme jt) {
-        jarLevelUsed = jl;
+		jarLevelUsed = jl;
         jarThemeUsed = jt;
         spritesComp = jt.getSpritesCompatibility();
         intersComp  = jt.getInteractionsCompatibility();
@@ -406,8 +403,9 @@ public class EditorGUI extends JPanel {
     
     //region Methods 
     /*OK*/private void initMatrix(){
-    	int[][] matrix = jarLevelUsed.getLevel().getMatrix();
-    	int[][] inters = jarLevelUsed.getLevel().getInteractions();
+    	Level lvl = jarLevelUsed.getLevel();
+    	int[][] matrix = lvl.getMatrix();
+    	int[][] inters = lvl.getInteractions();
     	
     	for(int i=0; i<NB_TILES_MATRIX; i++){
     		for(int j=0; j<NB_TILES_MATRIX; j++){
@@ -420,6 +418,16 @@ public class EditorGUI extends JPanel {
 						frontImages[indexFront], indexBack,
 						indexFront, position));
     		}
+    	}
+    	
+    	if(lvl.getStartPosition() != null && lvl.getEndPosition() != null){
+    		Point start = lvl.getStartPosition(),
+    			  end	= lvl.getEndPosition();
+    		int startPosition = ((int) start.getX())*NB_TILES_MATRIX + ((int) start.getY()),
+    			endPosition   = ((int) end.getX())  *NB_TILES_MATRIX + ((int) end.getY());
+    		
+    		departure = (Tile) gridMatrix.getComponent(startPosition);
+    		arrival   = (Tile) gridMatrix.getComponent(endPosition);
     	}
     }
     /*OK*/private void initSprites(){
