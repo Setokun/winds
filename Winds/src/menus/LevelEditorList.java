@@ -28,6 +28,7 @@ import addon.AddonManager;
 import addon.JarLevel;
 import addon.JarTheme;
 import addon.Level;
+import addon.level.Type;
 import display.Window;
 
 public class LevelEditorList extends JPanel {
@@ -156,19 +157,19 @@ public class LevelEditorList extends JPanel {
 			    // get the row index and col index that contains that coordinate
 				int col = table.columnAtPoint(p);
 				int row = table.rowAtPoint(p);
-				if(col == 1){
-					System.out.println("Edition de " + table.getValueAt(row, 0));
-				}
 				if(col == 2){
-					System.out.println("Duplication de " + table.getValueAt(row, 0));
+					System.out.println("Edition de " + table.getValueAt(row, 1));
 				}
 				if(col == 3){
-					System.out.println("Suppression de " + table.getValueAt(row, 0));
+					System.out.println("Duplication de " + table.getValueAt(row, 1));
 				}
 				if(col == 4){
-					if(!table.getValueAt(row, 4).equals("Uploaded")){
-						System.out.println("Upload de " + table.getValueAt(row, 0));
-						table.setValueAt("Uploaded", row, 4);
+					System.out.println("Suppression de " + table.getValueAt(row, 1));
+				}
+				if(col == 5){
+					if(!table.getValueAt(row, 5).equals("Uploaded")){
+						System.out.println("Upload de " + table.getValueAt(row, 1));
+						table.setValueAt("Uploaded", row, 5);
 					}
 					else{
 						System.out.println("niveau déjà uploadé");
@@ -179,58 +180,50 @@ public class LevelEditorList extends JPanel {
 		} );
 	}
 	private void initTableData(){
-		table.setModel(
-			new DefaultTableModel(
-				new Object[][] {
-					{"Level 1", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 2", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 3", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 4", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 5", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 6", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 7", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 8", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 9", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 10", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 11", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 12", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 13", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 14", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 15", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 16", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 17", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 18", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 19", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 20", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-					{"Level 21", new ImageIcon("resources/Buttons/Btn_edit.png"), new ImageIcon("resources/Buttons/Btn_duplicate.png"), new ImageIcon("resources/Buttons/Btn_delete.png"), new ImageIcon("resources/Buttons/Btn_upload.png")},
-				},
-				new String[]{ "LEVEL NAME", "", "", "", "" }
-			) {
-				private static final long serialVersionUID = 218805739056532012L;
-				@SuppressWarnings({ "unused", "rawtypes" })
-				Class[] columnTypes = new Class[]{ String.class, ButtonColumn.class,
-						ButtonColumn.class, ButtonColumn.class, ButtonColumn.class };
-				boolean[] columnEditables = new boolean[]{
-						  true, false, false, false, false };
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
-				}
+		JarLevel[] jars = AddonManager.getJarLevelsByType(Type.my);
+		
+		DefaultTableModel model = new DefaultTableModel(){
+			private static final long serialVersionUID = 218805739056532012L;
+			@SuppressWarnings({ "unused", "rawtypes" })
+			Class[] columnTypes = new Class[]{
+					JarLevel.class, String.class,
+					ButtonColumn.class, ButtonColumn.class,
+					ButtonColumn.class, ButtonColumn.class };
+			boolean[] columnEditables = new boolean[]{
+					  false, true, false, false, false, false };
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		};
+		model.setColumnIdentifiers(new String[]{ "", "LEVEL NAME", "", "", "", "" });
+		for(int i=0; i<jars.length; i++)
+			model.addRow(new Object[]{
+				jars,
+				jars[i].getLevel().getName(),
+				new ImageIcon("resources/Buttons/Btn_edit.png"),
+				new ImageIcon("resources/Buttons/Btn_duplicate.png"),
+				new ImageIcon("resources/Buttons/Btn_delete.png"),
+				new ImageIcon("resources/Buttons/Btn_upload.png")
 			});
-	
+
 		int colWidth = 98;
+		table.setModel(model);
 		table.setRowHeight(29);
-		table.getColumnModel().getColumn(0).setPreferredWidth(275);
-		for(int i=1; i<=4; i++){
+		table.getColumnModel().getColumn(0).setMinWidth(0);
+		table.getColumnModel().getColumn(0).setMaxWidth(0);
+		table.getColumnModel().getColumn(0).setPreferredWidth(0);
+		table.getColumnModel().getColumn(1).setPreferredWidth(275);
+		for(int i=2; i<=5; i++){
 			table.getColumnModel().getColumn(i).setResizable(false);
 			table.getColumnModel().getColumn(i).setMinWidth(colWidth);
 			table.getColumnModel().getColumn(i).setMaxWidth(colWidth);
 			table.getColumnModel().getColumn(i).setPreferredWidth(colWidth);
 		}
 		
-		new ButtonColumn(table, null, 1);
 		new ButtonColumn(table, null, 2);
 		new ButtonColumn(table, null, 3);
 		new ButtonColumn(table, null, 4);
+		new ButtonColumn(table, null, 5);
 	}
 	
 	protected void btnNewLevelClicked(ActionEvent evt) {
