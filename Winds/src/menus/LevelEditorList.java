@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
+import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -40,6 +41,7 @@ public class LevelEditorList extends JPanel {
 	private JTable table;
 	private JScrollPane scroll;
 	private int titleMargin;
+
 	
 	public LevelEditorList() {
 		initComponents();
@@ -78,7 +80,7 @@ public class LevelEditorList extends JPanel {
 		btnNewLevel.setBorder(new SoftBevelBorder(0));
 		btnNewLevel.setBorderPainted(false);
 		btnNewLevel.setContentAreaFilled(false);
-		btnNewLevel.addActionListener( (evt)->{ btnNewLevelClicked(evt); } );
+		btnNewLevel.addActionListener( (evt)->{ btnNewClicked(evt); } );
 		btnNewLevel.addMouseListener(new MouseAdapter() {
 			public void mouseExited(MouseEvent e) {
 				btnNewLevel.setIcon(new ImageIcon("resources/Buttons/NewLevel.png"));
@@ -152,30 +154,14 @@ public class LevelEditorList extends JPanel {
 		
 		table.addMouseListener(new MouseAdapter(){
 		    public void mouseClicked(MouseEvent e){
-		        // get the coordinates of the mouse click
-				Point p = e.getPoint();
-			    // get the row index and col index that contains that coordinate
-				int col = table.columnAtPoint(p);
-				int row = table.rowAtPoint(p);
-				if(col == 2){
-					System.out.println("Edition de " + table.getValueAt(row, 1));
-				}
-				if(col == 3){
-					System.out.println("Duplication de " + table.getValueAt(row, 1));
-				}
-				if(col == 4){
-					System.out.println("Suppression de " + table.getValueAt(row, 1));
-				}
-				if(col == 5){
-					if(!table.getValueAt(row, 5).equals("Uploaded")){
-						System.out.println("Upload de " + table.getValueAt(row, 1));
-						table.setValueAt("Uploaded", row, 5);
-					}
-					else{
-						System.out.println("niveau déjà uploadé");
-					}
-					
-				}
+				int col = table.columnAtPoint( e.getPoint() );
+				int row = table.rowAtPoint( e.getPoint() );
+				
+				ActionEvent evt = new ActionEvent(new Point(row,0), ActionEvent.ACTION_PERFORMED, null);
+				if(col == 2)	btnEditClicked(evt);
+				if(col == 3)	btnDuplicateClicked(evt);
+				if(col == 4)	btnDeleteClicked(evt);
+				if(col == 5)	btnUploadClicked(evt);
 		    }  
 		} );
 	}
@@ -195,10 +181,11 @@ public class LevelEditorList extends JPanel {
 				return columnEditables[column];
 			}
 		};
+		
 		model.setColumnIdentifiers(new String[]{ "", "LEVEL NAME", "", "", "", "" });
 		for(int i=0; i<jars.length; i++)
 			model.addRow(new Object[]{
-				jars,
+				jars[i],
 				jars[i].getLevel().getName(),
 				new ImageIcon("resources/Buttons/Btn_edit.png"),
 				new ImageIcon("resources/Buttons/Btn_duplicate.png"),
@@ -226,7 +213,12 @@ public class LevelEditorList extends JPanel {
 		new ButtonColumn(table, null, 5);
 	}
 	
-	protected void btnNewLevelClicked(ActionEvent evt) {
+	private JarLevel getJarLevelAtPoint(Point p){
+		if(p == null)	return null;
+		return (JarLevel) table.getValueAt((int) p.x, (int) p.y);
+	}
+	
+	protected void btnNewClicked(ActionEvent evt) {
 		//LevelCreationDialog.show(true);
 		String levelName = "aaa";//LevelCreationDialog.getNameChoosen();
 		JarTheme themeUsed = AddonManager.getJarThemeByID(3);//LevelCreationDialog.getThemeChoosen();
@@ -248,4 +240,20 @@ public class LevelEditorList extends JPanel {
 		Window.affect(new MainMenu());
 	}
 	
+	private void btnEditClicked(ActionEvent evt){
+		JarLevel jarL = getJarLevelAtPoint((Point) evt.getSource());
+		
+	}
+	private void btnDuplicateClicked(ActionEvent evt){
+		JarLevel jar = getJarLevelAtPoint((Point) evt.getSource());
+		
+	}
+	private void btnDeleteClicked(ActionEvent evt){
+		JarLevel jar = getJarLevelAtPoint((Point) evt.getSource());
+		
+	}
+	private void btnUploadClicked(ActionEvent evt){
+		JarLevel jar = getJarLevelAtPoint((Point) evt.getSource());
+		
+	}
 }
