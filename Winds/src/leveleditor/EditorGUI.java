@@ -174,12 +174,13 @@ public class EditorGUI extends JPanel {
         txtTimeMax.addKeyListener(tml);
         txtTimeMax.addFocusListener(tml);
         int time = jarLevelUsed.getLevel().getTimeMax();
-    	txtTimeMax.setText(time != 0 ? String.valueOf(time) : PROMPT_TIMEMAX);
+    	txtTimeMax.setText(time == 0 ? PROMPT_TIMEMAX : String.valueOf(time));
     	txtTimeMax.setForeground(time != 0 ? Color.BLACK : Color.GRAY);
         
         lblDescription.setText("Level description :");
         
-        areaDescription.setText(PROMPT_DESCRIPTION);
+        String desc = jarLevelUsed.getLevel().getDescription();
+        areaDescription.setText(desc == null ? PROMPT_DESCRIPTION : desc);
         areaDescription.setToolTipText("maximum allowed : 255 characters");
         areaDescription.setForeground(Color.GRAY);
         areaDescription.setLineWrap(true);
