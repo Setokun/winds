@@ -199,18 +199,18 @@ public class ServerConnection {
 	
 	/*TODO*/public static void downloadTheme(int idTheme){
 		try {
-			  URLConnection ucon = new URL("http://www.winds-game.com/resources/brambles.jar" ).openConnection();
-			  FileOutputStream fos = new FileOutputStream("C:\\Users\\Stephane\\Downloads\\test.jar" );
-			  InputStream in = ucon.getInputStream();
-			  int b = 0;
-			  while ((b = in.read())!= -1)
-			    fos.write(b);
-			  fos.close();
-			  System.out.println("téléchargement terminé !!");
-			}
-			catch (Exception e){
-			  System.out.println(e);
-			}
+			URLConnection ucon = new URL("http://www.winds-game.com/API.php?email=player1@winds.net&password=player&action=downloadTheme&idTheme="+idTheme).openConnection();  
+			FileOutputStream fos = new FileOutputStream("C:\\Users\\Stephane\\Downloads\\test.jar" );
+			InputStream in = ucon.getInputStream();
+			int b = 0;
+			while ((b = in.read())!= -1)
+				fos.write(b);
+			fos.close();
+			System.out.println("téléchargement terminé !!");
+		}
+		catch (Exception e){
+		  System.out.println(e);
+		}
 	}
 	
 	/*TODO*/public static void downloadLevel(int idLevel){
