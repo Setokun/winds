@@ -168,6 +168,25 @@ public class AddonManager {
 	public static JarLevel getLoadedJarLevel() {
 		return loadedJarLevel;
 	}
+	public static int[] getThemesInstalledIds(){
+		int nbThemes = jarThemesList.size();
+		int[] ids = new int[nbThemes];
+		for (int i = 0; i < nbThemes; i++) {
+			ids[i] = jarThemesList.get(i).getIdDB();
+		}
+		return ids;
+	}
+	public static int[] getLevelsInstalledIds(Type type){
+		JarLevel[] levels = getJarLevelsByType(type);
+		int nbLevels = levels.length;
+		int[] ids = new int[nbLevels];
+		for (int i = 0; i < nbLevels; i++) {
+			int test = levels[i].getLevel().getIdDB();
+			System.out.println(test);
+			ids[i] = test;
+		}
+		return ids;
+	}
 	//endregion
 	
 }
