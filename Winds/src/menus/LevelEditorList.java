@@ -42,6 +42,8 @@ public class LevelEditorList extends JPanel {
 	private JScrollPane scroll;
 	private int titleMargin;
 	
+	
+	//region Constructor 
 	/*OK*/public LevelEditorList() {
 		initComponents();
 		initComponentsConfig();
@@ -53,7 +55,8 @@ public class LevelEditorList extends JPanel {
 		this.setLayout(groupLayout);
 		this.setPreferredSize(Window.DIM_STANDARD);		
 	}	
-
+	//endregion
+	
 	//region Initialisation 
 	/*OK*/private void initComponents(){
 		title = new JLabel();
@@ -143,7 +146,7 @@ public class LevelEditorList extends JPanel {
 					.addContainerGap(149, Short.MAX_VALUE))
 		);
 	}
-	/*OK*/private void initTableConfig(){
+	private void initTableConfig(){
 		table.getTableHeader().setBackground(new Color(23,182,255));
 		table.getTableHeader().setFont(windsPolice18);
 		table.getTableHeader().setForeground(Color.WHITE);
@@ -253,7 +256,7 @@ public class LevelEditorList extends JPanel {
 		Window.resize(Window.DIM_EDITOR);
 		Window.affect(new EditorGUI(jarL, jarT));
 	}
-	private void btnDuplicateClicked(ActionEvent evt){
+	/*OK*/private void btnDuplicateClicked(ActionEvent evt){
 		JarLevel jarL = getJarLevelAtPoint((Point) evt.getSource());
 		JarTheme jarT = AddonManager.getJarThemeByID(jarL.getLevel().getIdTheme());
 		
@@ -270,7 +273,36 @@ public class LevelEditorList extends JPanel {
 		}
 		
 		// level duplication
-		System.out.println("duplication possible");
+		Level lvl = (Level) jarL.getLevel().clone();
+		if(lvl == null){
+			JOptionPane.showMessageDialog(Window.getFrame(),
+					"Duplication failed.\nUnable to duplicate the level.",
+					"Warning", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
+		lvl.setName(levelName);
+		JarLevel newJar = new JarLevel(lvl);
+		if( !newJar.save() ){
+			JOptionPane.showMessageDialog(Window.getFrame(),
+					"Duplication failed.\nUnable to save the level.",
+					"Warning", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
+		AddonManager.addJarLevel(newJar.getFile());
+		DefaultTableModel tm = (DefaultTableModel) table.getModel();
+		tm.addRow(new Object[]{
+			newJar,
+			newJar.getLevel().getName(),
+			new ImageIcon("resources/Buttons/Btn_edit.png"),
+			new ImageIcon("resources/Buttons/Btn_duplicate.png"),
+			new ImageIcon("resources/Buttons/Btn_delete.png"),
+			new ImageIcon("resources/Buttons/Btn_upload.png")
+		});
+		JOptionPane.showMessageDialog(Window.getFrame(),
+				"Duplication succeeded.",
+				"Duplicated", JOptionPane.INFORMATION_MESSAGE);
 	}
 	private void btnDeleteClicked(ActionEvent evt){
 		JarLevel jar = getJarLevelAtPoint((Point) evt.getSource());

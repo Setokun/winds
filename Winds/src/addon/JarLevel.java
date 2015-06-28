@@ -91,7 +91,7 @@ public class JarLevel {
 			jarOut.closeEntry();
 			jarOut.close();
 			JOptionPane.showMessageDialog(Window.getFrame(), "Level saved",
-				"Saving level succeeded", JOptionPane.INFORMATION_MESSAGE);
+				"Saved", JOptionPane.INFORMATION_MESSAGE);
 			return true;
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(Window.getFrame(),

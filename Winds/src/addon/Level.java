@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-public class Level {
+public class Level implements Cloneable {
 	private String creator, date, name, description;
 	private int idDB, idTheme;
 	private Mode mode;
@@ -24,7 +24,9 @@ public class Level {
 	private int[][] matrix, interactions;
 	private int timeMax;
 	
-	public Level(){
+	
+	// region Constructors 
+	/*OK*/public Level(){
 		updateDate();
 		name = "my new level";
 		creator = Profile.getCurrentPlayer().getPseudo();
@@ -35,22 +37,31 @@ public class Level {
 		matrix = new int[EditorGUI.NB_TILES_MATRIX][EditorGUI.NB_TILES_MATRIX];
 		interactions = new int[EditorGUI.NB_TILES_MATRIX][EditorGUI.NB_TILES_MATRIX];
 	}
-	public Level(String levelName, int idTheme){
+	/*OK*/public Level(String levelName, int idTheme){
 		this();
 		this.name = levelName;
 		this.idTheme = idTheme;
 	}
+	//endregion
 	
 	//region Public methods 
-	public String toJson(){
+	/*OK*/public Level clone() {
+		try {
+			return (Level) super.clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+	/*OK*/public String toJson(){
 		Gson gson = new GsonBuilder().serializeNulls().create();
 		return gson.toJson(this);
 	}
-	public void updateDate(){
-		date = ZonedDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
-	}
-	public String toString(){
+	/*OK*/public String toString(){
 		return "Level "+ toJson();
+	}
+	
+	/*OK*/public void updateDate(){
+		date = ZonedDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
 	}
 	//endregion
 	
