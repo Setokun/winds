@@ -38,11 +38,11 @@ public class Score {
 	public void setNbItems(int nbItems) {this.nbItems = nbItems;}
 	
 	public void setScore(int idLevel){
-
+		
 		try {
 			Score oldScore = null;
 			int counter = 0;			
-			ResultSet r = DBClass.requestQuery("SELECT nbItems, nbClicks, time, rank FROM scores WHERE id="+idLevel);
+			ResultSet r = DBClass.requestQuery("SELECT nbItems, nbClicks, time, rank FROM scores WHERE idLevel="+idLevel);
 			while(r.next()){counter++;}
 			
 			if(counter > 0){
@@ -53,10 +53,11 @@ public class Score {
 				}
 				
 				if(oldScore != null && this.getScore() > oldScore.getScore()){
-					DBClass.executeQuery("UPDATE scores SET nbItems = "+this.nbItems+", nbClicks="+this.nbClicks+", time="+this.time+" WHERE id="+idLevel);
+					DBClass.executeQuery("UPDATE scores SET nbItems = "+this.nbItems+", nbClicks="+this.nbClicks+", time="+this.time+" WHERE idLevel="+idLevel);
 				}
 			}
 			else{
+				
 				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems, rank) VALUES ('"+Window.profile.getId()+"','"+idLevel+"', '"+time+"', '"+nbClicks+"', '"+nbItems+"', 0)");
 			}
 			

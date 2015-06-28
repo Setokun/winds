@@ -1,5 +1,6 @@
 package database;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import addon.AddonManager;
@@ -10,6 +11,8 @@ public class ThemeData {
 	
 	private int idTheme;
 	private String name;
+	private String description;
+	private String fileName;
 	
 	public ThemeData(){
 		
@@ -21,27 +24,38 @@ public class ThemeData {
 	public String getName() {
 		return name;
 	}
+	public String getDescription() {
+		return description;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+
 	public void setIdTheme(int idTheme) {
 		this.idTheme = idTheme;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public String toString(){
-		return "idTheme:"+idTheme+",name:"+name;
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	
-	public static Object[][] getThemesList(){
+	public String toString(){
+		return "idTheme:"+idTheme+",name:"+name+",description:"+description+",fileName:"+fileName;
+	}
+	
+	public static Object[][] getThemesList() throws IOException{
 		
 		Object[][] results = null;
 		
 		ArrayList<ThemeData> r = null;
-		try {
-			r = ServerConnection.getThemesList(Window.profile.getEmail(), Window.profile.getPassword());
-		} catch (Exception e) {
-			//TODO afficher un dialogBox d'informations de serveur indisponible
-		}
+		
+		r = ServerConnection.getThemesList(Window.profile.getEmail(), Window.profile.getPassword());
+		
 		int[] ids = AddonManager.getThemesInstalledIds();
 		int nbThemes = r.size() - ids.length;
 		results = new Object[nbThemes][2];

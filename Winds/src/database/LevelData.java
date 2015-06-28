@@ -1,5 +1,6 @@
 package database;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import display.Window;
 
 public class LevelData {
 	private int timeMax, idTheme, idLevel;
-	private String name, description, date, creator;
+	private String name, description, creator, levelType, levelStatus, levelMode;
 	
 	public LevelData(){
 		
@@ -30,14 +31,20 @@ public class LevelData {
 	public String getDescription() {
 		return description;
 	}
-	public String getDate() {
-		return date;
-	}
 	public String getCreator() {
 		return creator;
 	}
 	public int getIdLevel() {
 		return idLevel;
+	}
+	public String getLevelType() {
+		return levelType;
+	}
+	public String getLevelStatus() {
+		return levelStatus;
+	}
+	public String getLevelMode() {
+		return levelMode;
 	}
 	
 	//setters
@@ -53,76 +60,93 @@ public class LevelData {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public void setDate(String date) {
-		this.date = date;
-	}
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}
 	public void setIdLevel(int idLevel) {
 		this.idLevel = idLevel;
 	}
-	
-	public String toString(){
-		return "timeMax:"+timeMax+",idTheme:"+idTheme+",name:"+name+",description:"+description+",date:"+date+",creator:"+creator+",idLevel:"+idLevel;
+	public void setLevelType(String levelType) {
+		this.levelType = levelType;
+	}
+	public void setLevelStatus(String levelStatus) {
+		this.levelStatus = levelStatus;
+	}
+	public void setLevelMode(String levelMode) {
+		this.levelMode = levelMode;
 	}
 
-	public static Object[][] getLevelsList(Type type){
+	public String toString(){
+		return "timeMax:"+timeMax+",idTheme:"+idTheme+",name:"+name+",description:"
+				+description+",creator:"+creator+",idLevel:"+idLevel
+				+",type:"+levelType+",status:"+levelStatus+",mode:"+levelMode;
+	}
+
+	public static Object[][] getLevelsList(Type type) throws IOException{
 		
+		ArrayList<Object[]> intermediary = null;
 		Object[][] results = null;
 		
 		ArrayList<LevelData> r = null;
-		try {
-			
-			if(type == Type.basic){
-				r = ServerConnection.getBasicLevelsList(Window.profile.getEmail(), Window.profile.getPassword());
-			}
-			else if(type == Type.custom){
-				r = ServerConnection.getCustomLevelsList(Window.profile.getEmail(), Window.profile.getPassword());
-			}
-			else if(type == Type.toModerate){
-				r = ServerConnection.getLevelsToModerateList(Window.profile.getEmail(), Window.profile.getPassword());
-			}
-		} catch (Exception e) {
-			//TODO afficher un dialogBox d'informations de serveur indisponible
-		}
-		
-		int[] ids = AddonManager.getLevelsInstalledIds(type);
-		
-		int nbLevels = r.size() - ids.length;
-		/*if(nbLevels < 0)*/ nbLevels = 1;
-		
-		results = new Object[nbLevels][2];
 
-		int j=0;
-		for(int i=0; i < r.size();i++){
-			boolean exists = false;
-			
-			for (int k = 0; k < ids.length; k++) {
-				if(ids[k] == r.get(i).getIdLevel())
-					exists = true;
+		if(type == Type.basic){
+			r = ServerConnection.getBasicLevelsList(Window.profile.getEmail(), Window.profile.getPassword());
+		}
+		else if(type == Type.custom){
+			r = ServerConnection.getCustomLevelsList(Window.profile.getEmail(), Window.profile.getPassword());
+		}
+		else if(type == Type.toModerate){
+			r = ServerConnection.getLevelsToModerateList(Window.profile.getEmail(), Window.profile.getPassword());
+		}
+
+		int[] idLevels = AddonManager.getLevelsInstalledIds(type);
+		int[] idThemes = AddonManager.getThemesInstalledIds();
+		
+		int nbLevels = r.size() - idLevels.length;
+		
+		if(nbLevels > 0){
+			intermediary = new ArrayList<Object[]>();
+			results = new Object[nbLevels][2];
+
+			for(int i=0; i < r.size();i++){
+				boolean exists = false;
+				boolean requiredThemeInstalled = false;
+				
+				//on test 
+				for (int k = 0; k < idLevels.length; k++) {
+					if(idLevels[k] == r.get(i).getIdLevel())
+						exists = true;
+				}
+				//on teste si le thème requis est installé
+				for (int k2 = 0; k2 < idThemes.length; k2++) {
+					if(idThemes[k2] == r.get(i).getIdTheme()){
+						requiredThemeInstalled = true;
+					}
+				}
+				if(!exists){
+					Object[] result = new Object[2]; 
+					result[0] =  String.valueOf(r.get(i).getName());
+					result[1] =  r.get(i).getIdLevel();
+					if(requiredThemeInstalled)intermediary.add(result);
+				}
 			}
-			if(!exists){
-				results[j][0] =  String.valueOf(r.get(i).getName());
-				results[j][1] =  r.get(i).getIdLevel();
-				j++;
+			System.out.println(intermediary.size());
+			results = new Object[intermediary.size()][2];
+			for (int i = 0; i < intermediary.size(); i++) {
+				results[i] = intermediary.get(i);
 			}
 		}
+		
 		return results;
 	}
 	
-	public static Object[][] getCustomLevelsList(){
+	public static Object[][] getCustomLevelsList() throws IOException{
 		
 		Object[][] results = null;
 		
 		ArrayList<LevelData> r = null;
-		try {
-			
-			r = ServerConnection.getCustomLevelsList(Window.profile.getEmail(), Window.profile.getPassword());
-			
-		} catch (Exception e) {
-			//TODO afficher un dialogBox d'informations de serveur indisponible
-		}
+
+		r = ServerConnection.getCustomLevelsList(Window.profile.getEmail(), Window.profile.getPassword());
 		
 		int nbLevels = r.size();
 		
@@ -152,6 +176,21 @@ public class LevelData {
 			e.printStackTrace();
 		}
 		return status;
+	}
+	
+	public void insertDB(){
+		try {
+			
+			DBClass.executeQuery("INSERT INTO levels (id , name, description, timeMax, "
+								+ "levelType, levelStatus, levelMode, creator, idTheme) "
+								+ "VALUES ("+getIdLevel()+",'"+getName()+"','"+getDescription()+"','"+getTimeMax()
+								+"','"+getLevelType()+"','"+getLevelStatus()+"','"+getLevelMode()+"','"+getCreator()+"','"+getIdTheme()+"');");
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

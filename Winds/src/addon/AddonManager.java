@@ -147,12 +147,17 @@ public class AddonManager {
 		loadedJarTheme = jar;
 	}
 	public static void loadJarLevel(int index){
-		loadedJarLevel = jarLevelsList.get(index);
+		for (int i = 0; i < jarLevelsList.size(); i++) {
+			if(jarLevelsList.get(i).getLevel().getIdDB() == index)
+				loadedJarLevel = jarLevelsList.get(i);
+		}
+		//loadedJarLevel = jarLevelsList.get(index);
 	}
 	public static void loadJarLevel(JarLevel jar){
 		loadedJarLevel = jar;
 	}
 	//endregion
+	
 	//region Getters 
 	public static JarTheme[] getJarThemes(){
 		JarTheme[] jarThemes = new JarTheme[ jarThemesList.size() ];

@@ -19,6 +19,7 @@ import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,6 +27,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
+import server.ServerConnection;
 import addon.level.Type;
 import database.LevelData;
 import database.ThemeData;
@@ -53,10 +55,16 @@ public class Shop  extends JPanel {
 		title = new JLabel("Shop");
 		title.setFont(windsPolice48);
 		
-		Object[][] listThemesToDisplay = getThemesList();
-		Object[][] listBasicLevelsToDisplay = getLevelsList(Type.basic);
-		Object[][] listCustomLevelsToDisplay = getCustomLevelsList(Type.custom);
-		Object[][] listLevelsToModerateToDisplay = getLevelsList(Type.toModerate);
+		Object[][] listThemesToDisplay = null, listBasicLevelsToDisplay = null, listCustomLevelsToDisplay = null, listLevelsToModerateToDisplay = null;
+		try {
+			listThemesToDisplay = getThemesList();
+			listBasicLevelsToDisplay = getLevelsList(Type.basic);
+			listCustomLevelsToDisplay = getCustomLevelsList(Type.custom);
+			listLevelsToModerateToDisplay = getLevelsList(Type.toModerate);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(this, "Unable to reach distant winds server, please verify your internet connection and try again !");
+		}
+		
 		
 		jBtnBack = new JButton();
 		jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
@@ -150,7 +158,6 @@ public class Shop  extends JPanel {
 		setLayout(gl);
 		
 	}
-	
 
 	private void initializeFont() {
 		try {
@@ -167,29 +174,35 @@ public class Shop  extends JPanel {
 		Window.affect(new MainMenu());
 	}
 	
-	private Object[][] getThemesList(){
+	private Object[][] getThemesList() throws IOException{
 		Object[][] listThemes = ThemeData.getThemesList();
-		Object[][] listThemesToDisplay = new Object[listThemes.length][3];
-		for(int i=0; i<listThemes.length; i++){
-			listThemesToDisplay[i][0] = listThemes[i][0];
-			listThemesToDisplay[i][1] = new ImageIcon("resources/Buttons/Btn_install.png");
-			listThemesToDisplay[i][2] = listThemes[i][1];
+		Object[][] listThemesToDisplay = null;
+		if(listThemes != null){
+			listThemesToDisplay = new Object[listThemes.length][3];
+			for(int i=0; i<listThemes.length; i++){
+				listThemesToDisplay[i][0] = listThemes[i][0];
+				listThemesToDisplay[i][1] = new ImageIcon("resources/Buttons/Btn_install.png");
+				listThemesToDisplay[i][2] = listThemes[i][1];
+			}
 		}
 		return listThemesToDisplay;
 	}
 	
-	private Object[][] getLevelsList(Type type){
+	private Object[][] getLevelsList(Type type) throws IOException{
 		Object[][] listLevels = LevelData.getLevelsList(type);
-		Object[][] listLevelsToDisplay = new Object[listLevels.length][3];
-		for(int i=0; i<listLevels.length; i++){
-			listLevelsToDisplay[i][0] = listLevels[i][0];
-			listLevelsToDisplay[i][1] = new ImageIcon("resources/Buttons/Btn_install.png");
-			listLevelsToDisplay[i][2] = listLevels[i][1];
+		Object[][] listLevelsToDisplay = null;
+		if(listLevels != null){
+			listLevelsToDisplay = new Object[listLevels.length][3];
+			for(int i=0; i<listLevels.length; i++){
+				listLevelsToDisplay[i][0] = listLevels[i][0];
+				listLevelsToDisplay[i][1] = new ImageIcon("resources/Buttons/Btn_install.png");
+				listLevelsToDisplay[i][2] = listLevels[i][1];
+			}
 		}
 		return listLevelsToDisplay;
 	}
 	
-	private Object[][] getCustomLevelsList(Type type){
+	private Object[][] getCustomLevelsList(Type type) throws IOException{
 		Object[][] listLevels = LevelData.getCustomLevelsList();
 		Object[][] listLevelsToDisplay = new Object[listLevels.length][6];
 		for(int i=0; i<listLevels.length; i++){
@@ -244,10 +257,11 @@ public class Shop  extends JPanel {
 				int col = tableNewThemes.columnAtPoint(p);
 				int row = tableNewThemes.rowAtPoint(p);
 				if(col == 1){
-					System.out.println("Installation de " + tableNewThemes.getValueAt(row, 0));//TODO
+					System.out.println("Installation de " + tableNewThemes.getValueAt(row, 2));//TODO
+					ServerConnection.downloadTheme(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewThemes.getValueAt(row, 2));
 					((DefaultTableModel)tableNewThemes.getModel()).removeRow(row);
 				}
-		    }  
+		    }
 		} );
 		scrollPaneNewThemes.setViewportView(tableNewThemes);
 	}
@@ -296,7 +310,8 @@ public class Shop  extends JPanel {
 				int col = tableNewLevels.columnAtPoint(p);
 				int row = tableNewLevels.rowAtPoint(p);
 				if(col == 1){
-					System.out.println("Installation de " + tableNewLevels.getValueAt(row, 0));
+					//System.out.println("Installation de " + tableNewLevels.getValueAt(row, 0));
+					ServerConnection.downloadLevel(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewLevels.getValueAt(row, 2));
 					((DefaultTableModel)tableNewLevels.getModel()).removeRow(row);
 				}
 		    }  

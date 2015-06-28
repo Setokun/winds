@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import account.Profile;
+import addon.AddonManager;
 import addon.JarLevel;
 
 import com.google.gson.Gson;
@@ -81,143 +83,222 @@ public class ServerConnection {
 		return scores;
 	}
 	
-	/*OK*/public static ArrayList<ThemeData> getThemesList(String email, String password){
+	/*OK*/public static ArrayList<ThemeData> getThemesList(String email, String password) throws IOException{
 		ArrayList<ThemeData> themes = new ArrayList<ThemeData>();
 
-		try {
-			URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getThemes");
-	        URLConnection yc = monURL.openConnection();
-	        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-	        
-			JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
-			
-			for (int i=0;i<jArray.size();i++) {
-			    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-			    ThemeData thm = new ThemeData();
-			    thm.setIdTheme(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
-			    thm.setName(jsonObject.get("name").toString());
-			    themes.add(thm);
-			}
-			
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getThemes");
+        URLConnection yc = monURL.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+        
+		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
+		
+		for (int i=0;i<jArray.size();i++) {
+		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+		    ThemeData thm = new ThemeData();
+		    thm.setIdTheme(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
+		    thm.setName(jsonObject.get("name").toString());
+		    themes.add(thm);
 		}
+		
+		in.close();
 		
 		return themes;
 	}
 	
-	/*OK*/public static ArrayList<LevelData> getBasicLevelsList(String email, String password){
+	/*OK*/public static ThemeData getThemeInfos(String email, String password, int idTheme) throws IOException{
+		ThemeData themeData = null;
+
+		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getThemes&idTheme="+idTheme);
+        URLConnection yc = monURL.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+        
+		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
+		
+		for (int i=0;i<jArray.size();i++) {
+		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+		    themeData = new ThemeData();
+		    themeData.setIdTheme(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
+		    themeData.setName(jsonObject.get("name").toString());
+		    themeData.setDescription(jsonObject.get("description").toString());
+		    themeData.setFileName(jsonObject.get("fileName").toString());
+		}
+		
+		in.close();
+		
+		return themeData;
+	}
+	
+	/*TODO*/public static LevelData getLevelInfos(String email, String password, int idLevel) throws IOException{
+		LevelData levelData = null;
+
+		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getLevelInfos&idLevel="+idLevel);
+        URLConnection yc = monURL.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+        
+		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
+		
+		for (int i=0;i<jArray.size();i++) {
+		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+		    levelData = new LevelData();
+		    levelData.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
+		    levelData.setLevelType(jsonObject.get("levelType").toString());
+		    levelData.setLevelStatus(jsonObject.get("levelStatus").toString());
+		    levelData.setLevelMode(jsonObject.get("levelMode").toString());
+		    levelData.setIdLevel(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
+		    levelData.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
+		    levelData.setName(jsonObject.get("name").toString());
+		    levelData.setDescription(jsonObject.get("description").toString());
+		    levelData.setCreator(jsonObject.get("creator").toString());
+		}
+		in.close();
+		
+		return levelData;
+	}
+	
+	/*OK*/public static ArrayList<LevelData> getBasicLevelsList(String email, String password) throws IOException{
 		ArrayList<LevelData> basicLevels = new ArrayList<LevelData>();
 
-		try {
-			URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getBasicLevels");
-	        URLConnection yc = monURL.openConnection();
-	        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-	        
-			JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
-			
-			for (int i=0;i<jArray.size();i++) {
-			    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-			    LevelData lvl = new LevelData();
-			    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
-			    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
-			    lvl.setName(jsonObject.get("name").toString());
-			    lvl.setDescription(jsonObject.get("description").toString());
-			    lvl.setDate(jsonObject.get("creationDate").toString());
-			    lvl.setCreator(jsonObject.get("creator").toString());
-			    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
-			    basicLevels.add(lvl);
-			}
-			
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getBasicLevels");
+        URLConnection yc = monURL.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+        
+		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
+		
+		for (int i=0;i<jArray.size();i++) {
+		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+		    LevelData lvl = new LevelData();
+		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
+		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
+		    lvl.setName(jsonObject.get("name").toString());
+		    lvl.setDescription(jsonObject.get("description").toString());
+		    lvl.setCreator(jsonObject.get("creator").toString());
+		    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+		    basicLevels.add(lvl);
 		}
+		
+		in.close();
+		
 		return basicLevels;
 	}
 	
-	/*OK*/public static ArrayList<LevelData> getCustomLevelsList(String email, String password){
+	/*OK*/public static ArrayList<LevelData> getCustomLevelsList(String email, String password) throws IOException{
 		ArrayList<LevelData> customLevels = new ArrayList<LevelData>();
 
-		try {
-			URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getCustomLevels");
-	        URLConnection yc = monURL.openConnection();
-	        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-	        
-			JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
-			
-			for (int i=0;i<jArray.size();i++) {
-			    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-			    LevelData lvl = new LevelData();
-			    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
-			    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
-			    lvl.setName(jsonObject.get("name").toString());
-			    lvl.setDescription(jsonObject.get("description").toString());
-			    lvl.setDate(jsonObject.get("creationDate").toString());
-			    lvl.setCreator(jsonObject.get("creator").toString());
-			    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
-			    customLevels.add(lvl);
-			}
-			
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getCustomLevels");
+        URLConnection yc = monURL.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+        
+		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
+		
+		for (int i=0;i<jArray.size();i++) {
+		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+		    LevelData lvl = new LevelData();
+		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
+		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
+		    lvl.setName(jsonObject.get("name").toString());
+		    lvl.setDescription(jsonObject.get("description").toString());
+		    lvl.setCreator(jsonObject.get("creator").toString());
+		    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+		    customLevels.add(lvl);
 		}
+		
+		in.close();
+
 		return customLevels;
 	}
 	
-	/*OK*/public static ArrayList<LevelData> getLevelsToModerateList(String email, String password){
+	/*OK*/public static ArrayList<LevelData> getLevelsToModerateList(String email, String password) throws IOException{
 		ArrayList<LevelData> levelsToModerate = new ArrayList<LevelData>();
 
-		try {
-			URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getLevelsToModerate");
-	        URLConnection yc = monURL.openConnection();
-	        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-	        
-			JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
-			
-			for (int i=0;i<jArray.size();i++) {
-			    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-			    LevelData lvl = new LevelData();
-			    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
-			    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
-			    lvl.setName(jsonObject.get("name").toString());
-			    lvl.setDescription(jsonObject.get("description").toString());
-			    lvl.setDate(jsonObject.get("creationDate").toString());
-			    lvl.setCreator(jsonObject.get("creator").toString());
-			    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
-			    levelsToModerate.add(lvl);
-			}
-			
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getLevelsToModerate");
+        URLConnection yc = monURL.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+        
+		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
+		
+		for (int i=0;i<jArray.size();i++) {
+		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+		    LevelData lvl = new LevelData();
+		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
+		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
+		    lvl.setName(jsonObject.get("name").toString());
+		    lvl.setDescription(jsonObject.get("description").toString());
+		    lvl.setCreator(jsonObject.get("creator").toString());
+		    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+		    levelsToModerate.add(lvl);
 		}
+		
+		in.close();
+
 		return levelsToModerate;
 	}
 	
-	/*TODO*/public static void downloadTheme(int idTheme){
+	/*TODO*/public static void downloadTheme(String email, String password, int idTheme){
 		try {
+			ThemeData theme = getThemeInfos(email, password, idTheme);
+			
 			URLConnection ucon = new URL("http://www.winds-game.com/API.php?email=player1@winds.net&password=player&action=downloadTheme&idTheme="+idTheme).openConnection();  
-			FileOutputStream fos = new FileOutputStream("C:\\Users\\Stephane\\Downloads\\test.jar" );
+			StringBuilder sb = new StringBuilder(System.getProperty("user.dir" )+ "\\bin\\resources\\themes\\");
+			sb.append(theme.getFileName().replaceAll("\"", ""));
+			FileOutputStream fos = new FileOutputStream(sb.toString());
 			InputStream in = ucon.getInputStream();
 			int b = 0;
 			while ((b = in.read())!= -1)
 				fos.write(b);
 			fos.close();
 			System.out.println("téléchargement terminé !!");
+			AddonManager.addJarTheme(new File(sb.toString()));
+			//TODO insérer ici une requete d'ajout des informations du thème dans la BDD
 		}
 		catch (Exception e){
-		  System.out.println(e);
+			//TODO faire un messageBox d'erreur de téléchargement de thème
+			System.out.println(e);
 		}
 	}
 	
-	/*TODO*/public static void downloadLevel(int idLevel){
-		
+	/*TODO*/public static void downloadLevel(String email, String password, int idLevel){
+		try {
+			LevelData level = getLevelInfos(email, password, idLevel);
+			
+			if(level != null){
+				String s = null;
+				
+				if(level.getLevelType().equals("\"basic\"")){
+					s = "http://www.winds-game.com/API.php?email="+email.replace("\"", "")+"&password="+password.replace("\"", "")+"&action=downloadBasicLevel&idBasicLevel="+idLevel;
+				}
+				else if(level.getLevelType().equals("custom")){
+					s = "http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=downloadCustomLevel&idCustomLevel="+idLevel;
+				}
+				else if(level.getLevelType().equals("tomoderate")){
+					s = "http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=downloadLevelToModerate&idLevelToModerate="+idLevel;
+				}
+				
+				URLConnection ucon = new URL(s).openConnection();  
+				StringBuilder sb = new StringBuilder(System.getProperty("user.dir" )+ "\\bin\\resources\\levels\\");
+				sb.append(level.getIdLevel());
+				sb.append(".jar");
+				//System.out.println(sb.toString());
+				
+				FileOutputStream fos = new FileOutputStream(sb.toString());
+				InputStream in = ucon.getInputStream();
+				int b = 0;
+				while ((b = in.read())!= -1)
+					fos.write(b);
+				fos.close();
+				System.out.println("téléchargement du niveau terminé !!");
+				AddonManager.addJarLevel(new File(sb.toString()));
+
+				level.insertDB();
+				//TODO insérer ici une requete d'ajout des informations du thème dans la BDD
+			}
+		}
+		catch (Exception e){
+			//TODO faire un messageBox d'erreur de téléchargement de thème
+			System.out.println(e);
+		}
 	}
 	
-	/*TODO*/public static void uploadCustomLevel(JarLevel level){
+	/*TODO*/public static void uploadCustomLevel(String email, String password, JarLevel level){
 		
 	}
 
