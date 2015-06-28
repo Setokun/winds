@@ -52,7 +52,6 @@ public class Tile extends JLabel implements Cloneable {
 	/*OK*/static Tile createInteraction(Image frontImage, int frontIndex, String tips){
 		return new Tile(LEGEND, null, frontImage, DEFAULT, frontIndex, DEFAULT, tips);
 	}		
-	//endregion
 	
 	/*OK*/private Tile(int type, Image backImage, Image frontImage, int backIndex, int frontIndex, int position, String tips){
 		super();
@@ -76,34 +75,9 @@ public class Tile extends JLabel implements Cloneable {
 		if(type == LEGEND){ this.addMouseListener(new TileLegendListener()); }
 		if(type == MATRIX){ this.addMouseListener(new TileMatrixListener()); }
 	}
-	/*OK*/private ImageIcon mixImages(){
-		BufferedImage mix = createBlankImage();
-		Graphics g = mix.getGraphics();
-
-		if(backImage != null)   g.drawImage(backImage, 0, 0, SIZE, SIZE, this);
-		if(frontImage != null)  g.drawImage(frontImage, 0, 0, SIZE, SIZE, this);
-		
-		g.dispose();
-		return new ImageIcon(mix);
-	}
-	/*OK*/private BufferedImage createBlankImage(){
-		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
-		Graphics g = bi.getGraphics();
-		g.setColor(new Color(238, 238, 238));
-		g.fillRect(0, 0, SIZE, SIZE);
-		g.dispose();
-		return bi;
-	}
-	/*OK*/private static BufferedImage createTransparentImage(){
-		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = bi.createGraphics();
-		g2d.setComposite(AlphaComposite.Clear);
-		g2d.fillRect(0, 0, SIZE, SIZE);
-		g2d.dispose();
-		return bi;
-	}
+	//endregion
 	
-	//region Methods
+	//region Public methods 
 	/*OK*/public boolean equals(Object obj){
 		if( !(obj instanceof Tile) )  return false;
 		
@@ -113,16 +87,7 @@ public class Tile extends JLabel implements Cloneable {
 	}
 	/*OK*/public Tile clone(){
 		try {
-			Tile c = (Tile) super.clone();
-			c.tips = this.tips;
-			c.type = this.type;
-			c.position = this.position;
-			c.backIndex = this.backIndex;
-			c.frontIndex = this.frontIndex;
-			c.backImage = this.backImage;
-			c.frontImage = this.frontImage;
-			c.mixed = c.mixImages();
-			return c;
+			return (Tile) super.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -173,7 +138,35 @@ public class Tile extends JLabel implements Cloneable {
 		mixed = this.mixImages();
 		setIcon(mixed);
 	}
+	//endregion
 	
+	//region Private methods 
+	/*OK*/private ImageIcon mixImages(){
+		BufferedImage mix = createBlankImage();
+		Graphics g = mix.getGraphics();
+
+		if(backImage != null)   g.drawImage(backImage, 0, 0, SIZE, SIZE, this);
+		if(frontImage != null)  g.drawImage(frontImage, 0, 0, SIZE, SIZE, this);
+		
+		g.dispose();
+		return new ImageIcon(mix);
+	}
+	/*OK*/private BufferedImage createBlankImage(){
+		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = bi.getGraphics();
+		g.setColor(new Color(238, 238, 238));
+		g.fillRect(0, 0, SIZE, SIZE);
+		g.dispose();
+		return bi;
+	}
+	/*OK*/private static BufferedImage createTransparentImage(){
+		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		g2d.setComposite(AlphaComposite.Clear);
+		g2d.fillRect(0, 0, SIZE, SIZE);
+		g2d.dispose();
+		return bi;
+	}
 	/*OK*/private void updateFromEmpty(){
 		backIndex  = emptyCurrent.backIndex;
 		backImage  = emptyCurrent.backImage;
