@@ -28,6 +28,7 @@ import addon.AddonManager;
 import addon.JarLevel;
 import addon.JarTheme;
 import addon.Level;
+import addon.level.LevelCreationDialog;
 import addon.level.Type;
 import display.Window;
 
@@ -221,10 +222,12 @@ public class LevelEditorList extends JPanel {
 	
 	//region Button Events 
 	/*OK*/private void btnNewClicked(ActionEvent evt) {
-		//LevelCreationDialog.show(true);
-		String levelName = "aaa";//LevelCreationDialog.getNameChoosen();
-		JarTheme themeUsed = AddonManager.getJarThemeByID(3);//LevelCreationDialog.getThemeChoosen();
+		// requirements
+		LevelCreationDialog lcd = LevelCreationDialog.show(null);
+		if(lcd.canceled())  return;
 		
+		String levelName = lcd.getNameChoosen();
+		JarTheme themeUsed = lcd.getThemeChoosen();
 		if(levelName == null || themeUsed == null){
 			JOptionPane.showMessageDialog(
 					Window.getFrame(), "Mandatory fields missing",
@@ -232,8 +235,10 @@ public class LevelEditorList extends JPanel {
 			return;
 		}
 		
+		// empty level creation
 		Level lvl = new Level(levelName, themeUsed.getIdDB());
 		
+		// level editor opening
 		Window.resize(Window.DIM_EDITOR);
 		Window.affect(new EditorGUI(new JarLevel(lvl), themeUsed));
 	}
@@ -249,10 +254,23 @@ public class LevelEditorList extends JPanel {
 		Window.affect(new EditorGUI(jarL, jarT));
 	}
 	private void btnDuplicateClicked(ActionEvent evt){
-		JarLevel jar = getJarLevelAtPoint((Point) evt.getSource());
+		JarLevel jarL = getJarLevelAtPoint((Point) evt.getSource());
+		JarTheme jarT = AddonManager.getJarThemeByID(jarL.getLevel().getIdTheme());
 		
+		// requirements
+		LevelCreationDialog lcd = LevelCreationDialog.show(jarT);
+		if(lcd.canceled())  return;
 		
+		String levelName = lcd.getNameChoosen();
+		if(levelName == null){
+			JOptionPane.showMessageDialog(
+				Window.getFrame(), "Mandatory field missing",
+				"Warning", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 		
+		// level duplication
+		System.out.println("duplication possible");
 	}
 	private void btnDeleteClicked(ActionEvent evt){
 		JarLevel jar = getJarLevelAtPoint((Point) evt.getSource());
