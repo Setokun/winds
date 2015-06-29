@@ -29,7 +29,7 @@ public class AddonManager {
 		collectJarLevels();
 	}
 	
-
+	//region Theme methods 
 	/*OK*/private static void collectJarThemes(){
 		File folder = new File("bin/resources/themes");
 		File[] items = folder.listFiles();
@@ -102,11 +102,13 @@ public class AddonManager {
 				return jt;
 		return null;
 	}
+	//endregion
 	
+	//region Level methods 
 	/*OK*/private static void collectJarLevels(){
 		File folder = new File("bin/resources/levels");
 		File[] items = folder.listFiles();
-		
+				
 		for (int i = 0; i < items.length; i++)
 			if (items[i].isFile() && items[i].getName().endsWith(".jar")) {
 		    	JarLevel level = validateJarLevel(items[i]);
@@ -114,13 +116,16 @@ public class AddonManager {
 			}
 	}
 	/*OK*/private static JarLevel validateJarLevel(File jarFile){
-		JarLevel current = new JarLevel(jarFile);
+		JarLevel current = new JarLevel(jarFile);		
 		return current.isValid() ? current : null;
 	}
 	/*OK*/public static void addJarLevel(File jarFile){
 		JarLevel current = validateJarLevel(jarFile);
 		if(current != null && !jarLevelsList.contains(current))
 			jarLevelsList.add(current);
+	}
+	/*OK*/public static boolean removeJarLevel(JarLevel jar){
+		return jarLevelsList.remove(jar);
 	}
 	/*OK*/public static JarLevel[] getJarLevelsByType(Type levelType){
 		ArrayList<JarLevel> list = new ArrayList<JarLevel>();
@@ -131,27 +136,9 @@ public class AddonManager {
 		JarLevel[] jarLevels = new JarLevel[ list.size() ];
 		return list.toArray(jarLevels);
 	}
-	
-	
-	//region Setters 
-	public static void loadJarTheme(int index){
-		for (int i = 0; i < jarThemesList.size(); i++) {
-			if(jarThemesList.get(i).getIdDB() == index)
-				loadedJarTheme = jarThemesList.get(i);
-		}
-		//loadedTheme = themesList.get(index);
-	}
-	public static void loadJarTheme(JarTheme jar){
-		loadedJarTheme = jar;
-	}
-	public static void loadJarLevel(int index){
-		loadedJarLevel = jarLevelsList.get(index);
-	}
-	public static void loadJarLevel(JarLevel jar){
-		loadedJarLevel = jar;
-	}
 	//endregion
-	//region Getters 
+	
+	//region Getters and Setters 
 	public static JarTheme[] getJarThemes(){
 		JarTheme[] jarThemes = new JarTheme[ jarThemesList.size() ];
 		return jarThemesList.toArray(jarThemes);
@@ -165,6 +152,22 @@ public class AddonManager {
 	}
 	public static JarLevel getLoadedJarLevel() {
 		return loadedJarLevel;
+	}
+
+	public static void loadJarTheme(int index){
+		for (int i = 0; i < jarThemesList.size(); i++) {
+			if(jarThemesList.get(i).getIdDB() == index)
+				loadedJarTheme = jarThemesList.get(i);
+		}
+	}
+	public static void loadJarTheme(JarTheme jar){
+		loadedJarTheme = jar;
+	}
+	public static void loadJarLevel(int index){
+		loadedJarLevel = jarLevelsList.get(index);
+	}
+	public static void loadJarLevel(JarLevel jar){
+		loadedJarLevel = jar;
 	}
 	//endregion
 	
