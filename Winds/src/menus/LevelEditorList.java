@@ -276,8 +276,8 @@ public class LevelEditorList extends JPanel {
 		Level lvl = (Level) jarL.getLevel().clone();
 		if(lvl == null){
 			JOptionPane.showMessageDialog(Window.getFrame(),
-					"Duplication failed.\nUnable to duplicate the level.",
-					"Warning", JOptionPane.WARNING_MESSAGE);
+					"Unable to duplicate the level.",
+					"Duplication failed", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 		
@@ -285,8 +285,8 @@ public class LevelEditorList extends JPanel {
 		JarLevel newJar = new JarLevel(lvl);
 		if( !newJar.save() ){
 			JOptionPane.showMessageDialog(Window.getFrame(),
-					"Duplication failed.\nUnable to save the level.",
-					"Warning", JOptionPane.WARNING_MESSAGE);
+					"Unable to save the level.",
+					"Duplication failed", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 		
@@ -305,8 +305,33 @@ public class LevelEditorList extends JPanel {
 				"Duplicated", JOptionPane.INFORMATION_MESSAGE);
 	}
 	private void btnDeleteClicked(ActionEvent evt){
-		JarLevel jar = getJarLevelAtPoint((Point) evt.getSource());
+		// requirements
+		Point p = (Point) evt.getSource();
+		int response = JOptionPane.showConfirmDialog(this, "Are you sure to delete this level ?",
+					   "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if(response == JOptionPane.NO_OPTION)  return;
 		
+		// level deletion
+		JarLevel jar = getJarLevelAtPoint(p);
+		
+		if( !AddonManager.removeJarLevel(jar) ){
+			JOptionPane.showMessageDialog(Window.getFrame(),
+				"Unable to remove this level from the addon manager.",
+				"Deletion failed", JOptionPane.WARNING_MESSAGE);
+			return;
+		}		
+		
+		if( !jar.getFile().delete() ){
+			JOptionPane.showMessageDialog(Window.getFrame(),
+				"Unable to remove the file of this level.",
+				"Deletion failed", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
+		((DefaultTableModel) table.getModel()).removeRow(p.x);
+		JOptionPane.showMessageDialog(Window.getFrame(),
+				"Deletion succeeded.",
+				"Deleted", JOptionPane.INFORMATION_MESSAGE);
 	}
 	private void btnUploadClicked(ActionEvent evt){
 		JarLevel jar = getJarLevelAtPoint((Point) evt.getSource());
