@@ -178,7 +178,7 @@ public class LevelData {
 		return status;
 	}
 	
-	public void insertDB(){
+	public boolean insertDB(){
 		try {
 			
 			DBClass.executeQuery("INSERT INTO levels (id , name, description, timeMax, "
@@ -189,8 +189,15 @@ public class LevelData {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			try {
+				DBClass.executeQuery("UPDATE levels SET name='"+getName()+"', description='"+getDescription()+"', timeMax='"+getTimeMax()+"'"
+						+ ", levelType='"+getLevelType()+"', levelStatus='"+getLevelStatus()+"', levelMode='"+getLevelMode()+"',"
+						+ " creator='"+getCreator()+"', idTheme='"+getIdTheme()+"' WHERE id="+getIdLevel());
+			}catch (ClassNotFoundException | SQLException e1) {
+				return false;
+			}
 		}
+		return true;
 	}
 	
 }

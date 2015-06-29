@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -257,9 +258,24 @@ public class Shop  extends JPanel {
 				int col = tableNewThemes.columnAtPoint(p);
 				int row = tableNewThemes.rowAtPoint(p);
 				if(col == 1){
-					System.out.println("Installation de " + tableNewThemes.getValueAt(row, 2));//TODO
-					ServerConnection.downloadTheme(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewThemes.getValueAt(row, 2));
-					((DefaultTableModel)tableNewThemes.getModel()).removeRow(row);
+					if(ServerConnection.downloadTheme(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewThemes.getValueAt(row, 2))){
+						int idThemeInstalled = (int)tableNewThemes.getValueAt(row, 2);
+						JOptionPane.showMessageDialog(null, "New theme "+ tableNewThemes.getValueAt(row, 0) +" installed !!");
+						((DefaultTableModel)tableNewThemes.getModel()).removeRow(row);
+						ArrayList<LevelData> rows;
+						try {
+							rows = ServerConnection.getBasicLevelsList(Window.profile.getEmail(),Window.profile.getPassword());
+							for (int i = 0; i < rows.size(); i++) {
+								if(rows.get(i).getIdTheme() == idThemeInstalled){
+									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon("resources/Buttons/Btn_install.png"), rows.get(i).getIdLevel()};
+									((DefaultTableModel)tableNewLevels.getModel()).addRow(rowToInsert);
+								}
+							}
+						} catch (IOException e1) {
+							JOptionPane.showMessageDialog(null, "Unable to load new levels for this new theme, please reload this menu...");
+						}
+						
+					}
 				}
 		    }
 		} );
@@ -311,8 +327,10 @@ public class Shop  extends JPanel {
 				int row = tableNewLevels.rowAtPoint(p);
 				if(col == 1){
 					//System.out.println("Installation de " + tableNewLevels.getValueAt(row, 0));
-					ServerConnection.downloadLevel(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewLevels.getValueAt(row, 2));
-					((DefaultTableModel)tableNewLevels.getModel()).removeRow(row);
+					if(ServerConnection.downloadLevel(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewLevels.getValueAt(row, 2))){
+						JOptionPane.showMessageDialog(null, "New level installed !!");
+						((DefaultTableModel)tableNewLevels.getModel()).removeRow(row);
+					}
 				}
 		    }  
 		} );

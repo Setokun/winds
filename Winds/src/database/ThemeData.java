@@ -1,6 +1,7 @@
 package database;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import addon.AddonManager;
@@ -74,5 +75,22 @@ public class ThemeData {
 		}
 		return results;
 	}
-	
+
+	public boolean insertDB(){
+		try {
+			
+			DBClass.executeQuery("INSERT INTO themes (id, name, description) "
+								+ "VALUES ('"+idTheme+"', '"+name+"','"+description+");");
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			try {
+				DBClass.executeQuery("UPDATE themes SET name='"+name+"', description='"+description+"' WHERE id='"+idTheme+"'");
+			} catch (ClassNotFoundException | SQLException e1) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

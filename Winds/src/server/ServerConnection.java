@@ -12,7 +12,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -21,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
 
 import account.Profile;
 import addon.AddonManager;
@@ -233,30 +234,33 @@ public class ServerConnection {
 		return levelsToModerate;
 	}
 	
-	/*TODO*/public static void downloadTheme(String email, String password, int idTheme){
+	/*OK*/public static boolean downloadTheme(String email, String password, int idTheme){
 		try {
 			ThemeData theme = getThemeInfos(email, password, idTheme);
+			if(theme != null){
+				URLConnection ucon = new URL("http://www.winds-game.com/API.php?email=player1@winds.net&password=player&action=downloadTheme&idTheme="+idTheme).openConnection();  
+				StringBuilder sb = new StringBuilder(System.getProperty("user.dir" )+ "\\bin\\resources\\themes\\");
+				sb.append(theme.getFileName().replaceAll("\"", ""));
+				FileOutputStream fos = new FileOutputStream(sb.toString());
+				InputStream in = ucon.getInputStream();
+				int b = 0;
+				while ((b = in.read())!= -1)
+					fos.write(b);
+				fos.close();
+
+				AddonManager.addJarTheme(new File(sb.toString()));
+				return theme.insertDB();
+			}
 			
-			URLConnection ucon = new URL("http://www.winds-game.com/API.php?email=player1@winds.net&password=player&action=downloadTheme&idTheme="+idTheme).openConnection();  
-			StringBuilder sb = new StringBuilder(System.getProperty("user.dir" )+ "\\bin\\resources\\themes\\");
-			sb.append(theme.getFileName().replaceAll("\"", ""));
-			FileOutputStream fos = new FileOutputStream(sb.toString());
-			InputStream in = ucon.getInputStream();
-			int b = 0;
-			while ((b = in.read())!= -1)
-				fos.write(b);
-			fos.close();
-			System.out.println("téléchargement terminé !!");
-			AddonManager.addJarTheme(new File(sb.toString()));
-			//TODO insérer ici une requete d'ajout des informations du thème dans la BDD
 		}
 		catch (Exception e){
-			//TODO faire un messageBox d'erreur de téléchargement de thème
-			System.out.println(e);
+			JOptionPane.showMessageDialog(null, "Unable to reach distant winds server, please verify your internet connection and try again !");
+			return false;
 		}
+		return true;
 	}
 	
-	/*TODO*/public static void downloadLevel(String email, String password, int idLevel){
+	/*OK*/public static boolean downloadLevel(String email, String password, int idLevel){
 		try {
 			LevelData level = getLevelInfos(email, password, idLevel);
 			
@@ -285,17 +289,17 @@ public class ServerConnection {
 				while ((b = in.read())!= -1)
 					fos.write(b);
 				fos.close();
-				System.out.println("téléchargement du niveau terminé !!");
+				//System.out.println("téléchargement du niveau terminé !!");
 				AddonManager.addJarLevel(new File(sb.toString()));
 
-				level.insertDB();
-				//TODO insérer ici une requete d'ajout des informations du thème dans la BDD
+				return level.insertDB();
 			}
 		}
 		catch (Exception e){
-			//TODO faire un messageBox d'erreur de téléchargement de thème
-			System.out.println(e);
+			JOptionPane.showMessageDialog(null, "Unable to reach distant winds server, please verify your internet connection and try again !");
+			return false;
 		}
+		return true;
 	}
 	
 	/*TODO*/public static void uploadCustomLevel(String email, String password, JarLevel level){
