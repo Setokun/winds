@@ -47,7 +47,10 @@ public class Level implements Cloneable {
 	//region Public methods 
 	/*OK*/public Level clone() {
 		try {
-			return (Level) super.clone();
+			Level lvl = (Level) super.clone();
+			lvl.updateDate();
+			lvl.uploaded = false;
+			return lvl;
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
