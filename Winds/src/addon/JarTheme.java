@@ -39,7 +39,7 @@ public class JarTheme {
 					new URL("jar:"+ jarFile.toURI().toURL() +"!/") });
 				mainClass = Class.forName(classFilePath, true, ucl);
 				theme = (ThemeBase) mainClass.newInstance();
-				String packageName = mainClass.getPackage().toString().replace("package ", "");
+				String packageName = mainClass.getPackage().toString().replace("package ", "").replace(".", "/");
 				
 				music		 = packageName +"/"+ mainClass.getDeclaredAnnotation(wFiles.class).music();
 				logo		 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).logo());
