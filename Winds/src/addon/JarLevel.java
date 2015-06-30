@@ -17,15 +17,9 @@ import display.Window;
 
 public class JarLevel {
 	private static final String fileSourceName = "level.src";
-	
-	private static String levelResourcePath;
 	private File jar;
 	private Level lvl;
-	
-	static {
-		String currentPath = JarLevel.class.getResource("").getPath().replace("%20", " ");
-		levelResourcePath = currentPath.replace("addon/", "resources/levels/");
-	}
+
 	
 	//region Constructors 
 	/*OK*/public JarLevel(Level lvl){
@@ -69,7 +63,7 @@ public class JarLevel {
 		do {
 			i++;
 			name = themeName +"_"+ i +".jar";
-			jar = new File(levelResourcePath, name);
+			jar = new File(AddonManager.getLevelsPath(), name);
 		} while( jar.exists() );
 	}
 	/*OK*/private boolean writeFile(){
@@ -100,7 +94,7 @@ public class JarLevel {
 			return false;
 		}
 	}
-	/*to finish*/private String encodeJson(String text, boolean encoding){
+	private String encodeJson(String text, boolean encoding){
 		/*int offset = encoding ? -1 : 1;
 		char[] cs = text.toCharArray();
 		StringBuilder sb = new StringBuilder();
@@ -112,7 +106,7 @@ public class JarLevel {
 		return text; //sb.toString(); le temps du dev
 	}
 	/*OK*/private String canWriteFile(String json){
-		File levelsFolder = new File(levelResourcePath);
+		File levelsFolder = new File(AddonManager.getLevelsPath());
 		
 		if( !levelsFolder.canWrite() )
 			return "No writing access rights onto levels folder";
@@ -129,7 +123,8 @@ public class JarLevel {
 		try {
 			JarFile jf = new JarFile(jar);
 			is = jf.getInputStream( jf.getEntry(fileSourceName) );
-			while ((bit = is.read()) != -1)  sb.append( (char) bit );
+			while ((bit = is.read()) != -1)
+				sb.append((char) bit);
 			jf.close();
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -2,25 +2,70 @@ package addon;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Enumeration;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import annotation.wFiles;
 import annotation.wTheme;
 
+
 public class JarTheme {
+	private ThemeBase theme;
 	private Class<?> mainClass;
 	private String music;
 	private BufferedImage logo, background, interactions,
-						  sprites64, sprites128; 
+						  sprites64, sprites128, spritesBoss; 
+	
+	
+	//region Constructors 
+	public JarTheme(File jarFile){
+		JarFile jf = null;
+		try {
+			jf = new JarFile(jarFile);
+			String classFilePath = getClassFilePath(jf);
+			if(classFilePath != null){
+				
+				URLClassLoader ucl = new URLClassLoader(new URL[]{
+					new URL("jar:"+ jarFile.toURI().toURL() +"!/") });
+				mainClass = Class.forName(classFilePath, true, ucl);
+				theme = (ThemeBase) mainClass.newInstance();
+				String packageName = mainClass.getPackage().toString().replace("package ", "");
+				
+				music		 = packageName +"/"+ mainClass.getDeclaredAnnotation(wFiles.class).music();
+				logo		 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).logo());
+				background	 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).background());
+				interactions = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).interactions());
+				sprites64	 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).sprites64());
+				sprites128	 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).sprites128());
+				spritesBoss  = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).spritesBoss());
+				
+			}
+			jf.close();
+		} catch (IllegalAccessException | InstantiationException |
+				 ClassNotFoundException | IOException e) {
+			System.out.println("Unable to open the JAR file named \""+ jarFile.getName() +"\"");
+			e.printStackTrace();
+			return;
+		}
+		    
+	}
+	//endregion
 	
 	//region Public methods
-	/*to finish*/public boolean isValid(){
+	public boolean isValid(){
 		wTheme aTheme = mainClass.getDeclaredAnnotation(wTheme.class);		
-		return aTheme != null && mainClass != null //&&  music != null
-			&& logo != null && background != null //&& interactions != null
+		return aTheme != null && mainClass != null &&  music != null
+			&& logo != null && background != null && interactions != null
 			&& sprites64 != null && sprites128 != null;
 	}
 	public boolean equals(Object o){
@@ -41,24 +86,41 @@ public class JarTheme {
 			&& new ImageIcon(sprites128).getDescription().equals(new ImageIcon(j.sprites128).getDescription());
 	}
 	public String toString(){
-		return "JarTheme {mainClass: \""+ mainClass.getName()
-						+"\", wTheme: \""+ wThemeToString()
-						//+"\", music: \""+ music
-						+"\", logo: \""+ (logo==null ? "null" : logo.getClass().getName())
-						+"\", background: \""+ new ImageIcon(background).getDescription()
-						+"\", interactions: \""+ new ImageIcon(interactions).getDescription()
-						+"\", spritesheet64: \""+ new ImageIcon(sprites64).getDescription()
-						+"\", spritesheet128: \""+ new ImageIcon(sprites128).getDescription() +"\"}";
+		return "JarTheme [mainClass: \""+ mainClass.getName()
+						+"\", "+ wThemeToString()
+						+", "+ wFilesToString() +"]";
+	}
+	//endregion
+	
+	//region Private methods 
+	/*OK*/private String getClassFilePath(JarFile jar){
+		String path = null;
+		Enumeration<JarEntry> entries = jar.entries();
+		while(entries.hasMoreElements()){
+			String name = entries.nextElement().getName();
+			if( name.endsWith(".class") ){
+				path = name.replace("/", ".").replace(".class", "");
+				break;
+			}
+		}
+		return path;
+	}
+	/*OK*/private BufferedImage getBufferedImage(JarFile jar, String packageName, String path) throws IOException {
+		InputStream is = jar.getInputStream( jar.getEntry(
+			packageName == null ? path : packageName +"/"+ path) );
+		BufferedImage img = ImageIO.read(is);
+		is.close();
+		return img;
 	}
 	//endregion
 	
 	//region Annotation getters - OK 
 	public String wThemeToString(){
-		return "wTheme {idDB: \""+ getIdDB()
+		return "wTheme [idDB: \""+ getIdDB()
 			  +"\", creator: \""+ getCreator()
 			  +"\", date: \""+ getDate()
 			  +"\", name: \""+ getName()
-			  +"\", description: \""+ getDescription() +"\"}";
+			  +"\", description: \""+ getDescription() +"\"]";
 	}
 	public int getIdDB(){
 		return mainClass.getDeclaredAnnotation(wTheme.class).idDB();
@@ -75,44 +137,65 @@ public class JarTheme {
 	public String getDescription(){
 		return mainClass.getDeclaredAnnotation(wTheme.class).description();
 	}
+	
+	public String wFilesToString(){
+		return "wFiles [music: \""+ getMusicPath()
+				+"\", logo: \""+ getLogoPath()
+				+"\", background: \""+ getBackgroundPath()
+				+"\", interactions: \""+ getInteractionsPath()
+				+"\", sprites64: \""+ getSprites64Path()
+				+"\", sprites128: \""+ getSprites128Path()
+				+"\", spritesBoss: \""+ getSpritesBossPath()
+				+"\"]";
+	}
+	public String getMusicPath(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).music();
+	}
+	public String getLogoPath(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).logo();
+	}
+	public String getBackgroundPath(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).background();
+	}
+	public String getInteractionsPath(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).interactions();
+	}
+	public String getSprites64Path(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).sprites64();
+	}
+	public String getSprites128Path(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).sprites128();
+	}
+	public String getSpritesBossPath(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).spritesBoss();
+	}
 	//endregion
+	
 	//region Class getters - OK 
 	public Class<?> getMainClass(){
 		return mainClass;
 	}
-	@SuppressWarnings("unchecked")
 	public Map<Point, Integer[]> getSpritesCompatibility(){
-		return (Map<Point, Integer[]>) getValueField("spriteCompatibility");
+		return theme.spriteCompatibility;
 	}
 	public int[][] getInteractionsCompatibility(){
-		return (int[][]) getValueField("interactionsCompatibility");
+		return theme.interactionsCompatibility;
 	}
 	public int[][][] getCollisions(){
-		try {
-			Field f = mainClass.getDeclaredField("collisionsList");
-			f.setAccessible(true);
-			return (int[][][]) f.get(null);
-		} catch (NoSuchFieldException e)	 { e.printStackTrace();
-		} catch (SecurityException e)		 { e.printStackTrace();
-		} catch (IllegalArgumentException e) { e.printStackTrace();
-		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
-		return null;
+		return theme.collisionsList;
 	}
 	public String[] getInteractionTips(){
-		return (String[]) getValueField("interactionTips");
-	}
-	private Object getValueField(String name){
-		try {
-			Field f = mainClass.getDeclaredField(name);
-			f.setAccessible(true);
-			return f.get(null);
-		} catch (NoSuchFieldException e)	 { e.printStackTrace();
-		} catch (SecurityException e)		 { e.printStackTrace();
-		} catch (IllegalArgumentException e) { e.printStackTrace();
-		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
-		return null;
+		return theme.interactionTips;
 	}
 	//endregion
+	
 	//region Member getters - OK 
 	public String getMusic() {
 		return music;
@@ -132,31 +215,8 @@ public class JarTheme {
 	public BufferedImage getSprites128() {
 		return sprites128;
 	}
-	//endregion
-	
-	//region Class setters - OK 
-	public void setMainClass(Class<?> mainClass) {
-		this.mainClass = mainClass;
-	}
-	//endregion
-	//region Member setters - OK 
-	public void setMusic(String music) {
-		this.music = music;
-	}
-	public void setLogo(BufferedImage logo) {
-		this.logo = logo;
-	}
-	public void setBackground(BufferedImage background) {
-		this.background = background;
-	}
-	public void setInteractions(BufferedImage interactions) {
-		this.interactions = interactions;
-	}
-	public void setSprites64(BufferedImage sprites64) {
-		this.sprites64 = sprites64;
-	}
-	public void setSprites128(BufferedImage sprites128) {
-		this.sprites128 = sprites128;
+	public BufferedImage getSpritesBoss() {
+		return spritesBoss;
 	}
 	//endregion
 	

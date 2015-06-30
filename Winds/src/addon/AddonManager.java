@@ -1,16 +1,7 @@
 package addon;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-
-import javax.imageio.ImageIO;
 
 import addon.level.Type;
 
@@ -21,8 +12,17 @@ public class AddonManager {
 	
 	private static JarTheme loadedJarTheme;
 	private static JarLevel loadedJarLevel;
+	
+	private static String themesPath, levelsPath, commonPath;
 
 	static {
+		// paths initialisation
+		String currentPath = JarLevel.class.getResource("").getPath().replace("%20", " ");
+		themesPath = currentPath.replace("addon/", "resources/themes/");
+		levelsPath = currentPath.replace("addon/", "resources/levels/");
+		commonPath = currentPath.replace("addon/", "resources/common/");
+		
+		// lists initialisation
 		jarThemesList = new ArrayList<JarTheme>();
 		jarLevelsList = new ArrayList<JarLevel>();
 		collectJarThemes();
@@ -41,54 +41,8 @@ public class AddonManager {
 		    }
 		}
 	}
-	/*to finish - music*/private static JarTheme validateJarTheme(File jarFile){
-		JarTheme current = new JarTheme();
-		try {
-			JarFile jar = new JarFile(jarFile);
-			Enumeration<JarEntry> jarEntries = jar.entries();
-			while(jarEntries.hasMoreElements()){
-				String entry = jarEntries.nextElement().getName();
-				
-				if( entry.endsWith(".class") ){
-					String className = entry.replace(".class", "").replace('/', '.');
-					URL[] urls = { new URL("jar:" + jarFile.toURI().toURL() + "!/") };
-				    URLClassLoader ucl = new URLClassLoader(urls);
-				    try {
-						Class<?> themeClass = Class.forName(className, true, ucl);
-						current.setMainClass(themeClass);
-					} catch (ClassNotFoundException e) { e.printStackTrace(); }
-				    
-				}else {
-					URL entryURL = new URL("jar:" + jarFile.toURI().toURL() + "!/"+ entry);
-					URL fileURL = entryURL.openConnection().getURL();
-					
-					if( entry.endsWith(".mp3") ){
-						current.setMusic("music");
-					}else {
-						BufferedImage icon = ImageIO.read(fileURL);
-						
-						if( entry.endsWith("logo.png") ){
-							current.setLogo(icon);
-						}else
-						if( entry.endsWith("background.jpg") ){
-							current.setBackground(icon);
-						}else
-						if( entry.endsWith("interactions.png") ){
-							current.setInteractions(icon);
-						}else
-						if( entry.endsWith("spritesheet/128.png") ){
-							current.setSprites128(icon);
-						}else
-						if( entry.endsWith("spritesheet/64.png") ){
-							current.setSprites64(icon);
-						}
-					}
-				}
-			}
-			jar.close();
-		} catch (IOException e) {
-			System.out.println("Unable to open the JAR file named \""+ jarFile.getName() +"\"");
-		}
+	/*OK*/private static JarTheme validateJarTheme(File jarFile){
+		JarTheme current = new JarTheme(jarFile);
 		return current.isValid() ? current : null;
 	}
 	/*OK*/public static void addJarTheme(File jarFile){
@@ -139,6 +93,16 @@ public class AddonManager {
 	//endregion
 	
 	//region Getters and Setters 
+	public static String getThemesPath(){
+		return themesPath;
+	}
+	public static String getLevelsPath(){
+		return levelsPath;
+	}
+	public static String getCommonPath(){
+		return commonPath;
+	}
+	
 	public static JarTheme[] getJarThemes(){
 		JarTheme[] jarThemes = new JarTheme[ jarThemesList.size() ];
 		return jarThemesList.toArray(jarThemes);
