@@ -25,22 +25,38 @@ import display.Window;
 
 public class EditorListener {
 	
+	/**
+	 * Class to listen actions onto "Save" button in EditorGUI.
+	 */
 	/*OK*/public static class SaveListener implements ActionListener {
 		private EditorGUI gui;
 		
+		/**
+		 * Instanciate a new listener.
+		 */
 		public SaveListener(EditorGUI gui){
 			this.gui = gui;
 		}
+		/**
+		 * Save the JarLevel used in the EditorGUI and store it by AddonManager 
+		 * when the button is performed.
+		 */
 		public void actionPerformed(ActionEvent e) {
 			JarLevel jar = gui.saveJarLevel();
 			if(jar != null)  AddonManager.addJarLevel(jar.getFile());
 		}
 	}
 	
+	/**
+	 * Class to listen actions onto "TimeMax" field in EditorGUI.
+	 */
 	/*OK*/public static class TimeMaxListener extends KeyAdapter implements FocusListener {
 		private final int maxChar = 3;
 		private JTextField field;
 		
+		/**
+		 * Restricts key input.
+		 */
 		public void keyTyped(KeyEvent e) {
 			char car = e.getKeyChar();
 			int code = e.getKeyCode();
@@ -53,12 +69,18 @@ public class EditorListener {
 			
 			if(isMaxLength || !allowedKey || isZeroFirstChar)	e.consume();
 		}
+		/**
+		 * Checks the navigation key input.
+		 */
 		public void keyReleased(KeyEvent e){
 			boolean transferKey = e.getKeyCode() == KeyEvent.VK_ESCAPE
 							   || e.getKeyCode() == KeyEvent.VK_ENTER;
 			if(transferKey)  field.transferFocus();
 		}
 
+		/**
+		 * Manage the prompt text displayed in the field when it gains focus.
+		 */
 		public void focusGained(FocusEvent e) {
 			field = (JTextField) e.getSource();
 			if( field.getText().equals(EditorGUI.PROMPT_TIMEMAX) ){
@@ -66,6 +88,9 @@ public class EditorListener {
 				field.setForeground(Color.BLACK);
 			}
 		}
+		/**
+		 * Manage the prompt text displayed in the field when it loses focus.
+		 */
 		public void focusLost(FocusEvent e) {
 			if( field.getText().equals("") ){
 				field.setText(EditorGUI.PROMPT_TIMEMAX);
@@ -83,18 +108,30 @@ public class EditorListener {
 		}
 	}
 	
+	/**
+	 * Class to listen actions onto "Description" field in EditorGUI.
+	 */
 	/*OK*/public static class DescriptionListener extends KeyAdapter implements FocusListener {
 		private final int maxChar = 255;
 		private JTextArea area;
 		
+		/**
+		 * Restricts key input.
+		 */
 		public void keyTyped(KeyEvent e) {
 			if(area.getText().length() == maxChar)	e.consume();
 		}
+		/**
+		 * Checks the navigation key input.
+		 */
 		public void keyReleased(KeyEvent e){
 			if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
 				area.transferFocus();
 		}
 		
+		/**
+		 * Manage the prompt text displayed in the field when it gains focus.
+		 */
 		public void focusGained(FocusEvent e) {
 			area = (JTextArea) e.getSource();
 			if( area.getText().equals(EditorGUI.PROMPT_DESCRIPTION) ){
@@ -102,6 +139,9 @@ public class EditorListener {
 				area.setText(null);
 			}
 		}		
+		/**
+		 * Manage the prompt text displayed in the field when it loses focus.
+		 */
 		public void focusLost(FocusEvent e) {
 			if( area.getText().equals("") ){
 				area.setForeground(Color.GRAY);
@@ -111,7 +151,13 @@ public class EditorListener {
 		}
 	}
 	
+	/**
+	 * Class to listen actions onto "Back" button in EditorGUI.
+	 */
 	/*OK*/public static class BackListener implements ActionListener {
+		/**
+		 * Back to the LevelEditorList when the button is performed.
+		 */
 		public void actionPerformed(ActionEvent e) {
 			int response = JOptionPane.showConfirmDialog(Window.getFrame(),
 				"Do you really want to quit the level editor ?\nThe"
@@ -124,22 +170,40 @@ public class EditorListener {
 		}
 	}
 	
+	/**
+	 * Class to listen actions onto "Empty" button in EditorGUI.
+	 */
 	/*OK*/public static class EmptyListener extends MouseAdapter {
+		/**
+		 * Affect an empty tile to the current tile when the button is performed.
+		 */
 		public void mousePressed(MouseEvent e) {
 			EditorGUI.tileCurrent.updateFrom(Tile.createEmptyCurrent());
 		}
 	}
 	
+	/**
+	 * Class to listen actions onto legend tile in EditorGUI.
+	 */
 	/*OK*/public static class TileLegendListener extends MouseAdapter {
+		/**
+		 * Update the current tile from the clicked legend tile.
+		 */
 		public void mouseReleased(MouseEvent e) {
 			Tile source = (Tile) e.getSource();
 			EditorGUI.tileCurrent.updateFrom(source);
 		}
 	}
 	
+	/**
+	 * Class to listen actions onto matrix tile in EditorGUI.
+	 */
 	/*OK*/public static class TileMatrixListener extends MouseAdapter {
 		private final int delay = 200;	// milliseconds
 		
+		/**
+		 * Update the clicked matrix tile from the current tile.
+		 */
 		public void mouseReleased(MouseEvent e) {
 			Tile current = EditorGUI.tileCurrent;
 			Tile source = (Tile) e.getSource();
@@ -154,13 +218,19 @@ public class EditorListener {
 			updateInteractionSingletons(source);
 		}
 		
-		private boolean allowedBackTile(Tile current, Tile[] neighboors){
+		/**
+		 * Checks the sprite compatibility between the current tile and his neighbors.
+		 * @param current	Tile which will be compared with his neighbors
+		 * @param neighbors	the neighbors of the current tile
+		 * @return boolean
+		 */
+		private boolean allowedBackTile(Tile current, Tile[] neighbors){
 			int currentIndex = current.getBackIndex();
 			if(currentIndex == 0)  return true;
 			
 			Map<Point, Integer[]> compatibility = EditorGUI.spritesComp;
-			for(int i=0; i<neighboors.length; i++){
-				Tile side = neighboors[i];
+			for(int i=0; i<neighbors.length; i++){
+				Tile side = neighbors[i];
 				
 				// out of matrix bounds : all tiles allowed
 				if(side == null)  continue;
@@ -181,6 +251,9 @@ public class EditorListener {
 			}
 			return true;
 		}
+		/**
+		 * Alerts the user the current tile is unauthorized.
+		 */
 		private void notifyForbiddenTile(){
 			JPanel pnl = EditorGUI.current;
 			Color oldColor = pnl.getBackground();
@@ -193,6 +266,10 @@ public class EditorListener {
 				}
 			}).start();
 		}
+		/**
+		 * Updates the departure and arrival tiles if needed
+		 * @param current Tile
+		 */
 		private void updateInteractionSingletons(Tile current){
 			// updates departure
 			if( current.isDeparture() )
