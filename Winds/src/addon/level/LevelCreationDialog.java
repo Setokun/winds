@@ -1,7 +1,6 @@
 package addon.level;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -21,26 +20,28 @@ import display.Window;
 public class LevelCreationDialog {
 
 	private final Dimension DIALOG_DIM = new Dimension(410,170);
+	private final int FIELD_WIDTH=125, FIELD_HEIGHT=25;
 	
-	private static String nameChoosen;
-	private static JarTheme themeChoosen;
 	private static String[] themeNames;
+	private String nameChoosen;
+	private JarTheme themeChoosen;
 	
+	private boolean canceled;
 	private JDialog dial;
 	private JTextField txtName;
-	private JComboBox<JarTheme> cbTheme;
+	private JComboBox<String> cbTheme;
 	private JLabel lblName, lblTheme;
 	private JButton btnValid, btnReset, btnCancel;
 	
 
-	public static void show(boolean needThemeChoice){
-		nameChoosen = null;
-		themeChoosen = null;
-		themeNames = getThemeNames( AddonManager.getJarThemes() );
-		new LevelCreationDialog(needThemeChoice);
+	public static LevelCreationDialog show(JarTheme jarThemeToUse){
+		themeNames = (jarThemeToUse == null) ? getThemeNames(AddonManager.getJarThemes()) : new String[0];
+		return new LevelCreationDialog(jarThemeToUse);
 	}
 	
-	private LevelCreationDialog(boolean needThemeChoice){
+	private LevelCreationDialog(JarTheme jarThemeToUse){
+		canceled = false;
+		themeChoosen = jarThemeToUse;
 		initFields();
 		initButtons();
 		initDialog();
@@ -53,6 +54,10 @@ public class LevelCreationDialog {
 		//20 chars max
 		lblTheme = new JLabel("Theme to use : ");
         cbTheme = new JComboBox(themeNames);
+        
+        boolean isNullTheme = themeChoosen == null;
+		lblTheme.setVisible(isNullTheme);
+		cbTheme.setVisible(isNullTheme);
 	}
 	private void initButtons(){
 		btnValid  = new JButton("Valid");
@@ -61,15 +66,17 @@ public class LevelCreationDialog {
 			// ya surement des verifs a faire ici
 			dial.dispose();
 		});
+		
 		btnReset  = new JButton("Reset");
 		btnReset.addActionListener((e) -> {
 			txtName.setText(null);
-			cbTheme.setSelectedIndex(0);
+			if(cbTheme.isVisible()) cbTheme.setSelectedIndex(0);
 			updateChoices();
 		});
+		
 		btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener((e) -> {
-			btnReset.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+			canceled = true;
 			dial.dispose();
 		});
 	}
@@ -89,58 +96,61 @@ public class LevelCreationDialog {
 	}
 	
 	private WindowAdapter initWindowListener(){
-		WindowAdapter listener = new WindowAdapter() {
+		return new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				updateChoices();
-				boolean emptyOrFilled = (nameChoosen == null && themeChoosen == null) ||
-										(nameChoosen != null && themeChoosen != null);
-				if(emptyOrFilled){
+				if(nameChoosen != null && themeChoosen != null){
 					dial.dispose();
-				}else{
-					JOptionPane.showMessageDialog(dial,
-						"You must type a name and choose a theme.",
-						"Mandatory Fields", JOptionPane.ERROR_MESSAGE, null);
+					return;
 				}
+				
+				StringBuilder message = new StringBuilder("You must type a name");
+				if(themeChoosen == null)  message.append(" and choose a theme");
+				JOptionPane.showMessageDialog(dial, message.append(".").toString(),
+					"Mandatory Fields", JOptionPane.ERROR_MESSAGE, null);
 			}
 		};
-		return listener;
 	}
 	private GroupLayout initStructure(){
 		GroupLayout layout = new GroupLayout(dial.getContentPane());
-        layout.setHorizontalGroup(
+		
+		//region HorizontalGroup 
+		layout.setHorizontalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup( layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
+                        .addGap(84,84,84)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                             .addComponent(lblTheme)
                             .addComponent(lblName))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtName)
-                            .addComponent(cbTheme, 0, 125, Short.MAX_VALUE)))
+                            .addComponent(txtName, FIELD_WIDTH, FIELD_WIDTH, Short.MAX_VALUE)
+                            .addComponent(cbTheme, FIELD_WIDTH, FIELD_WIDTH, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
+                        .addGap(69,69,69)
                         .addComponent(btnValid)
                         .addGap(30,30,30)
                         .addComponent(btnReset)
                         .addGap(30,30,30)
                         .addComponent(btnCancel)))
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addContainerGap(69,Short.MAX_VALUE))
         );
+        //endregion
+        //region VerticalGroup 
         layout.setVerticalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(lblName)
-                    .addComponent(txtName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtName, FIELD_HEIGHT, FIELD_HEIGHT, FIELD_HEIGHT))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTheme)
-                    .addComponent(cbTheme, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbTheme, FIELD_HEIGHT, FIELD_HEIGHT, FIELD_HEIGHT))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(btnValid)
@@ -148,6 +158,8 @@ public class LevelCreationDialog {
                     .addComponent(btnCancel))
                 .addContainerGap())
         );
+        //endregion
+        
         return layout;
 	}
 	private void updateChoices(){
@@ -155,7 +167,7 @@ public class LevelCreationDialog {
 		nameChoosen = name.equals("") ? null : name;
 		
 		int indexTheme = cbTheme.getSelectedIndex();
-		themeChoosen = (indexTheme == 0) ? null : AddonManager.getJarThemes()[indexTheme -1];
+		if(cbTheme.isVisible()) themeChoosen = (indexTheme == 0) ? null : AddonManager.getJarThemes()[indexTheme -1];
 	}
 	
 	private static String[] getThemeNames(JarTheme[] themes){
@@ -166,11 +178,14 @@ public class LevelCreationDialog {
 		}		
 		return names;
 	}
-	public static String getNameChoosen() {
+	public String getNameChoosen() {
 		return nameChoosen;
 	}
-	public static JarTheme getThemeChoosen() {
+	public JarTheme getThemeChoosen() {
 		return themeChoosen;
+	}
+	public boolean canceled(){
+		return canceled;
 	}
 	
 }

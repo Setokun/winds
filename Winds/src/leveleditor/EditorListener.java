@@ -1,7 +1,6 @@
 package leveleditor;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +26,7 @@ import display.Window;
 public class EditorListener {
 	
 	/*OK*/public static class SaveListener implements ActionListener {
-		EditorGUI gui;
+		private EditorGUI gui;
 		
 		public SaveListener(EditorGUI gui){
 			this.gui = gui;
@@ -39,7 +38,7 @@ public class EditorListener {
 	}
 	
 	/*OK*/public static class TimeMaxListener extends KeyAdapter implements FocusListener {
-		private static final int maxChar = 3;
+		private final int maxChar = 3;
 		private JTextField field;
 		
 		public void keyTyped(KeyEvent e) {
@@ -76,16 +75,17 @@ public class EditorListener {
 			
 			int time = Integer.valueOf( field.getText() ).intValue();
 			if(time < EditorGUI.MINIMUM_TIME){
-				JOptionPane.showMessageDialog(null, "Specified time must be greater than 30 seconds", "Invalid time", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Specified time must be greater than "
+						+ EditorGUI.MINIMUM_TIME +" seconds", "Invalid time",
+						JOptionPane.INFORMATION_MESSAGE);
 				field.setText( String.valueOf(EditorGUI.MINIMUM_TIME) );
 			}			
 		}
-
 	}
 	
 	/*OK*/public static class DescriptionListener extends KeyAdapter implements FocusListener {
 		private final int maxChar = 255;
-		JTextArea area;
+		private JTextArea area;
 		
 		public void keyTyped(KeyEvent e) {
 			if(area.getText().length() == maxChar)	e.consume();
@@ -126,7 +126,7 @@ public class EditorListener {
 	
 	/*OK*/public static class EmptyListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {
-			EditorGUI.tileCurrent.updateFrom(Tile.getEmptyLegend());
+			EditorGUI.tileCurrent.updateFrom(Tile.createEmptyCurrent());
 		}
 	}
 	
@@ -138,56 +138,80 @@ public class EditorListener {
 	}
 	
 	/*OK*/public static class TileMatrixListener extends MouseAdapter {
+		private final int delay = 200;	// milliseconds
+		
 		public void mouseReleased(MouseEvent e) {
 			Tile current = EditorGUI.tileCurrent;
 			Tile source = (Tile) e.getSource();
 			Tile[] neighboors = EditorGUI.getNeighboors(source.getPosition());
 			
-			if( allowedTile(current, neighboors) ){
-				int index = current.getIndex();
-				Image img = index != 0 ? EditorGUI.images32[index] : Tile.getEmptyMatrix().getIcon().getImage();
-				source.updateFrom(index, img);
+			if( !allowedBackTile(current, neighboors) ){
+				notifyForbiddenTile();
 				return;
 			}
 			
-			notifyForbiddenTile();
+			source.updateFrom(current);
+			updateInteractionSingletons(source);
 		}
-		private void notifyForbiddenTile(){
-			JPanel pnl = EditorGUI.current;
-			Color oldColor = pnl.getBackground();
-			
-			pnl.setBackground(new Color(240,125,125));
-			new Timer(200, new ActionListener() {	// milliseconds
-				public void actionPerformed(ActionEvent e) {
-					pnl.setBackground(oldColor);
-					((Timer) e.getSource()).stop();
-				}
-			}).start();
-		}
-		private boolean allowedTile(Tile current, Tile[] neighboors){
-			int currentIndex = current.getIndex();
+		
+		private boolean allowedBackTile(Tile current, Tile[] neighboors){
+			int currentIndex = current.getBackIndex();
 			if(currentIndex == 0)  return true;
 			
-			Map<Point, Integer[]> compatibility = EditorGUI.compatibility;
+			Map<Point, Integer[]> compatibility = EditorGUI.spritesComp;
 			for(int i=0; i<neighboors.length; i++){
 				Tile side = neighboors[i];
 				
 				// out of matrix bounds : all tiles allowed
 				if(side == null)  continue;
 				// side is an empty tile
-				if(side.getIndex() == 0)  continue;
+				if(side.getBackIndex() == 0)  continue;
 				
 				Integer[] compatibles = compatibility.get(new Point(currentIndex,i));
-				boolean found = false;
-				for(int j=0; j<compatibles.length; j++){
-					if(compatibles[j].intValue() == side.getIndex()){
-						found = true;
-						break;
+				if(compatibles != null){
+					boolean found = false;
+					for(int j=0; j<compatibles.length; j++){
+						if(compatibles[j].intValue() == side.getBackIndex()){
+							found = true;
+							break;
+						}
 					}
+					if( !found )  return false;
 				}
-				if( !found )  return false;
 			}
 			return true;
+		}
+		private void notifyForbiddenTile(){
+			JPanel pnl = EditorGUI.current;
+			Color oldColor = pnl.getBackground();
+			
+			pnl.setBackground(new Color(240,125,125));
+			new Timer(delay, new ActionListener() {	
+				public void actionPerformed(ActionEvent e) {
+					pnl.setBackground(oldColor);
+					((Timer) e.getSource()).stop();
+				}
+			}).start();
+		}
+		private void updateInteractionSingletons(Tile current){
+			// updates departure
+			if( current.isDeparture() )
+				EditorGUI.setDeparture(current);
+			
+			// updates arrival
+			else if( current.isArrival() )
+				EditorGUI.setArrival(current);
+			
+			// checks for updating departure or arrival
+			else if( current.isEmptyInteraction() ){
+				boolean isDeparturePosition = EditorGUI.getDeparture() != null &&
+						current.getPosition() == EditorGUI.getDeparture().getPosition();
+				boolean isArrivalPosition = EditorGUI.getArrival() != null &&
+						current.getPosition() == EditorGUI.getArrival().getPosition();
+				
+				if(isDeparturePosition)			EditorGUI.setDeparture(null);
+				else if(isArrivalPosition)		EditorGUI.setArrival(null);
+			}
 		}
 	}
 

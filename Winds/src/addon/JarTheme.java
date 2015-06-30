@@ -2,26 +2,71 @@ package addon;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Enumeration;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import annotation.wFiles;
 import annotation.wTheme;
 
+
 public class JarTheme {
+	private ThemeBase theme;
 	private Class<?> mainClass;
 	private String music;
 	private BufferedImage logo, background, interactions,
-						  sprites32, sprites64, sprites128; 
+						  sprites64, sprites128, spritesBoss; 
+	
+	
+	//region Constructors 
+	public JarTheme(File jarFile){
+		JarFile jf = null;
+		try {
+			jf = new JarFile(jarFile);
+			String classFilePath = getClassFilePath(jf);
+			if(classFilePath != null){
+				
+				URLClassLoader ucl = new URLClassLoader(new URL[]{
+					new URL("jar:"+ jarFile.toURI().toURL() +"!/") });
+				mainClass = Class.forName(classFilePath, true, ucl);
+				theme = (ThemeBase) mainClass.newInstance();
+				String packageName = mainClass.getPackage().toString().replace("package ", "");
+				
+				music		 = packageName +"/"+ mainClass.getDeclaredAnnotation(wFiles.class).music();
+				logo		 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).logo());
+				background	 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).background());
+				interactions = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).interactions());
+				sprites64	 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).sprites64());
+				sprites128	 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).sprites128());
+				spritesBoss  = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).spritesBoss());
+				
+			}
+			jf.close();
+		} catch (IllegalAccessException | InstantiationException |
+				 ClassNotFoundException | IOException e) {
+			System.out.println("Unable to open the JAR file named \""+ jarFile.getName() +"\"");
+			e.printStackTrace();
+			return;
+		}
+		    
+	}
+	//endregion
 	
 	//region Public methods
-	/*to finish*/public boolean isValid(){
+	public boolean isValid(){
 		wTheme aTheme = mainClass.getDeclaredAnnotation(wTheme.class);		
-		return aTheme != null && mainClass != null //&&  music != null
-			&& logo != null && background != null //&& interactions != null
-			&& sprites32 != null && sprites64 != null && sprites128 != null;
+		return aTheme != null && mainClass != null &&  music != null
+			&& logo != null && background != null && interactions != null
+			&& sprites64 != null && sprites128 != null;
 	}
 	public boolean equals(Object o){
 		if( !(o instanceof JarTheme) ){ return false; }
@@ -37,30 +82,45 @@ public class JarTheme {
 			&& new ImageIcon(logo).getDescription().equals(new ImageIcon(j.logo).getDescription())
 			&& new ImageIcon(background).getDescription().equals(new ImageIcon(j.background).getDescription())
 			&& new ImageIcon(interactions).getDescription().equals(new ImageIcon(j.interactions).getDescription())
-			&& new ImageIcon(sprites32).getDescription().equals(new ImageIcon(j.sprites32).getDescription())
 			&& new ImageIcon(sprites64).getDescription().equals(new ImageIcon(j.sprites64).getDescription())
 			&& new ImageIcon(sprites128).getDescription().equals(new ImageIcon(j.sprites128).getDescription());
 	}
 	public String toString(){
-		return "JarTheme {mainClass: \""+ mainClass.getName()
-						+"\", wTheme: \""+ wThemeToString()
-						//+"\", music: \""+ music
-						+"\", logo: \""+ (logo==null ? "null" : logo.getClass().getName())
-						+"\", background: \""+ new ImageIcon(background).getDescription()
-						//+"\", interactions: \""+ new ImageIcon(interactions).getDescription()
-						+"\", spritesheet32: \""+ new ImageIcon(sprites32).getDescription()
-						+"\", spritesheet64: \""+ new ImageIcon(sprites64).getDescription()
-						+"\", spritesheet128: \""+ new ImageIcon(sprites128).getDescription() +"\"}";
+		return "JarTheme [mainClass: \""+ mainClass.getName()
+						+"\", "+ wThemeToString()
+						+", "+ wFilesToString() +"]";
+	}
+	//endregion
+	
+	//region Private methods 
+	/*OK*/private String getClassFilePath(JarFile jar){
+		String path = null;
+		Enumeration<JarEntry> entries = jar.entries();
+		while(entries.hasMoreElements()){
+			String name = entries.nextElement().getName();
+			if( name.endsWith(".class") ){
+				path = name.replace("/", ".").replace(".class", "");
+				break;
+			}
+		}
+		return path;
+	}
+	/*OK*/private BufferedImage getBufferedImage(JarFile jar, String packageName, String path) throws IOException {
+		InputStream is = jar.getInputStream( jar.getEntry(
+			packageName == null ? path : packageName +"/"+ path) );
+		BufferedImage img = ImageIO.read(is);
+		is.close();
+		return img;
 	}
 	//endregion
 	
 	//region Annotation getters - OK 
 	public String wThemeToString(){
-		return "wTheme {idDB: \""+ getIdDB()
+		return "wTheme [idDB: \""+ getIdDB()
 			  +"\", creator: \""+ getCreator()
 			  +"\", date: \""+ getDate()
 			  +"\", name: \""+ getName()
-			  +"\", description: \""+ getDescription() +"\"}";
+			  +"\", description: \""+ getDescription() +"\"]";
 	}
 	public int getIdDB(){
 		return mainClass.getDeclaredAnnotation(wTheme.class).idDB();
@@ -77,140 +137,65 @@ public class JarTheme {
 	public String getDescription(){
 		return mainClass.getDeclaredAnnotation(wTheme.class).description();
 	}
+	
+	public String wFilesToString(){
+		return "wFiles [music: \""+ getMusicPath()
+				+"\", logo: \""+ getLogoPath()
+				+"\", background: \""+ getBackgroundPath()
+				+"\", interactions: \""+ getInteractionsPath()
+				+"\", sprites64: \""+ getSprites64Path()
+				+"\", sprites128: \""+ getSprites128Path()
+				+"\", spritesBoss: \""+ getSpritesBossPath()
+				+"\"]";
+	}
+	public String getMusicPath(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).music();
+	}
+	public String getLogoPath(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).logo();
+	}
+	public String getBackgroundPath(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).background();
+	}
+	public String getInteractionsPath(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).interactions();
+	}
+	public String getSprites64Path(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).sprites64();
+	}
+	public String getSprites128Path(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).sprites128();
+	}
+	public String getSpritesBossPath(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).spritesBoss();
+	}
 	//endregion
+	
 	//region Class getters - OK 
 	public Class<?> getMainClass(){
 		return mainClass;
 	}
-	public int[][][] getCollisions(){
-		Field[] fields = mainClass.getDeclaredFields();
-		
-		for (Field field : fields) {
-			System.out.println(field.getName());
-		}
-		
-		try {
-			Field f = mainClass.getDeclaredField("collisionsList");
-			f.setAccessible(true);
-			return (int[][][]) f.get(null);
-		} catch (NoSuchFieldException e)	 { e.printStackTrace();
-		} catch (SecurityException e)		 { e.printStackTrace();
-		} catch (IllegalArgumentException e) { e.printStackTrace();
-		} catch (IllegalAccessException e)	 { e.printStackTrace(); }
-		return null;
+	public Map<Point, Integer[]> getSpritesCompatibility(){
+		return theme.spriteCompatibility;
 	}
-	public Map<Point, Integer[]> getCompatibility(){
-		// test
-		Map<Point, Integer[]> compatibility = new HashMap<Point, Integer[]>();
-		
-		compatibility.put(new Point(1,0), new Integer[]{1,2,5,6,7,8,9,10,20});
-		compatibility.put(new Point(1,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(1,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(1,3), new Integer[]{2,4,5,11,12,13,14,15,16,17,18,20,21});
-
-		compatibility.put(new Point(2,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(2,1), new Integer[]{1,3,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(2,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(2,3), new Integer[]{1,3,6,7,8,9,10,19});
-
-		compatibility.put(new Point(3,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(3,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(3,2), new Integer[]{5,7,11,14});
-		compatibility.put(new Point(3,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-		
-		compatibility.put(new Point(4,0), new Integer[]{1,2,5,6,7,8,9,10,15,20});
-		compatibility.put(new Point(4,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(4,2), new Integer[]{6,12,13,20});
-		compatibility.put(new Point(4,3), new Integer[]{1,3,6,7,8,9,10,19});
-
-		compatibility.put(new Point(5,0), new Integer[]{3,11,16,18,21});
-		compatibility.put(new Point(5,1), new Integer[]{1,3,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(5,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(5,3), new Integer[]{1,3,6,7,8,9,10,19});
-
-		compatibility.put(new Point(6,0), new Integer[]{4,12,17,19});
-		compatibility.put(new Point(6,1), new Integer[]{2,4,8,9,10,20,21});
-		compatibility.put(new Point(6,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(6,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-
-		compatibility.put(new Point(7,0), new Integer[]{3,11,16,18,21});
-		compatibility.put(new Point(7,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(7,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(7,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-
-		compatibility.put(new Point(8,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(8,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(8,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(8,3), new Integer[]{1,3,6,7,8,9,10,20,21});
-
-		compatibility.put(new Point(9,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(9,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(9,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(9,3), new Integer[]{1,3,6,7,8,9,10,20,21});
-
-		compatibility.put(new Point(10,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(10,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(10,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(10,3), new Integer[]{1,3,6,7,8,9,10,20,21});
-
-		compatibility.put(new Point(11,0), new Integer[]{3,11,16,21});
-		compatibility.put(new Point(11,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(11,2), new Integer[]{5,7,11,14});
-		compatibility.put(new Point(11,3), new Integer[]{2,4,5,11,12,13,14,17,18,20,21});
-
-		compatibility.put(new Point(12,0), new Integer[]{4,12,17,19});
-		compatibility.put(new Point(12,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(12,2), new Integer[]{6,12,13,20});
-		compatibility.put(new Point(12,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-
-		compatibility.put(new Point(13,0), new Integer[]{4,12,17,19});
-		compatibility.put(new Point(13,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(13,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(13,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-
-		compatibility.put(new Point(14,0), new Integer[]{3,11,16,21});
-		compatibility.put(new Point(14,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(14,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(14,3), new Integer[]{2,4,5,11,12,13,14,17,18,20,21});
-
-		compatibility.put(new Point(15,0), new Integer[]{1,2,5,6,7,8,9,10,20});
-		compatibility.put(new Point(15,1), new Integer[]{16});
-		compatibility.put(new Point(15,2), new Integer[]{1,2,3,4,8,9,10,17,18,19,21});
-		compatibility.put(new Point(15,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-
-		compatibility.put(new Point(16,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,20});
-		compatibility.put(new Point(16,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(16,2), new Integer[]{5,7,11,14});
-		compatibility.put(new Point(16,3), new Integer[]{15});
-
-		compatibility.put(new Point(17,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(17,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(17,2), new Integer[]{6,12,13,20});
-		compatibility.put(new Point(17,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-
-		compatibility.put(new Point(18,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(18,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(18,2), new Integer[]{5,7,11,14});
-		compatibility.put(new Point(18,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-	
-		compatibility.put(new Point(19,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15});
-		compatibility.put(new Point(19,1), new Integer[]{2,4,5,8,9,10,21});
-		compatibility.put(new Point(19,2), new Integer[]{6,12,13,20});
-		compatibility.put(new Point(19,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-
-		compatibility.put(new Point(20,0), new Integer[]{4,12,17,19});
-		compatibility.put(new Point(20,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18});
-		compatibility.put(new Point(20,2), new Integer[]{1,2,3,4,8,9,10,15,16,21});
-		compatibility.put(new Point(20,3), new Integer[]{1,3,6,7,8,9,10,19});
-	
-		compatibility.put(new Point(21,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(21,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(21,2), new Integer[]{5,11,14});
-		compatibility.put(new Point(21,3), new Integer[]{1,3,6,7,8,9,10,19});
-		
-		return compatibility;
+	public int[][] getInteractionsCompatibility(){
+		return theme.interactionsCompatibility;
+	}
+	public int[][][] getCollisions(){
+		return theme.collisionsList;
+	}
+	public String[] getInteractionTips(){
+		return theme.interactionTips;
 	}
 	//endregion
+	
 	//region Member getters - OK 
 	public String getMusic() {
 		return music;
@@ -224,43 +209,14 @@ public class JarTheme {
 	public BufferedImage getInteractions() {
 		return interactions;
 	}
-	public BufferedImage getSprites32() {
-		return sprites32;
-	}
 	public BufferedImage getSprites64() {
 		return sprites64;
 	}
 	public BufferedImage getSprites128() {
 		return sprites128;
 	}
-	//endregion
-	
-	//region Class setters - OK 
-	public void setMainClass(Class<?> mainClass) {
-		this.mainClass = mainClass;
-	}
-	//endregion
-	//region Memeber setters - OK 
-	public void setMusic(String music) {
-		this.music = music;
-	}
-	public void setLogo(BufferedImage logo) {
-		this.logo = logo;
-	}
-	public void setBackground(BufferedImage background) {
-		this.background = background;
-	}
-	public void setInteractions(BufferedImage interactions) {
-		this.interactions = interactions;
-	}
-	public void setSprites32(BufferedImage sprites32) {
-		this.sprites32 = sprites32;
-	}
-	public void setSprites64(BufferedImage sprites64) {
-		this.sprites64 = sprites64;
-	}
-	public void setSprites128(BufferedImage sprites128) {
-		this.sprites128 = sprites128;
+	public BufferedImage getSpritesBoss() {
+		return spritesBoss;
 	}
 	//endregion
 	
