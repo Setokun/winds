@@ -143,7 +143,7 @@ public class EditorListener {
 		public void mouseReleased(MouseEvent e) {
 			Tile current = EditorGUI.tileCurrent;
 			Tile source = (Tile) e.getSource();
-			Tile[] neighboors = EditorGUI.getNeighboors(source.getPosition());
+			Tile[] neighboors = EditorGUI.getNeighbors(source.getPosition());
 			
 			if( !allowedBackTile(current, neighboors) ){
 				notifyForbiddenTile();
