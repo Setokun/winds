@@ -63,7 +63,7 @@ public class Game extends Canvas implements Runnable{
 		defeat = false;
 		scoreUploaded = false;
 		
-		score = new Score();
+		score = new Score(AddonManager.getLoadedJarLevel().getLevel().getIdDB());
 		handler = new Handler();
 		cam = new Camera(0, 0);
 		interactions = new InteractionBlock(handler);

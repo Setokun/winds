@@ -40,12 +40,14 @@ public class ServerConnection {
 	private static final String URL_API_SERVER = "http://www.winds-game.com/API.php";
 	private static final int TIMEOUT = 6; // seconds
 	
+	public ServerConnection(){}
+	
 	/*OK*/public static Profile downloadProfile(String email, String password){
 		
 		Profile profile = null;
 
 		try {
-			URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=downloadProfile");
+			URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=downloadProfile");
 	        URLConnection yc = monURL.openConnection();
 	        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 	        
@@ -63,7 +65,7 @@ public class ServerConnection {
 		
 		ArrayList<Score> scores = new ArrayList<Score>();
 
-		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getScores");
+		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getScores");
         URLConnection yc = monURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
         
@@ -71,8 +73,7 @@ public class ServerConnection {
 		
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-		    Score score = new Score();
-		    score.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+		    Score score = new Score(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
 		    score.setTime(Integer.valueOf(jsonObject.get("time").toString().replaceAll("\"", "")));
 		    score.setClicks(Integer.valueOf(jsonObject.get("nbClicks").toString().replaceAll("\"", "")));
 		    score.setNbItems(Integer.valueOf(jsonObject.get("nbItems").toString().replaceAll("\"", "")));
@@ -87,7 +88,7 @@ public class ServerConnection {
 	/*OK*/public static ArrayList<ThemeData> getThemesList(String email, String password) throws IOException{
 		ArrayList<ThemeData> themes = new ArrayList<ThemeData>();
 
-		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getThemes");
+		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getThemes");
         URLConnection yc = monURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
         
@@ -109,7 +110,7 @@ public class ServerConnection {
 	/*OK*/public static ThemeData getThemeInfos(String email, String password, int idTheme) throws IOException{
 		ThemeData themeData = null;
 
-		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getThemes&idTheme="+idTheme);
+		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getThemes&idTheme="+idTheme);
         URLConnection yc = monURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
         
@@ -132,7 +133,7 @@ public class ServerConnection {
 	/*TODO*/public static LevelData getLevelInfos(String email, String password, int idLevel) throws IOException{
 		LevelData levelData = null;
 
-		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getLevelInfos&idLevel="+idLevel);
+		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getLevelInfos&idLevel="+idLevel);
         URLConnection yc = monURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
         
@@ -159,7 +160,7 @@ public class ServerConnection {
 	/*OK*/public static ArrayList<LevelData> getBasicLevelsList(String email, String password) throws IOException{
 		ArrayList<LevelData> basicLevels = new ArrayList<LevelData>();
 
-		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getBasicLevels");
+		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getBasicLevels");
         URLConnection yc = monURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
         
@@ -185,7 +186,7 @@ public class ServerConnection {
 	/*OK*/public static ArrayList<LevelData> getCustomLevelsList(String email, String password) throws IOException{
 		ArrayList<LevelData> customLevels = new ArrayList<LevelData>();
 
-		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getCustomLevels");
+		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getCustomLevels");
         URLConnection yc = monURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
         
@@ -211,7 +212,7 @@ public class ServerConnection {
 	/*OK*/public static ArrayList<LevelData> getLevelsToModerateList(String email, String password) throws IOException{
 		ArrayList<LevelData> levelsToModerate = new ArrayList<LevelData>();
 
-		URL monURL = new URL("http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=getLevelsToModerate");
+		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getLevelsToModerate");
         URLConnection yc = monURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
         
@@ -238,7 +239,7 @@ public class ServerConnection {
 		try {
 			ThemeData theme = getThemeInfos(email, password, idTheme);
 			if(theme != null){
-				URLConnection ucon = new URL("http://www.winds-game.com/API.php?email=player1@winds.net&password=player&action=downloadTheme&idTheme="+idTheme).openConnection();  
+				URLConnection ucon = new URL(URL_API_SERVER+"?email=player1@winds.net&password=player&action=downloadTheme&idTheme="+idTheme).openConnection();  
 				StringBuilder sb = new StringBuilder(System.getProperty("user.dir" )+ "\\bin\\resources\\themes\\");
 				sb.append(theme.getFileName().replaceAll("\"", ""));
 				FileOutputStream fos = new FileOutputStream(sb.toString());
@@ -268,13 +269,13 @@ public class ServerConnection {
 				String s = null;
 				
 				if(level.getLevelType().equals("\"basic\"")){
-					s = "http://www.winds-game.com/API.php?email="+email.replace("\"", "")+"&password="+password.replace("\"", "")+"&action=downloadBasicLevel&idBasicLevel="+idLevel;
+					s = URL_API_SERVER+"?email="+email.replace("\"", "")+"&password="+password.replace("\"", "")+"&action=downloadBasicLevel&idBasicLevel="+idLevel;
 				}
 				else if(level.getLevelType().equals("custom")){
-					s = "http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=downloadCustomLevel&idCustomLevel="+idLevel;
+					s = URL_API_SERVER+"?email="+email.replace("\"", "")+"&password="+password.replace("\"", "")+"&action=downloadCustomLevel&idCustomLevel="+idLevel;
 				}
 				else if(level.getLevelType().equals("tomoderate")){
-					s = "http://www.winds-game.com/API.php?email="+email+"&password="+password+"&action=downloadLevelToModerate&idLevelToModerate="+idLevel;
+					s = URL_API_SERVER+"?email="+email.replace("\"", "")+"&password="+password.replace("\"", "")+"&action=downloadLevelToModerate&idLevelToModerate="+idLevel;
 				}
 				
 				URLConnection ucon = new URL(s).openConnection();  
@@ -306,25 +307,30 @@ public class ServerConnection {
 		
 	}
 
-	/*TODO reste à formater les scores passés en paramètre*/
-	public void uploadScores(String email, String password, ArrayList<Score> scores){
-		String infosToUpload = "[{%22idLevel%22:1, %22time%22:32, %22nbClicks%22:67, %22nbItems%22:102}, {%22idLevel%22:4, %22time%22:37, %22nbClicks%22:68, %22nbItems%22:57}]";
-		
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("action", "uploadScores");
-		params.put("email", email);
-		params.put("password", password);
-		params.put("scores", infosToUpload);
-
+	/*OK*/public boolean uploadScores(String email, String password, ArrayList<Score> scores){
 		List<String> response = new ArrayList<String>();
-		
-		try { 	response = sendRequest(params); } 
-		catch (Exception e) { e.printStackTrace(); }
 
-		for(int i=0; i<response.size(); i++){
-			System.out.println(response.get(i));
+		if(scores != null && scores.size() > 0){
+
+			StringBuilder infosToUpload = new StringBuilder("[");
+			
+			for (int i = 0; i < scores.size(); i++) {
+				infosToUpload.append(scores.get(i).toString()+",");
+			}
+			infosToUpload.deleteCharAt(infosToUpload.length()-1);
+			infosToUpload.append("]");
+			
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("action", "uploadScores");
+			params.put("email", email);
+			params.put("password", password);
+			params.put("scores", infosToUpload.toString());
+			
+			try { 	response = sendRequest(params); } 
+			catch (Exception e) { e.printStackTrace(); }
 		}
 		
+		return (scores.size() == Integer.valueOf(response.get(0)));
 	}
 	
 	public List<String> sendRequest(Map<String, String> params) throws Exception {
@@ -341,7 +347,6 @@ public class ServerConnection {
 		return req.finish();
 	}
 
-	
 	private class ServerRequest {
 	    private final String boundary;
 	    private static final String EOL = "\r\n";

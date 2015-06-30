@@ -15,8 +15,11 @@ public class Score {
 	private int nbItems;
 	private int time;
 	
-	public Score(){}
-	public Score(int clicks ,int nbItems, int time){
+	public Score(int idLevel){
+		this.idLevel = idLevel;
+	}
+	public Score(int idLevel, int clicks ,int nbItems, int time){
+		this.idLevel = idLevel;
 		this.nbClicks = clicks;
 		this.nbItems = nbItems;
 		this.time = time;
@@ -49,7 +52,7 @@ public class Score {
 				r = DBClass.requestQuery("SELECT nbItems, nbClicks, time, rank FROM scores WHERE idLevel="+idLevel);
 				
 				while(r.next()){
-					oldScore = new Score(r.getInt("nbClicks"),r.getInt("nbItems"), r.getInt("time"));
+					oldScore = new Score(idLevel, r.getInt("nbClicks"),r.getInt("nbItems"), r.getInt("time"));
 				}
 				
 				if(oldScore != null && this.getScore() > oldScore.getScore()){
@@ -70,12 +73,12 @@ public class Score {
 	public static ArrayList<Score> getLocalScores(){
 		try {
 			
-			ResultSet r = DBClass.requestQuery("SELECT levels.name AS levelName, nbItems, nbClicks, time, rank FROM scores JOIN levels ON levels.id = scores.idLevel WHERE idPlayer="+Window.profile.getId()+"ORDER BY levels.id");
+			ResultSet r = DBClass.requestQuery("SELECT levels.name AS levelName, levels.id AS levelID, nbItems, nbClicks, time, rank FROM scores JOIN levels ON levels.id = scores.idLevel WHERE idPlayer="+Window.profile.getId()+"ORDER BY levels.id");
 			
 			ArrayList<Score> scores = new ArrayList<Score>();
 
 			while(r.next()) {
-				Score s = new Score();
+				Score s = new Score(r.getInt("levelID"));
 				
 				s.setLevelName(r.getString("levelname"));
 				s.setNbItems(r.getInt("nbItems"));
@@ -149,7 +152,7 @@ public class Score {
 	}
     
 	public String toString(){
-		return "id:"+idLevel+",levelName:"+levelName+",clicks:"+nbClicks+",nbItems:"+nbItems+",time:"+time;
+		return "{%22idLevel%22:"+idLevel+", %22time%22:"+time+", %22nbClicks%22:"+nbClicks+", %22nbItems%22:"+nbItems+"}";
 	}
 	
 }

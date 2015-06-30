@@ -15,6 +15,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,6 +23,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import server.ServerConnection;
 import database.Score;
 import display.Window;
 
@@ -210,7 +212,10 @@ public class Scores extends JPanel {
 	}
 	
 	protected void btnUploadMyScoresActionPerformed(ActionEvent evt) {
-		// TODO Auto-generated method stub
+		ServerConnection sc = new ServerConnection();
+		if(sc.uploadScores(Window.profile.getEmail(), Window.profile.getPassword(), Score.getLocalScores())){
+			JOptionPane.showMessageDialog(null, "Scores uploaded");
+		}
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
