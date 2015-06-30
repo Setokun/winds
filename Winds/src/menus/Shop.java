@@ -257,10 +257,16 @@ public class Shop  extends JPanel {
 			    // get the row index and col index that contains that coordinate
 				int col = tableNewThemes.columnAtPoint(p);
 				int row = tableNewThemes.rowAtPoint(p);
+				
+				String themeName = (String) tableNewThemes.getValueAt(row, 0);
+				tableNewThemes.setValueAt(new ImageIcon("Download in progress..."), row, 0);
+				tableNewThemes.update(tableNewThemes.getGraphics());
+				
 				if(col == 1){
+					
 					if(ServerConnection.downloadTheme(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewThemes.getValueAt(row, 2))){
 						int idThemeInstalled = (int)tableNewThemes.getValueAt(row, 2);
-						JOptionPane.showMessageDialog(null, "New theme "+ tableNewThemes.getValueAt(row, 0) +" installed !!");
+						JOptionPane.showMessageDialog(null, "New theme "+ themeName +" installed !!");
 						((DefaultTableModel)tableNewThemes.getModel()).removeRow(row);
 						ArrayList<LevelData> rows;
 						try {
@@ -272,6 +278,7 @@ public class Shop  extends JPanel {
 								}
 							}
 						} catch (IOException e1) {
+							tableNewThemes.setValueAt(themeName, row, 0);
 							JOptionPane.showMessageDialog(null, "Unable to load new levels for this new theme, please reload this menu...");
 						}
 						
