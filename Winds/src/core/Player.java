@@ -164,6 +164,40 @@ public class Player extends GameObject{
 					
 					
 				}
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.Boss){
+					// TOP
+					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){
+						y = tempObject.getBounds().get(j).y + tempObject.getBounds().get(j).height;
+						velY = 1.5f;
+						velX = this.getVelX()/4;
+						this.life--;
+						AudioPlayer.playSfx("splaf");
+					}
+					// BOTTOM
+					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
+						y = tempObject.getBounds().get(j).y - 64;
+						velY = -2f;
+						velX = this.getVelX()/4;
+						this.life--;
+						AudioPlayer.playSfx("splaf");
+					}
+					// RIGHT
+					if(getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())){	
+						x = tempObject.getBounds().get(j).x - 64;
+						velX = -1.5f;
+						velY = this.getVelY()/4;
+						this.life--;
+						AudioPlayer.playSfx("splaf");
+					}
+					// LEFT
+					if(getBoundsLeft().intersects(tempObject.getBounds().get(j))){ 	
+						x = tempObject.getBounds().get(j).x + tempObject.getBounds().get(j).getBounds().width;
+						velX = 1.5f;
+						velY = this.getVelY()/4;
+						this.life--;
+						AudioPlayer.playSfx("splaf");
+					}
+				}
 				else if(tempObject.getBounds().get(j).getId() == ObjectId.Collectable){
 
 					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds()) 
@@ -267,6 +301,10 @@ public class Player extends GameObject{
 	}
 	public int getLife(){
 		return this.life;
+	}
+	
+	public String toString(){
+		return "player : {"+(int)this.x+","+(int)this.y+"}";
 	}
 	
 }
