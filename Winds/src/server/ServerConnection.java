@@ -55,7 +55,7 @@ public class ServerConnection {
 	        profile = gson.fromJson(in, Profile.class);
 	        in.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Unable to reach distant winds server, please verify your internet connection and try again !");
 		}
 		
 		return profile;

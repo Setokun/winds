@@ -99,6 +99,7 @@ public class Profile {
 				else
 				{
 					Profile profile = connectFromServer(email, password);
+					if(profile == null)return 0;
 					if(profile.getEmail() == null)return 2;
 					DBClass.executeQuery("INSERT INTO users (id, email, password, pseudo, userType, current, music, effects, resolution) "
 							+ "VALUES ('"+profile.getId()+"','"+profile.getEmail()+"','"+password+"','"+profile.getPseudo()+"','"+profile.getUserType()+"',true, 5, 5, 1);");
