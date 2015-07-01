@@ -16,6 +16,7 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +33,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import database.DBClass;
 import database.LevelData;
 import database.Score;
 import database.ThemeData;
+import display.Window;
 
 public class ServerConnection {
 	private static final String URL_API_SERVER = "http://www.winds-game.com/API.php";
@@ -61,7 +64,7 @@ public class ServerConnection {
 		return profile;
 	}
 	
-	/*OK*/public static ArrayList<Score> getScores(String email, String password) throws Exception{
+	/*OK*/public static ArrayList<Score> getScores(String email, String password) throws IOException{
 		
 		ArrayList<Score> scores = new ArrayList<Score>();
 
@@ -81,6 +84,23 @@ public class ServerConnection {
 		    scores.add(score);
 		}
 		in.close();
+		
+		for (int i = 0; i < scores.size(); i++) {
+			Score score = scores.get(i);
+			try {
+				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
+						+ "VALUES ('"+Window.profile.getId()+"','"+score.getIdLevel()+"','"+score.getTime()+"','"+score.getClicks()+"','"+score.getNbItems()+"');");
+			} catch (ClassNotFoundException e) {
+			} catch (SQLException e) {
+				try {
+					DBClass.executeQuery("UPDATE scores SET time='"+score.getTime()+"', nbClicks='"+score.getClicks()+"', nbItems='"+score.getNbItems()+"' WHERE idLevel='"+score.getIdLevel()+"' AND idPlayer='"+Window.profile.getId()+"'");
+				} catch (ClassNotFoundException e1) {
+				} catch (SQLException e1) {
+					JOptionPane.showMessageDialog(null, "Unable to save your scores from the server, please try again...");
+				}
+			}
+		}
+		
 		
 		return scores;
 	}
@@ -130,7 +150,7 @@ public class ServerConnection {
 		return themeData;
 	}
 	
-	/*TODO*/public static LevelData getLevelInfos(String email, String password, int idLevel) throws IOException{
+	/*OK*/public static LevelData getLevelInfos(String email, String password, int idLevel) throws IOException{
 		LevelData levelData = null;
 
 		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getLevelInfos&idLevel="+idLevel);
@@ -183,7 +203,7 @@ public class ServerConnection {
 		return basicLevels;
 	}
 	
-	/*OK*/public static ArrayList<LevelData> getCustomLevelsList(String email, String password) throws IOException{
+	/*TODO*/public static ArrayList<LevelData> getCustomLevelsList(String email, String password) throws IOException{
 		ArrayList<LevelData> customLevels = new ArrayList<LevelData>();
 
 		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getCustomLevels");
@@ -303,8 +323,16 @@ public class ServerConnection {
 		return true;
 	}
 	
-	/*TODO*/public static void uploadCustomLevel(String email, String password, JarLevel level){
-		
+	/*returns true if the file was correctly updated*/
+	/*TODO*/public static boolean uploadCustomLevel(String email, String password, String levelPath){
+		ServerConnection sc = new ServerConnection();
+		try {
+			sc.uploadFile(levelPath);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Unable to upload your level to the remote server");
+			return false;
+		}
+		return true;
 	}
 
 	/*OK*/public boolean uploadScores(String email, String password, ArrayList<Score> scores){
@@ -343,7 +371,7 @@ public class ServerConnection {
 	public List<String> uploadFile(String filepath) throws Exception {
 		File uploadFile = new File(filepath);
 		ServerRequest req = new ServerRequest("POST");
-		req.addFile("hello1", uploadFile);
+		req.addFile("level", uploadFile);
 		return req.finish();
 	}
 

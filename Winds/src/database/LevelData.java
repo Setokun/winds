@@ -130,7 +130,7 @@ public class LevelData {
 					if(requiredThemeInstalled)intermediary.add(result);
 				}
 			}
-			System.out.println(intermediary.size());
+			
 			results = new Object[intermediary.size()][2];
 			for (int i = 0; i < intermediary.size(); i++) {
 				results[i] = intermediary.get(i);

@@ -82,10 +82,10 @@ public class Profile {
 	}
 	
 	public static int insertOrUpdateProfile(String email, String password){
-		// 0 -> ko
-		// 1 -> password updated
-		// 2 -> wrong server password
-		// 3 -> new profile inserted
+		/* 0 -> ko
+		   1 -> password updated
+		   2 -> wrong server password
+		   3 -> new profile inserted*/
 			try {
 				if(isExistingEmail(email)){
 					Profile profile = connectFromServer(email, password);
