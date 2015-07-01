@@ -46,11 +46,11 @@ public class Score {
 		try {
 			Score oldScore = null;
 			int counter = 0;			
-			ResultSet r = DBClass.requestQuery("SELECT nbItems, nbClicks, time, rank FROM scores WHERE idLevel="+idLevel);
+			ResultSet r = DBClass.requestQuery("SELECT nbItems, nbClicks, time FROM scores WHERE idLevel="+idLevel);
 			while(r.next()){counter++;}
 			
 			if(counter > 0){
-				r = DBClass.requestQuery("SELECT nbItems, nbClicks, time, rank FROM scores WHERE idLevel="+idLevel);
+				r = DBClass.requestQuery("SELECT nbItems, nbClicks, time FROM scores WHERE idLevel="+idLevel);
 				
 				while(r.next()){
 					oldScore = new Score(idLevel, r.getInt("nbClicks"),r.getInt("nbItems"), r.getInt("time"));
@@ -62,7 +62,7 @@ public class Score {
 			}
 			else{
 				
-				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems, rank) VALUES ('"+Window.profile.getId()+"','"+idLevel+"', '"+time+"', '"+nbClicks+"', '"+nbItems+"')");
+				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) VALUES ('"+Window.profile.getId()+"','"+idLevel+"', '"+time+"', '"+nbClicks+"', '"+nbItems+"')");
 			}
 			
 		} catch (ClassNotFoundException | SQLException e) {
@@ -116,7 +116,7 @@ public class Score {
 			results[i][1] =  String.valueOf(r.get(i).getNbItems());
 			results[i][2] =  String.valueOf(r.get(i).getClicks());
 			results[i][3] =  Score.transformIntTimeInString(r.get(i).getTime());
-			results[i][4] =  String.valueOf(10000 - r.get(i).getTime() * 100 + r.get(i).getNbItems() * 75 - r.get(i).getClicks() * 10);
+			results[i][4] =  String.valueOf(Score.calculateScore(r.get(i).getTime(),r.get(i).getNbItems(),r.get(i).getClicks()));
 		}
 		return results;
 	}
@@ -137,7 +137,6 @@ public class Score {
 		return results;
 	}
 	
-	
 	public static  String transformIntTimeInString(int time){
 		String result = "";
 		int hours = time / 3600;
@@ -152,6 +151,10 @@ public class Score {
 		return result;
 	}
     
+	public static int calculateScore(int time, int nbItems, int nbClicks){
+		return 10000 - time * 100 + nbItems * 75 - nbClicks * 10;
+	}
+	
 	public String toString(){
 		return "{%22idLevel%22:"+idLevel+", %22time%22:"+time+", %22nbClicks%22:"+nbClicks+", %22nbItems%22:"+nbItems+"}";
 	}
