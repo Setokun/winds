@@ -273,22 +273,20 @@ public class LevelEditorList extends JPanel {
 		}
 		
 		// level duplication
-		Level lvl = (Level) jarL.getLevel().clone();
-		if(lvl == null){
-			JOptionPane.showMessageDialog(Window.getFrame(),
-					"Unable to duplicate the level.",
-					"Duplication failed", JOptionPane.WARNING_MESSAGE);
-			return;
-		}
-		
-		lvl.setName(levelName);
-		JarLevel newJar = new JarLevel(lvl);
-		if( !newJar.save() ){
-			JOptionPane.showMessageDialog(Window.getFrame(),
-					"Unable to save the level.",
-					"Duplication failed", JOptionPane.WARNING_MESSAGE);
-			return;
-		}
+		JarLevel newJar = null;
+		try {
+			Level lvl = (Level) jarL.getLevel().clone();
+			if(lvl == null) throw new Exception("Level cloning failed");
+					
+			lvl.setName(levelName);
+			newJar = new JarLevel(lvl);
+			newJar.save();
+    	} catch (Exception e){
+    		JOptionPane.showMessageDialog(Window.getFrame(),
+				"Unable to save this level :\n"+ e.getMessage(),
+				"Duplication failed", JOptionPane.WARNING_MESSAGE);
+    		return;
+    	}
 		
 		AddonManager.addJarLevel(newJar.getFile());
 		DefaultTableModel tm = (DefaultTableModel) table.getModel();
@@ -301,7 +299,7 @@ public class LevelEditorList extends JPanel {
 			new ImageIcon("resources/Buttons/Btn_upload.png")
 		});
 		JOptionPane.showMessageDialog(Window.getFrame(),
-				"Duplication succeeded.",
+				"Level duplicated.",
 				"Duplicated", JOptionPane.INFORMATION_MESSAGE);
 	}
 	private void btnDeleteClicked(ActionEvent evt){

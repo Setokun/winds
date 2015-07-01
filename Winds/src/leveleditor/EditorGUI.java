@@ -35,6 +35,7 @@ import addon.JarLevel;
 import addon.JarTheme;
 import addon.Level;
 import core.SpriteSheet;
+import display.Window;
 
 
 public class EditorGUI extends JPanel {
@@ -464,7 +465,18 @@ public class EditorGUI extends JPanel {
     	lvl.setMatrix( extractMatrix() );
     	lvl.setInteractions( extractInteractions() );
 
-    	return jarLevelUsed.save() ? jarLevelUsed : null;
+    	try {
+    		jarLevelUsed.save();
+    		JOptionPane.showMessageDialog(Window.getFrame(), "Level saved",
+				"Saved", JOptionPane.INFORMATION_MESSAGE);
+    		return jarLevelUsed;
+    	} catch (Exception e){
+    		JOptionPane.showMessageDialog(Window.getFrame(),
+				"Unable to save this level :\n"+ e.getMessage(),
+				"Saving level failed", JOptionPane.WARNING_MESSAGE);
+    		return null;
+    	}
+    	
     }
     /*OK*/static Tile[] getNeighboors(int position){
     	int nbTilesPerRow = NB_TILES_MATRIX,

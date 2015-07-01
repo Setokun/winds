@@ -33,9 +33,9 @@ public class JarLevel {
 	//endregion
 	
 	//region Public methods 
-	/*OK*/public boolean save(){
+	/*OK*/public void save() throws Exception {
 		createFile();
-		return writeFile();
+		writeFile();
 	}
 	/*OK*/public boolean isValid(){
 		return jar != null && jar.exists() && lvl != null;
@@ -66,16 +66,9 @@ public class JarLevel {
 			jar = new File(AddonManager.getLevelsPath(), name);
 		} while( jar.exists() );
 	}
-	/*OK*/private boolean writeFile(){
+	/*OK*/private void writeFile() throws Exception {
 		String json = encodeJson(lvl.toJson(), true);
-		String writable = canWriteFile(json);
-		
-		if( !writable.equals("OK") ){
-			JOptionPane.showMessageDialog(Window.getFrame(),
-				"Unable to save this level :\n"+ writable,
-				"Saving level failed", JOptionPane.WARNING_MESSAGE);
-			return false;
-		}		
+		checkWritableFile(json);
 		
 		try {
 			FileOutputStream fileOut = new FileOutputStream(jar);
@@ -84,14 +77,8 @@ public class JarLevel {
 			jarOut.write( json.getBytes() );
 			jarOut.closeEntry();
 			jarOut.close();
-			JOptionPane.showMessageDialog(Window.getFrame(), "Level saved",
-				"Saved", JOptionPane.INFORMATION_MESSAGE);
-			return true;
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(Window.getFrame(),
-				"Unable to save this level :\n"+ e.getMessage(),
-				"Saving level failed", JOptionPane.WARNING_MESSAGE);
-			return false;
+			throw new Exception(e.getMessage());
 		}
 	}
 	private String encodeJson(String text, boolean encoding){
@@ -105,15 +92,13 @@ public class JarLevel {
 		}*/
 		return text; //sb.toString(); le temps du dev
 	}
-	/*OK*/private String canWriteFile(String json){
+	/*OK*/private void checkWritableFile(String json) throws Exception {
 		File levelsFolder = new File(AddonManager.getLevelsPath());
 		
 		if( !levelsFolder.canWrite() )
-			return "No writing access rights onto levels folder";
+			throw new Exception("No writing access rights onto levels folder");
 		if(json.length() >= (int) levelsFolder.getFreeSpace())
-			return "Not enough free space into HDD";
-		
-		return "OK";
+			throw new Exception("Not enough free space into HDD");
 	}
 	/*OK*/private String getLevelContent(){
 		StringBuilder sb = new StringBuilder();
