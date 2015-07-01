@@ -85,15 +85,20 @@ public class ServerConnection {
 		}
 		in.close();
 		
+		
+		
 		for (int i = 0; i < scores.size(); i++) {
 			Score score = scores.get(i);
 			try {
-				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
-						+ "VALUES ('"+Window.profile.getId()+"','"+score.getIdLevel()+"','"+score.getTime()+"','"+score.getClicks()+"','"+score.getNbItems()+"');");
+				String s = "INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
+						+ "VALUES ("+Window.profile.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");";
+				System.out.println(s);
+				DBClass.executeQuery(s);
+				System.out.println("reste dans le try");
 			} catch (ClassNotFoundException e) {
 			} catch (SQLException e) {
 				try {
-					DBClass.executeQuery("UPDATE scores SET time='"+score.getTime()+"', nbClicks='"+score.getClicks()+"', nbItems='"+score.getNbItems()+"' WHERE idLevel='"+score.getIdLevel()+"' AND idPlayer='"+Window.profile.getId()+"'");
+					DBClass.executeQuery("UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()+", nbItems="+score.getNbItems()+" WHERE idLevel="+score.getIdLevel()+" AND idPlayer="+Window.profile.getId());
 				} catch (ClassNotFoundException e1) {
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, "Unable to save your scores from the server, please try again...");

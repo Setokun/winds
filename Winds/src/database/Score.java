@@ -1,5 +1,6 @@
 package database;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class Score {
 	public static ArrayList<Score> getLocalScores(){
 		try {
 			
-			ResultSet r = DBClass.requestQuery("SELECT levels.name AS levelName, levels.id AS levelID, nbItems, nbClicks, time, rank FROM scores JOIN levels ON levels.id = scores.idLevel WHERE idPlayer="+Window.profile.getId()+"ORDER BY levels.id");
+			ResultSet r = DBClass.requestQuery("SELECT levels.name AS levelName, levels.id AS levelID, nbItems, nbClicks, time FROM scores JOIN levels ON levels.id = scores.idLevel WHERE idPlayer="+Window.profile.getId()+"ORDER BY levels.id");
 			
 			ArrayList<Score> scores = new ArrayList<Score>();
 
@@ -103,7 +104,7 @@ public class Score {
 		ArrayList<Score> r = null;
 		try {
 			r = ServerConnection.getScores(Window.profile.getEmail(), Window.profile.getPassword());
-		} catch (Exception e) {
+		} catch (IOException e) {
 			r = Score.getLocalScores();
 		}
 		int nbScores = r.size();
