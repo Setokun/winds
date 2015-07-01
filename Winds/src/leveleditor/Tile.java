@@ -14,7 +14,9 @@ import javax.swing.JLabel;
 import leveleditor.EditorListener.TileLegendListener;
 import leveleditor.EditorListener.TileMatrixListener;
 
-
+/**
+ * Class which is the graphic representation of JarLevel et JarTheme elements
+ */
 public class Tile extends JLabel implements Cloneable {
 	public  static final int SIZE=64, DEFAULT=0;
 	private static final int MATRIX=0, CURRENT=1, LEGEND=2;
@@ -35,24 +37,66 @@ public class Tile extends JLabel implements Cloneable {
 	}
 	
 	//region Constructors - OK 
+	/**
+	 * Create a tile with an empty background and no interaction for the current tile.
+	 * @return Tile
+	 */
 	/*OK*/static Tile createEmptyCurrent(){
 		return emptyCurrent.clone();
 	}
+	/**
+	 * Create a matrix tile with an empty background, no interaction and the specified position.
+	 * @param position index of the tile in the matrix
+	 * @return Tile
+	 */
 	/*OK*/static Tile createEmptyMatrix(int position){
 		Tile t = emptyMatrix.clone();
 		t.position = position;
 		return t;
 	}
+	/**
+	 * Create a matrix tile with the specified attributes.
+	 * @param backImage		Image of the sprite to display in the background of the tile
+	 * @param frontImage	Image of the interaction to display in the foreground of the tile
+	 * @param backIndex		Index of the sprite
+	 * @param frontIndex	Index of the interaction
+	 * @param position		Index of the tile in the matrix
+	 * @return Tile
+	 */
 	/*OK*/static Tile createMatrix(Image backImage, Image frontImage, int backIndex, int frontIndex, int position){
 		return new Tile(MATRIX, backImage, frontImage, backIndex, frontIndex, position, null);
 	}
+	/**
+	 * Create a legend sprite tile with the specified attributes.
+	 * @param backImage		Image of the sprite to display in the background of the tile
+	 * @param backIndex		Index of the sprite
+	 * @return Tile
+	 */
 	/*OK*/static Tile createSprite(Image backImage, int backIndex){
 		return new Tile(LEGEND, backImage, null, backIndex, DEFAULT, DEFAULT, null);
 	}
+	/**
+	 * Create a legend interaction tile with the specified attributes.
+	 * @param frontImage	Image of the interaction to display in the foreground of the tile
+	 * @param frontIndex	Index of the interaction
+	 * @param tips			Tooltip text displayed when the mouse is over the tile
+	 * @return Tile
+	 */
 	/*OK*/static Tile createInteraction(Image frontImage, int frontIndex, String tips){
 		return new Tile(LEGEND, null, frontImage, DEFAULT, frontIndex, DEFAULT, tips);
 	}		
 	
+	/**
+	 * Create a tile with the specified attributes.
+	 * @param type			Type of the tile to create
+	 * @param backImage		Image of the sprite to display in the background of the tile
+	 * @param frontImage	Image of the interaction to display in the foreground of the tile
+	 * @param backIndex		Index of the sprite
+	 * @param frontIndex	Index of the interaction
+	 * @param position		Index of the tile in the matrix
+	 * @param tips			Tooltip text displayed when the mouse is over the tile
+	 * @return Tile
+	 */
 	/*OK*/private Tile(int type, Image backImage, Image frontImage, int backIndex, int frontIndex, int position, String tips){
 		super();
 		
@@ -78,6 +122,9 @@ public class Tile extends JLabel implements Cloneable {
 	//endregion
 	
 	//region Public methods 
+	/**
+	 * Checks if the specified object is equals to this tile.
+	 */	
 	/*OK*/public boolean equals(Object obj){
 		if( !(obj instanceof Tile) )  return false;
 		
@@ -85,6 +132,10 @@ public class Tile extends JLabel implements Cloneable {
 		return tips == t.tips && type == t.type && position == t.position
 			&& backIndex == t.backIndex && frontIndex == t.frontIndex;
 	}
+	/**
+	 * Clones the tile.
+	 * @return Tile
+	 */
 	/*OK*/public Tile clone(){
 		try {
 			return (Tile) super.clone();
@@ -93,6 +144,10 @@ public class Tile extends JLabel implements Cloneable {
 		}
 		return null;
 	}
+	/**
+	 * Serializes this tile to a string.
+	 * @return String
+	 */
 	/*OK*/public String toString(){
 		return "Tile [tips: "+ tips
 					+", type: "+ ((type == 0) ? "matrix" : (type == 1) ? "current" : "legend")
@@ -104,21 +159,39 @@ public class Tile extends JLabel implements Cloneable {
 					+", mixed: "+ mixed.toString()
 					+", parent: " + super.toString() +"]";
 	}
+	/**
+	 * Paints the tile.
+	 */
 	/*OK*/public void paintComponent(Graphics g){
         super.paintComponent(g);
         if(mixed != null)
         	g.drawImage(mixed.getImage(), 0, 0, getWidth(), getHeight(), this);
     }
 	
+	/**
+	 * Checks if the tile has a "departure" interaction.
+	 * @return boolean
+	 */
 	/*OK*/public boolean isDeparture(){
 		return frontIndex == 1;
 	}
+	/**
+	 * Checks if the tile has a "arrival" interaction.
+	 * @return boolean
+	 */
 	/*OK*/public boolean isArrival(){
 		return frontIndex == 2;
 	}
+	/**
+	 * Checks if the tile has no interaction.
+	 * @return boolean
+	 */
 	/*OK*/public boolean isEmptyInteraction(){
 		return frontIndex == DEFAULT;
 	}
+	/**
+	 * Remove the interaction of the tile.
+	 */
 	/*OK*/public void removeInteraction(){
 		frontIndex = emptyCurrent.frontIndex;
 		frontImage = emptyCurrent.frontImage;
@@ -130,6 +203,10 @@ public class Tile extends JLabel implements Cloneable {
 		mixed = this.mixImages();
 		setIcon(mixed);
 	}
+	/**
+	 * Updates this tile with the attributes of the specified tile.
+	 * @param source Tile where the attributes will be picked up
+	 */
 	/*OK*/public void updateFrom(Tile source){
 		if(this.type == CURRENT && source.type == CURRENT)	updateFromEmpty();
 		if(this.type == CURRENT && source.type == LEGEND)	updateCurrentFromLegend(source);
@@ -141,6 +218,10 @@ public class Tile extends JLabel implements Cloneable {
 	//endregion
 	
 	//region Private methods 
+	/**
+	 * Get an image which represents the superposition of the interaction and sprite images.
+	 * @return ImageIcon
+	 */
 	/*OK*/private ImageIcon mixImages(){
 		BufferedImage mix = createBlankImage();
 		Graphics g = mix.getGraphics();
@@ -151,6 +232,11 @@ public class Tile extends JLabel implements Cloneable {
 		g.dispose();
 		return new ImageIcon(mix);
 	}
+	/**
+	 * Create a blank background image.
+	 * Used for a tile which will contain only an interaction.
+	 * @return BufferedImage
+	 */
 	/*OK*/private BufferedImage createBlankImage(){
 		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = bi.getGraphics();
@@ -159,6 +245,11 @@ public class Tile extends JLabel implements Cloneable {
 		g.dispose();
 		return bi;
 	}
+	/**
+	 * Create a transparent foreground image.
+	 * Used for a tile which will contain only a sprite.
+	 * @return BufferedImage
+	 */
 	/*OK*/private static BufferedImage createTransparentImage(){
 		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -167,18 +258,29 @@ public class Tile extends JLabel implements Cloneable {
 		g2d.dispose();
 		return bi;
 	}
+	/**
+	 * Updates the tile with the attributes of a empty tile.
+	 */
 	/*OK*/private void updateFromEmpty(){
 		backIndex  = emptyCurrent.backIndex;
 		backImage  = emptyCurrent.backImage;
 		frontIndex = emptyCurrent.frontIndex;
 		frontImage = emptyCurrent.frontImage;
 	}
+	/**
+	 * Updates the current tile in GUI with the attributes of the specified legend tile.
+	 * @param source Tile where the attributes will be picked up
+	 */
 	/*OK*/private void updateCurrentFromLegend(Tile source){
 		backIndex  = source.backIndex;
 		backImage  = source.backImage;
 		frontIndex = source.frontIndex;
 		frontImage = source.frontImage;
 	}
+	/**
+	 * Updates the matrix tile with the attributes of the current tile in GUI.
+	 * @param source Tile where the attributes will be picked up
+	 */
 	/*OK*/private void updateMatrixFromCurrent(Tile source){
 		if(source.backIndex == DEFAULT && source.frontIndex == DEFAULT){
 			updateFromEmpty();
@@ -201,21 +303,45 @@ public class Tile extends JLabel implements Cloneable {
 	//endregion
 	
 	//region Getters 
+	/**
+	 * Get the type of the tile.
+	 * @return int
+	 */
 	public int getType(){
 		return type;
 	}
+	/**
+	 * Get the position of the tile in the matrix.
+	 * @return int
+	 */
 	public int getPosition(){
 		return position;
 	}
+	/**
+	 * Get the sprite's index of the tile.
+	 * @return int
+	 */
 	public int getBackIndex(){
 		return backIndex;
 	}
+	/**
+	 * Get the interaction's index of the tile.
+	 * @return int
+	 */
 	public int getFrontIndex(){
 		return frontIndex;
 	}
+	/**
+	 * Get the sprite's image of the tile.
+	 * @return int
+	 */
 	public Image getBackImage() {
 		return backImage;
 	}
+	/**
+	 * Get the interaction's image of the tile.
+	 * @return int
+	 */
 	public Image getFrontImage(){
 		return frontImage;
 	}
