@@ -9,13 +9,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -23,8 +23,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import server.ServerConnection;
 import database.Score;
-import database.Trophy;
 import display.Window;
 
 public class Scores extends JPanel {
@@ -50,32 +50,9 @@ public class Scores extends JPanel {
 		this.setPreferredSize(new Dimension(800,550));
 		
 		Object[][] results = null, resultsTrophies = null;
+		results = Score.getFormattedScores();
+		resultsTrophies = Score.getFormattedTrophies();
 		
-		ArrayList<Score> r = Score.getScores();
-		int count = r.size();
-		
-		results = new String[count][5];
-
-		for(int i=0; i < r.size();i++){
-			results[i][0] =  r.get(i).getLevelName();
-			results[i][1] =  String.valueOf(r.get(i).getNbItems());
-			results[i][2] =  String.valueOf(r.get(i).getClicks());
-			results[i][3] =  Score.transformIntTimeInString(r.get(i).getTime());
-			results[i][4] =  String.valueOf(10000 - r.get(i).getTime() * 100 + r.get(i).getNbItems() * 75 - r.get(i).getClicks() * 10);
-		}
-	
-		
-		
-		ArrayList<Trophy> t = Trophy.getTrophies();
-		count = t.size();
-		
-		resultsTrophies = new String[count][2];
-
-		for (int i = 0; i < count; i++) {
-			resultsTrophies[i][0] =  t.get(i).getDescription();
-			resultsTrophies[i][1] =  t.get(i).getAchieved();
-		}
-	
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
@@ -108,7 +85,7 @@ public class Scores extends JPanel {
 		});
 		
 		btnUploadMyScores = new JButton();
-		btnUploadMyScores.setIcon(new javax.swing.ImageIcon("res/Buttons/UploadMyScores.png"));
+		btnUploadMyScores.setIcon(new javax.swing.ImageIcon("resources/Buttons/UploadMyScores.png"));
 		btnUploadMyScores.setBorder(new javax.swing.border.SoftBevelBorder(0));
 		btnUploadMyScores.setBorderPainted(false);
 		btnUploadMyScores.setContentAreaFilled(false);
@@ -121,10 +98,10 @@ public class Scores extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				btnUploadMyScores.setIcon(new ImageIcon("res/Buttons/UploadMyScores.png"));
+				btnUploadMyScores.setIcon(new ImageIcon("resources/Buttons/UploadMyScores.png"));
 			}
 			public void mouseEntered(MouseEvent e) {
-				btnUploadMyScores.setIcon(new ImageIcon("res/Buttons/UploadMyScores_hover.png"));
+				btnUploadMyScores.setIcon(new ImageIcon("resources/Buttons/UploadMyScores_hover.png"));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
@@ -235,7 +212,10 @@ public class Scores extends JPanel {
 	}
 	
 	protected void btnUploadMyScoresActionPerformed(ActionEvent evt) {
-		// TODO Auto-generated method stub
+		ServerConnection sc = new ServerConnection();
+		if(sc.uploadScores(Window.profile.getEmail(), Window.profile.getPassword(), Score.getLocalScores())){
+			JOptionPane.showMessageDialog(null, "Scores uploaded");
+		}
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {

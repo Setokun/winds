@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import server.ServerConnection;
 import database.DBClass;
 import display.Window;
 
@@ -76,7 +77,55 @@ public class Profile {
 		return null;
 	}
 	
-	public static Profile getCurrentPlayer(){
+	public static Profile connectFromServer(String email, String password){
+		return ServerConnection.downloadProfile(email, password);
+	}
+	
+	public static int insertOrUpdateProfile(String email, String password){
+		/* 0 -> ko
+		   1 -> password updated
+		   2 -> wrong server password
+		   3 -> new profile inserted*/
+			try {
+				if(isExistingEmail(email)){
+					Profile profile = connectFromServer(email, password);
+					if(profile.getEmail() != null){
+						DBClass.executeQuery("UPDATE users set password='"+password+"', current=true WHERE email='"+email+"'");
+						return 1;
+					}else{
+						return 2;
+					}
+				}
+				else
+				{
+					Profile profile = connectFromServer(email, password);
+					if(profile == null)return 0;
+					if(profile.getEmail() == null)return 2;
+					DBClass.executeQuery("INSERT INTO users (id, email, password, pseudo, userType, current, music, effects, resolution) "
+							+ "VALUES ('"+profile.getId()+"','"+profile.getEmail()+"','"+password+"','"+profile.getPseudo()+"','"+profile.getUserType()+"',true, 5, 5, 1);");
+					return 3;
+				}
+			} 
+			catch (ClassNotFoundException e) {e.printStackTrace();}
+			catch (SQLException e) {e.printStackTrace();}
+		return 0;
+	}
+	
+	public static boolean isExistingEmail(String email){
+		
+		try {
+    		ResultSet r = DBClass.requestQuery("SELECT * FROM users WHERE email='"+email+"'");
+    		if(r.next()){
+    			return true;
+    		}
+		} catch (ClassNotFoundException e) {e.printStackTrace();
+		} catch (SQLException e) {e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+ 	public static Profile getCurrentPlayer(){
     	
     	try {
     		ResultSet r = DBClass.requestQuery("SELECT * FROM users WHERE current=true");
@@ -124,5 +173,9 @@ public class Profile {
     	
     	return null;	
     }
+	
+	public String toString(){
+		return "email : " + email + ",password : "+password;
+	}
 	
 }

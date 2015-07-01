@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -19,6 +20,7 @@ import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,6 +28,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
+import server.ServerConnection;
+import addon.level.Type;
+import database.LevelData;
+import database.ThemeData;
 import display.Window;
 
 public class Shop  extends JPanel {
@@ -37,28 +43,32 @@ public class Shop  extends JPanel {
 	private JScrollPane scrollPaneNewThemes, scrollPaneNewLevels, scrollPaneCustomLevels, scrollPaneLevelsToModerate;
 	private JTable tableNewThemes, tableNewLevels, tableCustomLevels, tableLevelsToModerate;
 	private GroupLayout gl;
+	Font windsPolice48 = null, windsPolice18 = null;
+	private int colWidth = 120;
 	// end declarations
 	
 	public Shop() {
-		
-		Font windsPolice48 = null, windsPolice18 = null;;
-    	try {
-    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,18F);
-    		windsPolice48 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,48F);
-		} catch (FontFormatException | IOException e) {
-			windsPolice18 = new Font ("Serif", Font.BOLD, 18);
-    		windsPolice48 = new Font ("Serif", Font.BOLD, 48);
-		}
+
+    	initializeFont();
 		
 		this.setPreferredSize(new Dimension(800,550));
 		
 		title = new JLabel("Shop");
 		title.setFont(windsPolice48);
 		
+		Object[][] listThemesToDisplay = null, listBasicLevelsToDisplay = null, listCustomLevelsToDisplay = null, listLevelsToModerateToDisplay = null;
+		try {
+			listThemesToDisplay = getThemesList();
+			listBasicLevelsToDisplay = getLevelsList(Type.basic);
+			listCustomLevelsToDisplay = getCustomLevelsList(Type.custom);
+			listLevelsToModerateToDisplay = getLevelsList(Type.toModerate);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(this, "Unable to reach distant winds server, please verify your internet connection and try again !");
+		}
+		
 		
 		jBtnBack = new JButton();
 		jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
-
 		jBtnBack.setBorder(new SoftBevelBorder(0));
 		jBtnBack.setBorderPainted(false);
 		jBtnBack.setContentAreaFilled(false);
@@ -139,11 +149,75 @@ public class Shop  extends JPanel {
 			gl.createParallelGroup(Alignment.LEADING)
 				.addGroup(vGroup)
 		);
+
 		
-		int colWidth = 120;
+		initializeThemeList(listThemesToDisplay);
+		initializeNewBasicLevelsList(listBasicLevelsToDisplay);
+		initializeCustomLevelsList(listCustomLevelsToDisplay);
+		initializeLevelsToModerateList(listLevelsToModerateToDisplay);
 		
-		//region New Themes table
+		setLayout(gl);
 		
+	}
+
+	private void initializeFont() {
+		try {
+    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,18F);
+    		windsPolice48 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,48F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice18 = new Font ("Serif", Font.BOLD, 18);
+    		windsPolice48 = new Font ("Serif", Font.BOLD, 48);
+		}
+	}
+
+	protected void jBtnBackActionPerformed(ActionEvent evt) {
+		Window.resize(new Dimension(800, 550));
+		Window.affect(new MainMenu());
+	}
+	
+	private Object[][] getThemesList() throws IOException{
+		Object[][] listThemes = ThemeData.getThemesList();
+		Object[][] listThemesToDisplay = null;
+		if(listThemes != null){
+			listThemesToDisplay = new Object[listThemes.length][3];
+			for(int i=0; i<listThemes.length; i++){
+				listThemesToDisplay[i][0] = listThemes[i][0];
+				listThemesToDisplay[i][1] = new ImageIcon("resources/Buttons/Btn_install.png");
+				listThemesToDisplay[i][2] = listThemes[i][1];
+			}
+		}
+		return listThemesToDisplay;
+	}
+	
+	private Object[][] getLevelsList(Type type) throws IOException{
+		Object[][] listLevels = LevelData.getLevelsList(type);
+		Object[][] listLevelsToDisplay = null;
+		if(listLevels != null){
+			listLevelsToDisplay = new Object[listLevels.length][3];
+			for(int i=0; i<listLevels.length; i++){
+				listLevelsToDisplay[i][0] = listLevels[i][0];
+				listLevelsToDisplay[i][1] = new ImageIcon("resources/Buttons/Btn_install.png");
+				listLevelsToDisplay[i][2] = listLevels[i][1];
+			}
+		}
+		return listLevelsToDisplay;
+	}
+	
+	private Object[][] getCustomLevelsList(Type type) throws IOException{
+		Object[][] listLevels = LevelData.getCustomLevelsList();
+		Object[][] listLevelsToDisplay = new Object[listLevels.length][6];
+		for(int i=0; i<listLevels.length; i++){
+			listLevelsToDisplay[i][0] = listLevels[i][0];
+			listLevelsToDisplay[i][1] = (listLevels[i][2] == null)?new ImageIcon("resources/Buttons/Btn_install.png"):null;
+			listLevelsToDisplay[i][2] = (listLevels[i][2] != null)?(listLevels[i][2].equals("activated"))?new ImageIcon("resources/Buttons/Btn_activate.png"):new ImageIcon("resources/Buttons/Btn_desactivate.png"):null;
+			listLevelsToDisplay[i][3] = (listLevels[i][2] != null)?new ImageIcon("resources/Buttons/Btn_activate.png"):null;
+			listLevelsToDisplay[i][4] = true;
+			listLevelsToDisplay[i][5] = listLevels[i][1];
+		}
+		return listLevelsToDisplay;
+	}
+
+	private void initializeThemeList(Object[][] listThemesToDisplay){
 		tableNewThemes = new JTable();
 		tableNewThemes.getTableHeader().setBackground(new Color(23,182,255));
 		tableNewThemes.getTableHeader().setFont(windsPolice18);
@@ -152,24 +226,14 @@ public class Shop  extends JPanel {
 		tableNewThemes.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		tableNewThemes.setBackground(Color.WHITE);
 		tableNewThemes.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"NewTheme_1", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewTheme_2", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewTheme_3", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewTheme_4", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewTheme_5", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewTheme_6", new ImageIcon("resources/Buttons/Btn_install.png")},
-			},
+				listThemesToDisplay,
 			new String[] {
-				"New Themes", ""
+				"New Themes", "", ""
 			}
 		) {
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 5700292645347825439L;
 			boolean[] columnEditables = new boolean[] {
-				false, false
+				false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -182,6 +246,9 @@ public class Shop  extends JPanel {
 		tableNewThemes.getColumnModel().getColumn(1).setPreferredWidth(colWidth);
 		tableNewThemes.getColumnModel().getColumn(1).setMinWidth(colWidth);
 		tableNewThemes.getColumnModel().getColumn(1).setMaxWidth(colWidth);
+		tableNewThemes.getColumnModel().getColumn(2).setPreferredWidth(0);
+		tableNewThemes.getColumnModel().getColumn(2).setMinWidth(0);
+		tableNewThemes.getColumnModel().getColumn(2).setMaxWidth(0);
 		new ButtonColumn(tableNewThemes, null, 1);
 		tableNewThemes.addMouseListener(new MouseAdapter(){
 		    public void mouseClicked(MouseEvent e){
@@ -190,18 +257,39 @@ public class Shop  extends JPanel {
 			    // get the row index and col index that contains that coordinate
 				int col = tableNewThemes.columnAtPoint(p);
 				int row = tableNewThemes.rowAtPoint(p);
+				
+				String themeName = (String) tableNewThemes.getValueAt(row, 0);
+				tableNewThemes.setValueAt(new ImageIcon("Download in progress..."), row, 0);
+				tableNewThemes.update(tableNewThemes.getGraphics());
+				
 				if(col == 1){
-					System.out.println("Installation de " + tableNewThemes.getValueAt(row, 0));
-					((DefaultTableModel)tableNewThemes.getModel()).removeRow(row);
+					
+					if(ServerConnection.downloadTheme(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewThemes.getValueAt(row, 2))){
+						int idThemeInstalled = (int)tableNewThemes.getValueAt(row, 2);
+						JOptionPane.showMessageDialog(null, "New theme "+ themeName +" installed !!");
+						((DefaultTableModel)tableNewThemes.getModel()).removeRow(row);
+						ArrayList<LevelData> rows;
+						try {
+							rows = ServerConnection.getBasicLevelsList(Window.profile.getEmail(),Window.profile.getPassword());
+							for (int i = 0; i < rows.size(); i++) {
+								if(rows.get(i).getIdTheme() == idThemeInstalled){
+									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon("resources/Buttons/Btn_install.png"), rows.get(i).getIdLevel()};
+									((DefaultTableModel)tableNewLevels.getModel()).addRow(rowToInsert);
+								}
+							}
+						} catch (IOException e1) {
+							tableNewThemes.setValueAt(themeName, row, 0);
+							JOptionPane.showMessageDialog(null, "Unable to load new levels for this new theme, please reload this menu...");
+						}
+						
+					}
 				}
-		    }  
+		    }
 		} );
 		scrollPaneNewThemes.setViewportView(tableNewThemes);
-		
-		//endregion New Themes table
-		
-		//region New Levels table
-		
+	}
+
+	private void initializeNewBasicLevelsList(Object[][] listBasicLevelsToDisplay){
 		tableNewLevels = new JTable();
 		tableNewLevels.getTableHeader().setBackground(new Color(23,182,255));
 		tableNewLevels.getTableHeader().setFont(windsPolice18);
@@ -210,26 +298,14 @@ public class Shop  extends JPanel {
 		tableNewLevels.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		tableNewLevels.setBackground(Color.WHITE);
 		tableNewLevels.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"NewOfficialLevel_1", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_2", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_3", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_4", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_5", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_6", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_7", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_8", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_9", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_10", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"NewOfficialLevel_11", new ImageIcon("resources/Buttons/Btn_install.png")},
-			},
+				listBasicLevelsToDisplay,
 			new String[] {
-				"New Levels", ""
+				"New Levels", "" ,""
 			}
 		) {
 			private static final long serialVersionUID = 5700292645347825439L;
 			boolean[] columnEditables = new boolean[] {
-				false, false
+				false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -238,10 +314,16 @@ public class Shop  extends JPanel {
 		tableNewLevels.setRowHeight(30);
 		tableNewLevels.getColumnModel().getColumn(0).setPreferredWidth(200);
 		tableNewLevels.getColumnModel().getColumn(0).setResizable(false);
+		
 		tableNewLevels.getColumnModel().getColumn(1).setResizable(false);
 		tableNewLevels.getColumnModel().getColumn(1).setPreferredWidth(colWidth);
 		tableNewLevels.getColumnModel().getColumn(1).setMinWidth(colWidth);
 		tableNewLevels.getColumnModel().getColumn(1).setMaxWidth(colWidth);
+		
+		tableNewLevels.getColumnModel().getColumn(2).setResizable(false);
+		tableNewLevels.getColumnModel().getColumn(2).setPreferredWidth(0);
+		tableNewLevels.getColumnModel().getColumn(2).setMinWidth(0);
+		tableNewLevels.getColumnModel().getColumn(2).setMaxWidth(0);
 		new ButtonColumn(tableNewLevels, null, 1);
 		tableNewLevels.addMouseListener(new MouseAdapter(){
 		    public void mouseClicked(MouseEvent e){
@@ -251,17 +333,19 @@ public class Shop  extends JPanel {
 				int col = tableNewLevels.columnAtPoint(p);
 				int row = tableNewLevels.rowAtPoint(p);
 				if(col == 1){
-					System.out.println("Installation de " + tableNewLevels.getValueAt(row, 0));
-					((DefaultTableModel)tableNewLevels.getModel()).removeRow(row);
+					//System.out.println("Installation de " + tableNewLevels.getValueAt(row, 0));
+					if(ServerConnection.downloadLevel(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewLevels.getValueAt(row, 2))){
+						JOptionPane.showMessageDialog(null, "New level installed !!");
+						((DefaultTableModel)tableNewLevels.getModel()).removeRow(row);
+					}
 				}
 		    }  
 		} );
 		scrollPaneNewLevels.setViewportView(tableNewLevels);
 		
-		//endregion New Levels table
-		
-		//region Custom Levels table
-		
+	}
+	
+	private void initializeCustomLevelsList(Object[][] listCustomLevelsToDisplay){
 		tableCustomLevels = new JTable();
 		tableCustomLevels.getTableHeader().setBackground(new Color(23,182,255));
 		tableCustomLevels.getTableHeader().setFont(windsPolice18);
@@ -270,26 +354,14 @@ public class Shop  extends JPanel {
 		tableCustomLevels.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		tableCustomLevels.setBackground(Color.WHITE);
 		tableCustomLevels.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Custom Level 1", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 2", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 3", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 4", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 5", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 6", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 7", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 8", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 9", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 10", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
-				{"Custom Level 11", new ImageIcon("resources/Buttons/Btn_install.png"), null, null, true},
-			},
+				listCustomLevelsToDisplay,
 			new String[] {
-				"Custom level name", "", "", "", ""
+				"Custom level name", "", "", "", "", ""
 			}
 		) {
 			private static final long serialVersionUID = 5700292645347825439L;
 			boolean[] columnEditables = new boolean[] {
-				false, false, false, false
+				false, false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -300,24 +372,19 @@ public class Shop  extends JPanel {
 		//region columnSizes
 		tableCustomLevels.getColumnModel().getColumn(0).setResizable(false);
 		
-		tableCustomLevels.getColumnModel().getColumn(1).setResizable(false);
-		tableCustomLevels.getColumnModel().getColumn(1).setPreferredWidth(colWidth);
-		tableCustomLevels.getColumnModel().getColumn(1).setMinWidth(colWidth);
-		tableCustomLevels.getColumnModel().getColumn(1).setMaxWidth(colWidth);
+		for (int i = 1; i <= 3; i++) {
+			tableCustomLevels.getColumnModel().getColumn(i).setResizable(false);
+			tableCustomLevels.getColumnModel().getColumn(i).setPreferredWidth(colWidth);
+			tableCustomLevels.getColumnModel().getColumn(i).setMinWidth(colWidth);
+			tableCustomLevels.getColumnModel().getColumn(i).setMaxWidth(colWidth);
+		}
 		
-		tableCustomLevels.getColumnModel().getColumn(2).setResizable(false);
-		tableCustomLevels.getColumnModel().getColumn(2).setPreferredWidth(colWidth);
-		tableCustomLevels.getColumnModel().getColumn(2).setMinWidth(colWidth);
-		tableCustomLevels.getColumnModel().getColumn(2).setMaxWidth(colWidth);
-		
-		tableCustomLevels.getColumnModel().getColumn(3).setResizable(false);
-		tableCustomLevels.getColumnModel().getColumn(3).setPreferredWidth(colWidth);
-		tableCustomLevels.getColumnModel().getColumn(3).setMinWidth(colWidth);
-		tableCustomLevels.getColumnModel().getColumn(3).setMaxWidth(colWidth);
-		
-		tableCustomLevels.getColumnModel().getColumn(4).setPreferredWidth(0);
-		tableCustomLevels.getColumnModel().getColumn(4).setMinWidth(0);
-		tableCustomLevels.getColumnModel().getColumn(4).setMaxWidth(0);
+		for (int i = 4; i <= 5; i++) {
+			tableCustomLevels.getColumnModel().getColumn(i).setResizable(false);
+			tableCustomLevels.getColumnModel().getColumn(i).setPreferredWidth(0);
+			tableCustomLevels.getColumnModel().getColumn(i).setMinWidth(0);
+			tableCustomLevels.getColumnModel().getColumn(i).setMaxWidth(0);
+		}
 		//endregion columnSizes
 		
 		new ButtonColumn(tableCustomLevels, null, 1);
@@ -339,32 +406,34 @@ public class Shop  extends JPanel {
 					}
 				}
 				if(col == 2){
-					if((Boolean)tableCustomLevels.getValueAt(row, 4)){
-						System.out.println("activation de " + tableCustomLevels.getValueAt(row, 0));//TODO
-						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_desactivate.png") , row, col);
-						tableCustomLevels.setValueAt(false, row, 4);
-					}
-					else{
-						System.out.println("désactivation de " + tableCustomLevels.getValueAt(row, 0));//TODO
-						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png") , row, col);
-						tableCustomLevels.setValueAt(true, row, 4);
+					if(tableCustomLevels.getValueAt(row, 1) == null){
+						if((Boolean)tableCustomLevels.getValueAt(row, 4)){
+							System.out.println("activation de " + tableCustomLevels.getValueAt(row, 0));//TODO
+							tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_desactivate.png") , row, col);
+							tableCustomLevels.setValueAt(false, row, 4);
+						}
+						else{
+							System.out.println("désactivation de " + tableCustomLevels.getValueAt(row, 0));//TODO
+							tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png") , row, col);
+							tableCustomLevels.setValueAt(true, row, 4);
+						}
 					}
 				}
 				if(col == 3){
-					System.out.println("Désinstallation de " + tableCustomLevels.getValueAt(row, 0));//TODO
-					tableCustomLevels.setValueAt(null, row, 2);
-					tableCustomLevels.setValueAt(null, row, col);
-					tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_install.png") , row, 1);
+					if(tableCustomLevels.getValueAt(row, 1) == null){
+						System.out.println("Désinstallation de " + tableCustomLevels.getValueAt(row, 0));//TODO
+						tableCustomLevels.setValueAt(null, row, 2);
+						tableCustomLevels.setValueAt(null, row, col);
+						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_install.png") , row, 1);
+					}
 				}
 		    }  
 		} );
 		
 		scrollPaneCustomLevels.setViewportView(tableCustomLevels);
-		
-		//endregion Custom Levels table
-		
-		//region Levels to moderate table
-		
+	}
+	
+	private void initializeLevelsToModerateList(Object[][] listLevelsToModerateToDisplay){
 		tableLevelsToModerate = new JTable();
 		tableLevelsToModerate.getTableHeader().setBackground(new Color(23,182,255));
 		tableLevelsToModerate.getTableHeader().setFont(windsPolice18);
@@ -373,26 +442,14 @@ public class Shop  extends JPanel {
 		tableLevelsToModerate.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		tableLevelsToModerate.setBackground(Color.WHITE);
 		tableLevelsToModerate.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Level_to_moderate_1", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"Level_to_moderate_2", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"Level_to_moderate_3", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"Level_to_moderate_4", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"Level_to_moderate_5", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"Level_to_moderate_6", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"Level_to_moderate_7", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"Level_to_moderate_8", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"Level_to_moderate_9", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"Level_to_moderate_10", new ImageIcon("resources/Buttons/Btn_install.png")},
-				{"Level_to_moderate_11", new ImageIcon("resources/Buttons/Btn_install.png")},
-			},
+				listLevelsToModerateToDisplay,
 			new String[] {
-				"Levels to moderate", ""
+				"Levels to moderate", "", ""
 			}
 		) {
 			private static final long serialVersionUID = 5700292645347825439L;
 			boolean[] columnEditables = new boolean[] {
-				false, false
+				false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -405,6 +462,10 @@ public class Shop  extends JPanel {
 		tableLevelsToModerate.getColumnModel().getColumn(1).setPreferredWidth(colWidth);
 		tableLevelsToModerate.getColumnModel().getColumn(1).setMinWidth(colWidth);
 		tableLevelsToModerate.getColumnModel().getColumn(1).setMaxWidth(colWidth);
+		tableLevelsToModerate.getColumnModel().getColumn(2).setResizable(false);
+		tableLevelsToModerate.getColumnModel().getColumn(2).setPreferredWidth(0);
+		tableLevelsToModerate.getColumnModel().getColumn(2).setMinWidth(0);
+		tableLevelsToModerate.getColumnModel().getColumn(2).setMaxWidth(0);
 		new ButtonColumn(tableLevelsToModerate, null, 1);
 		tableLevelsToModerate.addMouseListener(new MouseAdapter(){
 		    public void mouseClicked(MouseEvent e){
@@ -420,17 +481,6 @@ public class Shop  extends JPanel {
 		    }  
 		} );
 		scrollPaneLevelsToModerate.setViewportView(tableLevelsToModerate);
-		
-		//endregion Levels to moderate table
-		
-		setLayout(gl);
-		
 	}
-
-	protected void jBtnBackActionPerformed(ActionEvent evt) {
-		Window.resize(new Dimension(800, 550));
-		Window.affect(new MainMenu());
-	}
-	
 
 }

@@ -99,10 +99,25 @@ public class AddonManager {
 	public static String getLevelsPath(){
 		return levelsPath;
 	}
+
 	public static String getCommonPath(){
 		return commonPath;
 	}
+
+	public static void loadJarLevel(int index){
+		for (int i = 0; i < jarLevelsList.size(); i++) {
+			if(jarLevelsList.get(i).getLevel().getIdDB() == index)
+				loadedJarLevel = jarLevelsList.get(i);
+		}
+		//loadedJarLevel = jarLevelsList.get(index);
+	}
+	public static void loadJarLevel(JarLevel jar){
+		loadedJarLevel = jar;
+	}
+	//endregion
 	
+	//region Getters 
+
 	public static JarTheme[] getJarThemes(){
 		JarTheme[] jarThemes = new JarTheme[ jarThemesList.size() ];
 		return jarThemesList.toArray(jarThemes);
@@ -118,6 +133,7 @@ public class AddonManager {
 		return loadedJarLevel;
 	}
 
+
 	public static void loadJarTheme(int index){
 		for (int i = 0; i < jarThemesList.size(); i++) {
 			if(jarThemesList.get(i).getIdDB() == index)
@@ -127,11 +143,25 @@ public class AddonManager {
 	public static void loadJarTheme(JarTheme jar){
 		loadedJarTheme = jar;
 	}
-	public static void loadJarLevel(int index){
-		loadedJarLevel = jarLevelsList.get(index);
+
+
+	public static int[] getThemesInstalledIds(){
+		int nbThemes = jarThemesList.size();
+		int[] ids = new int[nbThemes];
+		for (int i = 0; i < nbThemes; i++) {
+			ids[i] = jarThemesList.get(i).getIdDB();
+		}
+		return ids;
 	}
-	public static void loadJarLevel(JarLevel jar){
-		loadedJarLevel = jar;
+	public static int[] getLevelsInstalledIds(Type type){
+		JarLevel[] levels = getJarLevelsByType(type);
+		int nbLevels = levels.length;
+		int[] ids = new int[nbLevels];
+		for (int i = 0; i < nbLevels; i++) {
+			ids[i] = levels[i].getLevel().getIdDB();
+		}
+		return ids;
+
 	}
 	//endregion
 	
