@@ -17,6 +17,7 @@ import addon.AddonManager;
 import addon.JarTheme;
 import display.Window;
 
+
 public class LevelCreationDialog {
 
 	private final Dimension DIALOG_DIM = new Dimension(410,170);
@@ -33,12 +34,13 @@ public class LevelCreationDialog {
 	private JLabel lblName, lblTheme;
 	private JButton btnValid, btnReset, btnCancel;
 	
-
-	public static LevelCreationDialog show(JarTheme jarThemeToUse){
-		themeNames = (jarThemeToUse == null) ? getThemeNames(AddonManager.getJarThemes()) : new String[0];
-		return new LevelCreationDialog(jarThemeToUse);
-	}
 	
+	//region Constructor 
+	/**
+	 * Instanciate a dialog box which is required when a JarLevel must be created
+	 * with the specified jarThemeToUse.
+	 * @param jarThemeToUse
+	 */
 	private LevelCreationDialog(JarTheme jarThemeToUse){
 		canceled = false;
 		themeChoosen = jarThemeToUse;
@@ -46,8 +48,40 @@ public class LevelCreationDialog {
 		initButtons();
 		initDialog();
 	}
+	//endregion
 	
-	@SuppressWarnings({"rawtypes","unchecked"})
+	
+	//region Statics 
+	/**
+	 * Shows the dialog box. If jarThemeToUse is set, the selection of the JarTheme to use is not displayed.
+	 * @param jarThemeToUse
+	 * @return LevelCreationDialog
+	 */
+	public static LevelCreationDialog show(JarTheme jarThemeToUse){
+		themeNames = (jarThemeToUse == null) ? getThemeNames(AddonManager.getJarThemes()) : new String[0];
+		return new LevelCreationDialog(jarThemeToUse);
+	}
+	/**
+	 * Collects the themes' name.
+	 * @param themes Array of JarThemes
+	 * @return String[]
+	 */
+	private static String[] getThemeNames(JarTheme[] themes){
+		String[] names = new String[ themes.length +1 ];
+		names[0] = "Choose a theme";
+		for (int i=0; i<themes.length; i++) {
+			names[i+1] = themes[i].getName();
+		}		
+		return names;
+	}
+	//endregion
+	
+	
+	//region Initialization 
+	/**
+	 * Initializes the fields of the dialog box.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initFields(){
 		lblName = new JLabel("Level name :");
 		txtName = new JTextField();
@@ -59,6 +93,9 @@ public class LevelCreationDialog {
 		lblTheme.setVisible(isNullTheme);
 		cbTheme.setVisible(isNullTheme);
 	}
+	/**
+	 * Initializes the buttons of the dialog box.
+	 */
 	private void initButtons(){
 		btnValid  = new JButton("Valid");
 		btnValid.addActionListener((e) -> {
@@ -80,6 +117,9 @@ public class LevelCreationDialog {
 			dial.dispose();
 		});
 	}
+	/**
+	 * Initializes the dialog box.
+	 */
 	private void initDialog(){
 		dial = new JDialog( Window.getFrame() );
 		dial.setTitle("Level creation requirements");
@@ -94,7 +134,10 @@ public class LevelCreationDialog {
 		dial.setLayout( initStructure() );
 		dial.setVisible(true);
 	}
-	
+	/**
+	 * Initializes the listener of the dialog box.
+	 * @return WindowApdater
+	 */
 	private WindowAdapter initWindowListener(){
 		return new WindowAdapter() {
 			@Override
@@ -112,6 +155,10 @@ public class LevelCreationDialog {
 			}
 		};
 	}
+	/**
+     * Builds the GUI's structure.
+	 * @return GroupLayout
+	 */
 	private GroupLayout initStructure(){
 		GroupLayout layout = new GroupLayout(dial.getContentPane());
 		
@@ -162,6 +209,13 @@ public class LevelCreationDialog {
         
         return layout;
 	}
+	//endregion
+	
+	
+	//region Methods 
+	/**
+	 * Updates the choices.
+	 */
 	private void updateChoices(){
 		String name = txtName.getText();
 		nameChoosen = name.equals("") ? null : name;
@@ -169,23 +223,31 @@ public class LevelCreationDialog {
 		int indexTheme = cbTheme.getSelectedIndex();
 		if(cbTheme.isVisible()) themeChoosen = (indexTheme == 0) ? null : AddonManager.getJarThemes()[indexTheme -1];
 	}
+	//endregion
 	
-	private static String[] getThemeNames(JarTheme[] themes){
-		String[] names = new String[ themes.length +1 ];
-		names[0] = "Choose a theme";
-		for (int i=0; i<themes.length; i++) {
-			names[i+1] = themes[i].getName();
-		}		
-		return names;
-	}
+	
+	//region Getters 
+	/**
+	 * Get the input level name.
+	 * @return String
+	 */
 	public String getNameChoosen() {
 		return nameChoosen;
 	}
+	/**
+	 * Get the selected JarTheme object.
+	 * @return JarTheme
+	 */
 	public JarTheme getThemeChoosen() {
 		return themeChoosen;
 	}
+	/**
+	 * Checks if the dialog box has been canceled.
+	 * @return boolean
+	 */
 	public boolean canceled(){
 		return canceled;
 	}
+	//endregion
 	
 }
