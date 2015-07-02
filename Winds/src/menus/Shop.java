@@ -29,6 +29,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
 import server.ServerConnection;
+import addon.AddonManager;
 import addon.level.Type;
 import database.LevelData;
 import database.LevelStatus;
@@ -210,8 +211,8 @@ public class Shop  extends JPanel {
 		for(int i=0; i<listLevels.length; i++){
 			listLevelsToDisplay[i][0] = listLevels[i][0];
 			listLevelsToDisplay[i][1] = (listLevels[i][2] == null || listLevels[i][2].equals("uninstalled"))?new ImageIcon("resources/Buttons/Btn_install.png"):null;
-			listLevelsToDisplay[i][2] = (listLevels[i][2] != null)?(listLevels[i][2].equals("installed"))?new ImageIcon("resources/Buttons/Btn_desactivate.png"):new ImageIcon("resources/Buttons/Btn_activate.png"):null;
-			listLevelsToDisplay[i][3] = (listLevels[i][2] != null)?new ImageIcon("resources/Buttons/Btn_uninstall.png"):null;
+			listLevelsToDisplay[i][2] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?(listLevels[i][2].equals("installed"))?new ImageIcon("resources/Buttons/Btn_desactivate.png"):new ImageIcon("resources/Buttons/Btn_activate.png"):null;
+			listLevelsToDisplay[i][3] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?new ImageIcon("resources/Buttons/Btn_uninstall.png"):null;
 			listLevelsToDisplay[i][4] = (listLevels[i][2] != null && listLevels[i][2].equals("desactivated"));
 			listLevelsToDisplay[i][5] = listLevels[i][1];
 		}
@@ -430,10 +431,15 @@ public class Shop  extends JPanel {
 				}
 				if(col == 3){
 					if(tableCustomLevels.getValueAt(row, 1) == null){
-						System.out.println("Désinstallation de " + tableCustomLevels.getValueAt(row, 0));//TODO
-						tableCustomLevels.setValueAt(null, row, 2);
-						tableCustomLevels.setValueAt(null, row, col);
-						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_install.png") , row, 1);
+						int idLevel = (int)tableCustomLevels.getValueAt(row, 5);
+						if(LevelData.setStatus(idLevel, LevelStatus.uninstalled)){
+							if(AddonManager.removeJarLevelById(idLevel)){
+								System.out.println("Désinstallation de " + tableCustomLevels.getValueAt(row, 0));
+								tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_install.png") , row, 1);
+								tableCustomLevels.setValueAt(null, row, 2);
+								tableCustomLevels.setValueAt(null, row, col);
+							}
+						}
 					}
 				}
 		    }  
