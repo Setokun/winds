@@ -77,13 +77,11 @@ public class ServerConnection {
 		    scores.add(score);
 		}
 		
-		
 		for (int i = 0; i < scores.size(); i++) {
 			Score score = scores.get(i);
 			try {
 				String s = "INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
 						+ "VALUES ("+Window.profile.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");";
-				System.out.println(s);
 				DBClass.executeQuery(s);
 				System.out.println("reste dans le try");
 			} catch (ClassNotFoundException e) {

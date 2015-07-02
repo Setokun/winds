@@ -207,14 +207,31 @@ public class Shop  extends JPanel {
 	
 	private Object[][] getCustomLevelsList(Type type) throws IOException{
 		Object[][] listLevels = LevelData.getCustomLevelsList();
-		Object[][] listLevelsToDisplay = new Object[listLevels.length][6];
-		for(int i=0; i<listLevels.length; i++){
-			listLevelsToDisplay[i][0] = listLevels[i][0];
-			listLevelsToDisplay[i][1] = (listLevels[i][2] == null || listLevels[i][2].equals("uninstalled"))?new ImageIcon("resources/Buttons/Btn_install.png"):null;
-			listLevelsToDisplay[i][2] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?(listLevels[i][2].equals("installed"))?new ImageIcon("resources/Buttons/Btn_desactivate.png"):new ImageIcon("resources/Buttons/Btn_activate.png"):null;
-			listLevelsToDisplay[i][3] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?new ImageIcon("resources/Buttons/Btn_uninstall.png"):null;
-			listLevelsToDisplay[i][4] = (listLevels[i][2] != null && listLevels[i][2].equals("desactivated"));
-			listLevelsToDisplay[i][5] = listLevels[i][1];
+		Object[][] listLevelsToDisplay = null;
+		int[] ids = AddonManager.getThemesInstalledIds();
+		int nbElementsToDisplay = 0;
+		if(ids.length > 0){
+			for (int i = 0; i < listLevels.length; i++) {
+				for (int j = 0; j < ids.length; j++) {
+					if(ids[j] == (int)listLevels[i][3]){
+						nbElementsToDisplay++;
+					}
+				}
+			}
+			
+			listLevelsToDisplay = new Object[nbElementsToDisplay][6];
+			for(int i=0; i<listLevels.length; i++){
+				for (int j = 0; j < ids.length; j++) {
+					if(ids[j] == (int)listLevels[i][3]){
+						listLevelsToDisplay[i][0] = listLevels[i][0];
+						listLevelsToDisplay[i][1] = (listLevels[i][2] == null || listLevels[i][2].equals("uninstalled"))?new ImageIcon("resources/Buttons/Btn_install.png"):null;
+						listLevelsToDisplay[i][2] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?(listLevels[i][2].equals("installed"))?new ImageIcon("resources/Buttons/Btn_desactivate.png"):new ImageIcon("resources/Buttons/Btn_activate.png"):null;
+						listLevelsToDisplay[i][3] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?new ImageIcon("resources/Buttons/Btn_uninstall.png"):null;
+						listLevelsToDisplay[i][4] = (listLevels[i][2] != null && listLevels[i][2].equals("desactivated"));
+						listLevelsToDisplay[i][5] = listLevels[i][1];
+					}
+				}
+			}
 		}
 		return listLevelsToDisplay;
 	}
@@ -279,11 +296,21 @@ public class Shop  extends JPanel {
 									((DefaultTableModel)tableNewLevels.getModel()).addRow(rowToInsert);
 								}
 							}
+							rows = ServerConnection.getCustomLevelsList();
+							for (int i = 0; i < rows.size(); i++) {
+								if(rows.get(i).getIdTheme() == idThemeInstalled){
+									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon("resources/Buttons/Btn_install.png"),null, null, true, rows.get(i).getIdLevel()};
+									((DefaultTableModel)tableCustomLevels.getModel()).addRow(rowToInsert);
+								}
+							}
 						} catch (IOException e1) {
 							tableNewThemes.setValueAt(themeName, row, 0);
 							JOptionPane.showMessageDialog(null, "Unable to load new levels for this new theme, please reload this menu...");
 						}
 						
+					}
+					else{
+						tableNewThemes.setValueAt(themeName, row, 0);
 					}
 				}
 		    }
@@ -335,7 +362,6 @@ public class Shop  extends JPanel {
 				int col = tableNewLevels.columnAtPoint(p);
 				int row = tableNewLevels.rowAtPoint(p);
 				if(col == 1){
-					//System.out.println("Installation de " + tableNewLevels.getValueAt(row, 0));
 					if(ServerConnection.downloadLevel((int)tableNewLevels.getValueAt(row, 2))){
 						JOptionPane.showMessageDialog(null, "New level installed !!");
 						((DefaultTableModel)tableNewLevels.getModel()).removeRow(row);
