@@ -64,7 +64,7 @@ public class LevelSelector extends JPanel{
     	if(compteur == 0 && nbElements != 0) compteur = 15;
 		
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
-			if(LevelData.getStatus(jarLevels[i].getLevel().getIdDB()) != "desactivated")
+			if(!LevelData.getStatus(jarLevels[i].getLevel().getIdDB()).equals("desactivated"))
 				levelsToDisplay.add(jarLevels[i]);
 		}
 		this.removeAll();
