@@ -208,10 +208,10 @@ public class Shop  extends JPanel {
 		Object[][] listLevelsToDisplay = new Object[listLevels.length][6];
 		for(int i=0; i<listLevels.length; i++){
 			listLevelsToDisplay[i][0] = listLevels[i][0];
-			listLevelsToDisplay[i][1] = (listLevels[i][2] == null)?new ImageIcon("resources/Buttons/Btn_install.png"):null;
-			listLevelsToDisplay[i][2] = (listLevels[i][2] != null)?(listLevels[i][2].equals("activated"))?new ImageIcon("resources/Buttons/Btn_activate.png"):new ImageIcon("resources/Buttons/Btn_desactivate.png"):null;
-			listLevelsToDisplay[i][3] = (listLevels[i][2] != null)?new ImageIcon("resources/Buttons/Btn_activate.png"):null;
-			listLevelsToDisplay[i][4] = true;
+			listLevelsToDisplay[i][1] = (listLevels[i][2] == null || listLevels[i][2].equals("uninstalled"))?new ImageIcon("resources/Buttons/Btn_install.png"):null;
+			listLevelsToDisplay[i][2] = (listLevels[i][2] != null)?(listLevels[i][2].equals("installed"))?new ImageIcon("resources/Buttons/Btn_activate.png"):new ImageIcon("resources/Buttons/Btn_desactivate.png"):null;
+			listLevelsToDisplay[i][3] = (listLevels[i][2] != null)?new ImageIcon("resources/Buttons/Btn_uninstall.png"):null;
+			listLevelsToDisplay[i][4] = (listLevels[i][2] != null);
 			listLevelsToDisplay[i][5] = listLevels[i][1];
 		}
 		return listLevelsToDisplay;

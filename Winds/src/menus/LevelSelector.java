@@ -23,6 +23,7 @@ import javax.swing.border.SoftBevelBorder;
 import addon.AddonManager;
 import addon.JarLevel;
 import addon.level.Type;
+import database.LevelData;
 import display.Window;
 
 public class LevelSelector extends JPanel{
@@ -63,7 +64,8 @@ public class LevelSelector extends JPanel{
     	if(compteur == 0 && nbElements != 0) compteur = 15;
 		
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
-			levelsToDisplay.add(jarLevels[i]);
+			if(LevelData.getStatus(jarLevels[i].getLevel().getIdDB()) != "desactivated")
+				levelsToDisplay.add(jarLevels[i]);
 		}
 		this.removeAll();
 		initComponents(title, numPage, nbPages, levelsToDisplay);
@@ -71,7 +73,7 @@ public class LevelSelector extends JPanel{
 
     private void initComponents(String title, int currentPage, int nbPages, ArrayList<JarLevel> levels) {
 
-    	Font windsPolice24 = null, windsPolice36 = null;;
+    	Font windsPolice24 = null, windsPolice36 = null;
     	try {
     		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
     		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);

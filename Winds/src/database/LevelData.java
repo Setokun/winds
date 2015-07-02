@@ -178,6 +178,23 @@ public class LevelData {
 		return status;
 	}
 	
+	public static boolean setStatus(int idLevel, LevelStatus status){
+		
+		try {
+			if(status == LevelStatus.installed){
+				DBClass.requestQuery("UPDATE levels SET levelStatus='installed' WHERE id="+idLevel+";");
+			}
+			else if(status == LevelStatus.desactivated){
+				DBClass.requestQuery("UPDATE levels SET levelStatus='desactivated' WHERE id="+idLevel+";");
+			}
+			else if(status == LevelStatus.uninstalled){
+				DBClass.requestQuery("UPDATE levels SET levelStatus='uninstalled' WHERE id="+idLevel+";");
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			return false;
+		}
+		return true;
+	}
 	public boolean insertDB(){
 		try {
 			
