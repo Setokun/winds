@@ -4,9 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import addon.AddonManager;
 import server.ServerConnection;
-import display.Window;
+import addon.AddonManager;
 
 public class ThemeData {
 	
@@ -55,7 +54,7 @@ public class ThemeData {
 		
 		ArrayList<ThemeData> r = null;
 		
-		r = ServerConnection.getThemesList(Window.profile.getEmail(), Window.profile.getPassword());
+		r = ServerConnection.getThemesList();
 		
 		int[] ids = AddonManager.getThemesInstalledIds();
 		int nbThemes = r.size() - ids.length;

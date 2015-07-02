@@ -31,6 +31,7 @@ import javax.swing.table.DefaultTableModel;
 import server.ServerConnection;
 import addon.level.Type;
 import database.LevelData;
+import database.LevelStatus;
 import database.ThemeData;
 import display.Window;
 
@@ -209,9 +210,9 @@ public class Shop  extends JPanel {
 		for(int i=0; i<listLevels.length; i++){
 			listLevelsToDisplay[i][0] = listLevels[i][0];
 			listLevelsToDisplay[i][1] = (listLevels[i][2] == null || listLevels[i][2].equals("uninstalled"))?new ImageIcon("resources/Buttons/Btn_install.png"):null;
-			listLevelsToDisplay[i][2] = (listLevels[i][2] != null)?(listLevels[i][2].equals("installed"))?new ImageIcon("resources/Buttons/Btn_activate.png"):new ImageIcon("resources/Buttons/Btn_desactivate.png"):null;
+			listLevelsToDisplay[i][2] = (listLevels[i][2] != null)?(listLevels[i][2].equals("installed"))?new ImageIcon("resources/Buttons/Btn_desactivate.png"):new ImageIcon("resources/Buttons/Btn_activate.png"):null;
 			listLevelsToDisplay[i][3] = (listLevels[i][2] != null)?new ImageIcon("resources/Buttons/Btn_uninstall.png"):null;
-			listLevelsToDisplay[i][4] = (listLevels[i][2] != null);
+			listLevelsToDisplay[i][4] = (listLevels[i][2] != null && listLevels[i][2].equals("desactivated"));
 			listLevelsToDisplay[i][5] = listLevels[i][1];
 		}
 		return listLevelsToDisplay;
@@ -264,13 +265,13 @@ public class Shop  extends JPanel {
 				
 				if(col == 1){
 					
-					if(ServerConnection.downloadTheme(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewThemes.getValueAt(row, 2))){
+					if(ServerConnection.downloadTheme((int)tableNewThemes.getValueAt(row, 2))){
 						int idThemeInstalled = (int)tableNewThemes.getValueAt(row, 2);
 						JOptionPane.showMessageDialog(null, "New theme "+ themeName +" installed !!");
 						((DefaultTableModel)tableNewThemes.getModel()).removeRow(row);
 						ArrayList<LevelData> rows;
 						try {
-							rows = ServerConnection.getBasicLevelsList(Window.profile.getEmail(),Window.profile.getPassword());
+							rows = ServerConnection.getBasicLevelsList();
 							for (int i = 0; i < rows.size(); i++) {
 								if(rows.get(i).getIdTheme() == idThemeInstalled){
 									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon("resources/Buttons/Btn_install.png"), rows.get(i).getIdLevel()};
@@ -334,7 +335,7 @@ public class Shop  extends JPanel {
 				int row = tableNewLevels.rowAtPoint(p);
 				if(col == 1){
 					//System.out.println("Installation de " + tableNewLevels.getValueAt(row, 0));
-					if(ServerConnection.downloadLevel(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewLevels.getValueAt(row, 2))){
+					if(ServerConnection.downloadLevel((int)tableNewLevels.getValueAt(row, 2))){
 						JOptionPane.showMessageDialog(null, "New level installed !!");
 						((DefaultTableModel)tableNewLevels.getModel()).removeRow(row);
 					}
@@ -400,11 +401,11 @@ public class Shop  extends JPanel {
 				if(col == 1){
 					if(tableCustomLevels.getValueAt(row, col) != null){
 						System.out.println("Installation de " + tableCustomLevels.getValueAt(row, 0));
-						if(ServerConnection.downloadLevel(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableCustomLevels.getValueAt(row, 5))){
+						if(ServerConnection.downloadLevel((int)tableCustomLevels.getValueAt(row, 5))){
 							JOptionPane.showMessageDialog(null, "New level installed !!");
 						}
 						tableCustomLevels.setValueAt(null, row, col);
-						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png"), row, 2);
+						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_desactivate.png"), row, 2);
 						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_uninstall.png") , row, 3);
 					}
 				}
@@ -412,13 +413,18 @@ public class Shop  extends JPanel {
 					if(tableCustomLevels.getValueAt(row, 1) == null){
 						if((Boolean)tableCustomLevels.getValueAt(row, 4)){
 							System.out.println("activation de " + tableCustomLevels.getValueAt(row, 0));//TODO
-							tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_desactivate.png") , row, col);
-							tableCustomLevels.setValueAt(false, row, 4);
+							if(LevelData.setStatus((int)tableCustomLevels.getValueAt(row, 5), LevelStatus.installed)){
+								tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_desactivate.png") , row, col);
+								tableCustomLevels.setValueAt(false, row, 4);
+							}
+							
 						}
 						else{
 							System.out.println("désactivation de " + tableCustomLevels.getValueAt(row, 0));//TODO
-							tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png") , row, col);
-							tableCustomLevels.setValueAt(true, row, 4);
+							if(LevelData.setStatus((int)tableCustomLevels.getValueAt(row, 5), LevelStatus.desactivated)){
+								tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png") , row, col);
+								tableCustomLevels.setValueAt(true, row, 4);
+							}
 						}
 					}
 				}

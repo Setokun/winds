@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import server.ServerConnection;
 import addon.AddonManager;
 import addon.level.Type;
-import display.Window;
 
 public class LevelData {
 	private int timeMax, idTheme, idLevel;
@@ -90,13 +89,13 @@ public class LevelData {
 		ArrayList<LevelData> r = null;
 
 		if(type == Type.basic){
-			r = ServerConnection.getBasicLevelsList(Window.profile.getEmail(), Window.profile.getPassword());
+			r = ServerConnection.getBasicLevelsList();
 		}
 		else if(type == Type.custom){
-			r = ServerConnection.getCustomLevelsList(Window.profile.getEmail(), Window.profile.getPassword());
+			r = ServerConnection.getCustomLevelsList();
 		}
 		else if(type == Type.toModerate){
-			r = ServerConnection.getLevelsToModerateList(Window.profile.getEmail(), Window.profile.getPassword());
+			r = ServerConnection.getLevelsToModerateList();
 		}
 
 		int[] idLevels = AddonManager.getLevelsInstalledIds(type);
@@ -146,7 +145,7 @@ public class LevelData {
 		
 		ArrayList<LevelData> r = null;
 
-		r = ServerConnection.getCustomLevelsList(Window.profile.getEmail(), Window.profile.getPassword());
+		r = ServerConnection.getCustomLevelsList();
 		
 		int nbLevels = r.size();
 		

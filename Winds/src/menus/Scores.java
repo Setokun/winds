@@ -213,7 +213,7 @@ public class Scores extends JPanel {
 	
 	protected void btnUploadMyScoresActionPerformed(ActionEvent evt) {
 		ServerConnection sc = new ServerConnection();
-		if(sc.uploadScores(Window.profile.getEmail(), Window.profile.getPassword(), Score.getLocalScores())){
+		if(sc.uploadScores(Score.getLocalScores())){
 			JOptionPane.showMessageDialog(null, "Scores uploaded");
 		}
 	}
