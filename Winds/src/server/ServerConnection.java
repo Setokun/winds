@@ -26,7 +26,6 @@ import javax.swing.JOptionPane;
 
 import account.Profile;
 import addon.AddonManager;
-import addon.JarLevel;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -67,7 +66,11 @@ public class ServerConnection {
 	/*OK*/public static ArrayList<Score> getScores(String email, String password) throws IOException{
 		
 		ArrayList<Score> scores = new ArrayList<Score>();
-
+		ArrayList<Score> oldScores = Score.getLocalScores();
+		
+		ServerConnection sc = new ServerConnection();
+		sc.uploadScores(email, password, oldScores);
+		
 		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getScores");
         URLConnection yc = monURL.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
@@ -81,31 +84,33 @@ public class ServerConnection {
 		    score.setClicks(Integer.valueOf(jsonObject.get("nbClicks").toString().replaceAll("\"", "")));
 		    score.setNbItems(Integer.valueOf(jsonObject.get("nbItems").toString().replaceAll("\"", "")));
 		    score.setLevelName(jsonObject.get("levelName").toString());
+		    
 		    scores.add(score);
 		}
 		in.close();
 		
-		
-		
 		for (int i = 0; i < scores.size(); i++) {
 			Score score = scores.get(i);
 			try {
-				String s = "INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
-						+ "VALUES ("+Window.profile.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");";
-				System.out.println(s);
-				DBClass.executeQuery(s);
-				System.out.println("reste dans le try");
+				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
+						+ "VALUES ("+Window.profile.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");");
 			} catch (ClassNotFoundException e) {
 			} catch (SQLException e) {
 				try {
-					DBClass.executeQuery("UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()+", nbItems="+score.getNbItems()+" WHERE idLevel="+score.getIdLevel()+" AND idPlayer="+Window.profile.getId());
+					for (int j = 0; j < oldScores.size(); j++) {
+						Score s = oldScores.get(j);
+						int oldScore = Score.calculateScore(s.getTime(), s.getNbItems(), s.getClicks());
+						int newScore = Score.calculateScore(score.getTime(), score.getNbItems(), score.getClicks());
+						if(newScore > oldScore)
+							DBClass.executeQuery("UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()+", nbItems="+score.getNbItems()+" WHERE idLevel="+score.getIdLevel()+" AND idPlayer="+Window.profile.getId());
+					}
+					
 				} catch (ClassNotFoundException e1) {
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, "Unable to save your scores from the server, please try again...");
 				}
 			}
 		}
-		
 		
 		return scores;
 	}

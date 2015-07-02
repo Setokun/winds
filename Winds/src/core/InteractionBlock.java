@@ -45,7 +45,7 @@ public class InteractionBlock{
 			handler.addObject(new Collectable(x+64, y+64, CollectableId.coin, ObjectId.Collectable));
 			break;
 		case 4:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50));
+			handler.addObject(new Boss(x   , y   , ObjectId.Enemy));
 			break;
 		case 5:
 			handler.addObject(new Arrival(x+64, y+56, ObjectId.Arrival));

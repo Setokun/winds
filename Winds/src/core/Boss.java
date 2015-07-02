@@ -11,6 +11,7 @@ import display.Window;
 
 public class Boss extends GameObject{
 
+	int count;
 	//private Animation animation;
 	
 	private static BufferedImage sprite;
@@ -23,7 +24,8 @@ public class Boss extends GameObject{
 	
 	public Boss(float x, float y,ObjectId id) {
 		super(x, y, id);
-
+		
+		this.count = 0;
 		this.collisions = new ArrayList<CollisionBox>();
 
 		this.collisions.add( new CollisionBox((int)x+8, (int)y+40, 56, 40, ObjectId.Boss) );
@@ -33,14 +35,18 @@ public class Boss extends GameObject{
 	}
 
 	@Override
-	public void tick(ArrayList<GameObject> object) {
-		/*x+=2;
-		y++;
-		for (int i = 0; i < collisions.size(); i++) {
-			getBounds().get(i).x+=2;
-			getBounds().get(i).y++;
+	public void tick(ArrayList<GameObject> objects) {
+		count++;
+		GameObject player = objects.get(3600);
+		if(count >= 3){
 			
-		}*/
+			this.x+=((player.x-this.x)>0)?1:-1;
+			this.y+=((player.y-this.y)>0)?1:-1;
+			this.collisions.get(0).x+=((player.x-this.x)>0)?1:-1;
+			this.collisions.get(0).y+=((player.y-this.y)>0)?1:-1;
+			count = 0;
+		}
+		
 	}
 
 	@Override
