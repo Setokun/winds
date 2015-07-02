@@ -264,13 +264,13 @@ public class Shop  extends JPanel {
 				
 				if(col == 1){
 					
-					if(ServerConnection.downloadTheme(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewThemes.getValueAt(row, 2))){
+					if(ServerConnection.downloadTheme((int)tableNewThemes.getValueAt(row, 2))){
 						int idThemeInstalled = (int)tableNewThemes.getValueAt(row, 2);
 						JOptionPane.showMessageDialog(null, "New theme "+ themeName +" installed !!");
 						((DefaultTableModel)tableNewThemes.getModel()).removeRow(row);
 						ArrayList<LevelData> rows;
 						try {
-							rows = ServerConnection.getBasicLevelsList(Window.profile.getEmail(),Window.profile.getPassword());
+							rows = ServerConnection.getBasicLevelsList();
 							for (int i = 0; i < rows.size(); i++) {
 								if(rows.get(i).getIdTheme() == idThemeInstalled){
 									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon("resources/Buttons/Btn_install.png"), rows.get(i).getIdLevel()};
@@ -334,7 +334,7 @@ public class Shop  extends JPanel {
 				int row = tableNewLevels.rowAtPoint(p);
 				if(col == 1){
 					//System.out.println("Installation de " + tableNewLevels.getValueAt(row, 0));
-					if(ServerConnection.downloadLevel(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableNewLevels.getValueAt(row, 2))){
+					if(ServerConnection.downloadLevel((int)tableNewLevels.getValueAt(row, 2))){
 						JOptionPane.showMessageDialog(null, "New level installed !!");
 						((DefaultTableModel)tableNewLevels.getModel()).removeRow(row);
 					}

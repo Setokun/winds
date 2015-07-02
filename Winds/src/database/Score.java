@@ -103,7 +103,7 @@ public class Score {
 		
 		ArrayList<Score> r = null;
 		try {
-			r = ServerConnection.getScores(Window.profile.getEmail(), Window.profile.getPassword());
+			r = ServerConnection.getScores();
 		} catch (IOException e) {
 			r = Score.getLocalScores();
 		}
