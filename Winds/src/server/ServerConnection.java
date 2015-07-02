@@ -367,8 +367,9 @@ public class ServerConnection {
 			try { 	response = sendRequest(params); } 
 			catch (Exception e) { e.printStackTrace(); }
 		}
-		
-		return (scores.size() == Integer.valueOf(response.get(0)));
+		if(response.size()>0)
+			return (scores.size() == Integer.valueOf(response.get(0)));
+		return false;
 	}
 	
 	public List<String> sendRequest(Map<String, String> params) throws Exception {
