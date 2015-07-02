@@ -44,21 +44,21 @@ public class Shop  extends JPanel {
 	private JButton jBtnBack;
 	private JScrollPane scrollPaneNewThemes, scrollPaneNewLevels, scrollPaneCustomLevels, scrollPaneLevelsToModerate;
 	private JTable tableNewThemes, tableNewLevels, tableCustomLevels, tableLevelsToModerate;
+	private Object[][] listThemesToDisplay = null, listBasicLevelsToDisplay = null, listCustomLevelsToDisplay = null, listLevelsToModerateToDisplay = null;
 	private GroupLayout gl;
 	Font windsPolice48 = null, windsPolice18 = null;
-	private int colWidth = 120;
+	private int colWidth = 120, titleMargin;
 	// end declarations
 	
 	public Shop() {
 
     	initializeFont();
-		
-		this.setPreferredSize(new Dimension(800,550));
+		initBackButton();
 		
 		title = new JLabel("Shop");
 		title.setFont(windsPolice48);
+		titleMargin = 400 - (title.getFontMetrics(title.getFont()).stringWidth(title.getText())/2);
 		
-		Object[][] listThemesToDisplay = null, listBasicLevelsToDisplay = null, listCustomLevelsToDisplay = null, listLevelsToModerateToDisplay = null;
 		try {
 			listThemesToDisplay = getThemesList();
 			listBasicLevelsToDisplay = getLevelsList(Type.basic);
@@ -67,32 +67,7 @@ public class Shop  extends JPanel {
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(this, "Unable to reach distant winds server, please verify your internet connection and try again !");
 		}
-		
-		
-		jBtnBack = new JButton();
-		jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
-		jBtnBack.setBorder(new SoftBevelBorder(0));
-		jBtnBack.setBorderPainted(false);
-		jBtnBack.setContentAreaFilled(false);
-		jBtnBack.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnBackActionPerformed(evt);
-            }
-        });
-		jBtnBack.addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
-			}
-			public void mouseEntered(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
-			}
-			public void mouseClicked(MouseEvent e) {}
-		});
-		
-		
-		int titleMargin = 400 - (title.getFontMetrics(title.getFont()).stringWidth(title.getText())/2);
+
 		
 		scrollPaneNewThemes = new JScrollPane();
 		scrollPaneNewLevels = new JScrollPane();
@@ -101,6 +76,19 @@ public class Shop  extends JPanel {
 		
 		gl = new GroupLayout(this);
 		
+		initHGroup();
+		initVGroup();
+		
+		initializeThemeList(listThemesToDisplay);
+		initializeNewBasicLevelsList(listBasicLevelsToDisplay);
+		initializeCustomLevelsList(listCustomLevelsToDisplay);
+		initializeLevelsToModerateList(listLevelsToModerateToDisplay);
+		
+		setLayout(gl);
+		
+	}
+
+	private void initHGroup() {
 		ParallelGroup hGroup = gl.createParallelGroup(Alignment.LEADING);
 		hGroup.addGroup(gl.createSequentialGroup()
 			.addGap(titleMargin)
@@ -128,7 +116,10 @@ public class Shop  extends JPanel {
 					.addComponent(scrollPaneCustomLevels, GroupLayout.PREFERRED_SIZE, 650, GroupLayout.PREFERRED_SIZE)
 					.addGap(73))
 		);
-		
+
+	}
+
+	private void initVGroup() {
 		SequentialGroup vGroup = gl.createSequentialGroup().addContainerGap();
 		vGroup.addGroup(gl.createParallelGroup(Alignment.LEADING)
 				.addComponent(title)
@@ -151,15 +142,30 @@ public class Shop  extends JPanel {
 			gl.createParallelGroup(Alignment.LEADING)
 				.addGroup(vGroup)
 		);
-
-		
-		initializeThemeList(listThemesToDisplay);
-		initializeNewBasicLevelsList(listBasicLevelsToDisplay);
-		initializeCustomLevelsList(listCustomLevelsToDisplay);
-		initializeLevelsToModerateList(listLevelsToModerateToDisplay);
-		
-		setLayout(gl);
-		
+	}
+	
+	private void initBackButton() {
+		jBtnBack = new JButton();
+		jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+		jBtnBack.setBorder(new SoftBevelBorder(0));
+		jBtnBack.setBorderPainted(false);
+		jBtnBack.setContentAreaFilled(false);
+		jBtnBack.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jBtnBackActionPerformed(evt);
+            }
+        });
+		jBtnBack.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+			}
+			public void mouseEntered(MouseEvent e) {
+				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
+			}
+			public void mouseClicked(MouseEvent e) {}
+		});
 	}
 
 	private void initializeFont() {
