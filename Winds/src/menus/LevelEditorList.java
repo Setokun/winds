@@ -177,7 +177,7 @@ public class LevelEditorList extends JPanel {
 			Class[] columnTypes = new Class[]{
 					JarLevel.class, String.class,
 					ButtonColumn.class, ButtonColumn.class,
-					ButtonColumn.class, ButtonColumn.class };
+					ButtonColumn.class, Object.class };
 			boolean[] columnEditables = new boolean[]{
 					  false, false, false, false, false, false };
 			public boolean isCellEditable(int row, int column) {
@@ -302,7 +302,7 @@ public class LevelEditorList extends JPanel {
 				"Level duplicated.",
 				"Duplicated", JOptionPane.INFORMATION_MESSAGE);
 	}
-	private void btnDeleteClicked(ActionEvent evt){
+	/*OK*/private void btnDeleteClicked(ActionEvent evt){
 		// requirements
 		Point p = (Point) evt.getSource();
 		int response = JOptionPane.showConfirmDialog(this, "Are you sure to delete this level ?",
@@ -313,27 +313,45 @@ public class LevelEditorList extends JPanel {
 		JarLevel jar = getJarLevelAtPoint(p);
 		
 		if( !AddonManager.removeJarLevel(jar) ){
-			JOptionPane.showMessageDialog(Window.getFrame(),
+			JOptionPane.showMessageDialog(this,
 				"Unable to remove this level from the addon manager.",
 				"Deletion failed", JOptionPane.WARNING_MESSAGE);
 			return;
 		}		
 		
 		if( !jar.getFile().delete() ){
-			JOptionPane.showMessageDialog(Window.getFrame(),
+			JOptionPane.showMessageDialog(this,
 				"Unable to remove the file of this level.",
 				"Deletion failed", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 		
 		((DefaultTableModel) table.getModel()).removeRow(p.x);
-		JOptionPane.showMessageDialog(Window.getFrame(),
-				"Deletion succeeded.",
-				"Deleted", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Deletion succeeded.",
+			"Deleted", JOptionPane.INFORMATION_MESSAGE);
 	}
 	private void btnUploadClicked(ActionEvent evt){
-		JarLevel jar = getJarLevelAtPoint((Point) evt.getSource());
+		Point p = (Point) evt.getSource();
+		if(table.getModel().getValueAt(p.x, 5).equals("Uploaded")) return;
 		
+		// JarLevel upload
+		/*JarLevel jar = getJarLevelAtPoint(p);
+		try {
+			jar.getLevel().setUploaded(true);
+			jar.save();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this,
+				"The uploading preparation of this level failed.",
+				"Uploading level failed", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
+		if( ServerConnection.uploadCustomLevel("", "", "") ){
+		table.getModel().setValueAt("Uploaded", p.x, 5);
+		JOptionPane.showMessageDialog(this,
+			"This level has been uploaded.", "Uploaded",
+			JOptionPane.INFORMATION_MESSAGE);
+		}*/
 	}
 	//endregion
 
