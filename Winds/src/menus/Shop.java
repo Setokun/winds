@@ -399,7 +399,10 @@ public class Shop  extends JPanel {
 				int row = tableCustomLevels.rowAtPoint(p);
 				if(col == 1){
 					if(tableCustomLevels.getValueAt(row, col) != null){
-						System.out.println("Installation de " + tableCustomLevels.getValueAt(row, 0));//TODO
+						System.out.println("Installation de " + tableCustomLevels.getValueAt(row, 0));
+						if(ServerConnection.downloadLevel(Window.profile.getEmail(),Window.profile.getPassword(), (int)tableCustomLevels.getValueAt(row, 5))){
+							JOptionPane.showMessageDialog(null, "New level installed !!");
+						}
 						tableCustomLevels.setValueAt(null, row, col);
 						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png"), row, 2);
 						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_uninstall.png") , row, 3);
