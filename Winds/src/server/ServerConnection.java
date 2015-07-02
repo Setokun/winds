@@ -169,7 +169,7 @@ public class ServerConnection {
 		return basicLevels;
 	}
 	
-	/*TODO*/public static ArrayList<LevelData> getCustomLevelsList() throws IOException{
+	/*OK*/public static ArrayList<LevelData> getCustomLevelsList() throws IOException{
 		ArrayList<LevelData> customLevels = new ArrayList<LevelData>();
 
 		JsonArray jArray = getJsonArrayOfGetRequest("action=getCustomLevels");
@@ -236,7 +236,8 @@ public class ServerConnection {
 		return true;
 	}
 	
-	/*OK*/public static boolean downloadLevel(int idLevel){
+	/*OK*/@SuppressWarnings("unused")
+	public static boolean downloadLevel(int idLevel){
 		try {
 			LevelData level = getLevelInfos(idLevel);
 			if(level.getLevelType().equals("custom")){

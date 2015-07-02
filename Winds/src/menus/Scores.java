@@ -53,12 +53,12 @@ public class Scores extends JPanel {
 		
 		groupLayout = new GroupLayout(this);
 		
-		initHGroup();
-		initVGroup();
-		
 		initTableTrophies();
 		initTableScores();
 		
+		initHGroup();
+		initVGroup();
+
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
