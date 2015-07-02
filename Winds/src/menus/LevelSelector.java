@@ -23,12 +23,14 @@ import javax.swing.border.SoftBevelBorder;
 import addon.AddonManager;
 import addon.JarLevel;
 import addon.level.Type;
+import database.LevelData;
 import display.Window;
 
 public class LevelSelector extends JPanel{
 	private static final long serialVersionUID = 9194645999792575062L;
 	
     //region Variables declaration
+	private Font windsPolice24 = null, windsPolice36 = null;
     private JButton jBtnNext, jBtnPrevious, jBtnBack;
     private LevelButton jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8;
     private LevelButton jButton9, jButton10, jButton11, jButton12, jButton13, jButton14, jButton15;
@@ -63,67 +65,22 @@ public class LevelSelector extends JPanel{
     	if(compteur == 0 && nbElements != 0) compteur = 15;
 		
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
-			levelsToDisplay.add(jarLevels[i]);
+			if(LevelData.getStatus(jarLevels[i].getLevel().getIdDB()) == null || !LevelData.getStatus(jarLevels[i].getLevel().getIdDB()).equals("desactivated"))
+				levelsToDisplay.add(jarLevels[i]);
 		}
 		this.removeAll();
+		
 		initComponents(title, numPage, nbPages, levelsToDisplay);
     }
 
     private void initComponents(String title, int currentPage, int nbPages, ArrayList<JarLevel> levels) {
 
-    	Font windsPolice24 = null, windsPolice36 = null;;
-    	try {
-    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
-    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
-		} catch (FontFormatException | IOException e) {
-			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
-    		windsPolice36 = new Font ("Serif", Font.BOLD, 36);
-		}
+    	initializeFont();
     	
-    	setPreferredSize(new Dimension(800, 550));
+    	int nbLvlsToDisplay = 0;
+    	if(levelsToDisplay != null) nbLvlsToDisplay = levelsToDisplay.size();
     	
-    	int nbLvlsToDisplay = levelsToDisplay.size();
-    	
-    	//region : instantiations
-        jBtnBack = new JButton();
-        jLblTitle = new JLabel();
-        
-        jButton1 = new LevelButton();
-        jButton2 = new LevelButton();
-        jButton3 = new LevelButton();
-        jButton4 = new LevelButton();
-        jButton5 = new LevelButton();
-        jButton6 = new LevelButton();
-        jButton7 = new LevelButton();
-        jButton8 = new LevelButton();
-        jButton9 = new LevelButton();
-        jButton10 = new LevelButton();
-        jButton11 = new LevelButton();
-        jButton12 = new LevelButton();
-        jButton13 = new LevelButton();
-        jButton14 = new LevelButton();
-        jButton15 = new LevelButton();
-        
-        jBtnNext = new JButton();
-        jBtnPrevious = new JButton();
-        
-        jLabel1 = new JLabel();
-        jLabel2 = new JLabel();
-        jLabel3 = new JLabel();
-        jLabel4 = new JLabel();
-        jLabel5 = new JLabel();
-        jLabel6 = new JLabel();
-        jLabel7 = new JLabel();
-        jLabel8 = new JLabel();
-        jLabel9 = new JLabel();
-        jLabel10 = new JLabel();
-        jLabel11 = new JLabel();
-        jLabel12 = new JLabel();
-        jLabel13 = new JLabel();
-        jLabel14 = new JLabel();
-        jLabel15 = new JLabel();
-        jLblNumPage = new JLabel();
-        //endregion
+        initButtonsAndLabels();
         
         //region : layouts
         GroupLayout layout = new GroupLayout(this);
@@ -145,27 +102,7 @@ public class LevelSelector extends JPanel{
         //endregion
 	    
         //region : header
-        jBtnBack.setFont(windsPolice24);
-        jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
-        jBtnBack.setBorder(new SoftBevelBorder(0));
-        jBtnBack.setBorderPainted(false);
-        jBtnBack.setContentAreaFilled(false);
-        jBtnBack.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnBackActionPerformed(evt);
-            }
-        });
-        jBtnBack.addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
-			}
-			public void mouseEntered(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
-			}
-			public void mouseClicked(MouseEvent e) {}
-		});
+        initBackButton();
         
         jLblTitle.setFont(windsPolice36);
         jLblTitle.setText(title);
@@ -349,47 +286,9 @@ public class LevelSelector extends JPanel{
     	
         //region : footer initializations
         
-        jBtnNext.setIcon(new ImageIcon("resources/Buttons/Next.png"));
-        jBtnNext.setBorder(new SoftBevelBorder(0));
-        jBtnNext.setBorderPainted(false);
-        jBtnNext.setContentAreaFilled(false);
-        jBtnNext.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-            	jBtnNextActionPerformed(evt);
-            }
-        });
-        jBtnNext.addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {
-				jBtnNext.setIcon(new ImageIcon("resources/Buttons/Next.png"));
-			}
-			public void mouseEntered(MouseEvent e) {
-				jBtnNext.setIcon(new ImageIcon("resources/Buttons/Next_hover.png"));
-			}
-			public void mouseClicked(MouseEvent e) {}
-		});
+        initNextButton();
         
-        jBtnPrevious.setIcon(new ImageIcon("resources/Buttons/Prev.png"));
-        jBtnPrevious.setBorder(new SoftBevelBorder(0));
-        jBtnPrevious.setBorderPainted(false);
-        jBtnPrevious.setContentAreaFilled(false);
-        jBtnPrevious.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-            	jBtnPreviousActionPerformed(evt);
-            }
-        });
-        jBtnPrevious.addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {
-				jBtnPrevious.setIcon(new ImageIcon("resources/Buttons/Prev.png"));
-			}
-			public void mouseEntered(MouseEvent e) {
-				jBtnPrevious.setIcon(new ImageIcon("resources/Buttons/Prev_hover.png"));
-			}
-			public void mouseClicked(MouseEvent e) {}
-		});
+        initPreviousButton();
         
         jLblNumPage.setFont(windsPolice24);
         jLblNumPage.setText((currentPage+1)+"/"+(nbPages+1));
@@ -439,7 +338,6 @@ public class LevelSelector extends JPanel{
         );
         //endregion
 
-        //region : vertical fill
         if(currentPage != nbPages)vBtnPrevAndNext.addComponent(jBtnNext, 50, 50, 50);
         if(nbPages>0)vBtnPrevAndNext.addComponent(jLblNumPage);
         if(currentPage != 0)vBtnPrevAndNext.addComponent(jBtnPrevious, 50, 50, 50);
@@ -464,9 +362,129 @@ public class LevelSelector extends JPanel{
                 .addGroup(vBtnPrevAndNext)
                 .addContainerGap())
         );
-        //endregion
     
     }
+
+	private void initPreviousButton() {
+		jBtnPrevious.setIcon(new ImageIcon("resources/Buttons/Prev.png"));
+        jBtnPrevious.setBorder(new SoftBevelBorder(0));
+        jBtnPrevious.setBorderPainted(false);
+        jBtnPrevious.setContentAreaFilled(false);
+        jBtnPrevious.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+            	jBtnPreviousActionPerformed(evt);
+            }
+        });
+        jBtnPrevious.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				jBtnPrevious.setIcon(new ImageIcon("resources/Buttons/Prev.png"));
+			}
+			public void mouseEntered(MouseEvent e) {
+				jBtnPrevious.setIcon(new ImageIcon("resources/Buttons/Prev_hover.png"));
+			}
+			public void mouseClicked(MouseEvent e) {}
+		});
+	}
+
+	private void initNextButton() {
+		jBtnNext.setIcon(new ImageIcon("resources/Buttons/Next.png"));
+        jBtnNext.setBorder(new SoftBevelBorder(0));
+        jBtnNext.setBorderPainted(false);
+        jBtnNext.setContentAreaFilled(false);
+        jBtnNext.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+            	jBtnNextActionPerformed(evt);
+            }
+        });
+        jBtnNext.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				jBtnNext.setIcon(new ImageIcon("resources/Buttons/Next.png"));
+			}
+			public void mouseEntered(MouseEvent e) {
+				jBtnNext.setIcon(new ImageIcon("resources/Buttons/Next_hover.png"));
+			}
+			public void mouseClicked(MouseEvent e) {}
+		});
+	}
+
+	private void initBackButton() {
+		jBtnBack.setFont(windsPolice24);
+        jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+        jBtnBack.setBorder(new SoftBevelBorder(0));
+        jBtnBack.setBorderPainted(false);
+        jBtnBack.setContentAreaFilled(false);
+        jBtnBack.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jBtnBackActionPerformed(evt);
+            }
+        });
+        jBtnBack.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+			}
+			public void mouseEntered(MouseEvent e) {
+				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
+			}
+			public void mouseClicked(MouseEvent e) {}
+		});
+	}
+
+	private void initButtonsAndLabels() {
+		jBtnBack = new JButton();
+        jLblTitle = new JLabel();
+        
+        jButton1 = new LevelButton();
+        jButton2 = new LevelButton();
+        jButton3 = new LevelButton();
+        jButton4 = new LevelButton();
+        jButton5 = new LevelButton();
+        jButton6 = new LevelButton();
+        jButton7 = new LevelButton();
+        jButton8 = new LevelButton();
+        jButton9 = new LevelButton();
+        jButton10 = new LevelButton();
+        jButton11 = new LevelButton();
+        jButton12 = new LevelButton();
+        jButton13 = new LevelButton();
+        jButton14 = new LevelButton();
+        jButton15 = new LevelButton();
+        
+        jBtnNext = new JButton();
+        jBtnPrevious = new JButton();
+        
+        jLabel1 = new JLabel();
+        jLabel2 = new JLabel();
+        jLabel3 = new JLabel();
+        jLabel4 = new JLabel();
+        jLabel5 = new JLabel();
+        jLabel6 = new JLabel();
+        jLabel7 = new JLabel();
+        jLabel8 = new JLabel();
+        jLabel9 = new JLabel();
+        jLabel10 = new JLabel();
+        jLabel11 = new JLabel();
+        jLabel12 = new JLabel();
+        jLabel13 = new JLabel();
+        jLabel14 = new JLabel();
+        jLabel15 = new JLabel();
+        jLblNumPage = new JLabel();
+	}
+
+	private void initializeFont() {
+		try {
+    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
+    		windsPolice36 = new Font ("Serif", Font.BOLD, 36);
+		}
+	}
 
 	private void jBtnBackActionPerformed(ActionEvent evt) {
     	Window.resize(new Dimension(800, 550));
