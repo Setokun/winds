@@ -30,7 +30,7 @@ public class Level implements Cloneable {
 		updateDate();
 		name = "my new level";
 		creator = Profile.getCurrentPlayer().getPseudo();
-		mode = Mode.Normal;
+		mode = Mode.standard;
 		type = Type.my;
 		uploaded = false;
 		startPosition = new Point(1,1);
