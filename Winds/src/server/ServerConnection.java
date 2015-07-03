@@ -65,38 +65,33 @@ public class ServerConnection {
 	
 	/*OK*/public static ArrayList<Score> getScores() throws IOException{
 		ArrayList<Score> oldScores = Score.getLocalScores();
-		ServerConnection.uploadScores(oldScores);
+		uploadScores(oldScores);
 
 		ArrayList<Score> scores = new ArrayList<Score>();
 		JsonArray jArray = getJsonArrayOfGetRequest("action=getScores");
-		
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
 		    Score score = new Score(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
 		    score.setTime(Integer.valueOf(jsonObject.get("time").toString().replaceAll("\"", "")));
 		    score.setClicks(Integer.valueOf(jsonObject.get("nbClicks").toString().replaceAll("\"", "")));
 		    score.setNbItems(Integer.valueOf(jsonObject.get("nbItems").toString().replaceAll("\"", "")));
-		    score.setLevelName(jsonObject.get("levelName").toString());
+		    score.setLevelName(jsonObject.get("levelName").toString().replaceAll("\"", ""));
 		    scores.add(score);
 		}
 		
 		for (int i = 0; i < scores.size(); i++) {
 			Score score = scores.get(i);
 			try {
-				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
-						+ "VALUES ("+Window.profile.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");");
+				String s = "INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
+						+ "VALUES ("+Window.profile.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");";
+				DBClass.executeQuery(s);
+				System.out.println("reste dans le try");
 			} catch (ClassNotFoundException e) {
 			} catch (SQLException e) {
 				try {
-					for (int j = 0; j < oldScores.size(); j++) {
-						Score s = oldScores.get(j);
-						int oldScore = Score.calculateScore(s.getTime(), s.getNbItems(), s.getClicks());
-						int newScore = Score.calculateScore(score.getTime(), score.getNbItems(), score.getClicks());
-						if(newScore > oldScore)
-							DBClass.executeQuery("UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()
+					DBClass.executeQuery("UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()
 												+", nbItems="+score.getNbItems()+" WHERE idLevel="+score.getIdLevel()
 												+" AND idPlayer="+Window.profile.getId());
-					}
 				} catch (ClassNotFoundException e1) {
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, "Unable to save your scores from the server, please try again...");
@@ -115,7 +110,7 @@ public class ServerConnection {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
 		    ThemeData thm = new ThemeData();
 		    thm.setIdTheme(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
-		    thm.setName(jsonObject.get("name").toString());
+		    thm.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
 		    themes.add(thm);
 		}
 		
@@ -130,9 +125,9 @@ public class ServerConnection {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
 		    themeData = new ThemeData();
 		    themeData.setIdTheme(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
-		    themeData.setName(jsonObject.get("name").toString());
-		    themeData.setDescription(jsonObject.get("description").toString());
-		    themeData.setFileName(jsonObject.get("fileName").toString());
+		    themeData.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
+		    themeData.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
+		    themeData.setFileName(jsonObject.get("fileName").toString().replaceAll("\"", ""));
 		}
 		
 		return themeData;
@@ -146,14 +141,14 @@ public class ServerConnection {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
 		    levelData = new LevelData();
 		    levelData.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
-		    levelData.setLevelType(jsonObject.get("levelType").toString());
-		    levelData.setLevelStatus(jsonObject.get("levelStatus").toString());
-		    levelData.setLevelMode(jsonObject.get("levelMode").toString());
+		    levelData.setLevelType(jsonObject.get("levelType").toString().replaceAll("\"", ""));
+		    levelData.setLevelStatus(jsonObject.get("levelStatus").toString().replaceAll("\"", ""));
+		    levelData.setLevelMode(jsonObject.get("levelMode").toString().replaceAll("\"", ""));
 		    levelData.setIdLevel(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
 		    levelData.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
-		    levelData.setName(jsonObject.get("name").toString());
-		    levelData.setDescription(jsonObject.get("description").toString());
-		    levelData.setCreator(jsonObject.get("creator").toString());
+		    levelData.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
+		    levelData.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
+		    levelData.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
 		}
 		
 		return levelData;
@@ -168,9 +163,9 @@ public class ServerConnection {
 		    LevelData lvl = new LevelData();
 		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
 		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
-		    lvl.setName(jsonObject.get("name").toString());
-		    lvl.setDescription(jsonObject.get("description").toString());
-		    lvl.setCreator(jsonObject.get("creator").toString());
+		    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
+		    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
+		    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
 		    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
 		    basicLevels.add(lvl);
 		}
@@ -178,7 +173,7 @@ public class ServerConnection {
 		return basicLevels;
 	}
 	
-	/*TODO*/public static ArrayList<LevelData> getCustomLevelsList() throws IOException{
+	/*OK*/public static ArrayList<LevelData> getCustomLevelsList() throws IOException{
 		ArrayList<LevelData> customLevels = new ArrayList<LevelData>();
 
 		JsonArray jArray = getJsonArrayOfGetRequest("action=getCustomLevels");
@@ -187,9 +182,9 @@ public class ServerConnection {
 		    LevelData lvl = new LevelData();
 		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
 		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
-		    lvl.setName(jsonObject.get("name").toString());
-		    lvl.setDescription(jsonObject.get("description").toString());
-		    lvl.setCreator(jsonObject.get("creator").toString());
+		    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
+		    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
+		    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
 		    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
 		    customLevels.add(lvl);
 		}
@@ -206,9 +201,9 @@ public class ServerConnection {
 		    LevelData lvl = new LevelData();
 		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
 		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
-		    lvl.setName(jsonObject.get("name").toString());
-		    lvl.setDescription(jsonObject.get("description").toString());
-		    lvl.setCreator(jsonObject.get("creator").toString());
+		    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
+		    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
+		    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
 		    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
 		    levelsToModerate.add(lvl);
 		}
@@ -245,9 +240,16 @@ public class ServerConnection {
 		return true;
 	}
 	
+
+	@SuppressWarnings("unused")
 	/*OK*/public static boolean downloadLevel(int idLevel){
 		try {
 			LevelData level = getLevelInfos(idLevel);
+			if(level.getLevelType().equals("custom")){
+				level.setLevelStatus("installed");
+			}
+			
+			System.out.println(level.toString());
 			
 			if(level != null){
 				String s = URL_API_SERVER +"?email="+ Window.profile.getEmail().replace("\"", "")

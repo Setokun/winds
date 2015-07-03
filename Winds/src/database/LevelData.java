@@ -149,12 +149,13 @@ public class LevelData {
 		
 		int nbLevels = r.size();
 		
-		results = new Object[nbLevels][3];
+		results = new Object[nbLevels][4];
 
 		for(int i=0; i < r.size();i++){
 			results[i][0] =  String.valueOf(r.get(i).getName());
 			results[i][1] =  r.get(i).getIdLevel();
 			results[i][2] =  getStatus(r.get(i).getIdLevel());
+			results[i][3] =  r.get(i).getIdTheme();
 		}
 		return results;
 	}
@@ -177,6 +178,23 @@ public class LevelData {
 		return status;
 	}
 	
+	public static boolean setStatus(int idLevel, LevelStatus status){
+		
+		try {
+			if(status == LevelStatus.installed){
+				DBClass.requestQuery("UPDATE levels SET levelStatus='installed' WHERE id="+idLevel+";");
+			}
+			else if(status == LevelStatus.desactivated){
+				DBClass.requestQuery("UPDATE levels SET levelStatus='desactivated' WHERE id="+idLevel+";");
+			}
+			else if(status == LevelStatus.uninstalled){
+				DBClass.requestQuery("UPDATE levels SET levelStatus='uninstalled' WHERE id="+idLevel+";");
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			return false;
+		}
+		return true;
+	}
 	public boolean insertDB(){
 		try {
 			

@@ -3,6 +3,8 @@ package addon;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import addon.level.Type;
 
 
@@ -80,6 +82,22 @@ public class AddonManager {
 	}
 	/*OK*/public static boolean removeJarLevel(JarLevel jar){
 		return jarLevelsList.remove(jar);
+	}
+	/*OK*/public static boolean removeJarLevelById(int idLevel){
+		for (int i = 0; i < jarLevelsList.size(); i++) {
+			if(jarLevelsList.get(i).getLevel().getIdDB() == idLevel){
+				JarLevel jar = jarLevelsList.get(i);
+				jarLevelsList.remove(jar);
+				if( !jar.getFile().delete() ){
+					JOptionPane.showMessageDialog(null,
+						"Unable to remove the file of this level.",
+						"Deletion failed", JOptionPane.WARNING_MESSAGE);
+					return false;
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 	/*OK*/public static JarLevel[] getJarLevelsByType(Type levelType){
 		ArrayList<JarLevel> list = new ArrayList<JarLevel>();
