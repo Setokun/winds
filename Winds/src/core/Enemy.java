@@ -17,6 +17,7 @@ public class Enemy extends GameObject{
 	private ArrayList<CollisionBox> collisions;
 	private int width = 0, widthPath;
 	private boolean facingRight;
+	private Direction direction;
 	
 	static {
 		BufferedImageLoader loader = new BufferedImageLoader();
@@ -24,9 +25,10 @@ public class Enemy extends GameObject{
 		sprites[1] = new SpriteSheet(loader.loadImage("/enemies/boss_bee_reverse.png"), 96).grabImage(0, 0);
 	}
 	
-	public Enemy(float x, float y,ObjectId id, int widthPath) {
+	public Enemy(float x, float y,ObjectId id, int widthPath, Direction direction) {
 		super(x, y, id);
 		this.widthPath = widthPath;
+		this.direction = direction;
 
 		this.collisions = new ArrayList<CollisionBox>();
 
@@ -39,26 +41,47 @@ public class Enemy extends GameObject{
 	@Override
 	public void tick(ArrayList<GameObject> object) {
 		
-		
-		
-		
-		if( this.widthPath > 0){
-			if(width == this.widthPath){facingRight = false;}
-			if(width == 0){facingRight = true;}
-			
-			if(facingRight){
-				this.x++;
-				for (int i = 0; i < collisions.size(); i++) {
-					getBounds().get(i).x++;
+		if(direction == Direction.left || direction == Direction.right){
+			if( this.widthPath > 0){
+				if(width == this.widthPath){facingRight = false;}
+				if(width == 0){facingRight = true;}
+				
+				if(facingRight){
+					this.x+=(direction == Direction.right)?1:-1;
+					for (int i = 0; i < collisions.size(); i++) {
+						getBounds().get(i).x++;
+					}
+					width++;
 				}
-				width++;
+				else{
+					this.x-=(direction == Direction.right)?1:-1;
+					for (int i = 0; i < collisions.size(); i++) {
+						getBounds().get(i).x--;
+					}
+					width--;
+				}
 			}
-			else{
-				this.x--;
-				for (int i = 0; i < collisions.size(); i++) {
-					getBounds().get(i).x--;
+		}
+		
+		if(direction == Direction.up || direction == Direction.down){
+			if( this.widthPath > 0){
+				if(width == this.widthPath){facingRight = false;}
+				if(width == 0){facingRight = true;}
+				
+				if(facingRight){
+					this.y+=(direction == Direction.right)?1:-1;
+					for (int i = 0; i < collisions.size(); i++) {
+						getBounds().get(i).y++;
+					}
+					width++;
 				}
-				width--;
+				else{
+					this.y-=(direction == Direction.right)?1:-1;
+					for (int i = 0; i < collisions.size(); i++) {
+						getBounds().get(i).y--;
+					}
+					width--;
+				}
 			}
 		}
 	}

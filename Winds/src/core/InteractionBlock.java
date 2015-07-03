@@ -21,6 +21,74 @@ public class InteractionBlock{
 			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
 			break;
 		case 2:
+			handler.addObject(new Arrival(x+8, y-24, ObjectId.Arrival));
+			break;
+		case 3:
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+32, CollectableId.coin, ObjectId.Collectable));
+			break;
+		case 4:
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+48, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+48, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+48, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+48, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+64, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+64, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+48, y+48, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+48, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+48, y+64, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.coin, ObjectId.Collectable));
+			break;
+		case 5:
+			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
+			break;
+		case 6:
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
+			break;
+		case 7:
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.honey, ObjectId.Collectable));
+			break;
+		case 8:
+			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			break;
+		case 9:
+			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			break;
+		case 10:
+			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
+			break;
+		case 11:
+			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
+			break;
+		case 12:
+			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
+			break;
+		case 13:
+			handler.addObject(new Boss(x   , y   , ObjectId.Enemy));
+			break;
+	
+		/*case 1:
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
+			break;
+		case 2:
 			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50));
 			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50));
 			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50));
@@ -64,7 +132,13 @@ public class InteractionBlock{
 			break;
 		case 10:
 			
-			break;	
+			break;
+		case 11:
+			
+			break;
+		case 12:
+			
+			break;	*/
 		}
 		
 	}
