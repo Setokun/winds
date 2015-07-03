@@ -37,6 +37,9 @@ import addon.Level;
 import core.SpriteSheet;
 
 
+/**
+ * Class which represents the level editor's GUI.
+ */
 public class EditorGUI extends JPanel {
 	private static final long serialVersionUID = -4428661135236351743L;
 	public  static final int MINIMUM_TIME = 60;
@@ -490,10 +493,12 @@ public class EditorGUI extends JPanel {
     
     
     /**
-     * Get an array of tiles which represents the neighbors of this tile in the matrix's list
-     * where 0 is the top, 1 is the right, 2 is the bottom and 3 is the left.
+     * Get an array of tiles which represents the neighbors of this tile in the matrix's<br>list 
+     * where 0 is the top, 1 is the right, 2 is the bottom and 3 is the left.<br>
+     * Warning : a neighbor tile can be null if the current tile is at the bound of the<br>matrix grid.
      * @param position the tile's index in the matrix's list
-     * @return Tile[4] 
+     * @return Tile[4]
+     * 
      */
     /*OK*/static Tile[] getNeighbors(int position){
     	int nbTilesPerRow = NB_TILES_MATRIX,
@@ -541,7 +546,7 @@ public class EditorGUI extends JPanel {
     }
     /**
      * Get the departure point of this level.
-     * @return Point
+     * @return Point or null
      */
     /*OK*/private Point getStartPosition(){
     	Point p = null;
@@ -554,7 +559,7 @@ public class EditorGUI extends JPanel {
     }
     /**
      * Get the arrival point of this level.
-     * @return Point
+     * @return Point or null
      */
     /*OK*/private Point getEndPosition(){
     	Point p = null;
@@ -603,22 +608,21 @@ public class EditorGUI extends JPanel {
     //region Getters & Setters 
     /**
      * Get the current tile which represents the level's departure.
-     * @return Tile
+     * @return Tile or null
      */
     static Tile getDeparture(){
     	return departure;
     }
     /**
      * Get the current tile which represents the level's arrival.
-     * @return Tile
+     * @return Tile or null
      */
     static Tile getArrival(){
     	return arrival;
     }
     /**
      * Set the specified tile to become the current departure tile.
-     * @param newDeparture
-     * @return Tile
+     * @param newDeparture Tile which represents the new departure
      */
     /*OK*/static void setDeparture(Tile newDeparture){
     	if(arrival != null && arrival.equals(newDeparture))
@@ -636,8 +640,7 @@ public class EditorGUI extends JPanel {
     }
     /**
      * Set the specified tile to become the current arrival tile.
-     * @param newArrival 
-     * @return Tile
+     * @param newArrival Tile which represents the new arrival
      */
     /*OK*/static void setArrival(Tile newArrival){
     	if(departure != null && departure.equals(newArrival))
