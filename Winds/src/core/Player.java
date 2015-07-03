@@ -232,7 +232,7 @@ public class Player extends GameObject{
 							Game.setFinished();
 							Game.bgMusic.stop();
 							Game.bgMusic = new AudioPlayer("resources/musics/victory.mp3", false);
-						    Game.bgMusic.play();
+							Game.bgMusic.play();
 						}
 						
 					}

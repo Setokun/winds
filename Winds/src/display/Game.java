@@ -28,35 +28,34 @@ import database.Score;
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
 	
-	public static int WIDTH = (int) Window.profile.getScreenDimensions().getWidth(), 
-					  HEIGHT = (int) Window.profile.getScreenDimensions().getHeight();
+	public static int WIDTH = (int) Window.profile.getScreenDimensions().getWidth(), HEIGHT = (int) Window.profile.getScreenDimensions().getHeight();
 	public static Camera cam;
+	public static Score score;
 	public final String TITLE = "Winds";
-	private BufferedImage bubulle, gameover, victory;
+	private String bgMusicFilename;
+	private BufferedImage bubulle, gameover, victory, bg = null, pauseImage = null;
 	
-	private BufferedImage bg = null, pauseImage = null;
-	
-	private static boolean pause = false, running = false, finished, defeat, scoreUploaded;
+	private static boolean pause, running, finished, defeat, scoreUploaded;
 	
 	private Thread thread;
-	private String bgMusicFilename;
+	
 	public static AudioPlayer bgMusic;
 	private Handler handler;
-	static BufferedImage[] instance;
+	private static BufferedImage[] instance;
 	private InteractionBlock interactions;
 
 	private Player player;
-	public static Score score;
+	
 	private int seconds, delayVictory, delayGameOver, timeMax;
 	
 	public Game(){
 	    AddonManager.loadJarTheme(AddonManager.getLoadedJarLevel().getLevel().getIdTheme());
-	    timeMax = AddonManager.getLoadedJarLevel().getLevel().getTimeMax();
 	    start();
 	}
 	
 	private void init(){
 		
+		timeMax = AddonManager.getLoadedJarLevel().getLevel().getTimeMax();
 		seconds = 0; delayVictory = 53; delayGameOver = 20;
 		pause = false;
 		finished = false;
@@ -113,7 +112,6 @@ public class Game extends Canvas implements Runnable{
 		thread = new Thread(this);
 		thread.start();
 	}
-	
 	public synchronized void stop(){
 		if(!running)
 			return;
@@ -156,21 +154,9 @@ public class Game extends Canvas implements Runnable{
 			
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
-				if(!getPause() && player.getLife() > 0 && !finished)
-				{
-					seconds++;
-					score.setTime(seconds);
-				}
-				if(timeMax == seconds) defeat = true;
-				if(finished){
-					if(!scoreUploaded){
-						scoreUploaded = true;
-						score.setScore(AddonManager.getLoadedJarLevel().getLevel().getIdDB());
-					}
-					delayVictory--;
-				}
-				if(defeat)delayGameOver--;
-				if(delayVictory == 0 || delayGameOver == 0) goBackToMenu();
+
+				endLevel();
+				
 				System.out.println(updates + " updates, fps : " + frames);
 				updates = 0;
 				frames = 0;
@@ -178,9 +164,8 @@ public class Game extends Canvas implements Runnable{
 		}
 		stop();
 	}
-	
 	private void tick(){
-		if(!getPause() && player.getLife() > 0){
+		if(!getPause() && !defeat){
 			handler.tick();
 			
 			for(int i = 0; i < handler.objects.size(); i++){
@@ -190,7 +175,6 @@ public class Game extends Canvas implements Runnable{
 			}
 		}
 	}
-	
 	private void render(){
 		
 		this.requestFocus();
@@ -231,15 +215,15 @@ public class Game extends Canvas implements Runnable{
 				g.setColor(Color.white);
 			g.drawString((timeMax - seconds)/60 + ":" + (timeMax - seconds)%60, 32, 32);
 			
-			
+			// rendering the lifes count
 			for (int i = 0; i < player.getLife(); i++) {g.drawImage(bubulle, 30 +i*30, 40, this);}
 			
-			if(player.getLife() == 0){
+			if(player.getLife() == 0 || (timeMax - seconds) == 0){
 				if(!defeat){
 					defeat = true;
-					Game.bgMusic.stop();
-					Game.bgMusic = new AudioPlayer("resources/musics/gameover.mp3", false);
-				    Game.bgMusic.play();
+					bgMusic.stop();
+					bgMusic = new AudioPlayer("resources/musics/gameover.mp3", false);
+				    bgMusic.play();
 				}
 				
 				g.drawImage(gameover, 0, 0, this);
@@ -287,7 +271,6 @@ public class Game extends Canvas implements Runnable{
 		}
 		
 	}
-	
 	private void loadInteractions(int[][] elements){
 
 		int number;
@@ -314,10 +297,29 @@ public class Game extends Canvas implements Runnable{
 		return instance;
 	}
 	
+	private void endLevel() {
+		if(!getPause() && player.getLife() > 0 && !finished && !defeat)
+		{
+			seconds++;
+			score.setTime(seconds);
+		}
+		if(finished && !pause){
+			if(!scoreUploaded){
+				scoreUploaded = true;
+				score.setScore(AddonManager.getLoadedJarLevel().getLevel().getIdDB());
+			}
+			
+			delayVictory--;
+		}
+		if(defeat && !pause) delayGameOver--;
+		
+		if(delayVictory == 0 || delayGameOver == 0) goBackToMenu();
+		
+	}
+	
 	public static boolean getPause(){
 		return Game.pause;
 	}
-	
 	public static void setPause(){
 		if(!pause){
 			Game.bgMusic.pause();
