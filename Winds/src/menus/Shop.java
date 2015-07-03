@@ -433,7 +433,6 @@ public class Shop  extends JPanel {
 				int row = tableCustomLevels.rowAtPoint(p);
 				if(col == 1){
 					if(tableCustomLevels.getValueAt(row, col) != null){
-						System.out.println("Installation de " + tableCustomLevels.getValueAt(row, 0));
 						if(ServerConnection.downloadLevel((int)tableCustomLevels.getValueAt(row, 5))){
 							JOptionPane.showMessageDialog(null, "New level installed !!");
 						}
@@ -445,7 +444,6 @@ public class Shop  extends JPanel {
 				if(col == 2){
 					if(tableCustomLevels.getValueAt(row, 1) == null){
 						if((Boolean)tableCustomLevels.getValueAt(row, 4)){
-							System.out.println("activation de " + tableCustomLevels.getValueAt(row, 0));//TODO
 							if(LevelData.setStatus((int)tableCustomLevels.getValueAt(row, 5), LevelStatus.installed)){
 								tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_desactivate.png") , row, col);
 								tableCustomLevels.setValueAt(false, row, 4);
@@ -453,7 +451,6 @@ public class Shop  extends JPanel {
 							
 						}
 						else{
-							System.out.println("désactivation de " + tableCustomLevels.getValueAt(row, 0));//TODO
 							if(LevelData.setStatus((int)tableCustomLevels.getValueAt(row, 5), LevelStatus.desactivated)){
 								tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png") , row, col);
 								tableCustomLevels.setValueAt(true, row, 4);
@@ -466,7 +463,6 @@ public class Shop  extends JPanel {
 						int idLevel = (int)tableCustomLevels.getValueAt(row, 5);
 						if(LevelData.setStatus(idLevel, LevelStatus.uninstalled)){
 							if(AddonManager.removeJarLevelById(idLevel)){
-								System.out.println("Désinstallation de " + tableCustomLevels.getValueAt(row, 0));
 								tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_install.png") , row, 1);
 								tableCustomLevels.setValueAt(null, row, 2);
 								tableCustomLevels.setValueAt(null, row, col);

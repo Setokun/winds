@@ -83,7 +83,6 @@ public class ServerConnection {
 				String s = "INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
 						+ "VALUES ("+Window.profile.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");";
 				DBClass.executeQuery(s);
-				System.out.println("reste dans le try");
 			} catch (ClassNotFoundException e) {
 			} catch (SQLException e) {
 				try {
@@ -243,9 +242,6 @@ public class ServerConnection {
 			if(level.getLevelType().equals("custom")){
 				level.setLevelStatus("installed");
 			}
-			
-			System.out.println(level.toString());
-			
 			
 			if(level != null){
 				String s = URL_API_SERVER +"?email="+ Window.profile.getEmail().replace("\"", "")
