@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 
 import account.Profile;
 import addon.AddonManager;
+import addon.JarLevel;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -42,7 +43,6 @@ public class ServerConnection {
 	private static final String URL_API_SERVER = "http://www.winds-game.com/API.php";
 	private static final int TIMEOUT = 6; // seconds
 	
-	public ServerConnection(){}
 	
 	/*OK*/public static Profile downloadProfile(String email, String password){
 		
@@ -275,16 +275,13 @@ public class ServerConnection {
 		return true;
 	}
 	
-	/*returns true if the file was correctly updated*/
-	/*TODO*/public static boolean uploadCustomLevel(String levelPath){
-		ServerConnection sc = new ServerConnection();
+	/*OK*/public static ArrayList<String> uploadCustomLevel(JarLevel jar){
 		try {
-			sc.uploadFile(levelPath);
+			return uploadFile(jar.getFile());
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Unable to upload your level to the remote server");
-			return false;
+			return new ArrayList<String>();
 		}
-		return true;
 	}
 
 	/*OK*/public boolean uploadScores(ArrayList<Score> scores){
@@ -323,23 +320,22 @@ public class ServerConnection {
 		
         return jArray;
 	}
-	
-	
-	public List<String> sendRequest(Map<String, String> params) throws Exception {
+	/*OK*/private static List<String> sendRequest(Map<String, String> params) throws Exception {
 		ServerRequest req = new ServerRequest("POST");
-		for(Map.Entry<String, String> entry : params.entrySet()){
+		for(Map.Entry<String, String> entry : params.entrySet())
 			req.addParameter(entry.getKey(), entry.getValue());
-		}
 		return req.finish();
 	}
-	public List<String> uploadFile(String filepath) throws Exception {
-		File uploadFile = new File(filepath);
+	/*OK*/private static ArrayList<String> uploadFile(File f) throws Exception {
 		ServerRequest req = new ServerRequest("POST");
-		req.addFile("level", uploadFile);
+		req.addParameter("email", Window.profile.getEmail());
+		req.addParameter("password", Window.profile.getPassword());
+		req.addParameter("action", "uploadCustomLevel");
+		req.addFile("level", f);
 		return req.finish();
 	}
 
-	private class ServerRequest {
+	private static class ServerRequest {
 	    private final String boundary;
 	    private static final String EOL = "\r\n";
 	    private HttpURLConnection cnx;
@@ -425,8 +421,8 @@ public class ServerConnection {
 	     * @return a list of Strings as response in case the server returned status OK, otherwise an exception is thrown.
 	     * @throws Exception
 	     */
-	    public List<String> finish() throws Exception {
-	        List<String> response = new ArrayList<String>();
+	    public ArrayList<String> finish() throws Exception {
+	        ArrayList<String> response = new ArrayList<String>();
 	 
 	        writer.append(EOL).flush();
 	        writer.append("--" + boundary + "--").append(EOL);
