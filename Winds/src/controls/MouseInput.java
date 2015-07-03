@@ -45,11 +45,12 @@ public class MouseInput extends MouseAdapter{
 			if(!Game.isFinished()){
 				for(int i = 0; i<handler.objects.size(); i++){
 					GameObject tempObject = handler.objects.get(i);
-					int playerX = (int) (tempObject.getX()+32 + Game.cam.getX() );
-					int playerY = (int) (tempObject.getY()+32 + Game.cam.getY() );
+					
 					
 					
 					if(tempObject.getId() == ObjectId.Player){
+						int playerX = (int) (tempObject.getX()+32 + Game.cam.getX() );
+						int playerY = (int) (tempObject.getY()+32 + Game.cam.getY() );
 						
 						if(key == InputEvent.BUTTON1_MASK)
 						{				
@@ -81,26 +82,26 @@ public class MouseInput extends MouseAdapter{
 							if(coefY > 1.0f) coefY = 1.0f;
 							
 							if((playerX > mouseX) && (playerY > mouseY)){
-								/*tempObject.setFacingRight(true);
-								tempObject.setFacingDown(true);*/
+								//tempObject.setFacingRight(true);
+								//tempObject.setFacingDown(true);
 								tempObject.setVelX(coefX);
 								tempObject.setVelY(coefY);
 							}
 							if((playerX < mouseX) && (playerY > mouseY)){
-								/*tempObject.setFacingRight(false);
-								tempObject.setFacingDown(true);*/
+								//tempObject.setFacingRight(false);
+								//tempObject.setFacingDown(true);
 								tempObject.setVelX(-coefX);
 								tempObject.setVelY(coefY);
 							}
 							if((playerX > mouseX) && (playerY < mouseY)){
-								/*tempObject.setFacingRight(true);
-								tempObject.setFacingDown(false);*/
+								//tempObject.setFacingRight(true);
+								//tempObject.setFacingDown(false);
 								tempObject.setVelX(coefX);
 								tempObject.setVelY(-coefY);
 							}
 							if((playerX < mouseX) && (playerY < mouseY)){
-								/*tempObject.setFacingRight(false);
-								tempObject.setFacingDown(false);*/
+								//tempObject.setFacingRight(false);
+								//tempObject.setFacingDown(false);
 								tempObject.setVelX(-coefX);
 								tempObject.setVelY(-coefY);
 							}
@@ -125,12 +126,11 @@ public class MouseInput extends MouseAdapter{
 
 	}
 	
-	double distance(Point p1, Point p2)
-	{
-	double dx,dy;
-	dx=p2.x-p1.x;
-	dy=p2.y-p1.y;
-	return java.lang.Math.sqrt(dx*dx+dy*dy);
+	double distance(Point p1, Point p2){
+		double dx,dy;
+		dx=p2.x-p1.x;
+		dy=p2.y-p1.y;
+		return java.lang.Math.sqrt(dx*dx+dy*dy);
 	}
 	
 }

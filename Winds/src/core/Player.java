@@ -56,8 +56,6 @@ public class Player extends GameObject{
 		
 		if(falling && !isActing()){
 			velY += gravity;
-			
-			
 		}
 		
 		if(velY > MAX_SPEED)
