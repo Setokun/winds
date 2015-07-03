@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 
 import account.Profile;
 import addon.AddonManager;
+import addon.JarLevel;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -42,7 +43,6 @@ public class ServerConnection {
 	private static final String URL_API_SERVER = "http://www.winds-game.com/API.php";
 	private static final int TIMEOUT = 6; // seconds
 	
-	public ServerConnection(){}
 	
 	/*OK*/public static Profile downloadProfile(String email, String password){
 		
@@ -63,19 +63,12 @@ public class ServerConnection {
 		return profile;
 	}
 	
-	/*OK*/public static ArrayList<Score> getScores(String email, String password) throws IOException{
-		
-		ArrayList<Score> scores = new ArrayList<Score>();
+	/*OK*/public static ArrayList<Score> getScores() throws IOException{
 		ArrayList<Score> oldScores = Score.getLocalScores();
-		
-		ServerConnection sc = new ServerConnection();
-		sc.uploadScores(email, password, oldScores);
-		
-		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getScores");
-        URLConnection yc = monURL.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-        
-		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
+		ServerConnection.uploadScores(oldScores);
+
+		ArrayList<Score> scores = new ArrayList<Score>();
+		JsonArray jArray = getJsonArrayOfGetRequest("action=getScores");
 		
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
@@ -84,10 +77,8 @@ public class ServerConnection {
 		    score.setClicks(Integer.valueOf(jsonObject.get("nbClicks").toString().replaceAll("\"", "")));
 		    score.setNbItems(Integer.valueOf(jsonObject.get("nbItems").toString().replaceAll("\"", "")));
 		    score.setLevelName(jsonObject.get("levelName").toString());
-		    
 		    scores.add(score);
 		}
-		in.close();
 		
 		for (int i = 0; i < scores.size(); i++) {
 			Score score = scores.get(i);
@@ -102,9 +93,10 @@ public class ServerConnection {
 						int oldScore = Score.calculateScore(s.getTime(), s.getNbItems(), s.getClicks());
 						int newScore = Score.calculateScore(score.getTime(), score.getNbItems(), score.getClicks());
 						if(newScore > oldScore)
-							DBClass.executeQuery("UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()+", nbItems="+score.getNbItems()+" WHERE idLevel="+score.getIdLevel()+" AND idPlayer="+Window.profile.getId());
+							DBClass.executeQuery("UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()
+												+", nbItems="+score.getNbItems()+" WHERE idLevel="+score.getIdLevel()
+												+" AND idPlayer="+Window.profile.getId());
 					}
-					
 				} catch (ClassNotFoundException e1) {
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, "Unable to save your scores from the server, please try again...");
@@ -115,15 +107,10 @@ public class ServerConnection {
 		return scores;
 	}
 	
-	/*OK*/public static ArrayList<ThemeData> getThemesList(String email, String password) throws IOException{
+	/*OK*/public static ArrayList<ThemeData> getThemesList() throws IOException{
 		ArrayList<ThemeData> themes = new ArrayList<ThemeData>();
 
-		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getThemes");
-        URLConnection yc = monURL.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-        
-		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
-		
+		JsonArray jArray = getJsonArrayOfGetRequest("action=getThemes");
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
 		    ThemeData thm = new ThemeData();
@@ -132,20 +119,13 @@ public class ServerConnection {
 		    themes.add(thm);
 		}
 		
-		in.close();
-		
 		return themes;
 	}
 	
-	/*OK*/public static ThemeData getThemeInfos(String email, String password, int idTheme) throws IOException{
+	/*OK*/public static ThemeData getThemeInfos(int idTheme) throws IOException{
 		ThemeData themeData = null;
 
-		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getThemes&idTheme="+idTheme);
-        URLConnection yc = monURL.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-        
-		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
-		
+		JsonArray jArray = getJsonArrayOfGetRequest("action=getThemes&idTheme="+idTheme);
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
 		    themeData = new ThemeData();
@@ -155,20 +135,13 @@ public class ServerConnection {
 		    themeData.setFileName(jsonObject.get("fileName").toString());
 		}
 		
-		in.close();
-		
 		return themeData;
 	}
 	
-	/*OK*/public static LevelData getLevelInfos(String email, String password, int idLevel) throws IOException{
+	/*OK*/public static LevelData getLevelInfos(int idLevel) throws IOException{
 		LevelData levelData = null;
 
-		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getLevelInfos&idLevel="+idLevel);
-        URLConnection yc = monURL.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-        
-		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
-		
+		JsonArray jArray = getJsonArrayOfGetRequest("action=getLevelInfos&idLevel="+idLevel);
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
 		    levelData = new LevelData();
@@ -182,20 +155,14 @@ public class ServerConnection {
 		    levelData.setDescription(jsonObject.get("description").toString());
 		    levelData.setCreator(jsonObject.get("creator").toString());
 		}
-		in.close();
 		
 		return levelData;
 	}
 	
-	/*OK*/public static ArrayList<LevelData> getBasicLevelsList(String email, String password) throws IOException{
+	/*OK*/public static ArrayList<LevelData> getBasicLevelsList() throws IOException{
 		ArrayList<LevelData> basicLevels = new ArrayList<LevelData>();
 
-		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getBasicLevels");
-        URLConnection yc = monURL.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-        
-		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
-		
+		JsonArray jArray = getJsonArrayOfGetRequest("action=getBasicLevels");
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
 		    LevelData lvl = new LevelData();
@@ -208,20 +175,13 @@ public class ServerConnection {
 		    basicLevels.add(lvl);
 		}
 		
-		in.close();
-		
 		return basicLevels;
 	}
 	
-	/*TODO*/public static ArrayList<LevelData> getCustomLevelsList(String email, String password) throws IOException{
+	/*TODO*/public static ArrayList<LevelData> getCustomLevelsList() throws IOException{
 		ArrayList<LevelData> customLevels = new ArrayList<LevelData>();
 
-		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getCustomLevels");
-        URLConnection yc = monURL.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-        
-		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
-		
+		JsonArray jArray = getJsonArrayOfGetRequest("action=getCustomLevels");
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
 		    LevelData lvl = new LevelData();
@@ -233,21 +193,14 @@ public class ServerConnection {
 		    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
 		    customLevels.add(lvl);
 		}
-		
-		in.close();
 
 		return customLevels;
 	}
 	
-	/*OK*/public static ArrayList<LevelData> getLevelsToModerateList(String email, String password) throws IOException{
+	/*OK*/public static ArrayList<LevelData> getLevelsToModerateList() throws IOException{
 		ArrayList<LevelData> levelsToModerate = new ArrayList<LevelData>();
 
-		URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=getLevelsToModerate");
-        URLConnection yc = monURL.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-        
-		JsonArray jArray = new JsonParser().parse(in).getAsJsonArray();
-		
+		JsonArray jArray = getJsonArrayOfGetRequest("action=getLevelsToModerate");
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
 		    LevelData lvl = new LevelData();
@@ -259,17 +212,18 @@ public class ServerConnection {
 		    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
 		    levelsToModerate.add(lvl);
 		}
-		
-		in.close();
 
 		return levelsToModerate;
 	}
 	
-	/*OK*/public static boolean downloadTheme(String email, String password, int idTheme){
+	/*OK*/public static boolean downloadTheme(int idTheme){
 		try {
-			ThemeData theme = getThemeInfos(email, password, idTheme);
+			ThemeData theme = getThemeInfos(idTheme);
 			if(theme != null){
-				URLConnection ucon = new URL(URL_API_SERVER+"?email=player1@winds.net&password=player&action=downloadTheme&idTheme="+idTheme).openConnection();  
+				URLConnection ucon = new URL(URL_API_SERVER+"?email="+ Window.profile.getEmail()
+						+"&password="+ Window.profile.getPassword()
+						+"&action=downloadTheme&idTheme="+ idTheme)
+					.openConnection();  
 				StringBuilder sb = new StringBuilder(System.getProperty("user.dir" )+ "\\bin\\resources\\themes\\");
 				sb.append(theme.getFileName().replaceAll("\"", ""));
 				FileOutputStream fos = new FileOutputStream(sb.toString());
@@ -291,28 +245,25 @@ public class ServerConnection {
 		return true;
 	}
 	
-	/*OK*/public static boolean downloadLevel(String email, String password, int idLevel){
+	/*OK*/public static boolean downloadLevel(int idLevel){
 		try {
-			LevelData level = getLevelInfos(email, password, idLevel);
+			LevelData level = getLevelInfos(idLevel);
 			
 			if(level != null){
-				String s = null;
+				String s = URL_API_SERVER +"?email="+ Window.profile.getEmail().replace("\"", "")
+						 + "&password="+ Window.profile.getPassword().replace("\"", "");
 				
-				if(level.getLevelType().equals("\"basic\"")){
-					s = URL_API_SERVER+"?email="+email.replace("\"", "")+"&password="+password.replace("\"", "")+"&action=downloadBasicLevel&idBasicLevel="+idLevel;
-				}
-				else if(level.getLevelType().equals("custom")){
-					s = URL_API_SERVER+"?email="+email.replace("\"", "")+"&password="+password.replace("\"", "")+"&action=downloadCustomLevel&idCustomLevel="+idLevel;
-				}
-				else if(level.getLevelType().equals("tomoderate")){
-					s = URL_API_SERVER+"?email="+email.replace("\"", "")+"&password="+password.replace("\"", "")+"&action=downloadLevelToModerate&idLevelToModerate="+idLevel;
+				switch( level.getLevelType() ){
+					case "basic":		s += "&action=downloadBasicLevel&idBasicLevel="+ idLevel;			break;
+					case "custom" :		s += "&action=downloadCustomLevel&idCustomLevel="+ idLevel;			break;
+					case "tomoderate":	s += "&action=downloadLevelToModerate&idLevelToModerate="+ idLevel;	break;
+					default : return false;
 				}
 				
 				URLConnection ucon = new URL(s).openConnection();  
 				StringBuilder sb = new StringBuilder(System.getProperty("user.dir" )+ "\\bin\\resources\\levels\\");
 				sb.append(level.getIdLevel());
 				sb.append(".jar");
-				//System.out.println(sb.toString());
 				
 				FileOutputStream fos = new FileOutputStream(sb.toString());
 				InputStream in = ucon.getInputStream();
@@ -320,32 +271,27 @@ public class ServerConnection {
 				while ((b = in.read())!= -1)
 					fos.write(b);
 				fos.close();
-				//System.out.println("téléchargement du niveau terminé !!");
 				AddonManager.addJarLevel(new File(sb.toString()));
 
 				return level.insertDB();
 			}
-		}
-		catch (Exception e){
+		} catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Unable to reach distant winds server, please verify your internet connection and try again !");
 			return false;
 		}
 		return true;
 	}
 	
-	/*returns true if the file was correctly updated*/
-	/*TODO*/public static boolean uploadCustomLevel(String email, String password, String levelPath){
-		ServerConnection sc = new ServerConnection();
+	/*OK*/public static ArrayList<String> uploadCustomLevel(JarLevel jar){
 		try {
-			sc.uploadFile(levelPath);
+			return uploadFile(jar.getFile());
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Unable to upload your level to the remote server");
-			return false;
+			return new ArrayList<String>();
 		}
-		return true;
 	}
 
-	/*OK*/public boolean uploadScores(String email, String password, ArrayList<Score> scores){
+	/*OK*/public static boolean uploadScores(ArrayList<Score> scores){
 		List<String> response = new ArrayList<String>();
 
 		if(scores != null && scores.size() > 0){
@@ -360,32 +306,43 @@ public class ServerConnection {
 			
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("action", "uploadScores");
-			params.put("email", email);
-			params.put("password", password);
+			params.put("email", Window.profile.getEmail());
+			params.put("password", Window.profile.getPassword());
 			params.put("scores", infosToUpload.toString());
 			
 			try { 	response = sendRequest(params); } 
 			catch (Exception e) { e.printStackTrace(); }
 		}
-		
-		return (scores.size() == Integer.valueOf(response.get(0)));
+		return response.size() > 0 ? scores.size() == Integer.valueOf(response.get(0)) : false;
 	}
 	
-	public List<String> sendRequest(Map<String, String> params) throws Exception {
+	/*OK*/private static JsonArray getJsonArrayOfGetRequest(String endURL) throws IOException {
+		URL url = new URL(URL_API_SERVER +"?email="+ Window.profile.getEmail()
+				+"&password="+ Window.profile.getPassword() +"&"+ endURL);
+		
+		URLConnection uc = url.openConnection();
+        BufferedReader br = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+        JsonArray jArray = new JsonParser().parse(br).getAsJsonArray();
+		br.close();
+		
+        return jArray;
+	}
+	/*OK*/private static List<String> sendRequest(Map<String, String> params) throws Exception {
 		ServerRequest req = new ServerRequest("POST");
-		for(Map.Entry<String, String> entry : params.entrySet()){
+		for(Map.Entry<String, String> entry : params.entrySet())
 			req.addParameter(entry.getKey(), entry.getValue());
-		}
 		return req.finish();
 	}
-	public List<String> uploadFile(String filepath) throws Exception {
-		File uploadFile = new File(filepath);
+	/*OK*/private static ArrayList<String> uploadFile(File f) throws Exception {
 		ServerRequest req = new ServerRequest("POST");
-		req.addFile("level", uploadFile);
+		req.addParameter("email", Window.profile.getEmail());
+		req.addParameter("password", Window.profile.getPassword());
+		req.addParameter("action", "uploadCustomLevel");
+		req.addFile("level", f);
 		return req.finish();
 	}
 
-	private class ServerRequest {
+	private static class ServerRequest {
 	    private final String boundary;
 	    private static final String EOL = "\r\n";
 	    private HttpURLConnection cnx;
@@ -471,8 +428,8 @@ public class ServerConnection {
 	     * @return a list of Strings as response in case the server returned status OK, otherwise an exception is thrown.
 	     * @throws Exception
 	     */
-	    public List<String> finish() throws Exception {
-	        List<String> response = new ArrayList<String>();
+	    public ArrayList<String> finish() throws Exception {
+	        ArrayList<String> response = new ArrayList<String>();
 	 
 	        writer.append(EOL).flush();
 	        writer.append("--" + boundary + "--").append(EOL);
