@@ -8,6 +8,9 @@ import javax.swing.JOptionPane;
 import addon.level.Type;
 
 
+/**
+ * Class used to manage theme and level archives.
+ */
 public class AddonManager {
 	private static ArrayList<JarTheme> jarThemesList;
 	private static ArrayList<JarLevel> jarLevelsList;
@@ -32,6 +35,9 @@ public class AddonManager {
 	}
 	
 	//region Theme methods 
+	/**
+	 * Collects the valid theme archives.
+	 */
 	/*OK*/private static void collectJarThemes(){
 		File folder = new File("bin/resources/themes");
 		File[] items = folder.listFiles();
@@ -43,15 +49,29 @@ public class AddonManager {
 		    }
 		}
 	}
+	/**
+	 * Checks the validity of the theme archive.
+	 * @param jarFile File which represents the theme archive
+	 * @return	JarTheme or null
+	 */
 	/*OK*/private static JarTheme validateJarTheme(File jarFile){
 		JarTheme current = new JarTheme(jarFile);
 		return current.isValid() ? current : null;
 	}
+	/**
+	 * Add the specified theme archive to the themes list if valid.
+	 * @param jarFile File which represents the theme archive
+	 */
 	/*OK*/public static void addJarTheme(File jarFile){
 		JarTheme current = validateJarTheme(jarFile);
 		if(current != null && !jarThemesList.contains(current))
 			jarThemesList.add(current);
 	}
+	/**
+	 * Get the theme which has the specified ID.
+	 * @param idTheme the ID of the theme to find
+	 * @return JarTheme or null
+	 */
 	/*OK*/public static JarTheme getJarThemeByID(int idTheme){
 		for (JarTheme jt : jarThemesList)
 			if(jt.getIdDB() == idTheme)
@@ -61,6 +81,9 @@ public class AddonManager {
 	//endregion
 	
 	//region Level methods 
+	/**
+	 * Collects the valid level archives.
+	 */
 	/*OK*/private static void collectJarLevels(){
 		File folder = new File("bin/resources/levels");
 		File[] items = folder.listFiles();
@@ -71,18 +94,39 @@ public class AddonManager {
 			    if(level != null)  jarLevelsList.add(level);
 			}
 	}
+	/**
+	 * Checks the validity of the level archive.
+	 * @param jarFile File which represents the level archive
+	 * @return	JarLevel or null
+	 */
 	/*OK*/private static JarLevel validateJarLevel(File jarFile){
 		JarLevel current = new JarLevel(jarFile);		
 		return current.isValid() ? current : null;
 	}
+	/**
+	 * Add the specified level archive to the levels list if valid.
+	 * @param jarFile File which represents the level archive
+	 */
 	/*OK*/public static void addJarLevel(File jarFile){
 		JarLevel current = validateJarLevel(jarFile);
 		if(current != null && !jarLevelsList.contains(current))
 			jarLevelsList.add(current);
 	}
+	/**
+	 * Removes the specified level archive from the levels list<br>
+	 * and returns the success statement.
+	 * @param jar JarLevel which must be removed
+	 * @return boolean true or false
+	 */
 	/*OK*/public static boolean removeJarLevel(JarLevel jar){
 		return jarLevelsList.remove(jar);
 	}
+	/**
+	 * Removes the level archive which has the specified ID from the levels list<br>
+	 * and returns the success statement.
+	 * @param idLevel the ID of the level archive to remove
+	 * @return boolean
+	 */
 	/*OK*/public static boolean removeJarLevelById(int idLevel){
 		for (int i = 0; i < jarLevelsList.size(); i++) {
 			if(jarLevelsList.get(i).getLevel().getIdDB() == idLevel){
@@ -99,6 +143,11 @@ public class AddonManager {
 		}
 		return false;
 	}
+	/**
+	 * Get the level archives which have the specified type.
+	 * @param levelType the type of the level archives to find
+	 * @return JarLevel[]
+	 */
 	/*OK*/public static JarLevel[] getJarLevelsByType(Type levelType){
 		ArrayList<JarLevel> list = new ArrayList<JarLevel>();
 		for (JarLevel lvl : jarLevelsList)
@@ -111,58 +160,101 @@ public class AddonManager {
 	//endregion
 	
 	//region Getters and Setters 
+	/**
+	 * Get the full path of the themes folder.
+	 * @return String
+	 */
 	public static String getThemesPath(){
 		return themesPath;
 	}
+	/**
+	 * Get the full path of the levels folder.
+	 * @return String
+	 */
 	public static String getLevelsPath(){
 		return levelsPath;
 	}
-
+	/**
+	 * Get the full path of the commons folder.
+	 * @return String
+	 */
 	public static String getCommonPath(){
 		return commonPath;
 	}
 
-	public static void loadJarLevel(int index){
-		for (int i = 0; i < jarLevelsList.size(); i++) {
-			if(jarLevelsList.get(i).getLevel().getIdDB() == index)
-				loadedJarLevel = jarLevelsList.get(i);
-		}
-		//loadedJarLevel = jarLevelsList.get(index);
-	}
-	public static void loadJarLevel(JarLevel jar){
-		loadedJarLevel = jar;
-	}
-	//endregion
-	
-	//region Getters 
-
+	/**
+	 * Get all theme archives.
+	 * @return JarTheme[]
+	 */
 	public static JarTheme[] getJarThemes(){
 		JarTheme[] jarThemes = new JarTheme[ jarThemesList.size() ];
 		return jarThemesList.toArray(jarThemes);
 	}
+	/**
+	 * Get all level archives.
+	 * @return JarTheme[]
+	 */
 	public static JarLevel[] getJarLevels(){
 		JarLevel[] jarLevels = new JarLevel[ jarLevelsList.size() ];
 		return jarLevelsList.toArray(jarLevels);
 	}
+	
+	/**
+	 * Set the theme which has the specified ID as current loaded theme.
+	 * @param idTheme the theme's ID
+	 */
+	public static void loadJarTheme(int idTheme){
+		for (int i = 0; i < jarThemesList.size(); i++) {
+			if(jarThemesList.get(i).getIdDB() == idTheme){
+				loadedJarTheme = jarThemesList.get(i);
+				break;
+			}
+		}
+	}
+	/**
+	 * Set the specified theme as current loaded theme.
+	 * @param jar the theme archive to load
+	 */
+	public static void loadJarTheme(JarTheme jar){
+		loadedJarTheme = jar;
+	}
+	/**
+	 * Set the level which has the specified ID as current loaded level.
+	 * @param idLevel
+	 */
+	public static void loadJarLevel(int idLevel){
+		for (int i = 0; i < jarLevelsList.size(); i++) {
+			if(jarLevelsList.get(i).getLevel().getIdDB() == idLevel)
+				loadedJarLevel = jarLevelsList.get(i);
+		}
+	}
+	/**
+	 * Set the specified level as current loaded level.
+	 * @param jar the level archive to load
+	 */
+	public static void loadJarLevel(JarLevel jar){
+		loadedJarLevel = jar;
+	}
+	
+	/**
+	 * Get the current loaded theme archive.
+	 * @return JarTheme
+	 */
 	public static JarTheme getLoadedJarTheme() {
 		return loadedJarTheme;
 	}
+	/**
+	 * Get the current loaded level archive.
+	 * @return JarTheme
+	 */
 	public static JarLevel getLoadedJarLevel() {
 		return loadedJarLevel;
 	}
 
-
-	public static void loadJarTheme(int index){
-		for (int i = 0; i < jarThemesList.size(); i++) {
-			if(jarThemesList.get(i).getIdDB() == index)
-				loadedJarTheme = jarThemesList.get(i);
-		}
-	}
-	public static void loadJarTheme(JarTheme jar){
-		loadedJarTheme = jar;
-	}
-
-
+	/**
+	 * Get the IDs of the installed themes.
+	 * @return int[]
+	 */
 	public static int[] getThemesInstalledIds(){
 		int nbThemes = jarThemesList.size();
 		int[] ids = new int[nbThemes];
@@ -171,6 +263,11 @@ public class AddonManager {
 		}
 		return ids;
 	}
+	/**
+	 * Get the IDs of the installed levels which have the specified type.
+	 * @param type the type of the level archives to find
+	 * @return int[]
+	 */
 	public static int[] getLevelsInstalledIds(Type type){
 		JarLevel[] levels = getJarLevelsByType(type);
 		int nbLevels = levels.length;
