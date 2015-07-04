@@ -22,6 +22,7 @@ import core.Direction;
 import core.GameObject;
 import core.ObjectId;
 import core.SpriteSheet;
+import display.Game;
 import display.Handler;
 import display.Window;
 
@@ -252,7 +253,13 @@ public class Theme extends ThemeBase {
 			break;
 		}
 	}
-	
+	public void loadFront(Handler handler){
+		Random rand = new Random();
+		
+		for (int i = 0; i < 30; i++) {
+			handler.addObject(new Leaf(rand.nextInt(2000)-2000,rand.nextInt(600), ObjectId.Interactions));
+		}
+	}
 	public void run() {
 		methodTest();
 	}
@@ -418,6 +425,42 @@ public class Theme extends ThemeBase {
 		public ArrayList<CollisionBox> getBounds() {
 			return collisions;
 		}
+	}
+	
+	private static class Leaf extends GameObject{
+		
+		BufferedImage sprites;
+		private float x1, y1;
+		
+		public Leaf(float x, float y, ObjectId id) {
+			super(x, y, id);
+			x1 = x - 400;
+			y1= y - 400;
+			BufferedImageLoader loader = new BufferedImageLoader();
+			sprites = new SpriteSheet(loader.loadImage("/feuille.png"), 78).grabImage(0, 0);
+		}
+
+		public void tick(ArrayList<GameObject> object) {
+			x1+=5;
+			if(x1 > 1024){
+				x1 = -1024;
+			}
+			x= Game.player.getX()+32 + x1;
+			y1+=1;
+			if(y1 > 320){
+				y1 = -320;
+			}
+			y= Game.player.getY()+32 + y1;
+		}
+
+		public void render(Graphics g) {
+			g.drawImage(sprites, (int)x, (int)y, 25, 25, null);
+		}
+
+		public ArrayList<CollisionBox> getBounds() {
+			return null;
+		}
+
 	}
 	
 }

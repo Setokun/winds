@@ -17,6 +17,7 @@ public abstract class ThemeBase {
 	abstract protected int[][][] initCollisionsList();
 	abstract protected String[] initInteractionTips();
 	abstract public void loadInteractions(int x, int y, int id, Handler handler);
+	abstract public void loadFront(Handler handler);
 	abstract public void run();
 	
 }

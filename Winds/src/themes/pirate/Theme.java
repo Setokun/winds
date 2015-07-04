@@ -169,8 +169,11 @@ public class Theme extends ThemeBase {
 	private void methodTest(){
 		System.out.println("running unknown method");
 	}
-	@Override
 	public void loadInteractions(int x, int y, int id, Handler handler) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void loadFront(Handler handler) {
 		// TODO Auto-generated method stub
 		
 	}

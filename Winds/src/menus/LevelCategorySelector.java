@@ -19,7 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.LayoutStyle;
 import javax.swing.border.SoftBevelBorder;
 
-import addon.AddonManager;
 import addon.level.Type;
 import display.Window;
 
