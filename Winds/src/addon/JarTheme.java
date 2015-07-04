@@ -91,8 +91,26 @@ public class JarTheme {
 						+"\", "+ wThemeToString()
 						+", "+ wFilesToString() +"]";
 	}
-	public void loadInteractions(int x, int y, int id, Handler handler){
-		theme.loadInteractions(x, y, id, handler);
+	public void loadInteractions(Handler handler){
+		
+		int[][] elements = AddonManager.getLoadedJarLevel().getLevel().getInteractions();
+		int id;
+				
+		for(int i = 0; i < 60; i++){
+			for(int j = 0; j < 60; j++){
+				
+				id = elements[i][j];
+				
+				if (id == 0) {
+					//handler.addObject(new Block(j*128, i*128, number, null));
+					continue;
+				}
+				theme.loadInteractions(j*128, i*128, id, handler);
+			}
+		}
+	}
+	public void loadFront(Handler handler){
+		theme.loadFront(handler);
 	}
 	//endregion
 	

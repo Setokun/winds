@@ -41,9 +41,8 @@ public class Game extends Canvas implements Runnable{
 	public static AudioPlayer bgMusic;
 	private Handler handler;
 	private static BufferedImage[] instance;
-	//private InteractionBlock interactions;
 
-	private Player player;
+	public static Player player;
 	
 	private int seconds, delayVictory, delayGameOver, timeMax;
 	
@@ -64,11 +63,9 @@ public class Game extends Canvas implements Runnable{
 		score = new Score(AddonManager.getLoadedJarLevel().getLevel().getIdDB());
 		handler = new Handler();
 		cam = new Camera(0, 0);
-		//interactions = new InteractionBlock(handler);
 		
 
 		BufferedImageLoader loader = new BufferedImageLoader();
-		//bg = loader.loadImage("/background/pirate3.jpg");
 		bg = AddonManager.getLoadedJarTheme().getBackground();
 		pauseImage = loader.loadImage("/background/menu_pause.png");
 		gameover = loader.loadImage("/background/gameover.png");
@@ -87,16 +84,14 @@ public class Game extends Canvas implements Runnable{
 	    ////////////////////////////////////////////////////
 	    
 	    loadLevelByMatrix(AddonManager.getLoadedJarLevel().getLevel().getMatrix());
+	    
 	    Point startPoint = AddonManager.getLoadedJarLevel().getLevel().getStartPosition();
 	    player = new Player(startPoint.x*128, startPoint.y*128, handler, ObjectId.Player);
 		handler.addObject(player);
 		
-	    
 		
-		int[][] elements = AddonManager.getLoadedJarLevel().getLevel().getInteractions();
-		
-	    loadInteractions(elements);
-
+		AddonManager.getLoadedJarTheme().loadInteractions(handler);
+	    AddonManager.getLoadedJarTheme().loadFront(handler);
 	    
 	    this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput(handler));
@@ -270,28 +265,7 @@ public class Game extends Canvas implements Runnable{
 		}
 		
 	}
-	private void loadInteractions(int[][] elements){
 
-		int number;
-		
-		for(int i = 0; i < 60; i++){
-			for(int j = 0; j < 60; j++){
-				
-				number = elements[i][j];
-				
-				if (number == 0) {
-					//handler.addObject(new Block(j*128, i*128, number, null));
-					continue;
-				}
-				
-				AddonManager.getLoadedJarTheme().loadInteractions(j*128, i*128, number, handler);
-				
-			}
-		}
-		
-	}
-	
-	
 	public static BufferedImage[] getInstance(){
 		return instance;
 	}
@@ -343,6 +317,10 @@ public class Game extends Canvas implements Runnable{
 	}
 	public static void setFinished(){
 		finished = true;
+	}
+	
+	public void feuilles(Graphics g){
+		
 	}
 	
 }
