@@ -34,8 +34,8 @@ public class JarTheme {
 		try {
 			jf = new JarFile(jarFile);
 			String classFilePath = getClassFilePath(jf);
+			
 			if(classFilePath != null){
-				
 				URLClassLoader ucl = new URLClassLoader(new URL[]{
 					new URL("jar:"+ jarFile.toURI().toURL() +"!/") });
 				mainClass = Class.forName(classFilePath, true, ucl);
@@ -102,7 +102,7 @@ public class JarTheme {
 		Enumeration<JarEntry> entries = jar.entries();
 		while(entries.hasMoreElements()){
 			String name = entries.nextElement().getName();
-			if( name.endsWith(".class") ){
+			if( name.endsWith(".class") && !name.contains("$")){
 				path = name.replace("/", ".").replace(".class", "");
 				break;
 			}
