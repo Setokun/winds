@@ -83,7 +83,7 @@ public class Game extends Canvas implements Runnable{
 		//bgMusicFilename = "resources/Winds_Ice_Cavern.mp3";
 		bgMusicFilename = "resources/Honey.mp3";
 	    bgMusic = new AudioPlayer(bgMusicFilename, true);
-	    //bgMusic.play();
+	    bgMusic.play();
 	    ////////////////////////////////////////////////////
 	    
 	    loadLevelByMatrix(AddonManager.getLoadedJarLevel().getLevel().getMatrix());
@@ -325,7 +325,7 @@ public class Game extends Canvas implements Runnable{
 			Game.pause = true;
 		}
 		else{
-			//Game.bgMusic.resume();
+			Game.bgMusic.resume();
 			Game.pause = false;
 		}
 		
