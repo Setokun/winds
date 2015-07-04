@@ -18,7 +18,9 @@ import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
 import core.Block;
+import core.Blower;
 import core.CollisionBox;
+import core.Direction;
 import core.ObjectId;
 import core.Player;
 import core.SpriteSheet;
@@ -27,7 +29,7 @@ import database.Score;
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
 	
-	public static int WIDTH = (int) Window.profile.getScreenDimensions().getWidth(), HEIGHT = (int) Window.profile.getScreenDimensions().getHeight();
+	public static int WIDTH, HEIGHT;
 	public static Camera cam;
 	public static Score score;
 	public final String TITLE = "Winds";
@@ -47,6 +49,8 @@ public class Game extends Canvas implements Runnable{
 	private int seconds, delayVictory, delayGameOver, timeMax;
 	
 	public Game(){
+		WIDTH = (int) Window.profile.getScreenDimensions().getWidth();
+		HEIGHT = (int) Window.profile.getScreenDimensions().getHeight();
 	    AddonManager.loadJarTheme(AddonManager.getLoadedJarLevel().getLevel().getIdTheme());
 	    start();
 	}
@@ -90,9 +94,10 @@ public class Game extends Canvas implements Runnable{
 		handler.addObject(player);
 		
 		
+		
 		AddonManager.getLoadedJarTheme().loadInteractions(handler);
 	    AddonManager.getLoadedJarTheme().loadFront(handler);
-	    
+	    handler.addObject(new Blower(1200, 500, ObjectId.Blower, Direction.left));
 	    this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput(handler));
 	    
@@ -185,11 +190,11 @@ public class Game extends Canvas implements Runnable{
 
 		if(pause){
 			g.setColor(Color.red);
-			g.drawImage(pauseImage, 0, 0, this.getWidth(), this.getHeight(), this);
+			g.drawImage(pauseImage, 0, 0, this);
 			if(Window.debug){
-				g.drawRect(297,185,180,40);
-				g.drawRect(217,265,330,40);
-				g.drawRect(260,348,250,40);
+				g.drawRect(122,169,180,40);
+				g.drawRect(47,235,330,40);
+				g.drawRect(148,307,250,40);
 			}
 		}else{
 			
@@ -220,10 +225,10 @@ public class Game extends Canvas implements Runnable{
 				    bgMusic.play();
 				}
 				
-				g.drawImage(gameover, 0, 0, this);
+				g.drawImage(gameover, 0, 0, WIDTH, HEIGHT, this);
 			}
-			
-			if(finished) g.drawImage(victory, 0, 0, this);
+
+			if(finished) g.drawImage(victory, 0, 0, WIDTH, HEIGHT, this);
 			
 		}
 

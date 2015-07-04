@@ -369,7 +369,6 @@ public class Theme extends ThemeBase {
 
 	private static class Boss extends GameObject{
 		int count;
-		//private Animation animation;
 		
 		private static BufferedImage sprite;
 		private ArrayList<CollisionBox> collisions;

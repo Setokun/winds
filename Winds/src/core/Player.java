@@ -245,6 +245,18 @@ public class Player extends GameObject{
 						
 					}
 				}
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.Blower){
+					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds()) 
+							|| getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())
+							|| getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())
+							|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
+						
+						if(((Blower)tempObject).getDirection() == Direction.down) Game.player.setVelY(Math.abs(Game.player.getVelY()) +0.2f);
+						if(((Blower)tempObject).getDirection() == Direction.up) Game.player.setVelY(-Math.abs(Game.player.getVelY()) -0.2f);
+						if(((Blower)tempObject).getDirection() == Direction.left) Game.player.setVelX(-Math.abs(Game.player.getVelX()) -0.2f);
+						if(((Blower)tempObject).getDirection() == Direction.right) Game.player.setVelX(Math.abs(Game.player.getVelX()) +0.2f);
+					}
+				}
 				
 			}
 		}
