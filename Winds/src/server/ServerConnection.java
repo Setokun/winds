@@ -24,6 +24,8 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import account.Profile;
 import addon.AddonManager;
 
@@ -49,7 +51,7 @@ public class ServerConnection {
 		Profile profile = null;
 
 		try {
-			URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=downloadProfile");
+			URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+DigestUtils.md5(password)+"&action=downloadProfile");
 	        URLConnection yc = monURL.openConnection();
 	        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 	        
