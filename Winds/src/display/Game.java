@@ -19,7 +19,6 @@ import controls.KeyInput;
 import controls.MouseInput;
 import core.Block;
 import core.CollisionBox;
-import core.InteractionBlock;
 import core.ObjectId;
 import core.Player;
 import core.SpriteSheet;
@@ -42,7 +41,7 @@ public class Game extends Canvas implements Runnable{
 	public static AudioPlayer bgMusic;
 	private Handler handler;
 	private static BufferedImage[] instance;
-	private InteractionBlock interactions;
+	//private InteractionBlock interactions;
 
 	private Player player;
 	
@@ -65,7 +64,7 @@ public class Game extends Canvas implements Runnable{
 		score = new Score(AddonManager.getLoadedJarLevel().getLevel().getIdDB());
 		handler = new Handler();
 		cam = new Camera(0, 0);
-		interactions = new InteractionBlock(handler);
+		//interactions = new InteractionBlock(handler);
 		
 
 		BufferedImageLoader loader = new BufferedImageLoader();
@@ -285,7 +284,7 @@ public class Game extends Canvas implements Runnable{
 					continue;
 				}
 				
-				interactions.loadInteraction(j*128, i*128, number);
+				AddonManager.getLoadedJarTheme().loadInteractions(j*128, i*128, number, handler);
 				
 			}
 		}

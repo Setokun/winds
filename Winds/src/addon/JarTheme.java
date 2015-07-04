@@ -15,6 +15,7 @@ import java.util.jar.JarFile;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import display.Handler;
 import annotation.wFiles;
 import annotation.wTheme;
 
@@ -89,6 +90,9 @@ public class JarTheme {
 		return "JarTheme [mainClass: \""+ mainClass.getName()
 						+"\", "+ wThemeToString()
 						+", "+ wFilesToString() +"]";
+	}
+	public void loadInteractions(int x, int y, int id, Handler handler){
+		theme.loadInteractions(x, y, id, handler);
 	}
 	//endregion
 	
