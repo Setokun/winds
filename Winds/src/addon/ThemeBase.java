@@ -3,6 +3,8 @@ package addon;
 import java.awt.Point;
 import java.util.Map;
 
+import display.Handler;
+
 public abstract class ThemeBase {
 	protected Map<Point, Integer[]> spriteCompatibility = initSpriteCompatibility();
 	protected int[][] interactionsCompatibility = initInteractionsCompatibility();
@@ -29,9 +31,12 @@ public abstract class ThemeBase {
 	 * @return String[]
 	 */
 	abstract protected String[] initInteractionTips();
+
 	/**
 	 * Runs the theme.
 	 */
 	abstract public void run();
+	abstract public void loadInteractions(int x, int y, int id, Handler handler);
+	abstract public void loadFront(Handler handler);
 	
 }

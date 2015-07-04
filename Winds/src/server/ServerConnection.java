@@ -24,6 +24,8 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import account.Profile;
 import addon.AddonManager;
 import addon.JarLevel;
@@ -49,7 +51,7 @@ public class ServerConnection {
 		Profile profile = null;
 
 		try {
-			URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+password+"&action=downloadProfile");
+			URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+DigestUtils.md5(password)+"&action=downloadProfile");
 	        URLConnection yc = monURL.openConnection();
 	        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 	        
@@ -85,7 +87,6 @@ public class ServerConnection {
 				String s = "INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
 						+ "VALUES ("+Window.profile.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");";
 				DBClass.executeQuery(s);
-				System.out.println("reste dans le try");
 			} catch (ClassNotFoundException e) {
 			} catch (SQLException e) {
 				try {
@@ -248,8 +249,6 @@ public class ServerConnection {
 			if(level.getLevelType().equals("custom")){
 				level.setLevelStatus("installed");
 			}
-			
-			System.out.println(level.toString());
 			
 			if(level != null){
 				String s = URL_API_SERVER +"?email="+ Window.profile.getEmail().replace("\"", "")

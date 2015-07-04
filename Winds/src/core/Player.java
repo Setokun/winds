@@ -56,8 +56,6 @@ public class Player extends GameObject{
 		
 		if(falling && !isActing()){
 			velY += gravity;
-			
-			
 		}
 		
 		if(velY > MAX_SPEED)
@@ -129,37 +127,45 @@ public class Player extends GameObject{
 				else if(tempObject.getBounds().get(j).getId() == ObjectId.DangerousBlock 
 						|| tempObject.getBounds().get(j).getId() == ObjectId.Enemy){
 					
-					// TOP
+						// TOP
 					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){
 						y = tempObject.getBounds().get(j).y + tempObject.getBounds().get(j).height;
 						velY = 1.5f;
 						velX = this.getVelX()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							this.life--;
+							AudioPlayer.playSfx("splaf");
+						}
 					}
 					// BOTTOM
 					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
 						y = tempObject.getBounds().get(j).y - 64;
 						velY = -2f;
 						velX = this.getVelX()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							this.life--;
+							AudioPlayer.playSfx("splaf");
+						}
 					}
 					// RIGHT
 					if(getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())){	
 						x = tempObject.getBounds().get(j).x - 64;
 						velX = -1.5f;
 						velY = this.getVelY()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							this.life--;
+							AudioPlayer.playSfx("splaf");
+						}
 					}
 					// LEFT
 					if(getBoundsLeft().intersects(tempObject.getBounds().get(j))){ 	
 						x = tempObject.getBounds().get(j).x + tempObject.getBounds().get(j).getBounds().width;
 						velX = 1.5f;
 						velY = this.getVelY()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							this.life--;
+							AudioPlayer.playSfx("splaf");
+						}
 					}
 					
 					
@@ -234,9 +240,21 @@ public class Player extends GameObject{
 							Game.setFinished();
 							Game.bgMusic.stop();
 							Game.bgMusic = new AudioPlayer("resources/musics/victory.mp3", false);
-						    Game.bgMusic.play();
+							Game.bgMusic.play();
 						}
 						
+					}
+				}
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.Blower){
+					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds()) 
+							|| getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())
+							|| getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())
+							|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
+						
+						if(((Blower)tempObject).getDirection() == Direction.down) Game.player.setVelY(Math.abs(Game.player.getVelY()) +0.2f);
+						if(((Blower)tempObject).getDirection() == Direction.up) Game.player.setVelY(-Math.abs(Game.player.getVelY()) -0.2f);
+						if(((Blower)tempObject).getDirection() == Direction.left) Game.player.setVelX(-Math.abs(Game.player.getVelX()) -0.2f);
+						if(((Blower)tempObject).getDirection() == Direction.right) Game.player.setVelX(Math.abs(Game.player.getVelX()) +0.2f);
 					}
 				}
 				

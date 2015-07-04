@@ -15,6 +15,7 @@ import java.util.jar.JarFile;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import display.Handler;
 import annotation.wFiles;
 import annotation.wTheme;
 
@@ -33,8 +34,8 @@ public class JarTheme {
 		try {
 			jf = new JarFile(jarFile);
 			String classFilePath = getClassFilePath(jf);
+			
 			if(classFilePath != null){
-				
 				URLClassLoader ucl = new URLClassLoader(new URL[]{
 					new URL("jar:"+ jarFile.toURI().toURL() +"!/") });
 				mainClass = Class.forName(classFilePath, true, ucl);
@@ -90,6 +91,27 @@ public class JarTheme {
 						+"\", "+ wThemeToString()
 						+", "+ wFilesToString() +"]";
 	}
+	public void loadInteractions(Handler handler){
+		
+		int[][] elements = AddonManager.getLoadedJarLevel().getLevel().getInteractions();
+		int id;
+				
+		for(int i = 0; i < 60; i++){
+			for(int j = 0; j < 60; j++){
+				
+				id = elements[i][j];
+				
+				if (id == 0) {
+					//handler.addObject(new Block(j*128, i*128, number, null));
+					continue;
+				}
+				theme.loadInteractions(j*128, i*128, id, handler);
+			}
+		}
+	}
+	public void loadFront(Handler handler){
+		theme.loadFront(handler);
+	}
 	//endregion
 	
 	//region Private methods 
@@ -98,7 +120,7 @@ public class JarTheme {
 		Enumeration<JarEntry> entries = jar.entries();
 		while(entries.hasMoreElements()){
 			String name = entries.nextElement().getName();
-			if( name.endsWith(".class") ){
+			if( name.endsWith(".class") && !name.contains("$")){
 				path = name.replace("/", ".").replace(".class", "");
 				break;
 			}

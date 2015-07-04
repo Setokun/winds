@@ -46,22 +46,13 @@ public abstract class GameObject {
 		return velY;
 	}
 	public void setVelX(float velX){
-		if(this.isFacingRight()/* && this.velX < MAX_VEL_X*/)
-			this.velX += velX;
-		if(!this.isFacingRight()/* && this.velX > MIN_VEL_X*/)
-			this.velX += velX;
+		this.velX += velX;
 	}
 	public void setVelY(float velY){
-		if(this.isFacingDown())
-			if(Math.abs(this.velY) < MAX_VEL_Y)
-				this.velY += velY;
-			else
-				this.velY = MAX_VEL_Y;
-		if(!this.isFacingDown())
-			if(Math.abs(this.velY) < MAX_VEL_Y)
-				this.velY += velY;
-			else
-				this.velY = MAX_VEL_Y;
+		if(Math.abs(this.velY) < MAX_VEL_Y)
+			this.velY += velY;
+		else
+			this.velY = (this.isFacingDown())? MIN_VEL_Y : MAX_VEL_Y;
 	}
 	public boolean isFalling() {
 		return falling;
