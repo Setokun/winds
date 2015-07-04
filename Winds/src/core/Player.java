@@ -127,37 +127,45 @@ public class Player extends GameObject{
 				else if(tempObject.getBounds().get(j).getId() == ObjectId.DangerousBlock 
 						|| tempObject.getBounds().get(j).getId() == ObjectId.Enemy){
 					
-					// TOP
+						// TOP
 					if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){
 						y = tempObject.getBounds().get(j).y + tempObject.getBounds().get(j).height;
 						velY = 1.5f;
 						velX = this.getVelX()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							this.life--;
+							AudioPlayer.playSfx("splaf");
+						}
 					}
 					// BOTTOM
 					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
 						y = tempObject.getBounds().get(j).y - 64;
 						velY = -2f;
 						velX = this.getVelX()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							this.life--;
+							AudioPlayer.playSfx("splaf");
+						}
 					}
 					// RIGHT
 					if(getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())){	
 						x = tempObject.getBounds().get(j).x - 64;
 						velX = -1.5f;
 						velY = this.getVelY()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							this.life--;
+							AudioPlayer.playSfx("splaf");
+						}
 					}
 					// LEFT
 					if(getBoundsLeft().intersects(tempObject.getBounds().get(j))){ 	
 						x = tempObject.getBounds().get(j).x + tempObject.getBounds().get(j).getBounds().width;
 						velX = 1.5f;
 						velY = this.getVelY()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							this.life--;
+							AudioPlayer.playSfx("splaf");
+						}
 					}
 					
 					
