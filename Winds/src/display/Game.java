@@ -219,7 +219,7 @@ public class Game extends Canvas implements Runnable{
 			// rendering the lifes count
 			for (int i = 0; i < player.getLife(); i++) {g.drawImage(bubulle, 30 +i*30, 40, this);}
 			
-			if(player.getLife() == 0 || (timeMax - seconds) == 0){
+			if(player.getLife() <= 0 || (timeMax - seconds) == 0){
 				if(!defeat){
 					defeat = true;
 					bgMusic.stop();
