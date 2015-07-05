@@ -4,11 +4,13 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import menus.LevelCategorySelector;
@@ -29,6 +31,7 @@ import database.Score;
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
 	
+	Font windsPolice36;
 	public static int WIDTH, HEIGHT;
 	public static Camera cam;
 	public static Score score;
@@ -56,6 +59,8 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	private void init(){
+		
+		initializeFont();
 		
 		timeMax = AddonManager.getLoadedJarLevel().getLevel().getTimeMax();
 		seconds = 0; delayVictory = 53; delayGameOver = 20;
@@ -328,6 +333,14 @@ public class Game extends Canvas implements Runnable{
 	
 	public void feuilles(Graphics g){
 		
+	}
+	
+	private void initializeFont() {
+		try {
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice36 = new Font ("Serif", Font.BOLD, 18);
+		}
 	}
 	
 }
