@@ -9,10 +9,14 @@ public class Theme {
 	public Theme(){
 		p = new Player();
 		l = new Level();
-		b = new Boss(l);
+		b = new Boss(this, l);
 	}
 	public void run(){
 		b.intercept(p);
+	}
+	
+	public int[] getTileWeights(){
+		return new int[]{1,30,30,30};
 	}
 	
 }

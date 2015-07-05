@@ -6,7 +6,7 @@ public class Player {
 	private Point coordo;
 	
 	public Player(){
-		coordo = new Point(0,0);
+		coordo = new Point(9,9);
 	}
 	public Point getCoordo(){
 		return coordo;
