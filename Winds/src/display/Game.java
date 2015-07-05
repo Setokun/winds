@@ -155,7 +155,7 @@ public class Game extends Canvas implements Runnable{
 				timer += 1000;
 
 				endLevel();
-				
+				if(player.getLife() == 0)defeat = true;
 				System.out.println(updates + " updates, fps : " + frames);
 				updates = 0;
 				frames = 0;
