@@ -12,21 +12,18 @@ import display.Window;
 
 public class Blower extends GameObject{
 	
+	private BufferedImageLoader loader;
 	private BufferedImage[] sprites = new BufferedImage[10], spritesRaw;
 	private ArrayList<CollisionBox> collisions;
 	private Animation animation;
 	private Direction direction;
 	
-	static {
-		
-	}
-	
 	public Blower(float x, float y,ObjectId id, Direction direction) {
 		super(x, y, id);
 		this.direction = direction;
 		
-		BufferedImageLoader loader = new BufferedImageLoader();
-		BufferedImage[] spritesRaw = null;
+		loader = new BufferedImageLoader();
+		spritesRaw = null;
 		if(direction == Direction.down) {
 			spritesRaw = new SpriteSheet(loader.loadImage("/souffle_down.png"), 303).getSprites();
 		}

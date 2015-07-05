@@ -240,8 +240,7 @@ public class Scores extends JPanel {
 	}
 
 	protected void btnUploadMyScoresActionPerformed(ActionEvent evt) {
-		ServerConnection sc = new ServerConnection();
-		if(sc.uploadScores(Score.getLocalScores())){
+		if(ServerConnection.uploadScores(Score.getLocalScores())){
 			JOptionPane.showMessageDialog(null, "Scores uploaded");
 		}
 	}
