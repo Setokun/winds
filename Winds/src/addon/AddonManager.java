@@ -1,6 +1,7 @@
 package addon;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -85,7 +86,14 @@ public class AddonManager {
 	 * Collects the valid level archives.
 	 */
 	/*OK*/private static void collectJarLevels(){
-		File folder = new File("bin/resources/levels");
+		File folder = new File(levelsPath);
+		if(!folder.exists())
+			try {
+				folder.createNewFile();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Impossible to create levels' folder");
+				return;
+			}
 		File[] items = folder.listFiles();
 				
 		for (int i = 0; i < items.length; i++)
