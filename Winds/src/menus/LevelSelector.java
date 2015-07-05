@@ -13,9 +13,6 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javafx.scene.shape.Box;
-
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
