@@ -2,33 +2,40 @@ package menus;
 
 import java.awt.image.BufferedImage;
 
-import javax.swing.GroupLayout.Group;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.SoftBevelBorder;
 
 import addon.AddonManager;
 import addon.JarLevel;
 
-public class LevelButton extends JButton{
+public class LevelButton extends JPanel{
 	private static final long serialVersionUID = -2721501040792454948L;
 	
-	public LevelButton(){
-		
-        setBorder(new SoftBevelBorder(0));
-        setBorderPainted(false);
-        setContentAreaFilled(false);
-        
+	private JButton button;
+	private JLabel label;
+	
+	public LevelButton(JarLevel jarLvl){
+		button = new JButton();
+		label = new JLabel();
+        button.setBorder(new SoftBevelBorder(0));
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        BufferedImage logo = AddonManager.getJarThemeByID(jarLvl.getLevel().getIdTheme()).getLogo();
+		button.setIcon(new ImageIcon(logo));
+		button.addActionListener(new LevelLauncherEvent(jarLvl));
+		label.setText(jarLvl.getLevel().getName());
 	}
 	
-	public void affect(JarLevel jarLvl, Group buttonsGroup, Group labelsGroup, JLabel label){
-		BufferedImage logo = AddonManager.getJarThemeByID(jarLvl.getLevel().getIdTheme()).getLogo();
-		setIcon(new ImageIcon(logo));
-		addActionListener(new LevelLauncherEvent(jarLvl));
-		label.setText(jarLvl.getLevel().getName());
-		buttonsGroup.addComponent(this, 64, 64, 64);
-		labelsGroup.addComponent(label);
+	public JPanel getButton(){
+		JPanel j = new JPanel();
+		j.setLayout(new BoxLayout(j, BoxLayout.PAGE_AXIS));
+		j.add(this.button);
+		j.add(this.label);
+		return j;
 	}
 
 }
