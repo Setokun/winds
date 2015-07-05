@@ -1,6 +1,8 @@
 package addon.level;
 
 import java.awt.Dimension;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -21,7 +23,7 @@ import display.Window;
 public class LevelCreationDialog {
 
 	private final Dimension DIALOG_DIM = new Dimension(410,170);
-	private final int FIELD_WIDTH=125, FIELD_HEIGHT=25;
+	private final int FIELD_WIDTH=125, FIELD_HEIGHT=25, MAX_CHAR_NAME=14;
 	
 	private static String[] themeNames;
 	private String nameChoosen;
@@ -85,6 +87,12 @@ public class LevelCreationDialog {
 	private void initFields(){
 		lblName = new JLabel("Level name :");
 		txtName = new JTextField();
+		txtName.addKeyListener(new KeyAdapter(){
+			public void keyTyped(KeyEvent e) {
+				if(txtName.getText().length() == MAX_CHAR_NAME)
+					e.consume();
+			}
+		});
 		//20 chars max
 		lblTheme = new JLabel("Theme to use : ");
         cbTheme = new JComboBox(themeNames);
