@@ -121,22 +121,6 @@ public class Score {
 		return results;
 	}
 	
-	public static Object[][] getFormattedTrophies(){
-		
-		Object[][] results = null;
-		
-		ArrayList<Trophy> t = Trophy.getTrophies();
-		int count = t.size();
-		
-		results = new String[count][2];
-
-		for (int i = 0; i < count; i++) {
-			results[i][0] =  t.get(i).getDescription();
-			results[i][1] =  t.get(i).getAchieved();
-		}
-		return results;
-	}
-	
 	public static  String transformIntTimeInString(int time){
 		String result = "";
 		int hours = time / 3600;

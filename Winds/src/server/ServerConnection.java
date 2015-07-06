@@ -39,6 +39,7 @@ import database.DBClass;
 import database.LevelData;
 import database.Score;
 import database.ThemeData;
+import database.Trophy;
 import display.Window;
 
 public class ServerConnection {
@@ -116,6 +117,28 @@ public class ServerConnection {
 		}
 		
 		return themes;
+	}
+	
+	/*OK*/public static ArrayList<Trophy> getTrophies(){
+		ArrayList<Trophy> trophies = null;
+		
+		try {
+			trophies = new ArrayList<Trophy>();
+			
+			JsonArray jArray = getJsonArrayOfGetRequest("action=getTrophies");
+			for (int i=0;i<jArray.size();i++) {
+		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+		    Trophy trophy = new Trophy();
+		    trophy.setDescription(jsonObject.get("trophy").toString().replaceAll("\"", ""));
+		    trophy.setAchieved(jsonObject.get("ok").toString().replaceAll("\"", ""));
+		    trophies.add(trophy);
+		}
+		} catch (IOException e) {
+			// here we do nothing. if no connection, we don't display trophies, that's all...
+		}
+		
+		
+		return trophies;
 	}
 	
 	/*OK*/public static ThemeData getThemeInfos(int idTheme) throws IOException{

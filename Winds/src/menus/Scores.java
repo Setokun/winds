@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 
 import server.ServerConnection;
 import database.Score;
+import database.Trophy;
 import display.Window;
 
 public class Scores extends JPanel {
@@ -107,7 +108,7 @@ public class Scores extends JPanel {
 	private void initTableTrophies() {
 		scrollPaneTrophies = new JScrollPane();
 		
-		resultsTrophies = Score.getFormattedTrophies();
+		resultsTrophies = Trophy.getTrophies();
 		
 		tableTrophies = new JTable();
 		tableTrophies.getTableHeader().setBackground(new Color(23,182,255));
