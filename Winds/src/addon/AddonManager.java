@@ -88,12 +88,7 @@ public class AddonManager {
 	/*OK*/private static void collectJarLevels(){
 		File folder = new File(levelsPath);
 		if(!folder.exists())
-			try {
-				folder.createNewFile();
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Impossible to create levels' folder");
-				return;
-			}
+			folder.mkdir();
 		File[] items = folder.listFiles();
 				
 		for (int i = 0; i < items.length; i++)
