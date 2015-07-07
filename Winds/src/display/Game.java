@@ -4,82 +4,94 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import menus.LevelCategorySelector;
-import addons.Level;
+import addon.AddonManager;
+import addon.BufferedImageLoader;
 import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
 import core.Block;
-import core.InoffensiveBlock;
+import core.Blower;
+import core.CollisionBox;
+import core.Direction;
 import core.ObjectId;
 import core.Player;
-import core.Texture;
-import core.TransparentBlock;
+import core.SpriteSheet;
+import database.Score;
 
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
 	
-	public static int WIDTH = 800, HEIGHT = 600;
+	public static int WIDTH, HEIGHT;
 	public static Camera cam;
+	public static Score score;
+	private static boolean pause, running, finished, defeat, scoreUploaded;
+	public static AudioPlayer bgMusic;
+	private static BufferedImage[] instance;
+	public static Player player;
+	
 	public final String TITLE = "Winds";
-	private Level lvl;
-	
-	private BufferedImage bg = null, pauseImage = null, level = null;
-	
-	private static boolean pause = false, running = false;
-	
+	private BufferedImage bubulle, gameover, victory, bg = null, pauseImage = null;
 	private Thread thread;
-	private String bgMusicFilename;
-	static AudioPlayer bgMusic;
 	private Handler handler;
-	static Texture tex;
+	Font windsPolice36;
+	private int seconds, delayVictory, delayGameOver, timeMax;
 	
-	
-	private int seconds;
-	
-	//private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-	
-	public Game(Level lvl){
-		this.lvl = lvl;
-		System.out.println(lvl);
-		start();
+	public Game(){
+		WIDTH = (int) Window.profile.getScreenDimensions().getWidth();
+		HEIGHT = (int) Window.profile.getScreenDimensions().getHeight();
+	    AddonManager.loadJarTheme(AddonManager.getLoadedJarLevel().getLevel().getIdTheme());
+	    start();
 	}
 	
 	private void init(){
 		
-		seconds = 0;
+		initializeFont();
 		
-		tex = new Texture();
-		
-		//this.setPreferredSize(new Dimension(800,600));
+		timeMax = AddonManager.getLoadedJarLevel().getLevel().getTimeMax();
+		seconds = 0; delayVictory = 53; delayGameOver = 20;
 		pause = false;
-		BufferedImageLoader loader = new BufferedImageLoader();
-		bg = loader.loadImage("/background/pirate3.jpg");
-		pauseImage = loader.loadImage("/background/menu_pause.png");
-		level = loader.loadImage("/levels/level3.png"); // loading the level
+		finished = false;
+		defeat = false;
+		scoreUploaded = false;
 		
-		
-		
+		score = new Score(AddonManager.getLoadedJarLevel().getLevel().getIdDB());
 		handler = new Handler();
-		
 		cam = new Camera(0, 0);
 		
+		initBackgroundsAndImages();
+		
+	    instance = new SpriteSheet(AddonManager.getLoadedJarTheme().getSprites128(), 128).getSprites();
+		
+		
 		/////////////// sound initialization ///////////////
-		bgMusicFilename = "resources/Winds_Ice_Cavern.mp3";
-	    bgMusic = new AudioPlayer(bgMusicFilename, true);
+	    bgMusic = new AudioPlayer(true);
 	    bgMusic.play();
 	    ////////////////////////////////////////////////////
-	    LoadImageLevel(level);
+	    
+	    loadLevelByMatrix(AddonManager.getLoadedJarLevel().getLevel().getMatrix());
+	    
+	    Point startPoint = AddonManager.getLoadedJarLevel().getLevel().getStartPosition();
+	    player = new Player(startPoint.x*128, startPoint.y*128, handler, ObjectId.Player);
+		handler.addObject(player);
+		
+		AddonManager.getLoadedJarTheme().loadInteractions(handler);
+	    AddonManager.getLoadedJarTheme().loadFront(handler);
+	    handler.addObject(new Blower(1200, 500, ObjectId.Blower, Direction.left));
 	    this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput(handler));
 	    
 	}
-	
+
 	public synchronized void start(){
 		if(running)
 			return;
@@ -88,7 +100,6 @@ public class Game extends Canvas implements Runnable{
 		thread = new Thread(this);
 		thread.start();
 	}
-	
 	public synchronized void stop(){
 		if(!running)
 			return;
@@ -131,17 +142,21 @@ public class Game extends Canvas implements Runnable{
 			
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
-				if(!pause)seconds++;
+
+				endLevel();
+				if(player.getLife() <= 0 && !defeat)
+					defeat = true;
+				
 				System.out.println(updates + " updates, fps : " + frames);
+				
 				updates = 0;
 				frames = 0;
 			}
 		}
 		stop();
 	}
-	
 	private void tick(){
-		if(!getPause()){
+		if(!getPause() && !defeat){
 			handler.tick();
 			
 			for(int i = 0; i < handler.objects.size(); i++){
@@ -151,184 +166,131 @@ public class Game extends Canvas implements Runnable{
 			}
 		}
 	}
-	
 	private void render(){
 		
 		this.requestFocus();
 		
 		BufferStrategy bs = this.getBufferStrategy();
-		if(bs == null){
-			// set the number of images prepared before rendering, including the current one
-			this.createBufferStrategy(2);
-			return;
-		}
+		if(bs == null){this.createBufferStrategy(2);return;}
 		Graphics g = bs.getDrawGraphics();
 		Graphics2D g2d = (Graphics2D) g;
+		
 		
 		g.setFont(new Font("bubble & soap", 0, 36));
 		g.setColor(Color.WHITE);
 		
-		
-		/////////////////////////////////////////
+
 		if(pause){
 			g.setColor(Color.red);
-			g.drawImage(pauseImage, 0, 0, this.getWidth(), this.getHeight(), this);
+			g.drawImage(pauseImage, 0, 0, this);
 			if(Window.debug){
-				g.drawRect(297, 185, 180, 40);
-				g.drawRect(217,265,330,40);
-				g.drawRect(260,348,250,40);
+				g.drawRect(122,169,180,40);
+				g.drawRect(47,235,330,40);
+				g.drawRect(148,307,250,40);
 			}
 		}else{
-			/*g.drawImage(bg, 0, 0, this);
-			// affichage du temps écoulé
-			//g.setColor(Color.red);
-			g.drawString(seconds/60 + ":" + seconds%60, 32, 32);*/
-			////////////////////////
 			
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, getWidth(), getHeight());
+			// drawing the background
+			g.drawImage(bg, (int)(cam.getX()/4), (int)(cam.getY()/8), this);
 			
-			for(int i = 0; i<5000; i+=bg.getWidth())
-				for(int j = 0; j<5000; j+=bg.getHeight())
-					g.drawImage(bg, (int)(i+cam.getX()/4), (int)(j+cam.getY()/4), this);
 			
 			g2d.translate(cam.getX(), cam.getY());
-			
 			handler.render(g);
-			
 			g2d.translate( -cam.getX(), -cam.getY());
 			
 			
-			// affichage du temps écoulé
-			g.setColor(Color.white);
-			g.drawString(seconds/60 + ":" + seconds%60, 32, 32);
+			// draw elapsed time
+			if((timeMax - seconds) < 10)
+				g.setColor(Color.red);
+			else
+				g.setColor(Color.white);
+			g.drawString((timeMax - seconds)/60 + ":" + (timeMax - seconds)%60, 32, 32);
 			
+			// rendering the lifes count
+			for (int i = 0; i < player.getLife(); i++) {g.drawImage(bubulle, 30 +i*30, 40, this);}
+			
+			if(player.getLife() <= 0 || (timeMax - seconds) == 0){
+				if(!defeat){
+					defeat = true;
+					bgMusic.stop();
+					Game.bgMusic = new AudioPlayer("/musics/gameover.mp3", false);
+					Game.bgMusic.play();
+				}	
+				g.drawImage(gameover, 0, 0, WIDTH, HEIGHT, this);
+			}
+			if(finished) g.drawImage(victory, 0, 0, WIDTH, HEIGHT, this);
 		}
-		
-		//image.getGraphics().fillRect(50, 100, 40, 30);
-		//g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
 
-		g.setFont(new Font("bubble & soap", 0, 24));
-		g.drawRect(150, 10, 200, 25);
-		g.drawString(lvl.titreNiveau, 150, 30);
-		
-		/////////////////////////////////////////
-		
-		
-		
 		g.dispose();
 		bs.show();
 	}
 	
-	private void LoadImageLevel(BufferedImage image){
-		int w = image.getWidth();
-		int h = image.getHeight();
+	private void loadLevelByMatrix(int[][] elements){
+		int[][][] collisionsList = AddonManager.getLoadedJarTheme().getCollisions();
 		
-		//System.out.println("wdth - height : " + w + " " + h);
+		int number;
 		
-		for(int xx = 0; xx < h; xx++){
-			for(int yy = 0; yy < w; yy++){
-				int pixel = image.getRGB(xx, yy);
-				int red = (pixel >> 16) & 0xff;
-				int green = (pixel >> 8) & 0xff;
-				int blue = (pixel) & 0xff;
+		for(int i = 0; i < 60; i++){
+			for(int j = 0; j < 60; j++){
 				
-				if(red == 255 && green == 255 && blue == 255) handler.addObject(new Block(xx*32, yy*32, Block.blockType.SIMPLE_BLOCK, ObjectId.Block));
-				if(red == 128 && green == 128 && blue == 128) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.UPPER_SIMPLE_BLOCK, ObjectId.TransparentBlock));
-				if(red == 100 && green == 100 && blue == 100) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.LEFT_SIMPLE_BLOCK, ObjectId.TransparentBlock));
-				if(red == 80 && green == 80 && blue == 80) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.LEFT_DOWN_SIMPLE_BLOCK, ObjectId.TransparentBlock));
-				if(red == 60 && green == 60 && blue == 60) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.LEFT_UP_CORNER_SIMPLE_BLOCK, ObjectId.TransparentBlock));
-				if(red == 40 && green == 50 && blue == 60) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.UPPER_LEFT_SINGLE_BLOCK, ObjectId.TransparentBlock));
-				if(red == 90 && green == 50 && blue == 10) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.UPPER_RIGHT_SINGLE_BLOCK, ObjectId.TransparentBlock));
-				if(red == 122 && green == 190 && blue == 255) handler.addObject(new InoffensiveBlock(xx*32, yy*32, InoffensiveBlock.blockType.FLOOR_BLOCK, ObjectId.InoffensiveBlock));
-				if(red == 190 && green == 122 && blue == 255) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.UPPER_FLOOR_BLOCK, ObjectId.TransparentBlock));
+				number = elements[i][j];
 				
-				if(red == 190 && green == 100 && blue == 220) handler.addObject(new Block(xx*32, yy*32, Block.blockType.PIRATE_CAISSE_1, ObjectId.Block));
-				if(red == 190 && green == 100 && blue == 230) handler.addObject(new Block(xx*32, yy*32, Block.blockType.PIRATE_CAISSE_2, ObjectId.Block));
-				if(red == 190 && green == 100 && blue == 240) handler.addObject(new Block(xx*32, yy*32, Block.blockType.PIRATE_CAISSE_3, ObjectId.Block));
-				if(red == 190 && green == 100 && blue == 250) handler.addObject(new Block(xx*32, yy*32, Block.blockType.PIRATE_CAISSE_4, ObjectId.Block));
-
+				if (number == 0) {
+					handler.addObject(new Block(j*128, i*128, number, null));
+					continue;
+				}
 				
-				if(red == 200 && green == 105 && blue == 105) handler.addObject(new Block(xx*32, yy*32, Block.blockType.ICE_BLOCK_1, ObjectId.Block));
-				if(red == 15 && green == 105 && blue == 105) handler.addObject(new Block(xx*32, yy*32, Block.blockType.ICE_BLOCK_2, ObjectId.Block));
-				if(red == 150 && green == 105 && blue == 105) handler.addObject(new Block(xx*32, yy*32, Block.blockType.ICE_BLOCK_3, ObjectId.Block));
-				if(red == 200 && green == 150 && blue == 105) handler.addObject(new Block(xx*32, yy*32, Block.blockType.ICE_BLOCK_4, ObjectId.Block));
-				if(red == 200 && green == 150 && blue == 255) handler.addObject(new Block(xx*32, yy*32, Block.blockType.ICE_BLOCK_5, ObjectId.Block));
-				if(red == 255 && green == 105 && blue == 255) handler.addObject(new Block(xx*32, yy*32, Block.blockType.ICE_BLOCK_6, ObjectId.Block));
-				if(red == 0 && green == 150 && blue == 255) handler.addObject(new Block(xx*32, yy*32, Block.blockType.ICE_BLOCK_7, ObjectId.Block));
-				if(red == 255 && green == 255 && blue == 150) handler.addObject(new Block(xx*32, yy*32, Block.blockType.ICE_BLOCK_8, ObjectId.Block));
+				ArrayList<CollisionBox> collisions = new ArrayList<CollisionBox>();
+				for (int k = 0; k < collisionsList[number].length; k++) {
+					ObjectId id = ObjectId.Block;
+					if(collisionsList[number][k][4] == 1) id = ObjectId.DangerousBlock;
+					collisions.add(new CollisionBox(collisionsList[number][k][0],
+													collisionsList[number][k][1],
+													collisionsList[number][k][2],
+													collisionsList[number][k][3],
+													id));
+				}
 				
-				
-				// ronces
-				if(red == 201 && green == 106 && blue == 101) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_1, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 102) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_2, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 103) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_3, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 104) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_4, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 105) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_5, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 106) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_6, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 107) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_7, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 108) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_8, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 109) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_9, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 110) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_10, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 111) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_11, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 112) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_12, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 113) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_13, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 114) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_14, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 115) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_15, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 116) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_16, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 117) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_17, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 118) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_18, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 119) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_19, ObjectId.Block));
-				if(red == 201 && green == 106 && blue == 120) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_HAUT_20, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 101) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_1, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 102) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_2, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 103) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_3, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 104) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_4, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 105) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_5, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 106) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_6, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 107) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_7, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 108) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_8, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 109) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_9, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 110) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_10, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 111) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_11, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 112) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_12, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 113) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_13, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 114) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_14, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 115) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_15, ObjectId.Block));
-				if(red == 0 && green == 106 && blue == 116) handler.addObject(new Block(xx*32, yy*32, Block.blockType.RONCES_COTE_16, ObjectId.Block));
-				
-				if(red == 101 && green == 106 && blue == 101) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.RONCES_HAUT_1, ObjectId.TransparentBlock));
-				if(red == 101 && green == 106 && blue == 102) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.RONCES_HAUT_2, ObjectId.TransparentBlock));
-				if(red == 101 && green == 106 && blue == 103) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.RONCES_HAUT_3, ObjectId.TransparentBlock));
-				if(red == 101 && green == 106 && blue == 104) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.RONCES_HAUT_4, ObjectId.TransparentBlock));
-				if(red == 101 && green == 106 && blue == 105) handler.addObject(new TransparentBlock(xx*32, yy*32, TransparentBlock.blockType.RONCES_HAUT_5, ObjectId.TransparentBlock));
-				
-				
-				
-			}
-		}
-		
-		for(int xx = 0; xx < h; xx++){
-			for(int yy = 0; yy < w; yy++){
-				int pixel = image.getRGB(xx, yy);
-				int red = (pixel >> 16) & 0xff;
-				int green = (pixel >> 8) & 0xff;
-				int blue = (pixel) & 0xff;
-				
-				if(red == 0 && green == 0 && blue == 255) handler.addObject(new Player(xx*32, yy*32, handler, ObjectId.Player));
+				handler.addObject(new Block(j*128, i*128, number, collisions));
 			}
 		}
 		
 	}
-	
-	public static Texture getInstance(){
-		return tex;
+
+	public static BufferedImage[] getInstance(){
+		return instance;
+	}
+	private void initBackgroundsAndImages() {
+		BufferedImageLoader loader = new BufferedImageLoader();
+		bg = AddonManager.getLoadedJarTheme().getBackground();
+		pauseImage = loader.loadImage("/background/menu_pause.png");
+		gameover = loader.loadImage("/background/gameover.png");
+		victory = loader.loadImage("/background/victory.png");
+		//life sprite
+		bubulle = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
+	}
+	private void endLevel() {
+		if(!getPause() && player.getLife() > 0 && !finished && !defeat)
+		{
+			seconds++;
+			score.setTime(seconds);
+		}
+		if(finished && !pause){
+			if(!scoreUploaded){
+				scoreUploaded = true;
+				score.setScore(AddonManager.getLoadedJarLevel().getLevel().getIdDB());
+			}
+			
+			delayVictory--;
+		}
+		if(defeat && !pause) delayGameOver--;
+		
+		if(delayVictory == 0 || delayGameOver == 0) goBackToMenu();
 	}
 	
 	public static boolean getPause(){
 		return Game.pause;
 	}
-	
 	public static void setPause(){
 		if(!pause){
 			Game.bgMusic.pause();
@@ -338,12 +300,27 @@ public class Game extends Canvas implements Runnable{
 			Game.bgMusic.resume();
 			Game.pause = false;
 		}
-		
 	}
 	
-	public static void reafficherMenu(){
+	public static void goBackToMenu(){
+		Game.bgMusic.stop();
 		Game.running = false;
 		Window.resize(new Dimension(800, 550));
 		Window.affect(new LevelCategorySelector());
 	}
+	
+	public static boolean isFinished(){
+		return finished;
+	}
+	public static void setFinished(){
+		finished = true;
+	}
+	private void initializeFont() {
+		try {
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+		} catch (FontFormatException | IOException e) {
+			windsPolice36 = new Font ("Serif", Font.BOLD, 18);
+		}
+	}
+	
 }

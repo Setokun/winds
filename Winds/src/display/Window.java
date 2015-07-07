@@ -2,15 +2,24 @@ package display;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import menus.Login;
 import menus.MainMenu;
+import account.Profile;
 
-public	 class Window {
 
-	public static final boolean debug = true;
+public class Window {
+	public static final Dimension DIM_STANDARD = new Dimension(800, 550);
+	public static final Dimension DIM_EDITOR = new Dimension(1024, 600);
+	public static final boolean debug = false;
+	
+	public static Profile profile = null;
 	private static JFrame main;
+	
 	
 	public static void affect(Component c){
 		main.remove(main.getContentPane().getComponent(0));
@@ -26,17 +35,23 @@ public	 class Window {
 	
 	public static void main(String[] args) {
 		main = new JFrame("Winds");
-		//main.pack();
 		main.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		main.addWindowListener(new CloseWindowEvent());
 		main.setSize(new Dimension(800, 550));
 		main.setResizable(false);
 		main.setLocationRelativeTo(null);
 		
-		main.add(new MainMenu());
-		main.setVisible(true);
+		try {
+			main.setIconImage(ImageIO.read(Window.class.getClass().getResource("/bubulle.png")));
+		} catch (IOException e) { e.printStackTrace(); }
 		
-		
+		profile = Profile.getCurrentPlayer();
+		main.add(profile == null ? new Login() : new MainMenu());
+		main.setVisible(true);		
+	}
+	
+	public static JFrame getFrame(){
+		return main;
 	}
 	
 }

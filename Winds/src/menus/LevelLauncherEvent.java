@@ -1,25 +1,26 @@
 package menus;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import addon.AddonManager;
+import addon.JarLevel;
 import display.Game;
 import display.Window;
-import addons.Level;
 
 public class LevelLauncherEvent implements ActionListener{
 
-	private Level lvl;
+	private JarLevel jarLvl;
 	
-	public LevelLauncherEvent(Level lvl) {
-		this.lvl = lvl;
+	public LevelLauncherEvent(JarLevel jarLvl) {
+		this.jarLvl = jarLvl;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		Window.resize(new Dimension(800, 600));
-		Window.affect(new Game(lvl));
+		Window.resize(Window.profile.getScreenDimensions());
+		AddonManager.loadJarLevel(jarLvl);
+		Window.affect(new Game());
 	}
 
 }
