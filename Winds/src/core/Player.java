@@ -245,7 +245,7 @@ public class Player extends GameObject{
 							velX = velX / 10;
 							Game.setFinished();
 							Game.bgMusic.stop();
-							Game.bgMusic = new AudioPlayer("resources/musics/victory.mp3", false);
+							Game.bgMusic = new AudioPlayer("/musics/victory.mp3", false);
 							Game.bgMusic.play();
 						}
 						

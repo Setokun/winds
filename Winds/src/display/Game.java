@@ -86,8 +86,7 @@ public class Game extends Canvas implements Runnable{
 		
 		
 		/////////////// sound initialization ///////////////
-		//bgMusicFilename = "resources/Winds_Ice_Cavern.mp3";
-		bgMusicFilename = "resources/Honey.mp3";
+	    bgMusicFilename = "/Honey.mp3";
 	    bgMusic = new AudioPlayer(bgMusicFilename, true);
 	    bgMusic.play();
 	    ////////////////////////////////////////////////////
@@ -228,7 +227,7 @@ public class Game extends Canvas implements Runnable{
 				if(!defeat){
 					defeat = true;
 					bgMusic.stop();
-					bgMusic = new AudioPlayer("resources/musics/gameover.mp3", false);
+					bgMusic = new AudioPlayer("/musics/gameover.mp3", false);
 				    bgMusic.play();
 				}
 				

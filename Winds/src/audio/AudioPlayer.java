@@ -1,6 +1,6 @@
 package audio;
 
-import java.io.FileInputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 
 import javazoom.jl.decoder.JavaLayerException;
@@ -13,7 +13,7 @@ public class AudioPlayer {
     private Player player; 
     //private FloatControl fc; // reste à gérer le volume
     private boolean loop, savedLoop;
-    private FileInputStream fis;
+    private BufferedInputStream bis;
     
     private long pauseLocation;
     private long totalLength;
@@ -36,7 +36,7 @@ public class AudioPlayer {
     	if (player != null){
 	        loop = false;
     		try {
-				pauseLocation = fis.available();
+				pauseLocation = bis.available();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -52,10 +52,10 @@ public class AudioPlayer {
 				loop = savedLoop;
 				try { 
                 	
-        			do{ 
-        				fis = new FileInputStream(filename);
-        				player = new Player(fis);
-        				totalLength = fis.available();
+        			do{
+        				bis = new BufferedInputStream(getClass().getResourceAsStream(filename));
+        				player = new Player(bis);
+        				totalLength = bis.available();
         				player.play(); }while(loop); 
                 }
                 catch (Exception e) { System.out.println(e); }
@@ -69,12 +69,12 @@ public class AudioPlayer {
 			public void run() {
                 loop = savedLoop;
 				try { 
-        				fis = new FileInputStream(filename);
-        				fis.skip(totalLength - pauseLocation);
-        				player = new Player(fis);
-        				player.play(); 
-        				player.close();
-        				if(loop){play();}
+					bis = new BufferedInputStream(getClass().getResourceAsStream(filename));
+    				bis.skip(totalLength - pauseLocation);
+    				player = new Player(bis);
+    				player.play(); 
+    				player.close();
+    				if(loop){play();}
                 }
                 catch(JavaLayerException e){
                 	System.out.println("exception levée !!");
@@ -89,7 +89,7 @@ public class AudioPlayer {
     }
     
     public static void playSfx(String path){
-		String sfxName = "resources/sounds/"+ path +".mp3";
+		String sfxName = "/sounds/"+ path +".mp3";
 	    AudioPlayer sfx = new AudioPlayer(sfxName, false);
 	    sfx.play();
 	}
