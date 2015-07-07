@@ -54,7 +54,10 @@ public class AddonManager {
 		for (int i = 0; i < items.length; i++){
 		    if (items[i].isFile() && items[i].getName().endsWith(".jar")) {
 		    	JarTheme theme = validateJarTheme(items[i]);
-		    	if(theme != null){ jarThemesList.add(theme); }
+		    	if(theme != null){ 
+		    		theme.setJarFilePath(items[i].getAbsolutePath().replace("\\", "/"));
+		    		jarThemesList.add(theme); 
+		    	}
 		    }
 		}
 	}

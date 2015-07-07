@@ -2,25 +2,33 @@ package audio;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.net.URL;
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
+import addon.AddonManager;
 
 
 public class AudioPlayer {
 	
     private String filename;
     private Player player; 
-    //private FloatControl fc; // reste à gérer le volume
-    private boolean loop, savedLoop;
+    private boolean loop, savedLoop, isTheme;
     private BufferedInputStream bis;
     
     private long pauseLocation;
     private long totalLength;
     
     
+    public AudioPlayer(boolean loop) {
+        this.isTheme = true;
+    	this.savedLoop = loop;
+        this.loop = loop;
+    }
+    
     public AudioPlayer(String filename, boolean loop) {
-        this.filename = filename;
+        this.isTheme = false;
+    	this.filename = filename;
         this.savedLoop = loop;
         this.loop = loop;
     }
@@ -44,7 +52,6 @@ public class AudioPlayer {
     	}
     }
     
-    
     public void play() {
         // run in new thread to play in background
         new Thread() {
@@ -53,7 +60,13 @@ public class AudioPlayer {
 				try { 
                 	
         			do{
-        				bis = new BufferedInputStream(getClass().getResourceAsStream(filename));
+        				if(isTheme){
+        					String musicPath = "jar:file:/"+AddonManager.getLoadedJarTheme().getJarFilePath()+"!/"+AddonManager.getLoadedJarTheme().getMusic();
+            				URL url = new URL(musicPath);
+            				bis = new BufferedInputStream(url.openStream());
+        				}else{
+        					bis = new BufferedInputStream(getClass().getResourceAsStream(filename));
+        				}
         				player = new Player(bis);
         				totalLength = bis.available();
         				player.play(); }while(loop); 
@@ -69,7 +82,13 @@ public class AudioPlayer {
 			public void run() {
                 loop = savedLoop;
 				try { 
-					bis = new BufferedInputStream(getClass().getResourceAsStream(filename));
+					if(isTheme){
+    					String musicPath = "jar:file:/"+AddonManager.getLoadedJarTheme().getJarFilePath()+"!/"+AddonManager.getLoadedJarTheme().getMusic();
+        				URL url = new URL(musicPath);
+        				bis = new BufferedInputStream(url.openStream());
+    				}else{
+    					bis = new BufferedInputStream(getClass().getResourceAsStream(filename));
+    				}
     				bis.skip(totalLength - pauseLocation);
     				player = new Player(bis);
     				player.play(); 

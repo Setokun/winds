@@ -31,24 +31,19 @@ import database.Score;
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
 	
-	Font windsPolice36;
 	public static int WIDTH, HEIGHT;
 	public static Camera cam;
 	public static Score score;
-	public final String TITLE = "Winds";
-	private String bgMusicFilename;
-	private BufferedImage bubulle, gameover, victory, bg = null, pauseImage = null;
-	
 	private static boolean pause, running, finished, defeat, scoreUploaded;
-	
-	private Thread thread;
-	
 	public static AudioPlayer bgMusic;
-	private Handler handler;
 	private static BufferedImage[] instance;
-
 	public static Player player;
 	
+	public final String TITLE = "Winds";
+	private BufferedImage bubulle, gameover, victory, bg = null, pauseImage = null;
+	private Thread thread;
+	private Handler handler;
+	Font windsPolice36;
 	private int seconds, delayVictory, delayGameOver, timeMax;
 	
 	public Game(){
@@ -73,21 +68,13 @@ public class Game extends Canvas implements Runnable{
 		handler = new Handler();
 		cam = new Camera(0, 0);
 		
-
-		BufferedImageLoader loader = new BufferedImageLoader();
-		bg = AddonManager.getLoadedJarTheme().getBackground();
-		pauseImage = loader.loadImage("/background/menu_pause.png");
-		gameover = loader.loadImage("/background/gameover.png");
-		victory = loader.loadImage("/background/victory.png");
-		
-		bubulle = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
+		initBackgroundsAndImages();
 		
 	    instance = new SpriteSheet(AddonManager.getLoadedJarTheme().getSprites128(), 128).getSprites();
 		
 		
 		/////////////// sound initialization ///////////////
-	    bgMusicFilename = "/Honey.mp3";
-	    bgMusic = new AudioPlayer(bgMusicFilename, true);
+	    bgMusic = new AudioPlayer(true);
 	    bgMusic.play();
 	    ////////////////////////////////////////////////////
 	    
@@ -97,8 +84,6 @@ public class Game extends Canvas implements Runnable{
 	    player = new Player(startPoint.x*128, startPoint.y*128, handler, ObjectId.Player);
 		handler.addObject(player);
 		
-		
-		
 		AddonManager.getLoadedJarTheme().loadInteractions(handler);
 	    AddonManager.getLoadedJarTheme().loadFront(handler);
 	    handler.addObject(new Blower(1200, 500, ObjectId.Blower, Direction.left));
@@ -106,7 +91,7 @@ public class Game extends Canvas implements Runnable{
 		this.addMouseListener(new MouseInput(handler));
 	    
 	}
-	
+
 	public synchronized void start(){
 		if(running)
 			return;
@@ -163,6 +148,7 @@ public class Game extends Canvas implements Runnable{
 					defeat = true;
 				
 				System.out.println(updates + " updates, fps : " + frames);
+				
 				updates = 0;
 				frames = 0;
 			}
@@ -227,15 +213,12 @@ public class Game extends Canvas implements Runnable{
 				if(!defeat){
 					defeat = true;
 					bgMusic.stop();
-					bgMusic = new AudioPlayer("/musics/gameover.mp3", false);
-				    bgMusic.play();
-				}
-				
+					Game.bgMusic = new AudioPlayer("/musics/gameover.mp3", false);
+					Game.bgMusic.play();
+				}	
 				g.drawImage(gameover, 0, 0, WIDTH, HEIGHT, this);
 			}
-
 			if(finished) g.drawImage(victory, 0, 0, WIDTH, HEIGHT, this);
-			
 		}
 
 		g.dispose();
@@ -243,8 +226,6 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	private void loadLevelByMatrix(int[][] elements){
-		
-		
 		int[][][] collisionsList = AddonManager.getLoadedJarTheme().getCollisions();
 		
 		int number;
@@ -271,7 +252,6 @@ public class Game extends Canvas implements Runnable{
 				}
 				
 				handler.addObject(new Block(j*128, i*128, number, collisions));
-				
 			}
 		}
 		
@@ -280,7 +260,15 @@ public class Game extends Canvas implements Runnable{
 	public static BufferedImage[] getInstance(){
 		return instance;
 	}
-	
+	private void initBackgroundsAndImages() {
+		BufferedImageLoader loader = new BufferedImageLoader();
+		bg = AddonManager.getLoadedJarTheme().getBackground();
+		pauseImage = loader.loadImage("/background/menu_pause.png");
+		gameover = loader.loadImage("/background/gameover.png");
+		victory = loader.loadImage("/background/victory.png");
+		//life sprite
+		bubulle = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
+	}
 	private void endLevel() {
 		if(!getPause() && player.getLife() > 0 && !finished && !defeat)
 		{
@@ -298,7 +286,6 @@ public class Game extends Canvas implements Runnable{
 		if(defeat && !pause) delayGameOver--;
 		
 		if(delayVictory == 0 || delayGameOver == 0) goBackToMenu();
-		
 	}
 	
 	public static boolean getPause(){
@@ -313,7 +300,6 @@ public class Game extends Canvas implements Runnable{
 			Game.bgMusic.resume();
 			Game.pause = false;
 		}
-		
 	}
 	
 	public static void goBackToMenu(){
@@ -329,11 +315,6 @@ public class Game extends Canvas implements Runnable{
 	public static void setFinished(){
 		finished = true;
 	}
-	
-	public void feuilles(Graphics g){
-		
-	}
-	
 	private void initializeFont() {
 		try {
     		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
