@@ -183,7 +183,7 @@ public class Shop  extends JPanel {
 	
 	private void initBackButton() {
 		jBtnBack = new JButton();
-		jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+		jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
 		jBtnBack.setBorder(new SoftBevelBorder(0));
 		jBtnBack.setBorderPainted(false);
 		jBtnBack.setContentAreaFilled(false);
@@ -196,10 +196,10 @@ public class Shop  extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+				jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
+				jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
@@ -228,7 +228,7 @@ public class Shop  extends JPanel {
 			listThemesToDisplay = new Object[listThemes.length][3];
 			for(int i=0; i<listThemes.length; i++){
 				listThemesToDisplay[i][0] = listThemes[i][0];
-				listThemesToDisplay[i][1] = new ImageIcon("resources/Buttons/Btn_install.png");
+				listThemesToDisplay[i][1] = new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png"));
 				listThemesToDisplay[i][2] = listThemes[i][1];
 			}
 		}
@@ -241,7 +241,7 @@ public class Shop  extends JPanel {
 			listLevelsToDisplay = new Object[listLevels.length][3];
 			for(int i=0; i<listLevels.length; i++){
 				listLevelsToDisplay[i][0] = listLevels[i][0];
-				listLevelsToDisplay[i][1] = new ImageIcon("resources/Buttons/Btn_install.png");
+				listLevelsToDisplay[i][1] = new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png"));
 				listLevelsToDisplay[i][2] = listLevels[i][1];
 			}
 		}
@@ -266,9 +266,9 @@ public class Shop  extends JPanel {
 				for (int j = 0; j < ids.length; j++) {
 					if(ids[j] == (int)listLevels[i][3]){
 						listLevelsToDisplay[i][0] = listLevels[i][0];
-						listLevelsToDisplay[i][1] = (listLevels[i][2] == null || listLevels[i][2].equals("uninstalled"))?new ImageIcon("resources/Buttons/Btn_install.png"):null;
-						listLevelsToDisplay[i][2] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?(listLevels[i][2].equals("installed"))?new ImageIcon("resources/Buttons/Btn_desactivate.png"):new ImageIcon("resources/Buttons/Btn_activate.png"):null;
-						listLevelsToDisplay[i][3] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?new ImageIcon("resources/Buttons/Btn_uninstall.png"):null;
+						listLevelsToDisplay[i][1] = (listLevels[i][2] == null || listLevels[i][2].equals("uninstalled"))?new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")):null;
+						listLevelsToDisplay[i][2] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?(listLevels[i][2].equals("installed"))?new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_desactivate.png")):new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_activate.png")):null;
+						listLevelsToDisplay[i][3] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_uninstall.png")):null;
 						listLevelsToDisplay[i][4] = (listLevels[i][2] != null && listLevels[i][2].equals("desactivated"));
 						listLevelsToDisplay[i][5] = listLevels[i][1];
 					}
@@ -335,14 +335,14 @@ public class Shop  extends JPanel {
 							rows = ServerConnection.getBasicLevelsList();
 							for (int i = 0; i < rows.size(); i++) {
 								if(rows.get(i).getIdTheme() == idThemeInstalled){
-									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon("resources/Buttons/Btn_install.png"), rows.get(i).getIdLevel()};
+									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")), rows.get(i).getIdLevel()};
 									((DefaultTableModel)tableNewLevels.getModel()).addRow(rowToInsert);
 								}
 							}
 							rows = ServerConnection.getCustomLevelsList();
 							for (int i = 0; i < rows.size(); i++) {
 								if(rows.get(i).getIdTheme() == idThemeInstalled){
-									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon("resources/Buttons/Btn_install.png"),null, null, true, rows.get(i).getIdLevel()};
+									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")),null, null, true, rows.get(i).getIdLevel()};
 									((DefaultTableModel)tableCustomLevels.getModel()).addRow(rowToInsert);
 								}
 							}
@@ -474,22 +474,22 @@ public class Shop  extends JPanel {
 							JOptionPane.showMessageDialog(null, "New level installed !!");
 						}
 						tableCustomLevels.setValueAt(null, row, col);
-						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_desactivate.png"), row, 2);
-						tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_uninstall.png") , row, 3);
+						tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_desactivate.png")), row, 2);
+						tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_uninstall.png")) , row, 3);
 					}
 				}
 				if(col == 2){
 					if(tableCustomLevels.getValueAt(row, 1) == null){
 						if((Boolean)tableCustomLevels.getValueAt(row, 4)){
 							if(LevelData.setStatus((int)tableCustomLevels.getValueAt(row, 5), LevelStatus.installed)){
-								tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_desactivate.png") , row, col);
+								tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_desactivate.png")) , row, col);
 								tableCustomLevels.setValueAt(false, row, 4);
 							}
 							
 						}
 						else{
 							if(LevelData.setStatus((int)tableCustomLevels.getValueAt(row, 5), LevelStatus.desactivated)){
-								tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_activate.png") , row, col);
+								tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_activate.png")) , row, col);
 								tableCustomLevels.setValueAt(true, row, 4);
 							}
 						}
@@ -500,7 +500,7 @@ public class Shop  extends JPanel {
 						int idLevel = (int)tableCustomLevels.getValueAt(row, 5);
 						if(LevelData.setStatus(idLevel, LevelStatus.uninstalled)){
 							if(AddonManager.removeJarLevelById(idLevel)){
-								tableCustomLevels.setValueAt(new ImageIcon("resources/Buttons/Btn_install.png") , row, 1);
+								tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")) , row, 1);
 								tableCustomLevels.setValueAt(null, row, 2);
 								tableCustomLevels.setValueAt(null, row, col);
 							}
