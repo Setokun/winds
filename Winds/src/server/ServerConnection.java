@@ -245,6 +245,7 @@ public class ServerConnection {
 					.openConnection();  
 				StringBuilder sb = new StringBuilder(AddonManager.getThemesPath());
 				sb.append(theme.getName().replaceAll("\"", ""));
+				sb.append(".jar");
 				FileOutputStream fos = new FileOutputStream(sb.toString());
 				InputStream in = ucon.getInputStream();
 				int b = 0;
