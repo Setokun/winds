@@ -243,7 +243,7 @@ public class ServerConnection {
 						+"&password="+ Window.profile.getPassword()
 						+"&action=downloadTheme&idTheme="+ idTheme)
 					.openConnection();  
-				StringBuilder sb = new StringBuilder(System.getProperty("user.dir" )+ "\\bin\\resources\\themes\\");
+				StringBuilder sb = new StringBuilder(AddonManager.currentPath+ "/resources/themes/");
 				sb.append(theme.getFileName().replaceAll("\"", ""));
 				FileOutputStream fos = new FileOutputStream(sb.toString());
 				InputStream in = ucon.getInputStream();
@@ -284,7 +284,7 @@ public class ServerConnection {
 				}
 				
 				URLConnection ucon = new URL(s).openConnection();  
-				StringBuilder sb = new StringBuilder(System.getProperty("user.dir" )+ "\\bin\\resources\\levels\\");
+				StringBuilder sb = new StringBuilder(AddonManager.currentPath+ "/resources/levels/");
 				sb.append(level.getIdLevel());
 				sb.append(".jar");
 				

@@ -26,7 +26,7 @@ public class AddonManager {
 	static {
 		// paths initialisation
 		//String currentPath = JarLevel.class.getResource("").getPath().replace("%20", " ");
-		String currentPath = JarLevel.class.getProtectionDomain().getCodeSource().getLocation().getFile().replace("Winds.jar", "").substring(1);
+		currentPath = JarLevel.class.getProtectionDomain().getCodeSource().getLocation().getFile().replace("Winds.jar", "").substring(1);
 		themesPath = currentPath+"resources/themes/";
 		levelsPath = currentPath+"resources/levels/";
 		commonPath = currentPath+"resources/common/";
