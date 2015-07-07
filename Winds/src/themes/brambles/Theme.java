@@ -325,16 +325,16 @@ public class Theme extends ThemeBase {
 					if(width == 0){facingRight = true;}
 					
 					if(facingRight){
-						this.y+=(direction == Direction.right)?1:-1;
+						this.y+=(direction == Direction.down)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).y++;
+							getBounds().get(i).y+=(direction == Direction.down)?1:-1;
 						}
 						width++;
 					}
 					else{
-						this.y-=(direction == Direction.right)?1:-1;
+						this.y-=(direction == Direction.down)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).y--;
+							getBounds().get(i).y-=(direction == Direction.down)?1:-1;
 						}
 						width--;
 					}

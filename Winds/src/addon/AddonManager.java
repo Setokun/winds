@@ -12,6 +12,9 @@ import addon.level.Type;
  * Class used to manage theme and level archives.
  */
 public class AddonManager {
+	
+	public static String currentPath;
+	
 	private static ArrayList<JarTheme> jarThemesList;
 	private static ArrayList<JarLevel> jarLevelsList;
 	
@@ -22,10 +25,14 @@ public class AddonManager {
 
 	static {
 		// paths initialisation
-		String currentPath = JarLevel.class.getResource("").getPath().replace("%20", " ");
-		themesPath = currentPath.replace("addon/", "resources/themes/");
+		//String currentPath = JarLevel.class.getResource("").getPath().replace("%20", " ");
+		currentPath = JarLevel.class.getProtectionDomain().getCodeSource().getLocation().getFile().replace("Winds.jar", "").substring(1);
+		themesPath = currentPath+"resources/themes/";
+		levelsPath = currentPath+"resources/levels/";
+		commonPath = currentPath+"resources/common/";
+		/*themesPath = currentPath.replace("addon/", "resources/themes/");
 		levelsPath = currentPath.replace("addon/", "resources/levels/");
-		commonPath = currentPath.replace("addon/", "resources/common/");
+		commonPath = currentPath.replace("addon/", "resources/common/");*/
 		
 		// lists initialisation
 		jarThemesList = new ArrayList<JarTheme>();
@@ -39,13 +46,18 @@ public class AddonManager {
 	 * Collects the valid theme archives.
 	 */
 	/*OK*/private static void collectJarThemes(){
-		File folder = new File("bin/resources/themes");
+		File folder = new File(themesPath);
+		if(!folder.exists())
+			folder.mkdir();
 		File[] items = folder.listFiles();
 		
 		for (int i = 0; i < items.length; i++){
 		    if (items[i].isFile() && items[i].getName().endsWith(".jar")) {
 		    	JarTheme theme = validateJarTheme(items[i]);
-		    	if(theme != null){ jarThemesList.add(theme); }
+		    	if(theme != null){ 
+		    		theme.setJarFilePath(items[i].getAbsolutePath().replace("\\", "/"));
+		    		jarThemesList.add(theme); 
+		    	}
 		    }
 		}
 	}
@@ -64,8 +76,10 @@ public class AddonManager {
 	 */
 	/*OK*/public static void addJarTheme(File jarFile){
 		JarTheme current = validateJarTheme(jarFile);
-		if(current != null && !jarThemesList.contains(current))
+		if(current != null && !jarThemesList.contains(current)){
+			current.setJarFilePath(jarFile.getAbsolutePath().replace("\\", "/"));
 			jarThemesList.add(current);
+		}
 	}
 	/**
 	 * Get the theme which has the specified ID.
@@ -85,7 +99,9 @@ public class AddonManager {
 	 * Collects the valid level archives.
 	 */
 	/*OK*/private static void collectJarLevels(){
-		File folder = new File("bin/resources/levels");
+		File folder = new File(levelsPath);
+		if(!folder.exists())
+			folder.mkdir();
 		File[] items = folder.listFiles();
 				
 		for (int i = 0; i < items.length; i++)

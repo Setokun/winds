@@ -84,21 +84,21 @@ public class LevelEditorList extends JPanel {
 		title.setFont(windsPolice36);
 		titleMargin = 400 - (title.getFontMetrics(title.getFont()).stringWidth(title.getText())/2);
 		
-		btnNewLevel.setIcon(new ImageIcon("resources/Buttons/NewLevel.png"));
+		btnNewLevel.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/NewLevel.png")));
 		btnNewLevel.setBorder(new SoftBevelBorder(0));
 		btnNewLevel.setBorderPainted(false);
 		btnNewLevel.setContentAreaFilled(false);
 		btnNewLevel.addActionListener( (evt)->{ btnNewClicked(evt); } );
 		btnNewLevel.addMouseListener(new MouseAdapter() {
 			public void mouseExited(MouseEvent e) {
-				btnNewLevel.setIcon(new ImageIcon("resources/Buttons/NewLevel.png"));
+				btnNewLevel.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/NewLevel.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				btnNewLevel.setIcon(new ImageIcon("resources/Buttons/NewLevel_hover.png"));
+				btnNewLevel.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/NewLevel_hover.png")));
 			}
 		});
 		
-		btnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+		btnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
 		btnBack.setBorder(new SoftBevelBorder(0));
 		btnBack.setBorderPainted(false);
 		btnBack.setContentAreaFilled(false);
@@ -109,10 +109,10 @@ public class LevelEditorList extends JPanel {
         });
 		btnBack.addMouseListener(new MouseAdapter() {
 			public void mouseExited(MouseEvent e) {
-				btnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+				btnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				btnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
+				btnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back_hover.png")));
 			}
 		});
 		
@@ -155,7 +155,6 @@ public class LevelEditorList extends JPanel {
 		table.getTableHeader().setBackground(new Color(23,182,255));
 		table.getTableHeader().setFont(windsPolice18);
 		table.getTableHeader().setForeground(Color.WHITE);
-		// penser à virer les bordures du header de la table
 		table.setDefaultRenderer(Object.class, new CenterTableCellRenderer());
 		table.setBackground(Color.WHITE);
 		table.setFont(windsPolice18);
@@ -194,10 +193,10 @@ public class LevelEditorList extends JPanel {
 			model.addRow(new Object[]{
 				jars[i],
 				jars[i].getLevel().getName(),
-				new ImageIcon("resources/Buttons/Btn_edit.png"),
-				new ImageIcon("resources/Buttons/Btn_duplicate.png"),
-				new ImageIcon("resources/Buttons/Btn_delete.png"),
-				jars[i].getLevel().isUploaded() ? "Uploaded" : new ImageIcon("resources/Buttons/Btn_upload.png")
+				new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_edit.png")),
+				new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_duplicate.png")),
+				new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_delete.png")),
+				jars[i].getLevel().isUploaded() ? "Uploaded" : new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_upload.png"))
 			});
 
 		int colWidth = 98;
@@ -298,10 +297,10 @@ public class LevelEditorList extends JPanel {
 		tm.addRow(new Object[]{
 			newJar,
 			newJar.getLevel().getName(),
-			new ImageIcon("resources/Buttons/Btn_edit.png"),
-			new ImageIcon("resources/Buttons/Btn_duplicate.png"),
-			new ImageIcon("resources/Buttons/Btn_delete.png"),
-			new ImageIcon("resources/Buttons/Btn_upload.png")
+			new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_edit.png")),
+			new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_duplicate.png")),
+			new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_delete.png")),
+			new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_upload.png"))
 		});
 		JOptionPane.showMessageDialog(Window.getFrame(),
 				"Level duplicated.",

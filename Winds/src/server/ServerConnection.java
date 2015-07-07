@@ -39,6 +39,7 @@ import database.DBClass;
 import database.LevelData;
 import database.Score;
 import database.ThemeData;
+import database.Trophy;
 import display.Window;
 
 public class ServerConnection {
@@ -116,6 +117,28 @@ public class ServerConnection {
 		}
 		
 		return themes;
+	}
+	
+	/*OK*/public static ArrayList<Trophy> getTrophies(){
+		ArrayList<Trophy> trophies = null;
+		
+		try {
+			trophies = new ArrayList<Trophy>();
+			
+			JsonArray jArray = getJsonArrayOfGetRequest("action=getTrophies");
+			for (int i=0;i<jArray.size();i++) {
+		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+		    Trophy trophy = new Trophy();
+		    trophy.setDescription(jsonObject.get("trophy").toString().replaceAll("\"", ""));
+		    trophy.setAchieved(jsonObject.get("ok").toString().replaceAll("\"", ""));
+		    trophies.add(trophy);
+		}
+		} catch (IOException e) {
+			// here we do nothing. if no connection, we don't display trophies, that's all...
+		}
+		
+		
+		return trophies;
 	}
 	
 	/*OK*/public static ThemeData getThemeInfos(int idTheme) throws IOException{
@@ -220,8 +243,8 @@ public class ServerConnection {
 						+"&password="+ Window.profile.getPassword()
 						+"&action=downloadTheme&idTheme="+ idTheme)
 					.openConnection();  
-				StringBuilder sb = new StringBuilder(System.getProperty("user.dir" )+ "\\bin\\resources\\themes\\");
-				sb.append(theme.getFileName().replaceAll("\"", ""));
+				StringBuilder sb = new StringBuilder(AddonManager.getThemesPath());
+				sb.append(theme.getName().replaceAll("\"", ""));
 				FileOutputStream fos = new FileOutputStream(sb.toString());
 				InputStream in = ucon.getInputStream();
 				int b = 0;
@@ -241,7 +264,6 @@ public class ServerConnection {
 		return true;
 	}
 	
-
 	@SuppressWarnings("unused")
 	/*OK*/public static boolean downloadLevel(int idLevel){
 		try {
@@ -262,7 +284,7 @@ public class ServerConnection {
 				}
 				
 				URLConnection ucon = new URL(s).openConnection();  
-				StringBuilder sb = new StringBuilder(System.getProperty("user.dir" )+ "\\bin\\resources\\levels\\");
+				StringBuilder sb = new StringBuilder(AddonManager.currentPath+ "/resources/levels/");
 				sb.append(level.getIdLevel());
 				sb.append(".jar");
 				
@@ -312,7 +334,7 @@ public class ServerConnection {
 			params.put("scores", infosToUpload.toString());
 			
 			try { 	response = sendRequest(params); } 
-			catch (Exception e) { e.printStackTrace(); }
+			catch (Exception e) {}
 		}
 		return response.size() > 0 ? scores.size() == Integer.valueOf(response.get(0)) : false;
 	}

@@ -13,9 +13,6 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javafx.scene.shape.Box;
-
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -200,7 +197,7 @@ public class LevelSelector extends JPanel{
 	}
 
 	private void initPreviousButton() {
-		jBtnPrevious.setIcon(new ImageIcon("resources/Buttons/Prev.png"));
+		jBtnPrevious.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Prev.png")));
         jBtnPrevious.setBorder(new SoftBevelBorder(0));
         jBtnPrevious.setBorderPainted(false);
         jBtnPrevious.setContentAreaFilled(false);
@@ -213,16 +210,16 @@ public class LevelSelector extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnPrevious.setIcon(new ImageIcon("resources/Buttons/Prev.png"));
+				jBtnPrevious.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Prev.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnPrevious.setIcon(new ImageIcon("resources/Buttons/Prev_hover.png"));
+				jBtnPrevious.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Prev_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
 	private void initNextButton() {
-		jBtnNext.setIcon(new ImageIcon("resources/Buttons/Next.png"));
+		jBtnNext.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Next.png")));
         jBtnNext.setBorder(new SoftBevelBorder(0));
         jBtnNext.setBorderPainted(false);
         jBtnNext.setContentAreaFilled(false);
@@ -235,17 +232,17 @@ public class LevelSelector extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnNext.setIcon(new ImageIcon("resources/Buttons/Next.png"));
+				jBtnNext.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Next.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnNext.setIcon(new ImageIcon("resources/Buttons/Next_hover.png"));
+				jBtnNext.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Next_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
 	private void initBackButton() {
 		jBtnBack.setFont(windsPolice24);
-        jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+        jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
         jBtnBack.setBorder(new SoftBevelBorder(0));
         jBtnBack.setBorderPainted(false);
         jBtnBack.setContentAreaFilled(false);
@@ -258,10 +255,10 @@ public class LevelSelector extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+				jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
+				jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});

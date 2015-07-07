@@ -23,6 +23,7 @@ public class Player extends GameObject{
 	private final float MAX_SPEED_X = 4;
 	private int timeElapsed = 0;
 	private int life;
+	private int invincibleTime;
 	
 	static BufferedImage bubble;
 	
@@ -36,6 +37,7 @@ public class Player extends GameObject{
 	
 	public Player(float x, float y, Handler handler,ObjectId id) {
 		super(x, y, id);
+		this.invincibleTime = 0;
 		this.handler = handler;
 		this.life = 3;
 	}
@@ -63,6 +65,10 @@ public class Player extends GameObject{
 		
 		if(velX > MAX_SPEED_X)
 			velX = MAX_SPEED_X;
+		
+		if(invincibleTime > 0){
+			invincibleTime--;
+		}
 		
 		collision(objects);
 	}
@@ -133,8 +139,7 @@ public class Player extends GameObject{
 						velY = 1.5f;
 						velX = this.getVelX()/4;
 						if(!Game.isFinished()){
-							this.life--;
-							AudioPlayer.playSfx("splaf");
+							if(!this.isHighlander()) this.getHurt();
 						}
 					}
 					// BOTTOM
@@ -143,8 +148,7 @@ public class Player extends GameObject{
 						velY = -2f;
 						velX = this.getVelX()/4;
 						if(!Game.isFinished()){
-							this.life--;
-							AudioPlayer.playSfx("splaf");
+							if(!this.isHighlander()) this.getHurt();
 						}
 					}
 					// RIGHT
@@ -153,8 +157,7 @@ public class Player extends GameObject{
 						velX = -1.5f;
 						velY = this.getVelY()/4;
 						if(!Game.isFinished()){
-							this.life--;
-							AudioPlayer.playSfx("splaf");
+							if(!this.isHighlander()) this.getHurt();
 						}
 					}
 					// LEFT
@@ -163,8 +166,7 @@ public class Player extends GameObject{
 						velX = 1.5f;
 						velY = this.getVelY()/4;
 						if(!Game.isFinished()){
-							this.life--;
-							AudioPlayer.playSfx("splaf");
+							if(!this.isHighlander()) this.getHurt();
 						}
 					}
 					
@@ -176,32 +178,36 @@ public class Player extends GameObject{
 						y = tempObject.getBounds().get(j).y + tempObject.getBounds().get(j).height;
 						velY = 1.5f;
 						velX = this.getVelX()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							if(!this.isHighlander()) this.getHurt();
+						}
 					}
 					// BOTTOM
 					if(getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())){
 						y = tempObject.getBounds().get(j).y - 64;
 						velY = -2f;
 						velX = this.getVelX()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							if(!this.isHighlander()) this.getHurt();
+						}
 					}
 					// RIGHT
 					if(getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())){	
 						x = tempObject.getBounds().get(j).x - 64;
 						velX = -1.5f;
 						velY = this.getVelY()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							if(!this.isHighlander()) this.getHurt();
+						}
 					}
 					// LEFT
 					if(getBoundsLeft().intersects(tempObject.getBounds().get(j))){ 	
 						x = tempObject.getBounds().get(j).x + tempObject.getBounds().get(j).getBounds().width;
 						velX = 1.5f;
 						velY = this.getVelY()/4;
-						this.life--;
-						AudioPlayer.playSfx("splaf");
+						if(!Game.isFinished()){
+							if(!this.isHighlander()) this.getHurt();
+						}
 					}
 				}
 				else if(tempObject.getBounds().get(j).getId() == ObjectId.Collectable){
@@ -239,7 +245,7 @@ public class Player extends GameObject{
 							velX = velX / 10;
 							Game.setFinished();
 							Game.bgMusic.stop();
-							Game.bgMusic = new AudioPlayer("resources/musics/victory.mp3", false);
+							Game.bgMusic = new AudioPlayer("/musics/victory.mp3", false);
 							Game.bgMusic.play();
 						}
 						
@@ -282,8 +288,10 @@ public class Player extends GameObject{
 	}
 
 	public void render(Graphics g) {
-		g.setColor(Color.blue);
-		g.drawImage(bubble, (int)x, (int)y, null);
+
+		if(!(invincibleTime > 0 && invincibleTime % 10 >= 5))
+			g.drawImage(bubble, (int)x, (int)y, null);
+		
 		
 		if(Window.debug){
 			Graphics2D g2d = (Graphics2D) g;
@@ -323,6 +331,16 @@ public class Player extends GameObject{
 	
 	public String toString(){
 		return "player : {"+(int)this.x+","+(int)this.y+"}";
+	}
+	
+	public void getHurt(){
+		this.invincibleTime += 180;
+		this.life--;
+		AudioPlayer.playSfx("splaf");
+	}
+	
+	public boolean isHighlander(){
+		return invincibleTime > 0;
 	}
 	
 }

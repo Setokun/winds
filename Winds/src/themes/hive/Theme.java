@@ -1,17 +1,33 @@
 package themes.hive;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-import display.Handler;
+import addon.BufferedImageLoader;
 import addon.ThemeBase;
 import annotation.wFiles;
 import annotation.wTheme;
+import core.Arrival;
+import core.Collectable;
+import core.CollectableId;
+import core.CollisionBox;
+import core.Direction;
+import core.GameObject;
+import core.ObjectId;
+import core.SpriteSheet;
+import display.Handler;
+import display.Window;
 
 
-@wTheme(idDB = 3, name = "Brambles", creator = "admin", date = "2015-05-17", description = "Brambles Theme")
-@wFiles(background = "background.jpg", music = "Winds_Ice_Cavern.mp3", logo = "logo.png",
+@wTheme(idDB = 2, name = "Hive", creator = "admin", date = "2015-07-07", description = "Hive Theme")
+@wFiles(background = "background.jpg", music = "Honey.mp3", logo = "logo.png",
 		interactions = "sprites/interactions.png", sprites64 = "sprites/64.png",
 		sprites128 = "sprites/128.png", spritesBoss = "sprites/boss.png")
 
@@ -127,30 +143,34 @@ public class Theme extends ThemeBase {
 		return compatibility;
 	}
 	protected int[][][] initCollisionsList(){
-		return new int[][][] {
-			{{}},
-			{{74,48,16,32, 1},{90,40,38,24, 1},{90,64,38,24,1}},
-			{{0,48,24,24, 1}},
-			{{80,64,16,64, 1},{96,48,32,32, 1},{96,80,24,48, 1}},
-			{{0,48,48,32, 1},{8,80,40,48, 1},{48,56,8,72, 1}},
-			{{0,32,112,48, 1},{112,32,8,32, 1},{76,0,48,32, 1}},
-			{{16,32,16,32, 1},{32,32,96,48, 1},{16,0,40,32, 1}},
-			{{80,0,48,32, 1},{80,32,8,40, 1},{88,32,40,44, 1}},
-			{{0,40,40,40, 1},{40,40,68,36, 1},{108,44,20,36, 1}},
-			{{0,40,128,16, 1},{0,56,128,24, 1},{40,80,48,16, 0}},
-			{{0,40,40,40, 1},{40,40,68,36, 1},{108,44,20,36, 1}},
-			{{80,0,40,56, 1},{76,56,40,72, 1}},
-			{{16,0,40,56, 1},{12,56,40,72, 1}},
-			{{16,0,40,56, 1},{12,56,40,40, 1},{12,96,32,24, 1}},
-			{{80,0,40,56, 1},{76,56,40,40, 1},{76,96,32,24, 1}},
-			{{88,48,20,24, 1},{108,48,20,32, 1},{108,40,20,8, 0}},
-			{{0,40,104,8, 0},{0,48,112,32, 1},{112,56,8,24, 1},{72,80,44,48, 1}},
-			{{8,44,16,84, 1},{24,36,20,92, 1},{44,56,8,72, 1}},
-			{{72,44,16,84, 1},{88,36,20,92, 1},{108,56,8,72, 1}},
-			{{12,64,12,64, 1},{24,48,104,24, 1},{24,72,32,56, 1}},
-			{{16,0,48,48, 1},{0,48,56,24, 1},{0,72,48,8, 1}},
-			{{40,36,56,8, 1},{ 0,44,112,36, 1},{72,80,40,48, 1},{112,48,8,80, 1}}
-		};
+		return new int[][][] {{{}},
+				{{0,0,128,128, 0}},
+				{{0,0,128,8, 0},{120,0,8,128, 0},{0,120,128,8, 0},{0,0,8,128, 0}},
+				{{0,0,28,128, 0},{0,0,128,24, 0},{28,24,16,32, 0}},
+				{{0,0,32,128, 1}},
+				{{0,0,32,128, 1}},
+				{{0,0,32,128, 1}},
+				{{0,0,28,128, 0}},
+				{{0,0,28,108, 0},{0,108,128,20, 0}},
+				{{0,108,128,20, 0}},
+				{{0,108,128,20, 0},{0,104,128,4, 1}},
+				{{0,108,128,20, 0},{0,104,128,4, 1}},
+				{{0,0,128,24, 0}},
+				{{0,0,32, 24, 0}},
+				{{84,0,44,128, 0}},
+				{{96,0,32,24, 0}},
+				{{0,108,24,20, 0}},
+				{{0,0,128,128, 0}},
+				{{0,0,128,128, 0}},
+				{{0,0,16,24, 0},{16,0,12,16, 0}},
+				{{84,108,44,20, 0}},
+				{{0,0,128,24, 0},{84,24,44,104, 0}},
+				{{0,108,128,20, 0},{84,0,44,128, 0},{72,84,12,24, 0}},
+				{{80,0,48,128, 1}},
+				{{80,0,48,128, 1}},
+				{{80,0,48,128, 1}},
+				{{80,0,48,128, 1}}
+			};
 	}
 	protected int[][] initInteractionsCompatibility(){
 		return new int[][]{};
@@ -170,12 +190,242 @@ public class Theme extends ThemeBase {
 		System.out.println("running unknown method");
 	}
 	public void loadInteractions(int x, int y, int id, Handler handler) {
-		// TODO Auto-generated method stub
+
+		Random rand = new Random();
+		switch(id){
 		
+		case 1:
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
+			break;
+		case 2:
+			handler.addObject(new Arrival(x+8, y-24, ObjectId.Arrival));
+			break;
+		case 3:
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+32, CollectableId.coin, ObjectId.Collectable));
+			break;
+		case 4:
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+48, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+16, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+48, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+48, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+48, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+64, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+32, y+64, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+48, y+48, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+48, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+48, y+64, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.coin, ObjectId.Collectable));
+			break;
+		case 5:
+			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
+			break;
+		case 6:
+			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
+			break;
+		case 7:
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.honey, ObjectId.Collectable));
+			break;
+		case 8:
+			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			break;
+		case 9:
+			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			break;
+		case 10:
+			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
+			break;
+		case 11:
+			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
+			break;
+		case 12:
+			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
+			break;
+		case 13:
+			handler.addObject(new Boss(x   , y   , ObjectId.Enemy));
+			break;
+		}
 	}
 	public void loadFront(Handler handler) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	private static class Enemy extends GameObject{
+	
+		//private Animation animation;
+	
+	private BufferedImage[] sprites = new BufferedImage[2];
+	private ArrayList<CollisionBox> collisions;
+	private int width = 0, widthPath;
+	private boolean facingRight;
+	private Direction direction;
+	
+	
+	
+	public Enemy(float x, float y,ObjectId id, int widthPath, Direction direction) {
+		super(x, y, id);
+		BufferedImageLoader loader = new BufferedImageLoader();
+		sprites[0] = new SpriteSheet(loader.loadImage("/enemies/boss_bee.png"), 96).grabImage(0, 0);
+		sprites[1] = new SpriteSheet(loader.loadImage("/enemies/boss_bee_reverse.png"), 96).grabImage(0, 0);
+		this.widthPath = widthPath;
+		this.direction = direction;
+	
+		this.collisions = new ArrayList<CollisionBox>();
+	
+		this.collisions.add( new CollisionBox((int)x+4, (int)y+20, 28, 20, ObjectId.Enemy) );
+		//this.collisions.add( new CollisionBox((int)x+40, (int)y, 16, 48, ObjectId.Boss) );
+			
+			
+		}
+	
+		public void tick(ArrayList<GameObject> object) {
+			
+			if(direction == Direction.left || direction == Direction.right){
+				if( this.widthPath > 0){
+					if(width == this.widthPath){facingRight = false;}
+					if(width == 0){facingRight = true;}
+					
+					if(facingRight){
+						this.x+=(direction == Direction.right)?1:-1;
+						for (int i = 0; i < collisions.size(); i++) {
+							getBounds().get(i).x++;
+						}
+						width++;
+					}
+					else{
+						this.x-=(direction == Direction.right)?1:-1;
+						for (int i = 0; i < collisions.size(); i++) {
+							getBounds().get(i).x--;
+						}
+						width--;
+					}
+				}
+			}
+			
+			if(direction == Direction.up || direction == Direction.down){
+				if( this.widthPath > 0){
+					if(width == this.widthPath){facingRight = false;}
+					if(width == 0){facingRight = true;}
+					
+					if(facingRight){
+						this.y+=(direction == Direction.down)?1:-1;
+						for (int i = 0; i < collisions.size(); i++) {
+							getBounds().get(i).y+=(direction == Direction.down)?1:-1;
+						}
+						width++;
+					}
+					else{
+						this.y-=(direction == Direction.down)?1:-1;
+						for (int i = 0; i < collisions.size(); i++) {
+							getBounds().get(i).y-=(direction == Direction.down)?1:-1;
+						}
+						width--;
+					}
+				}
+			}
+		}
+	
+		public void render(Graphics g) {
+			if(facingRight)
+				g.drawImage(sprites[0], (int)x, (int)y, 48, 48, null);
+			else
+				g.drawImage(sprites[1], (int)x, (int)y, 48, 48, null);
+			
+			if(Window.debug){
+				if(this.getBounds() != null){
+					Graphics2D g2d = (Graphics2D) g;
+					g.setColor(Color.red);
+	
+					for (int i = 0; i < getBounds().size(); i++) {
+						if(getBounds().get(i).getId() == ObjectId.Enemy)
+							g2d.setColor(Color.YELLOW);
+						g2d.draw(getBounds().get(i).getBounds());
+					}
+				}
+			}
+		}
+	
+		public ArrayList<CollisionBox> getBounds() {
+			return collisions;
+		}
+	}
+
+	private static class Boss extends GameObject{
+		int count;
+		
+		private static BufferedImage sprite;
+		private ArrayList<CollisionBox> collisions;
+		
+		static {
+			BufferedImageLoader loader = new BufferedImageLoader();
+			sprite = new SpriteSheet(loader.loadImage("/enemies/boss_bee.png"), 96).grabImage(0, 0);
+		}
+		
+		public Boss(float x, float y,ObjectId id) {
+			super(x, y, id);
+			
+			this.count = 0;
+			this.collisions = new ArrayList<CollisionBox>();
+
+			this.collisions.add( new CollisionBox((int)x+8, (int)y+40, 56, 40, ObjectId.Boss) );
+			//this.collisions.add( new CollisionBox((int)x+40, (int)y, 16, 48, ObjectId.Boss) );
+			
+			
+		}
+
+		public void tick(ArrayList<GameObject> objects) {
+			count++;
+			GameObject player = objects.get(3600);
+			if(count >= 3){
+				
+				this.x+=((player.getX()-this.x)>0)?1:-1;
+				this.y+=((player.getY()-this.y)>0)?1:-1;
+				this.collisions.get(0).x+=((player.getX()-this.x)>0)?1:-1;
+				this.collisions.get(0).y+=((player.getY()-this.y)>0)?1:-1;
+				count = 0;
+			}
+			
+		}
+
+		public void render(Graphics g) {
+			g.drawImage(sprite, (int)x, (int)y, 96, 96, null);
+			
+			if(Window.debug){
+				if(this.getBounds() != null){
+					Graphics2D g2d = (Graphics2D) g;
+					g.setColor(Color.red);
+
+					for (int i = 0; i < getBounds().size(); i++) {
+						if(getBounds().get(i).getId() == ObjectId.Boss)
+							g2d.setColor(Color.MAGENTA);
+						g2d.draw(getBounds().get(i).getBounds());
+					}
+				}
+			}
+		}
+
+		public ArrayList<CollisionBox> getBounds() {
+			return collisions;
+		}
 	}
 	
 }
