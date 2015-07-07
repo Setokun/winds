@@ -220,7 +220,7 @@ public class Scores extends JPanel {
 	}	
 	private void initUploadMyScoresButton() {
 		btnUploadMyScores = new JButton();
-		btnUploadMyScores.setIcon(new javax.swing.ImageIcon("resources/Buttons/UploadMyScores.png"));
+		btnUploadMyScores.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/UploadMyScores.png")));
 		btnUploadMyScores.setBorder(new javax.swing.border.SoftBevelBorder(0));
 		btnUploadMyScores.setBorderPainted(false);
 		btnUploadMyScores.setContentAreaFilled(false);
@@ -233,17 +233,17 @@ public class Scores extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				btnUploadMyScores.setIcon(new ImageIcon("resources/Buttons/UploadMyScores.png"));
+				btnUploadMyScores.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/UploadMyScores.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				btnUploadMyScores.setIcon(new ImageIcon("resources/Buttons/UploadMyScores_hover.png"));
+				btnUploadMyScores.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/UploadMyScores_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
 	private void initBackButton() {
 		jBtnBack = new JButton();
-		jBtnBack.setIcon(new javax.swing.ImageIcon("resources/Buttons/Back.png"));
+		jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
 
 		jBtnBack.setBorder(new javax.swing.border.SoftBevelBorder(0));
 		jBtnBack.setBorderPainted(false);
@@ -257,10 +257,10 @@ public class Scores extends JPanel {
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+				jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
+				jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
@@ -284,7 +284,7 @@ public class Scores extends JPanel {
 			listTrophiesToDisplay = new Object[listTrophies.length][2];
 			for(int i=0; i<listTrophies.length; i++){
 				listTrophiesToDisplay[i][0] = listTrophies[i][0];
-				listTrophiesToDisplay[i][1] = listTrophies[i][1].equals("ok")? new ImageIcon("resources/tick.png"):null;
+				listTrophiesToDisplay[i][1] = listTrophies[i][1].equals("ok")? new ImageIcon(this.getClass().getResource("/resources/tick.png")):null;
 			}
 		}
 		return listTrophiesToDisplay;

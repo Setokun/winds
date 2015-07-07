@@ -198,7 +198,7 @@ public class ConfigMenu extends JPanel{
 
 	private void initSaveButton() {
 		btnSave = new JButton();
-		btnSave.setIcon(new ImageIcon("resources/Buttons/Save.png"));
+		btnSave.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Save.png")));
 		btnSave.setBorder(new SoftBevelBorder(0));
 		btnSave.setBorderPainted(false);
 		btnSave.setContentAreaFilled(false);
@@ -211,10 +211,10 @@ public class ConfigMenu extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				btnSave.setIcon(new ImageIcon("resources/Buttons/Save.png"));
+				btnSave.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Save.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				btnSave.setIcon(new ImageIcon("resources/Buttons/Save_hover.png"));
+				btnSave.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Save_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
@@ -222,7 +222,7 @@ public class ConfigMenu extends JPanel{
 
 	private void initBackButton() {
 		jBtnBack = new JButton();
-		jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+		jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
 		jBtnBack.setBorder(new SoftBevelBorder(0));
 		jBtnBack.setBorderPainted(false);
 		jBtnBack.setContentAreaFilled(false);
@@ -235,10 +235,10 @@ public class ConfigMenu extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+				jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
+				jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});

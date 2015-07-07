@@ -115,7 +115,7 @@ public class LevelCategorySelector extends JPanel{
 	private void initToModerateButton() {
     	jBtnLevelsToModerate = new JButton();
         jBtnLevelsToModerate.setFont(windsPolice24);
-        jBtnLevelsToModerate.setIcon(new ImageIcon("resources/Buttons/LevelsToModerate.png"));
+        jBtnLevelsToModerate.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/LevelsToModerate.png")));
         jBtnLevelsToModerate.setBorder(new SoftBevelBorder(0));
         jBtnLevelsToModerate.setBorderPainted(false);
         jBtnLevelsToModerate.setContentAreaFilled(false);
@@ -128,10 +128,10 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnLevelsToModerate.setIcon(new ImageIcon("resources/Buttons/LevelsToModerate.png"));
+				jBtnLevelsToModerate.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/LevelsToModerate.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnLevelsToModerate.setIcon(new ImageIcon("resources/Buttons/LevelsToModerate_hover.png"));
+				jBtnLevelsToModerate.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/LevelsToModerate_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
@@ -139,7 +139,7 @@ public class LevelCategorySelector extends JPanel{
 	private void initMyLevelsButton() {
     	jBtnMyLevels = new JButton();
     	jBtnMyLevels.setFont(windsPolice24);
-        jBtnMyLevels.setIcon(new ImageIcon("resources/Buttons/MyLevels.png"));
+        jBtnMyLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/MyLevels.png")));
         jBtnMyLevels.setBorder(new SoftBevelBorder(0));
         jBtnMyLevels.setBorderPainted(false);
         jBtnMyLevels.setContentAreaFilled(false);
@@ -152,10 +152,10 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnMyLevels.setIcon(new ImageIcon("resources/Buttons/MyLevels.png"));
+				jBtnMyLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/MyLevels.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnMyLevels.setIcon(new ImageIcon("resources/Buttons/MyLevels_hover.png"));
+				jBtnMyLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/MyLevels_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
@@ -163,7 +163,7 @@ public class LevelCategorySelector extends JPanel{
 	private void initCustomLevelsButton() {
 		jBtnCustomLevels = new JButton();
 		jBtnCustomLevels.setFont(windsPolice24);
-        jBtnCustomLevels.setIcon(new ImageIcon("resources/Buttons/CustomLevels.png"));
+        jBtnCustomLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/CustomLevels.png")));
         jBtnCustomLevels.setBorder(new SoftBevelBorder(0));
         jBtnCustomLevels.setBorderPainted(false);
         jBtnCustomLevels.setContentAreaFilled(false);
@@ -176,10 +176,10 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnCustomLevels.setIcon(new ImageIcon("resources/Buttons/CustomLevels.png"));
+				jBtnCustomLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/CustomLevels.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnCustomLevels.setIcon(new ImageIcon("resources/Buttons/CustomLevels_hover.png"));
+				jBtnCustomLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/CustomLevels_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
@@ -187,7 +187,7 @@ public class LevelCategorySelector extends JPanel{
 	private void initBasicLevelsButton() {
     	jBtnBasicLevels = new JButton();
         jBtnBasicLevels.setFont(windsPolice24);
-        jBtnBasicLevels.setIcon(new ImageIcon("resources/Buttons/BasicLevels.png"));
+        jBtnBasicLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/BasicLevels.png")));
         jBtnBasicLevels.setBorder(new SoftBevelBorder(0));
         jBtnBasicLevels.setBorderPainted(false);
         jBtnBasicLevels.setContentAreaFilled(false);
@@ -200,10 +200,10 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnBasicLevels.setIcon(new ImageIcon("resources/Buttons/BasicLevels.png"));
+				jBtnBasicLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/BasicLevels.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnBasicLevels.setIcon(new ImageIcon("resources/Buttons/BasicLevels_hover.png"));
+				jBtnBasicLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/BasicLevels_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
@@ -211,7 +211,7 @@ public class LevelCategorySelector extends JPanel{
 	private void initBackButton() {
     	jBtnBack = new JButton();
         jBtnBack.setFont(windsPolice24);
-        jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+        jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
         jBtnBack.setBorder(new SoftBevelBorder(0));
         jBtnBack.setBorderPainted(false);
         jBtnBack.setContentAreaFilled(false);
@@ -224,10 +224,10 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back.png"));
+				jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
 			}
 			public void mouseEntered(MouseEvent e) {
-				jBtnBack.setIcon(new ImageIcon("resources/Buttons/Back_hover.png"));
+				jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back_hover.png")));
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
