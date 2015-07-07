@@ -264,7 +264,6 @@ public class ServerConnection {
 		return true;
 	}
 	
-
 	@SuppressWarnings("unused")
 	/*OK*/public static boolean downloadLevel(int idLevel){
 		try {
@@ -335,7 +334,7 @@ public class ServerConnection {
 			params.put("scores", infosToUpload.toString());
 			
 			try { 	response = sendRequest(params); } 
-			catch (Exception e) { e.printStackTrace(); }
+			catch (Exception e) {}
 		}
 		return response.size() > 0 ? scores.size() == Integer.valueOf(response.get(0)) : false;
 	}
