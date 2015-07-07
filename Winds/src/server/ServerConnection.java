@@ -243,8 +243,8 @@ public class ServerConnection {
 						+"&password="+ Window.profile.getPassword()
 						+"&action=downloadTheme&idTheme="+ idTheme)
 					.openConnection();  
-				StringBuilder sb = new StringBuilder(AddonManager.currentPath+ "/resources/themes/");
-				sb.append(theme.getFileName().replaceAll("\"", ""));
+				StringBuilder sb = new StringBuilder(AddonManager.getThemesPath());
+				sb.append(theme.getName().replaceAll("\"", ""));
 				FileOutputStream fos = new FileOutputStream(sb.toString());
 				InputStream in = ucon.getInputStream();
 				int b = 0;

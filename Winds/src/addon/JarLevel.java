@@ -127,7 +127,7 @@ public class JarLevel {
 		
 		if( !levelsFolder.canWrite() )
 			throw new Exception("No writing access rights onto levels folder");
-		if(json.length() >= (int) levelsFolder.getFreeSpace())
+		if((long)json.length() >= levelsFolder.getFreeSpace())
 			throw new Exception("Not enough free space into HDD");
 	}
 	/**
