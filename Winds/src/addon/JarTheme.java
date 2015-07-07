@@ -22,6 +22,7 @@ import annotation.wTheme;
 
 public class JarTheme {
 	private ThemeBase theme;
+	private String JarFilePath;
 	private Class<?> mainClass;
 	private String music;
 	private BufferedImage logo, background, interactions,
@@ -204,6 +205,9 @@ public class JarTheme {
 	public Class<?> getMainClass(){
 		return mainClass;
 	}
+	public String getJarFilePath(){
+		return JarFilePath;
+	}
 	public Map<Point, Integer[]> getSpritesCompatibility(){
 		return theme.spriteCompatibility;
 	}
@@ -239,6 +243,12 @@ public class JarTheme {
 	}
 	public BufferedImage getSpritesBoss() {
 		return spritesBoss;
+	}
+	//endregion
+	
+	//region Class getters
+	public void setJarFilePath(String jarFilePath){
+		this.JarFilePath = jarFilePath;
 	}
 	//endregion
 	
