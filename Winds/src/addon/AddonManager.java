@@ -76,8 +76,10 @@ public class AddonManager {
 	 */
 	/*OK*/public static void addJarTheme(File jarFile){
 		JarTheme current = validateJarTheme(jarFile);
-		if(current != null && !jarThemesList.contains(current))
+		if(current != null && !jarThemesList.contains(current)){
+			current.setJarFilePath(jarFile.getAbsolutePath().replace("\\", "/"));
 			jarThemesList.add(current);
+		}
 	}
 	/**
 	 * Get the theme which has the specified ID.
