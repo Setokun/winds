@@ -24,8 +24,6 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
 import account.Profile;
 import addon.AddonManager;
 import addon.JarLevel;
@@ -52,7 +50,7 @@ public class ServerConnection {
 		Profile profile = null;
 
 		try {
-			URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+DigestUtils.md5(password)+"&action=downloadProfile");
+			URL monURL = new URL(URL_API_SERVER+"?email="+email+"&password="+/*DigestUtils.md5(*/password/*)*/+"&action=downloadProfile");
 	        URLConnection yc = monURL.openConnection();
 	        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 	        
@@ -87,17 +85,22 @@ public class ServerConnection {
 			try {
 				String s = "INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
 						+ "VALUES ("+Window.profile.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");";
+				DBClass.connect();
 				DBClass.executeQuery(s);
 			} catch (ClassNotFoundException e) {
 			} catch (SQLException e) {
 				try {
-					DBClass.executeQuery("UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()
-												+", nbItems="+score.getNbItems()+" WHERE idLevel="+score.getIdLevel()
-												+" AND idPlayer="+Window.profile.getId());
+					String s =  "UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()
+							+", nbItems="+score.getNbItems()+" WHERE idLevel="+score.getIdLevel()
+							+" AND idPlayer="+Window.profile.getId();
+					DBClass.connect();
+					DBClass.executeQuery(s);
 				} catch (ClassNotFoundException e1) {
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, "Unable to save your scores from the server, please try again...");
 				}
+			}finally{
+				DBClass.disconnect();
 			}
 		}
 		

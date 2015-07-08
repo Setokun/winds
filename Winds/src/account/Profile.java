@@ -43,17 +43,21 @@ public class Profile {
 	
 	public void disconnect(){
 		try {
+			DBClass.connect();
 			DBClass.executeQuery("UPDATE users SET current=false WHERE id="+this.id);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			DBClass.disconnect();
 		}
 	}
 	
 	public static Profile connect(String email, String password){
 		
 		try {
+			DBClass.connect();
 			ResultSet r = DBClass.requestQuery("SELECT * FROM users WHERE email='"+email+"' AND password='"+password+"'");
     		if(r.next()){
     			Profile p = new Profile();
@@ -72,6 +76,8 @@ public class Profile {
 			return null;
 		} catch (ClassNotFoundException e) {e.printStackTrace();
 		} catch (SQLException e) {e.printStackTrace();
+		} finally {
+			DBClass.disconnect();
 		}
 		
 		return null;
@@ -90,6 +96,7 @@ public class Profile {
 				if(isExistingEmail(email)){
 					Profile profile = connectFromServer(email, password);
 					if(profile.getEmail() != null){
+						DBClass.connect();
 						DBClass.executeQuery("UPDATE users set password='"+password+"', current=true WHERE email='"+email+"'");
 						return 1;
 					}else{
@@ -101,6 +108,7 @@ public class Profile {
 					Profile profile = connectFromServer(email, password);
 					if(profile == null)return 0;
 					if(profile.getEmail() == null)return 2;
+					DBClass.connect();
 					DBClass.executeQuery("INSERT INTO users (id, email, password, pseudo, userType, current, music, effects, resolution) "
 							+ "VALUES ('"+profile.getId()+"','"+profile.getEmail()+"','"+password+"','"+profile.getPseudo()+"','"+profile.getUserType()+"',true, 5, 5, 1);");
 					return 3;
@@ -108,18 +116,24 @@ public class Profile {
 			} 
 			catch (ClassNotFoundException e) {e.printStackTrace();}
 			catch (SQLException e) {e.printStackTrace();}
+			finally{
+				DBClass.disconnect();
+			}
 		return 0;
 	}
 	
 	public static boolean isExistingEmail(String email){
 		
 		try {
+			DBClass.connect();
     		ResultSet r = DBClass.requestQuery("SELECT * FROM users WHERE email='"+email+"'");
     		if(r.next()){
     			return true;
     		}
 		} catch (ClassNotFoundException e) {e.printStackTrace();
 		} catch (SQLException e) {e.printStackTrace();
+		} finally{
+			DBClass.disconnect();
 		}
 		
 		return false;
@@ -128,6 +142,7 @@ public class Profile {
  	public static Profile getCurrentPlayer(){
     	
     	try {
+    		DBClass.connect();
     		ResultSet r = DBClass.requestQuery("SELECT * FROM users WHERE current=true");
     		if(r.next()){
     			Profile p = new Profile();
@@ -144,6 +159,8 @@ public class Profile {
 			return null;
 		} catch (ClassNotFoundException e) {e.printStackTrace();
 		} catch (SQLException e) {e.printStackTrace();
+		}finally{
+			DBClass.disconnect();
 		}
     	
     	return null;
@@ -152,16 +169,20 @@ public class Profile {
 	public Profile updateConfiguration(int music, int soundEffects, int resolution){
 		
 		try {
+			DBClass.connect();
     		DBClass.requestQuery("UPDATE users SET music="+music+", effects="+soundEffects+", resolution="+resolution+" WHERE id="+this.getId());
     		return connect(Window.profile.getEmail(), Window.profile.getPassword());
 		} catch (ClassNotFoundException e) {e.printStackTrace();
 		} catch (SQLException e) {e.printStackTrace();
+		} finally{
+			DBClass.disconnect();
 		}
 		return Window.profile;
 	}
 	
 	public Dimension getScreenDimensions(){
 		try {
+			DBClass.connect();
     		ResultSet r = DBClass.requestQuery("SELECT width, height FROM resolutions WHERE id="+this.resolution);
     		if(r.next()){
     			return new Dimension(r.getInt("width"), r.getInt("height"));
@@ -169,6 +190,8 @@ public class Profile {
 			return null;
 		} catch (ClassNotFoundException e) {e.printStackTrace();
 		} catch (SQLException e) {e.printStackTrace();
+		} finally{
+			DBClass.disconnect();
 		}
     	
     	return null;	

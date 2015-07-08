@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import database.DBClass;
 import menus.Login;
 import menus.MainMenu;
 import account.Profile;
@@ -40,6 +41,12 @@ public class Window {
 		main.setSize(new Dimension(800, 550));
 		main.setResizable(false);
 		main.setLocationRelativeTo(null);
+		
+		if(!DBClass.existStructure()){
+			DBClass.createStructures();
+			DBClass.createStartData();
+		}
+		
 		
 		try {
 			main.setIconImage(ImageIO.read(Window.class.getClass().getResource("/bubulle.png")));

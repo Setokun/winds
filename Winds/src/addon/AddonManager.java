@@ -25,16 +25,15 @@ public class AddonManager {
 
 	static {
 		// paths initialisation
-		//String currentPath = JarLevel.class.getResource("").getPath().replace("%20", " ");
 		currentPath = JarLevel.class.getProtectionDomain().getCodeSource().getLocation().getFile().replace("Winds.jar", "").substring(1);
 		themesPath = currentPath+"resources/themes/";
 		levelsPath = currentPath+"resources/levels/";
 		commonPath = currentPath+"resources/common/";
-		/*themesPath = currentPath.replace("addon/", "resources/themes/");
-		levelsPath = currentPath.replace("addon/", "resources/levels/");
-		commonPath = currentPath.replace("addon/", "resources/common/");*/
-		
+		File folder = new File(currentPath+"resources/");
+		if(!folder.exists())
+			folder.mkdir();
 		// lists initialisation
+		
 		jarThemesList = new ArrayList<JarTheme>();
 		jarLevelsList = new ArrayList<JarLevel>();
 		collectJarThemes();
