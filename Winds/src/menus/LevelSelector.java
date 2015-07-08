@@ -32,21 +32,13 @@ public class LevelSelector extends JPanel{
     private JButton jBtnNext, jBtnPrevious, jBtnBack;
     private LevelButton jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8, jButton9, jButton10, jButton11, jButton12, jButton13, jButton14, jButton15;
     private LevelButton[] buttons = {jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8, jButton9, jButton10, jButton11, jButton12, jButton13, jButton14, jButton15};
-    
     private JLabel jLblTitle, jLblNumPage;
-    
-    private int compteur, nbElements, nbPages, numPage = 0;
-    
+    private int compteur, nbElements, nbPages, numPage = 0;    
     private JarLevel[] jarLevels = new JarLevel[nbElements];
     private ArrayList<JarLevel> levelsToDisplay = new ArrayList<JarLevel>();
-    
     Boolean hasPrevious = false, hasNext = true;
-    
     JPanel southMiddle, jSouthWest, jSouthEast, south, north, jNorthWest, jNorthEast, middle, grid;
-    
     String title;
-    
-    //endregion
     
 	public LevelSelector(Type levelType) {
 		
@@ -280,8 +272,8 @@ public class LevelSelector extends JPanel{
 	}
 	private void initializeFont() {
 		try {
-    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
-    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,24F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,36F);
 		} catch (FontFormatException | IOException e) {
 			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
     		windsPolice36 = new Font ("Serif", Font.BOLD, 36);

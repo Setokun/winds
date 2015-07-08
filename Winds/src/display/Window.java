@@ -49,7 +49,7 @@ public class Window {
 		
 		
 		try {
-			main.setIconImage(ImageIO.read(Window.class.getClass().getResource("/bubulle.png")));
+			main.setIconImage(ImageIO.read(Window.class.getClass().getResource("/resources/collectables/bubulle.png")));
 		} catch (IOException e) { e.printStackTrace(); }
 		
 		profile = Profile.getCurrentPlayer();

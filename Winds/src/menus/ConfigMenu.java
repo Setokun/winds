@@ -246,8 +246,8 @@ public class ConfigMenu extends JPanel{
 
 	private void initializeFont() {
 		try {
-    		windsPolice30 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,30F);
-    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+    		windsPolice30 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,30F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,36F);
 		} catch (FontFormatException | IOException e) {
 			windsPolice30 = new Font ("Serif", Font.BOLD, 30);
 			windsPolice36 = new Font ("Serif", Font.BOLD, 36);

@@ -14,9 +14,9 @@ public class Collectable extends GameObject{
 	
 	static {
 		BufferedImageLoader loader = new BufferedImageLoader();
-		sprites[0] = new SpriteSheet(loader.loadImage("/piece_1.png"), 32).grabImage(0, 0);
-		sprites[1] = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
-		sprites[2] = new SpriteSheet(loader.loadImage("/collectables/honey.png"), 32).grabImage(0, 0);
+		sprites[0] = new SpriteSheet(loader.loadImage("/resources/collectables/piece_1.png"), 32).grabImage(0, 0);
+		sprites[1] = new SpriteSheet(loader.loadImage("/resources/collectables/bubulle.png"), 25).grabImage(0, 0);
+		sprites[2] = new SpriteSheet(loader.loadImage("/resources/collectables/honey.png"), 32).grabImage(0, 0);
 	}
 	
 	public Collectable(float x, float y, CollectableId collectableId, ObjectId id) {

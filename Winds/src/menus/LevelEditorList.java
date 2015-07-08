@@ -73,8 +73,8 @@ public class LevelEditorList extends JPanel {
 	}
 	/*OK*/private void initComponentsConfig() {
     	try {
-    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,18F);
-    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,18F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,36F);
 		} catch (FontFormatException | IOException e) {
 			windsPolice18 = new Font ("Serif", Font.BOLD, 18);
     		windsPolice36 = new Font ("Serif", Font.BOLD, 36);

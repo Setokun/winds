@@ -213,7 +213,7 @@ public class Game extends Canvas implements Runnable{
 				if(!defeat){
 					defeat = true;
 					bgMusic.stop();
-					Game.bgMusic = new AudioPlayer("/musics/gameover.mp3", false);
+					Game.bgMusic = new AudioPlayer("/resources/musics/gameover.mp3", false);
 					Game.bgMusic.play();
 				}	
 				g.drawImage(gameover, 0, 0, WIDTH, HEIGHT, this);
@@ -263,11 +263,11 @@ public class Game extends Canvas implements Runnable{
 	private void initBackgroundsAndImages() {
 		BufferedImageLoader loader = new BufferedImageLoader();
 		bg = AddonManager.getLoadedJarTheme().getBackground();
-		pauseImage = loader.loadImage("/background/menu_pause.png");
-		gameover = loader.loadImage("/background/gameover.png");
-		victory = loader.loadImage("/background/victory.png");
+		pauseImage = loader.loadImage("/resources/background/menu_pause.png");
+		gameover = loader.loadImage("/resources/background/gameover.png");
+		victory = loader.loadImage("/resources/background/victory.png");
 		//life sprite
-		bubulle = new SpriteSheet(loader.loadImage("/bubulle.png"), 25).grabImage(0, 0);
+		bubulle = new SpriteSheet(loader.loadImage("/resources/collectables/bubulle.png"), 25).grabImage(0, 0);
 	}
 	private void endLevel() {
 		if(!getPause() && player.getLife() > 0 && !finished && !defeat)
@@ -317,7 +317,7 @@ public class Game extends Canvas implements Runnable{
 	}
 	private void initializeFont() {
 		try {
-    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,36F);
 		} catch (FontFormatException | IOException e) {
 			windsPolice36 = new Font ("Serif", Font.BOLD, 18);
 		}

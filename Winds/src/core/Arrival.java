@@ -17,8 +17,8 @@ public class Arrival extends GameObject {
 	
 	static {
 		BufferedImageLoader loader = new BufferedImageLoader();
-		sprites[0] = new SpriteSheet(loader.loadImage("/arrival/pole_nok.png"), 64).grabImage(0, 0);
-		sprites[1] = new SpriteSheet(loader.loadImage("/arrival/pole_ok.png"), 64).grabImage(0, 0);
+		sprites[0] = new SpriteSheet(loader.loadImage("/resources/arrival/pole_nok.png"), 64).grabImage(0, 0);
+		sprites[1] = new SpriteSheet(loader.loadImage("/resources/arrival/pole_ok.png"), 64).grabImage(0, 0);
 	}
 	
 	public Arrival(float x, float y, ObjectId id) {

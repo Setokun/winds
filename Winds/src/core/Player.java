@@ -31,7 +31,7 @@ public class Player extends GameObject{
 	
 	static {
 		BufferedImageLoader loader = new BufferedImageLoader();
-		SpriteSheet spriteBubble = new SpriteSheet(loader.loadImage("/bulle2.png"), 64);
+		SpriteSheet spriteBubble = new SpriteSheet(loader.loadImage("/resources/bubble.png"), 64);
 		bubble = spriteBubble.grabImage(0, 0);
 	}
 	
@@ -245,7 +245,7 @@ public class Player extends GameObject{
 							velX = velX / 10;
 							Game.setFinished();
 							Game.bgMusic.stop();
-							Game.bgMusic = new AudioPlayer("/musics/victory.mp3", false);
+							Game.bgMusic = new AudioPlayer("/resources/musics/victory.mp3", false);
 							Game.bgMusic.play();
 						}
 						
