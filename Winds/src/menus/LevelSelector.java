@@ -66,9 +66,15 @@ public class LevelSelector extends JPanel{
     	compteur = nbElements % 15;
     	if(compteur == 0 && nbElements != 0) compteur = 15;
 		
+    	int[] idThemesInstalled = AddonManager.getThemesInstalledIds();
+    	
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
 			if(LevelData.getStatus(jarLevels[i].getLevel().getIdDB()) == null || !LevelData.getStatus(jarLevels[i].getLevel().getIdDB()).equals("desactivated"))
-				levelsToDisplay.add(jarLevels[i]);
+				for (int j = 0; j < idThemesInstalled.length; j++) {
+					if(idThemesInstalled[j] == jarLevels[i].getLevel().getIdTheme()){
+						levelsToDisplay.add(jarLevels[i]);
+					}
+				}				
 		}
 		this.removeAll();
 		
