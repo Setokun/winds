@@ -16,7 +16,7 @@ import account.Profile;
 public class Window {
 	public static final Dimension DIM_STANDARD = new Dimension(800, 550);
 	public static final Dimension DIM_EDITOR = new Dimension(1024, 600);
-	public static final boolean debug = false;
+	public static final boolean debug = true;
 	
 	public static Profile profile = null;
 	private static JFrame main;

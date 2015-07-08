@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import addon.AddonManager;
 import addon.BufferedImageLoader;
 import addon.ThemeBase;
 import annotation.wFiles;
@@ -267,6 +268,8 @@ public class Theme extends ThemeBase {
 		System.out.println("running unknown method");
 	}
 	
+	public static int[] weights = {0,1,1,2,2,5,5,2,10,10,10,10,10,8,8,1,5,3,3,3,3,5};
+	
 	private static class Enemy extends GameObject{
 	
 		//private Animation animation;
@@ -372,6 +375,8 @@ public class Theme extends ThemeBase {
 		
 		private static BufferedImage sprite;
 		private ArrayList<CollisionBox> collisions;
+		private Hunt hunt;
+		private Point nextStep;
 		
 		static {
 			BufferedImageLoader loader = new BufferedImageLoader();
@@ -381,27 +386,86 @@ public class Theme extends ThemeBase {
 		public Boss(float x, float y,ObjectId id) {
 			super(x, y, id);
 			
+			hunt = new Hunt();
+			this.nextStep = new Point((int)x/128,(int)y/128);
 			this.count = 0;
 			this.collisions = new ArrayList<CollisionBox>();
 
 			this.collisions.add( new CollisionBox((int)x+8, (int)y+40, 56, 40, ObjectId.Boss) );
-			//this.collisions.add( new CollisionBox((int)x+40, (int)y, 16, 48, ObjectId.Boss) );
 			
 			
 		}
 
 		public void tick(ArrayList<GameObject> objects) {
+			
 			count++;
 			GameObject player = objects.get(3600);
-			if(count >= 3){
+			Point bossPosition = new Point((int)x/128, (int)y/128);
+			
+			if(count >= 0){
+				Point PlayerPosition = new Point((int)player.getX()/128, (int)player.getY()/128);
+				//System.out.println("player :"+PlayerPosition.toString());
+				//System.out.println("Boss :"+bossPosition);
+				nextStep = hunt.getNextMove(bossPosition, PlayerPosition);
+				//System.out.println("prochaine étape :"+nextStep.toString());
+				goToPoint(nextStep);
+
+				/*if(bossPosition.x - nextStep.x > 0){
+					this.velX = -1;
+					this.x+=velX;
+					this.collisions.get(0).x += this.velX;
+				}else if(bossPosition.x - nextStep.x < 0){
+					this.velX = 1;
+					this.x+=velX;
+					this.collisions.get(0).x += this.velX;
+				}
+				else{
+					x+= (player.getX() - this.x > 0)?1:-1;
+					this.collisions.get(0).x += (player.getX() - this.x > 0)?1:-1;
+				}
 				
-				this.x+=((player.getX()-this.x)>0)?1:-1;
-				this.y+=((player.getY()-this.y)>0)?1:-1;
-				this.collisions.get(0).x+=((player.getX()-this.x)>0)?1:-1;
-				this.collisions.get(0).y+=((player.getY()-this.y)>0)?1:-1;
-				count = 0;
+				if(bossPosition.y - nextStep.y > 0){
+					this.velY = -1;
+					this.y+=velY;
+					this.collisions.get(0).y += velY;
+				}else if(bossPosition.y - nextStep.y < 0){
+					this.velY = 1;
+					this.y+=velY;
+					this.collisions.get(0).y += velY;
+				}
+				else{
+					if(player.getY() - this.y > 0){
+						y+= 1;
+						this.collisions.get(0).y += 1;
+					}
+					if(player.getY() - this.y > 0){
+						y-= 1;
+						this.collisions.get(0).y -= 1;
+					}
+				}*/
+				
+			count = 0;
 			}
 			
+			
+		}
+		
+		private void goToPoint(Point p){
+			if(p.x-((int)(this.x / 128))>0){
+				x+=1;
+				this.collisions.get(0).x+=1;
+			}else if(p.x-((int)(this.x / 128))<0){
+				x-=1;
+				this.collisions.get(0).x-=1;
+			}
+			
+			if(p.y-((int)(this.y / 128))>0){
+				y+=1;
+				this.collisions.get(0).y+=1;
+			}else if(p.y-((int)(this.y / 128))<0){
+				y-=1;
+				this.collisions.get(0).y-=1;
+			}
 		}
 
 		public void render(Graphics g) {
@@ -424,6 +488,133 @@ public class Theme extends ThemeBase {
 		public ArrayList<CollisionBox> getBounds() {
 			return collisions;
 		}
+	}
+	
+	private static class Hunt {
+		private static final int max = 56, margin = 2;
+		private Point origin, target;
+		
+		
+		public Hunt(){}
+		
+		/*OK*/public Point getNextMove(Point originPoint, Point targetPoint) {
+			origin  = originPoint;
+			target  = targetPoint;
+			
+			int distX = Math.abs(origin.x - target.x),
+				distY = Math.abs(origin.y - target.y);
+			boolean isInExplorationArea = distX - margin <= max && distY - margin <= max;
+			//System.out.println(distX +"  "+ distY +"  "+ isInExplorationArea);
+			
+			return isInExplorationArea ? new AlgorithmA().getNextPoint()
+									   : getStandardNextPoint();
+		}
+		/*OK*/private Point getStandardNextPoint(){
+			Point p = new Point();
+			int x0 = origin.x, x1 = target.x,
+				y0 = origin.y, y1 = target.y;
+			
+			if(Math.abs(x0 - x1) >= Math.abs(y0 - y1)){
+				p.x = x0 + (x0 < x1 ? +1 : -1);
+				p.y = y0;
+			} else {
+				p.x = x0;
+				p.y = y0 + (y0 < y1 ? +1 : -1);
+			}
+			return p;
+		}
+
+		private class AlgorithmA {
+			private int dimLvl;
+			private Point current, zero;
+			int[][] weight, estim;		// x, y
+			boolean[][] closed;			// x, y
+			Point[][] previous;			// x, y, [currentX,currentY]
+			private final int INFINITE = (Integer.MAX_VALUE /2) -1;
+			
+			/*OK*/public Point getNextPoint(){//System.out.println("algo A");
+				current = origin;
+				dimLvl = 60;
+				getAreaSource();
+				
+				initItems();
+				do {
+					getMinWeightPoint();
+					updateNeighboors();
+					closed[current.x][current.y] = true;
+				} while( !current.equals(target) );
+				return nextPoint();
+			}
+			/*OK*/private void getAreaSource(){
+				zero = new Point();
+				zero.x = Math.min(origin.x, target.x) % 128;
+				zero.y = Math.min(origin.y, target.y) % 128;
+				
+				int maxPosition = dimLvl -max -1;
+				if(zero.x > maxPosition) zero.x = maxPosition;
+				if(zero.y > maxPosition) zero.y = maxPosition;
+			}
+			
+			/*OK*/private void initItems(){
+				// weights 
+				weight = new int[max][max];
+				for (int y=0; y<max; y++)
+					for (int x=0; x<max; x++)
+						weight[x][y] = INFINITE;
+				weight[origin.x % 128][origin.y % 128] = 0;
+				
+				// estimations
+				estim = new int[max][max];
+				for (int y=0; y<max; y++)
+					for (int x=0; x<max; x++)
+						estim[x][y] = Math.abs(target.x %128 - x) + Math.abs(target.y %128 - y);
+
+				closed = new boolean[max][max];
+				previous = new Point[max][max];
+			}
+			/*OK*/private void getMinWeightPoint(){
+				int cost, minCost=INFINITE;
+				for(int y=0; y<max; y++)
+					for(int x=0; x<max; x++)
+						if( !closed[x][y] ){
+							int pond = weights[ AddonManager.getLoadedJarLevel().getLevel().getMatrix()[x][y] ];
+							cost = weight[x][y] + estim[x][y] + pond;
+							if(cost < minCost){
+								current = new Point(x,y);
+								minCost = cost;
+							}
+						}
+			}
+			/*OK*/private void updateNeighboors(){
+				int x=current.x, y=current.y, w=weight[x][y];
+				updateNeighboor(x+1, y, w);
+				updateNeighboor(x, y+1, w);
+				updateNeighboor(x-1, y, w);
+				updateNeighboor(x, y-1, w);
+			}
+			/*OK*/private void updateNeighboor(int x, int y, int w){
+				if(existsNeighboor(x,y) && !closed[x][y])
+					if(w+1 < weight[x][y]){
+						weight[x][y] = w+1;
+						previous[x][y] = current;
+					}
+			}
+			/*OK*/private boolean existsNeighboor(int x, int y){
+				return 0 <= x && x < max
+					&& 0 <= y && y < max;
+			}
+			/*OK*/private Point nextPoint(){
+				Point next=null, prev = (previous[target.x][target.y] != null)?previous[target.x][target.y]:origin;
+				while (!prev.equals(origin)){
+					next = prev;
+					// write here a syso of prev to trace the route
+					//System.out.println(prev);
+					prev = previous[prev.x][prev.y];
+				}
+				return (next == null)?prev:next;
+			}
+		}
+		
 	}
 	
 	private static class Leaf extends GameObject{
