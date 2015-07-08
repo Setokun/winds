@@ -45,7 +45,8 @@ public class Score {
 		
 		try {
 			Score oldScore = null;
-			int counter = 0;			
+			int counter = 0;	
+			DBClass.connect();
 			ResultSet r = DBClass.requestQuery("SELECT nbItems, nbClicks, time FROM scores WHERE idLevel="+idLevel);
 			while(r.next()){counter++;}
 			
@@ -67,33 +68,35 @@ public class Score {
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
+		} finally {
+			DBClass.disconnect();
 		}
 		
 	}
 	
 	public static ArrayList<Score> getLocalScores(){
 		try {
-			
+			DBClass.connect();
 			ResultSet r = DBClass.requestQuery("SELECT levels.name AS levelName, levels.id AS levelID, nbItems, nbClicks, time FROM scores JOIN levels ON levels.id = scores.idLevel WHERE idPlayer="+Window.profile.getId()+"ORDER BY levels.id");
 			
 			ArrayList<Score> scores = new ArrayList<Score>();
 
 			while(r.next()) {
 				Score s = new Score(r.getInt("levelID"));
-				
 				s.setLevelName(r.getString("levelname"));
 				s.setNbItems(r.getInt("nbItems"));
 				s.setClicks(r.getInt("nbClicks"));
 				s.setTime(r.getInt("time"));
-				
 				scores.add(s);
 			}
 			
 			return scores;
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException | SQLException e) {
+			//TODO
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		}
+		finally{
+			DBClass.disconnect();
 		}
 		return null;
 	}
@@ -105,6 +108,12 @@ public class Score {
 		try {
 			r = ServerConnection.getScores();
 		} catch (IOException e) {
+			try {
+				DBClass.connect();
+			} catch (ClassNotFoundException | SQLException e1) {}
+			finally{
+				DBClass.disconnect();
+			}
 			r = Score.getLocalScores();
 		}
 		int nbScores = r.size();

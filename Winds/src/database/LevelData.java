@@ -164,7 +164,7 @@ public class LevelData {
 		String status = null;
 		
 		try {
-			
+			DBClass.connect();
 			ResultSet r = DBClass.requestQuery("SELECT levelStatus FROM levels WHERE id="+idCustomeLevel+";");
 			
 			while(r.next()) {
@@ -174,6 +174,8 @@ public class LevelData {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally{
+			DBClass.disconnect();
 		}
 		return status;
 	}
@@ -181,6 +183,7 @@ public class LevelData {
 	public static boolean setStatus(int idLevel, LevelStatus status){
 		
 		try {
+			DBClass.connect();
 			if(status == LevelStatus.installed){
 				DBClass.requestQuery("UPDATE levels SET levelStatus='installed' WHERE id="+idLevel+";");
 			}
@@ -192,12 +195,14 @@ public class LevelData {
 			}
 		} catch (ClassNotFoundException | SQLException e) {
 			return false;
+		} finally{
+			DBClass.disconnect();
 		}
 		return true;
 	}
 	public boolean insertDB(){
 		try {
-			
+			DBClass.connect();
 			DBClass.executeQuery("INSERT INTO levels (id , name, description, timeMax, "
 								+ "levelType, levelStatus, levelMode, creator, idTheme) "
 								+ "VALUES ("+getIdLevel()+",'"+getName()+"','"+getDescription()+"','"+getTimeMax()
@@ -213,6 +218,8 @@ public class LevelData {
 			}catch (ClassNotFoundException | SQLException e1) {
 				return false;
 			}
+		}finally{
+			DBClass.disconnect();
 		}
 		return true;
 	}

@@ -77,7 +77,7 @@ public class ThemeData {
 
 	public boolean insertDB(){
 		try {
-			
+			DBClass.connect();
 			DBClass.executeQuery("INSERT INTO themes (id, name, description) "
 								+ "VALUES ('"+idTheme+"', '"+name+"','"+description+");");
 			
@@ -89,6 +89,8 @@ public class ThemeData {
 			} catch (ClassNotFoundException | SQLException e1) {
 				return false;
 			}
+		}finally{
+			DBClass.disconnect();
 		}
 		return true;
 	}
