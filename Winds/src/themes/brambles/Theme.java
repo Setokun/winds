@@ -286,8 +286,8 @@ public class Theme extends ThemeBase {
 	
 	private static class Enemy extends GameObject{
 	
-		private static BufferedImage[] spritesRight = new BufferedImage[6], spritesRightRaw;
-		private static BufferedImage[] spritesLeft = new BufferedImage[6], spritesLeftRaw;
+		private static BufferedImage[] spritesRight = new BufferedImage[4], spritesRightRaw;
+		private static BufferedImage[] spritesLeft = new BufferedImage[4], spritesLeftRaw;
 		private Animation animationRight, animationLeft;
 		private ArrayList<CollisionBox> collisions;
 		private int width = 0, widthPath;
@@ -296,8 +296,8 @@ public class Theme extends ThemeBase {
 		
 		static {
 			try {
-				spritesRightRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("sprites/zing_sheet.png")), 96).getSprites();
-				spritesLeftRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("sprites/zing_sheet_reverse.png")), 96).getSprites();
+				spritesRightRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/dragonfly.png")), 64).getSprites();
+				spritesLeftRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/dragonfly_reverse.png")), 64).getSprites();
 			} catch (IOException e) { e.printStackTrace(); }
 		}
 	
@@ -370,9 +370,9 @@ public class Theme extends ThemeBase {
 	
 		public void render(Graphics g) {
 			if(facingRight)
-				animationRight.drawAnimation(g, (int)x, (int)y, 48, 48);
+				animationRight.drawAnimation(g, (int)x, (int)y, 64, 64);
 			else
-				animationLeft.drawAnimation(g, (int)x, (int)y, 48, 48);
+				animationLeft.drawAnimation(g, (int)x, (int)y, 64, 64);
 			
 			if(Window.debug){
 				if(this.getBounds() != null){
@@ -397,12 +397,12 @@ public class Theme extends ThemeBase {
 		int count;
 		
 		private Animation animation;
-		private static BufferedImage[] sprites = new BufferedImage[6], spritesRaw;
+		private static BufferedImage[] sprites = new BufferedImage[4], spritesRaw;
 		private ArrayList<CollisionBox> collisions;
 		
 		static {
 			try {
-				spritesRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("sprites/zing_sheet.png")), 96).getSprites();
+				spritesRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/dragonfly.png")), 64).getSprites();
 			} catch (IOException e) { e.printStackTrace(); }
 		}
 		
