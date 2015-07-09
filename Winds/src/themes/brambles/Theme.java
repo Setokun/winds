@@ -5,16 +5,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 import addon.BufferedImageLoader;
 import addon.ThemeBase;
 import annotation.wFiles;
 import annotation.wTheme;
 import core.Arrival;
+import core.Blower;
 import core.Collectable;
 import core.CollectableId;
 import core.CollisionBox;
@@ -22,6 +26,7 @@ import core.Direction;
 import core.GameObject;
 import core.ObjectId;
 import core.SpriteSheet;
+import display.Animation;
 import display.Game;
 import display.Handler;
 import display.Window;
@@ -176,7 +181,7 @@ public class Theme extends ThemeBase {
 		return new String[]{
 			"Departure", "Arrival", "4 coins", "16 coins",
 			"1 life", "1 flower", "2 flowers", "1 mob",
-			"3 mobs", "3 mobs", "3 mobs", "3 mobs"
+			"3 mobs", "3 mobs", "3 mobs", "3 mobs", "right blower", "down blower", "left blower", "up blower"
 		};
 	}
 	public void loadInteractions(int x, int y, int id, Handler handler) {
@@ -249,6 +254,18 @@ public class Theme extends ThemeBase {
 			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
 			break;
 		case 13:
+			handler.addObject(new Blower(x   , y   , ObjectId.Blower, Direction.right));
+			break;
+		case 14:
+			handler.addObject(new Blower(x   , y   , ObjectId.Blower, Direction.down));
+			break;
+		case 15:
+			handler.addObject(new Blower(x   , y   , ObjectId.Blower, Direction.left));
+			break;
+		case 16:
+			handler.addObject(new Blower(x   , y   , ObjectId.Blower, Direction.up));
+			break;
+		case 17:
 			handler.addObject(new Boss(x   , y   , ObjectId.Enemy));
 			break;
 		}
@@ -269,33 +286,42 @@ public class Theme extends ThemeBase {
 	
 	private static class Enemy extends GameObject{
 	
-		//private Animation animation;
+		private static BufferedImage[] spritesRight = new BufferedImage[6], spritesRightRaw;
+		private static BufferedImage[] spritesLeft = new BufferedImage[6], spritesLeftRaw;
+		private Animation animationRight, animationLeft;
+		private ArrayList<CollisionBox> collisions;
+		private int width = 0, widthPath;
+		private boolean facingRight;
+		private Direction direction;
+		
+		static {
+			try {
+				spritesRightRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("sprites/zing_sheet.png")), 96).getSprites();
+				spritesLeftRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("sprites/zing_sheet_reverse.png")), 96).getSprites();
+			} catch (IOException e) { e.printStackTrace(); }
+		}
 	
-	private BufferedImage[] sprites = new BufferedImage[2];
-	private ArrayList<CollisionBox> collisions;
-	private int width = 0, widthPath;
-	private boolean facingRight;
-	private Direction direction;
+		public Enemy(float x, float y,ObjectId id, int widthPath, Direction direction) {
+			super(x, y, id);
 	
-	
-	
-	public Enemy(float x, float y,ObjectId id, int widthPath, Direction direction) {
-		super(x, y, id);
-		BufferedImageLoader loader = new BufferedImageLoader();
-		sprites[0] = new SpriteSheet(loader.loadImage("/enemies/boss_bee.png"), 96).grabImage(0, 0);
-		sprites[1] = new SpriteSheet(loader.loadImage("/enemies/boss_bee_reverse.png"), 96).grabImage(0, 0);
-		this.widthPath = widthPath;
-		this.direction = direction;
-	
-		this.collisions = new ArrayList<CollisionBox>();
-	
-		this.collisions.add( new CollisionBox((int)x+4, (int)y+20, 28, 20, ObjectId.Enemy) );
-		//this.collisions.add( new CollisionBox((int)x+40, (int)y, 16, 48, ObjectId.Boss) );
+			this.widthPath = widthPath;
+			this.direction = direction;
+		
+			this.collisions = new ArrayList<CollisionBox>();
+		
+			this.collisions.add( new CollisionBox((int)x+4, (int)y+20, 28, 20, ObjectId.Enemy) );
 			
+			for (int i = 1; i < spritesRightRaw.length; i++) { spritesRight[i-1] = spritesRightRaw[i]; }
+			for (int i = 1; i < spritesLeftRaw.length; i++)  { spritesLeft[i-1]  = spritesLeftRaw[i];  }
 			
+			animationRight = new Animation(1, spritesRight);
+			animationLeft = new Animation(1, spritesLeft);
+
 		}
 	
 		public void tick(ArrayList<GameObject> object) {
+			animationLeft.runAnimation();
+			animationRight.runAnimation();
 			
 			if(direction == Direction.left || direction == Direction.right){
 				if( this.widthPath > 0){
@@ -344,9 +370,9 @@ public class Theme extends ThemeBase {
 	
 		public void render(Graphics g) {
 			if(facingRight)
-				g.drawImage(sprites[0], (int)x, (int)y, 48, 48, null);
+				animationRight.drawAnimation(g, (int)x, (int)y, 48, 48);
 			else
-				g.drawImage(sprites[1], (int)x, (int)y, 48, 48, null);
+				animationLeft.drawAnimation(g, (int)x, (int)y, 48, 48);
 			
 			if(Window.debug){
 				if(this.getBounds() != null){
@@ -370,12 +396,14 @@ public class Theme extends ThemeBase {
 	private static class Boss extends GameObject{
 		int count;
 		
-		private static BufferedImage sprite;
+		private Animation animation;
+		private static BufferedImage[] sprites = new BufferedImage[6], spritesRaw;
 		private ArrayList<CollisionBox> collisions;
 		
 		static {
-			BufferedImageLoader loader = new BufferedImageLoader();
-			sprite = new SpriteSheet(loader.loadImage("/enemies/boss_bee.png"), 96).grabImage(0, 0);
+			try {
+				spritesRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("sprites/zing_sheet.png")), 96).getSprites();
+			} catch (IOException e) { e.printStackTrace(); }
 		}
 		
 		public Boss(float x, float y,ObjectId id) {
@@ -385,27 +413,33 @@ public class Theme extends ThemeBase {
 			this.collisions = new ArrayList<CollisionBox>();
 
 			this.collisions.add( new CollisionBox((int)x+8, (int)y+40, 56, 40, ObjectId.Boss) );
-			//this.collisions.add( new CollisionBox((int)x+40, (int)y, 16, 48, ObjectId.Boss) );
 			
+			for (int i = 1; i < spritesRaw.length; i++) {
+				sprites[i-1] = spritesRaw[i];
+			}
 			
+			animation = new Animation(1, sprites);
 		}
 
 		public void tick(ArrayList<GameObject> objects) {
-			count++;
-			GameObject player = objects.get(3600);
-			if(count >= 3){
-				
-				this.x+=((player.getX()-this.x)>0)?1:-1;
-				this.y+=((player.getY()-this.y)>0)?1:-1;
-				this.collisions.get(0).x+=((player.getX()-this.x)>0)?1:-1;
-				this.collisions.get(0).y+=((player.getY()-this.y)>0)?1:-1;
-				count = 0;
+			animation.runAnimation();
+			if(!Game.isFinished()){
+				count++;
+				GameObject player = objects.get(3600);
+				if(count >= 2){
+					
+					this.x+=((player.getX()-this.x)>0)?1:-1;
+					this.y+=((player.getY()-this.y)>0)?1:-1;
+					this.collisions.get(0).x+=((player.getX()-this.x)>0)?1:-1;
+					this.collisions.get(0).y+=((player.getY()-this.y)>0)?1:-1;
+					count = 0;
+				}
 			}
 			
 		}
 
 		public void render(Graphics g) {
-			g.drawImage(sprite, (int)x, (int)y, 96, 96, null);
+			animation.drawAnimation(g, (int)x, (int)y, 96, 96);
 			
 			if(Window.debug){
 				if(this.getBounds() != null){
@@ -436,7 +470,7 @@ public class Theme extends ThemeBase {
 			x1 = x - 400;
 			y1= y - 400;
 			BufferedImageLoader loader = new BufferedImageLoader();
-			sprites = new SpriteSheet(loader.loadImage("/feuille.png"), 78).grabImage(0, 0);
+			sprites = new SpriteSheet(loader.loadImage("/resources/feuille.png"), 78).grabImage(0, 0);
 		}
 
 		public void tick(ArrayList<GameObject> object) {

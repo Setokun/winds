@@ -21,9 +21,11 @@ public class Player extends GameObject{
 
 	private final float MAX_SPEED = 3;
 	private final float MAX_SPEED_X = 4;
+	private float wind_force = 1.0f;
 	private int timeElapsed = 0;
 	private int life;
 	private int invincibleTime;
+	private int windTime = 0;
 	
 	static BufferedImage bubble;
 	
@@ -203,11 +205,22 @@ public class Player extends GameObject{
 				|| getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())
 				|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
 			
-			if(((Blower)tempObject).getDirection() == Direction.down) Game.player.setVelY(Math.abs(Game.player.getVelY()) +0.2f);
-			if(((Blower)tempObject).getDirection() == Direction.up) Game.player.setVelY(-Math.abs(Game.player.getVelY()) -0.2f);
-			if(((Blower)tempObject).getDirection() == Direction.left) Game.player.setVelX(-Math.abs(Game.player.getVelX()) -0.2f);
-			if(((Blower)tempObject).getDirection() == Direction.right) Game.player.setVelX(Math.abs(Game.player.getVelX()) +0.2f);
+			if(windTime <= 0){
+				if(((Blower)tempObject).getDirection() == Direction.down)
+					Game.player.setVelY(Math.abs(Game.player.getVelY()) + wind_force);
+				if(((Blower)tempObject).getDirection() == Direction.up) 
+					Game.player.setVelY(-Math.abs(Game.player.getVelY()) - wind_force);
+				if(((Blower)tempObject).getDirection() == Direction.left) 
+					Game.player.setVelX(-Math.abs(Game.player.getVelX()) - wind_force);
+				if(((Blower)tempObject).getDirection() == Direction.right) 
+					Game.player.setVelX(Math.abs(Game.player.getVelX()) + wind_force);
+				
+				windTime = 30;
+			}
+			windTime--;
 		}
+		else
+			windTime = 0;
 	}
 	private void actionCollectable(GameObject tempObject, int j) {
 		if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds()) 

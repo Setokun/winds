@@ -25,16 +25,16 @@ public class Blower extends GameObject{
 		loader = new BufferedImageLoader();
 		spritesRaw = null;
 		if(direction == Direction.down) {
-			spritesRaw = new SpriteSheet(loader.loadImage("/souffle_down.png"), 303).getSprites();
+			spritesRaw = new SpriteSheet(loader.loadImage("/resources/souffle_down.png"), 303).getSprites();
 		}
 		else if(direction == Direction.up) {
-			spritesRaw = new SpriteSheet(loader.loadImage("/souffle_up.png"), 303).getSprites();
+			spritesRaw = new SpriteSheet(loader.loadImage("/resources/souffle_up.png"), 303).getSprites();
 		}
 		else if(direction == Direction.left) {
-			spritesRaw = new SpriteSheet(loader.loadImage("/souffle_left.png"), 303).getSprites();
+			spritesRaw = new SpriteSheet(loader.loadImage("/resources/souffle_left.png"), 303).getSprites();
 		}
 		else if(direction == Direction.right) {
-			spritesRaw = new SpriteSheet(loader.loadImage("/souffle_right.png"), 303).getSprites();
+			spritesRaw = new SpriteSheet(loader.loadImage("/resources/souffle_right.png"), 303).getSprites();
 		}
 		
 		for (int i = 1; i < spritesRaw.length; i++) {
@@ -45,9 +45,9 @@ public class Blower extends GameObject{
 		this.collisions = new ArrayList<CollisionBox>();
 
 		if(direction == Direction.down || direction == Direction.up)
-			this.collisions.add( new CollisionBox((int)x+64, (int)y+24, 56, 160, ObjectId.Blower) );
+			this.collisions.add( new CollisionBox((int)x+44, (int)y+12, 37, 105, ObjectId.Blower) );
 		if(direction == Direction.left || direction == Direction.right)
-			this.collisions.add( new CollisionBox((int)x+24, (int)y+64, 160, 56, ObjectId.Blower) );
+			this.collisions.add( new CollisionBox((int)x+12, (int)y+44, 105, 37, ObjectId.Blower) );
 	}
 
 	public void tick(ArrayList<GameObject> objects) {
@@ -55,7 +55,7 @@ public class Blower extends GameObject{
 	}
 
 	public void render(Graphics g) {
-		animation.drawAnimation(g, (int)x, (int)y, 192, 192);
+		animation.drawAnimation(g, (int)x, (int)y, 128, 128);
 		
 		if(Window.debug){
 			if(this.getBounds() != null){
