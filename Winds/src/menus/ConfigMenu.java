@@ -1,6 +1,5 @@
 package menus;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
@@ -261,7 +260,7 @@ public class ConfigMenu extends JPanel{
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
-		Window.resize(new Dimension(800, 550));
+		Window.resize(Window.DIM_STANDARD);
 		Window.affect(new MainMenu());
 	}
 }

@@ -1,6 +1,5 @@
 package menus;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
@@ -195,12 +194,12 @@ public class Login extends JPanel{
     			}
     			else if(result == 1 || result == 3){
     				Profile.current = Profile.connect(email, password);
-    				Window.resize(new Dimension(800, 550));
+    				Window.resize(Window.DIM_STANDARD);
     	    		Window.affect(new MainMenu());
     			}
 	    		
 	    	}else{
-	    		Window.resize(new Dimension(800, 550));
+	    		Window.resize(Window.DIM_STANDARD);
 	    		Window.affect(new MainMenu());
 	    	}
     	}

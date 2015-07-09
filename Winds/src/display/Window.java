@@ -18,7 +18,6 @@ public class Window {
 	public static final Dimension DIM_EDITOR = new Dimension(1024, 600);
 	public static final boolean debug = false;
 	
-	public static Profile profile = null;
 	private static JFrame main;
 	
 	
@@ -38,7 +37,7 @@ public class Window {
 		main = new JFrame("Winds");
 		main.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		main.addWindowListener(new CloseWindowEvent());
-		main.setSize(new Dimension(800, 550));
+		main.setSize(DIM_STANDARD);
 		main.setResizable(false);
 		main.setLocationRelativeTo(null);
 		
@@ -52,8 +51,8 @@ public class Window {
 			main.setIconImage(ImageIO.read(Window.class.getClass().getResource("/resources/collectables/bubulle.png")));
 		} catch (IOException e) { e.printStackTrace(); }
 		
-		profile = Profile.getCurrentPlayer();
-		main.add(profile == null ? new Login() : new MainMenu());
+		Profile.current = Profile.getCurrentPlayer();
+		main.add(Profile.current == null ? new Login() : new MainMenu());
 		main.setVisible(true);		
 	}
 	

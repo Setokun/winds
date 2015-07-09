@@ -280,7 +280,7 @@ public class LevelSelector extends JPanel{
 		}
 	}
 	private void jBtnBackActionPerformed(ActionEvent evt) {
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new LevelCategorySelector());
     }
 	protected void jBtnPreviousActionPerformed(ActionEvent evt) {

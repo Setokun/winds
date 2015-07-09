@@ -214,23 +214,23 @@ public class MainMenu extends JPanel{
 	}
 	
     private void jBtnPlayActionPerformed(java.awt.event.ActionEvent evt) {
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new LevelCategorySelector());
     }
     private void jBtnScoresActionPerformed(java.awt.event.ActionEvent evt) {
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new Scores());
     }
     private void jBtnConfigurationActionPerformed(java.awt.event.ActionEvent evt) {
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new ConfigMenu());
     }
     private void jBtnShopActionPerformed(java.awt.event.ActionEvent evt) {
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new Shop());
     }
     private void jBtnLevelEditorActionPerformed(java.awt.event.ActionEvent evt) {
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new LevelEditorList());
     }
     private void jBtnChangeProfileActionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,7 +243,7 @@ public class MainMenu extends JPanel{
 			DBClass.disconnect();
 		}
     	Profile.current = null;
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new Login());
     }
     private void jBtnQuitActionPerformed(java.awt.event.ActionEvent evt) {

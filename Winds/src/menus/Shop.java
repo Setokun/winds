@@ -217,7 +217,7 @@ public class Shop  extends JPanel {
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
-		Window.resize(new Dimension(800, 550));
+		Window.resize(Window.DIM_STANDARD);
 		Window.affect(new MainMenu());
 	}
 	

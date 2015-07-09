@@ -1,7 +1,6 @@
 package menus;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -245,23 +244,23 @@ public class LevelCategorySelector extends JPanel{
 	}
 
 	private void jBtnBackActionPerformed(ActionEvent evt) {
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new MainMenu());
     }                                        
     private void jBtnBasicLevelsActionPerformed(ActionEvent evt) {
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new LevelSelector(Type.basic));
     }                                               
     private void jBtnCustomLevelsActionPerformed(ActionEvent evt) {
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new LevelSelector(Type.custom));
     }                                                
     private void jBtnMyLevelsActionPerformed(ActionEvent evt) {
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new LevelSelector(Type.my));
     }                                            
     private void jBtnLevelsToModerateActionPerformed(ActionEvent evt) {
-    	Window.resize(new Dimension(800, 550));
+    	Window.resize(Window.DIM_STANDARD);
 		Window.affect(new LevelSelector(Type.toModerate));
     }                                                    
 

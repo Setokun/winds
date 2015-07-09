@@ -2,7 +2,6 @@ package display;
 
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
@@ -306,7 +305,7 @@ public class Game extends Canvas implements Runnable{
 	public static void goBackToMenu(){
 		Game.bgMusic.stop();
 		Game.running = false;
-		Window.resize(new Dimension(800, 550));
+		Window.resize(Window.DIM_STANDARD);
 		Window.affect(new LevelCategorySelector());
 	}
 	
