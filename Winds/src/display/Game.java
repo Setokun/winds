@@ -20,9 +20,7 @@ import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
 import core.Block;
-import core.Blower;
 import core.CollisionBox;
-import core.Direction;
 import core.ObjectId;
 import core.Player;
 import core.SpriteSheet;
@@ -34,7 +32,7 @@ public class Game extends Canvas implements Runnable{
 	public static int WIDTH, HEIGHT;
 	public static Camera cam;
 	public static Score score;
-	private static boolean pause, running, finished, defeat, scoreUploaded;
+	private static boolean pause, running, finished, defeat, scoreUploaded, finishedLoading;;
 	public static AudioPlayer bgMusic;
 	private static BufferedImage[] instance;
 	public static Player player;
@@ -47,6 +45,8 @@ public class Game extends Canvas implements Runnable{
 	private int seconds, delayVictory, delayGameOver, timeMax;
 	
 	public Game(){
+		this.setBackground(Color.BLACK);
+		finishedLoading = false;
 		WIDTH = (int) Profile.current.getScreenDimensions().getWidth();
 		HEIGHT = (int) Profile.current.getScreenDimensions().getHeight();
 	    AddonManager.loadJarTheme(AddonManager.getLoadedJarLevel().getLevel().getIdTheme());
@@ -86,10 +86,10 @@ public class Game extends Canvas implements Runnable{
 		
 		AddonManager.getLoadedJarTheme().loadInteractions(handler);
 	    AddonManager.getLoadedJarTheme().loadFront(handler);
-	    handler.addObject(new Blower(1200, 500, ObjectId.Blower, Direction.left));
+	    
 	    this.addKeyListener(new KeyInput(handler));
 		this.addMouseListener(new MouseInput(handler));
-	    
+	    finishedLoading = true;
 	}
 
 	public synchronized void start(){
@@ -156,7 +156,7 @@ public class Game extends Canvas implements Runnable{
 		stop();
 	}
 	private void tick(){
-		if(!getPause() && !defeat){
+		if(finishedLoading && !getPause() && !defeat){
 			handler.tick();
 			
 			for(int i = 0; i < handler.objects.size(); i++){
