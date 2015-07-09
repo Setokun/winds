@@ -33,7 +33,7 @@ import display.Window;
 
 
 @wTheme(idDB = 3, name = "Brambles", creator = "admin", date = "2015-05-17", description = "Brambles Theme")
-@wFiles(background = "background.jpg", music = "Winds_Ice_Cavern.mp3", logo = "logo.png",
+@wFiles(background = "background.jpg", music = "brambles.mp3", logo = "logo.png",
 		interactions = "sprites/interactions.png", sprites64 = "sprites/64.png",
 		sprites128 = "sprites/128.png", spritesBoss = "sprites/boss.png")
 
