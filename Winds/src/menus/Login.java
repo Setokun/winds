@@ -186,15 +186,15 @@ public class Login extends JPanel{
     	if(email.equals("") || password.equals(""))
     		JOptionPane.showMessageDialog(null, "Missing email or password !");
     	else {
-    		Window.profile = Profile.connect(email, password);
+    		Profile.current = Profile.connect(email, password);
     		
-    		if(Window.profile == null){
+    		if(Profile.current == null){
     			int result = Profile.insertOrUpdateProfile(email, password);
     			if(result == 2){
     				JOptionPane.showMessageDialog(null, "Bad creditentials, please try again !");
     			}
     			else if(result == 1 || result == 3){
-    				Window.profile = Profile.connect(email, password);
+    				Profile.current = Profile.connect(email, password);
     				Window.resize(new Dimension(800, 550));
     	    		Window.affect(new MainMenu());
     			}

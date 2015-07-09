@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import menus.LevelCategorySelector;
+import account.Profile;
 import addon.AddonManager;
 import addon.BufferedImageLoader;
 import audio.AudioPlayer;
@@ -47,8 +48,8 @@ public class Game extends Canvas implements Runnable{
 	private int seconds, delayVictory, delayGameOver, timeMax;
 	
 	public Game(){
-		WIDTH = (int) Window.profile.getScreenDimensions().getWidth();
-		HEIGHT = (int) Window.profile.getScreenDimensions().getHeight();
+		WIDTH = (int) Profile.current.getScreenDimensions().getWidth();
+		HEIGHT = (int) Profile.current.getScreenDimensions().getHeight();
 	    AddonManager.loadJarTheme(AddonManager.getLoadedJarLevel().getLevel().getIdTheme());
 	    start();
 	}

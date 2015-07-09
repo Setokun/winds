@@ -3,6 +3,7 @@ package menus;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import account.Profile;
 import addon.AddonManager;
 import addon.JarLevel;
 import display.Game;
@@ -18,7 +19,7 @@ public class LevelLauncherEvent implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		Window.resize(Window.profile.getScreenDimensions());
+		Window.resize(Profile.current.getScreenDimensions());
 		AddonManager.loadJarLevel(jarLvl);
 		Window.affect(new Game());
 	}

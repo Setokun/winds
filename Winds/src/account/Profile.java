@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 import server.ServerConnection;
 import database.DBClass;
-import display.Window;
 
 public class Profile {
 	private int id;
@@ -18,6 +17,7 @@ public class Profile {
 	private int soundEffectsVolume;
 	private int resolution;
 	
+	public static Profile current = null;
 	
 	public Profile(){
 		
@@ -171,13 +171,13 @@ public class Profile {
 		try {
 			DBClass.connect();
     		DBClass.requestQuery("UPDATE users SET music="+music+", effects="+soundEffects+", resolution="+resolution+" WHERE id="+this.getId());
-    		return connect(Window.profile.getEmail(), Window.profile.getPassword());
+    		return connect(current.getEmail(), current.getPassword());
 		} catch (ClassNotFoundException e) {e.printStackTrace();
 		} catch (SQLException e) {e.printStackTrace();
 		} finally{
 			DBClass.disconnect();
 		}
-		return Window.profile;
+		return current;
 	}
 	
 	public Dimension getScreenDimensions(){

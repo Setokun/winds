@@ -21,6 +21,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import account.Profile;
 import display.Window;
 
 public class ConfigMenu extends JPanel{
@@ -127,7 +128,7 @@ public class ConfigMenu extends JPanel{
 
 	private void initResolution() {
 		sliderResolution = new JSlider();
-		sliderResolution.setValue(Window.profile.getResolution());
+		sliderResolution.setValue(Profile.current.getResolution());
 		sliderResolution.setMaximum(2);
 		sliderResolution.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -164,7 +165,7 @@ public class ConfigMenu extends JPanel{
 
 	private void initSounds() {
 		sliderSounds = new JSlider();
-		sliderSounds.setValue(Window.profile.getSoundEffectsVolume()); //TODO à récupérer de la BDD en fonction du profil connecté
+		sliderSounds.setValue(Profile.current.getSoundEffectsVolume()); //TODO à récupérer de la BDD en fonction du profil connecté
 		sliderSounds.setMaximum(10);
 		sliderSounds.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -181,7 +182,7 @@ public class ConfigMenu extends JPanel{
 
 	private void initMusic() {
 		sliderMusic = new JSlider();
-		sliderMusic.setValue(Window.profile.getMusicVolume());
+		sliderMusic.setValue(Profile.current.getMusicVolume());
 		sliderMusic.setMaximum(10);
 		sliderMusic.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -255,7 +256,7 @@ public class ConfigMenu extends JPanel{
 	}
 	
 	protected void jBtnSaveActionPerformed(ActionEvent evt) {
-		Window.profile = Window.profile.updateConfiguration(sliderMusic.getValue(), sliderSounds.getValue(), sliderResolution.getValue());
+		Profile.current = Profile.current.updateConfiguration(sliderMusic.getValue(), sliderSounds.getValue(), sliderResolution.getValue());
 		JOptionPane.showMessageDialog(null, "Configuration updated !");
 	}
 

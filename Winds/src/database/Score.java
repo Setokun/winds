@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import server.ServerConnection;
-import display.Window;
+import account.Profile;
 
 public class Score {
 	private int id;
@@ -63,7 +63,7 @@ public class Score {
 			}
 			else{
 				
-				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) VALUES ('"+Window.profile.getId()+"','"+idLevel+"', '"+time+"', '"+nbClicks+"', '"+nbItems+"')");
+				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) VALUES ('"+Profile.current.getId()+"','"+idLevel+"', '"+time+"', '"+nbClicks+"', '"+nbItems+"')");
 			}
 			
 		} catch (ClassNotFoundException | SQLException e) {
@@ -77,7 +77,9 @@ public class Score {
 	public static ArrayList<Score> getLocalScores(){
 		try {
 			DBClass.connect();
-			ResultSet r = DBClass.requestQuery("SELECT levels.name AS levelName, levels.id AS levelID, nbItems, nbClicks, time FROM scores JOIN levels ON levels.id = scores.idLevel WHERE idPlayer="+Window.profile.getId()+"ORDER BY levels.id");
+			ResultSet r = DBClass.requestQuery("SELECT levels.name AS levelName, levels.id AS levelID, nbItems, nbClicks, time "
+					+ "FROM scores JOIN levels ON levels.id = scores.idLevel "
+					+ "WHERE idPlayer="+Profile.current.getId()+"ORDER BY levels.id");
 			
 			ArrayList<Score> scores = new ArrayList<Score>();
 

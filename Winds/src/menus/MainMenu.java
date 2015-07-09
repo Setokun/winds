@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.SoftBevelBorder;
 
+import account.Profile;
 import database.DBClass;
 import display.Window;
 
@@ -234,11 +235,14 @@ public class MainMenu extends JPanel{
     }
     private void jBtnChangeProfileActionPerformed(java.awt.event.ActionEvent evt) {
     	try {
+    		DBClass.connect();
 			DBClass.executeQuery("UPDATE users SET current = false");
 		} catch (ClassNotFoundException e) {e.printStackTrace();
 		} catch (SQLException e) {e.printStackTrace();
+		} finally {
+			DBClass.disconnect();
 		}
-    	Window.profile = null;
+    	Profile.current = null;
     	Window.resize(new Dimension(800, 550));
 		Window.affect(new Login());
     }

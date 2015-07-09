@@ -38,7 +38,6 @@ import database.LevelData;
 import database.Score;
 import database.ThemeData;
 import database.Trophy;
-import display.Window;
 
 public class ServerConnection {
 	private static final String URL_API_SERVER = "http://www.winds-game.com/API.php";
@@ -84,7 +83,7 @@ public class ServerConnection {
 			Score score = scores.get(i);
 			try {
 				String s = "INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
-						+ "VALUES ("+Window.profile.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");";
+						+ "VALUES ("+Profile.current.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");";
 				DBClass.connect();
 				DBClass.executeQuery(s);
 			} catch (ClassNotFoundException e) {
@@ -92,7 +91,7 @@ public class ServerConnection {
 				try {
 					String s =  "UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()
 							+", nbItems="+score.getNbItems()+" WHERE idLevel="+score.getIdLevel()
-							+" AND idPlayer="+Window.profile.getId();
+							+" AND idPlayer="+Profile.current.getId();
 					DBClass.connect();
 					DBClass.executeQuery(s);
 				} catch (ClassNotFoundException e1) {
@@ -242,8 +241,8 @@ public class ServerConnection {
 		try {
 			ThemeData theme = getThemeInfos(idTheme);
 			if(theme != null){
-				URLConnection ucon = new URL(URL_API_SERVER+"?email="+ Window.profile.getEmail()
-						+"&password="+ Window.profile.getPassword()
+				URLConnection ucon = new URL(URL_API_SERVER+"?email="+ Profile.current.getEmail()
+						+"&password="+ Profile.current.getPassword()
 						+"&action=downloadTheme&idTheme="+ idTheme)
 					.openConnection();  
 				StringBuilder sb = new StringBuilder(AddonManager.getThemesPath());
@@ -277,8 +276,8 @@ public class ServerConnection {
 			}
 			
 			if(level != null){
-				String s = URL_API_SERVER +"?email="+ Window.profile.getEmail().replace("\"", "")
-						 + "&password="+ Window.profile.getPassword().replace("\"", "");
+				String s = URL_API_SERVER +"?email="+ Profile.current.getEmail().replace("\"", "")
+						 + "&password="+ Profile.current.getPassword().replace("\"", "");
 				
 				switch( level.getLevelType() ){
 					case "basic":		s += "&action=downloadBasicLevel&idBasicLevel="+ idLevel;			break;
@@ -333,8 +332,8 @@ public class ServerConnection {
 			
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("action", "uploadScores");
-			params.put("email", Window.profile.getEmail());
-			params.put("password", Window.profile.getPassword());
+			params.put("email", Profile.current.getEmail());
+			params.put("password", Profile.current.getPassword());
 			params.put("scores", infosToUpload.toString());
 			
 			try { 	response = sendRequest(params); } 
@@ -344,8 +343,8 @@ public class ServerConnection {
 	}
 	
 	/*OK*/private static JsonArray getJsonArrayOfGetRequest(String endURL) throws IOException {
-		URL url = new URL(URL_API_SERVER +"?email="+ Window.profile.getEmail()
-				+"&password="+ Window.profile.getPassword() +"&"+ endURL);
+		URL url = new URL(URL_API_SERVER +"?email="+ Profile.current.getEmail()
+				+"&password="+ Profile.current.getPassword() +"&"+ endURL);
 		
 		URLConnection uc = url.openConnection();
         BufferedReader br = new BufferedReader(new InputStreamReader(uc.getInputStream()));
@@ -362,8 +361,8 @@ public class ServerConnection {
 	}
 	/*OK*/private static ArrayList<String> uploadFile(File f) throws Exception {
 		ServerRequest req = new ServerRequest("POST");
-		req.addParameter("email", Window.profile.getEmail());
-		req.addParameter("password", Window.profile.getPassword());
+		req.addParameter("email", Profile.current.getEmail());
+		req.addParameter("password", Profile.current.getPassword());
 		req.addParameter("action", "uploadCustomLevel");
 		req.addFile("level", f);
 		return req.finish();

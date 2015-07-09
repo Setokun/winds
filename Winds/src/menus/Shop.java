@@ -26,6 +26,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
 import server.ServerConnection;
+import account.Profile;
 import addon.AddonManager;
 import addon.level.Type;
 import database.LevelData;
@@ -51,8 +52,8 @@ public class Shop  extends JPanel {
 	
 	public Shop() {
 
-		this.isModoAdmin = Window.profile.getUserType().equals("administrator") 
-				|| Window.profile.getUserType().equals("moderator");
+		this.isModoAdmin = Profile.current.getUserType().equals("administrator") 
+				|| Profile.current.getUserType().equals("moderator");
 		
 		standardTableDimension = new Dimension(320,90);
 		
