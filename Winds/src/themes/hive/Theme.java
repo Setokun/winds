@@ -400,7 +400,7 @@ public class Theme extends ThemeBase {
 		
 		static {
 			try {
-				spritesRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/boss_bee.png")), 96).getSprites();
+				spritesRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/zing_sheet.png")), 96).getSprites();
 			} catch (IOException e) { e.printStackTrace(); }
 		}
 		
