@@ -106,7 +106,7 @@ public class EditorGUI extends JPanel {
 	 */
     /*OK*/private void initComponents(){
     	try {
-    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
+    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,24F);
 		} catch (FontFormatException | IOException e) {
 			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
 		}
