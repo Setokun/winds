@@ -12,15 +12,17 @@ import display.Window;
 public class LevelLauncherEvent implements MouseListener{
 
 	private JarLevel jarLvl;
+	private int numPage;
 	
-	public LevelLauncherEvent(JarLevel jarLvl) {
+	public LevelLauncherEvent(JarLevel jarLvl, int numPage) {
 		this.jarLvl = jarLvl;
+		this.numPage = numPage;
 	}
 	
 	public void mouseClicked(MouseEvent e) {
 		Window.resize(Profile.current.getScreenDimensions());
 		AddonManager.loadJarLevel(jarLvl);
-		Window.affect(new Game());
+		Window.affect(new Game(jarLvl.getLevel().getType(), numPage));
 	}
 	public void mouseEntered(MouseEvent e) {}
 	public void mousePressed(MouseEvent e) {}

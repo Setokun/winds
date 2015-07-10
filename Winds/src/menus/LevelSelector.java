@@ -41,8 +41,9 @@ public class LevelSelector extends JPanel{
     JPanel southMiddle, jSouthWest, jSouthEast, south, north, jNorthWest, jNorthEast, middle, grid;
     String title;
     
-	public LevelSelector(Type levelType) {
+	public LevelSelector(Type levelType, int numPage) {
 		type = levelType;
+		this.numPage = numPage;
 		
 		if(type == Type.basic)		 this.title = "Basic levels";
 		if(type == Type.custom)	 this.title = "Custom Levels";
@@ -116,7 +117,7 @@ public class LevelSelector extends JPanel{
 		grid.setLayout(gridLayout);
 		
 		for (int i = 0; i < levelsToDisplay.size(); i++) {
-			buttons[i] = new LevelButton(levelsToDisplay.get(i), type);
+			buttons[i] = new LevelButton(levelsToDisplay.get(i), type, currentPage);
 			grid.add(buttons[i].getButton());
 		}
 		

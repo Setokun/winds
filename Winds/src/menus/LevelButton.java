@@ -19,7 +19,7 @@ public class LevelButton extends JPanel{
 	private JButton button;
 	private JLabel label;
 	
-	public LevelButton(JarLevel jarLvl, Type type){
+	public LevelButton(JarLevel jarLvl, Type type, int numPage){
 		button = new JButton();
 		label = new JLabel();
         button.setBorder(new SoftBevelBorder(0));
@@ -29,8 +29,8 @@ public class LevelButton extends JPanel{
 		button.setIcon(new ImageIcon(logo));
 		button.addMouseListener(
 			(type == Type.tomoderate)?
-				new LevelToModerateLauncherEvent(jarLvl)
-				:new LevelLauncherEvent(jarLvl)
+				new LevelToModerateLauncherEvent(jarLvl, numPage)
+				:new LevelLauncherEvent(jarLvl, numPage)
 		);
 		label.setText(jarLvl.getLevel().getName());
 	}

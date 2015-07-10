@@ -13,9 +13,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import menus.LevelCategorySelector;
+import menus.LevelSelector;
 import account.Profile;
 import addon.AddonManager;
 import addon.BufferedImageLoader;
+import addon.level.Type;
 import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
@@ -29,7 +31,7 @@ import database.Score;
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 2987645570832878854L;
 	
-	public static int WIDTH, HEIGHT;
+	public static int WIDTH, HEIGHT, numPageFrom;
 	public static Camera cam;
 	public static Score score;
 	private static boolean pause, running, finished, defeat, scoreUploaded, finishedLoading;;
@@ -37,6 +39,7 @@ public class Game extends Canvas implements Runnable{
 	private static BufferedImage[] instance;
 	public static Player player;
 	
+	private static Type typeLvl;
 	public final String TITLE = "Winds";
 	private BufferedImage bubulle, gameover, victory, bg = null, pauseImage = null;
 	private Thread thread;
@@ -44,7 +47,9 @@ public class Game extends Canvas implements Runnable{
 	Font windsPolice36;
 	private int seconds, delayVictory, delayGameOver, timeMax;
 	
-	public Game(){
+	public Game(Type typeLevel, int numPage){
+		typeLvl = typeLevel;
+		numPageFrom = numPage;
 		this.setBackground(Color.BLACK);
 		finishedLoading = false;
 		WIDTH = (int) Profile.current.getScreenDimensions().getWidth();
@@ -306,7 +311,7 @@ public class Game extends Canvas implements Runnable{
 		Game.bgMusic.stop();
 		Game.running = false;
 		Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelCategorySelector());
+		Window.affect(new LevelSelector(typeLvl, numPageFrom));
 	}
 	
 	public static boolean isFinished(){

@@ -249,19 +249,19 @@ public class LevelCategorySelector extends JPanel{
     }                                        
     private void jBtnBasicLevelsActionPerformed(ActionEvent evt) {
     	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelSelector(Type.basic));
+		Window.affect(new LevelSelector(Type.basic, 0));
     }                                               
     private void jBtnCustomLevelsActionPerformed(ActionEvent evt) {
     	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelSelector(Type.custom));
+		Window.affect(new LevelSelector(Type.custom, 0));
     }                                                
     private void jBtnMyLevelsActionPerformed(ActionEvent evt) {
     	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelSelector(Type.my));
+		Window.affect(new LevelSelector(Type.my, 0));
     }                                            
     private void jBtnLevelsToModerateActionPerformed(ActionEvent evt) {
     	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelSelector(Type.tomoderate));
+		Window.affect(new LevelSelector(Type.tomoderate, 0));
     }                                                    
 
 }
