@@ -85,7 +85,7 @@ public class Shop  extends JPanel {
 			listThemesToDisplay = getThemesList();
 			listBasicLevelsToDisplay = getLevelsList(Type.basic);
 			listCustomLevelsToDisplay = getCustomLevelsList(Type.custom);
-			listLevelsToModerateToDisplay = getLevelsList(Type.toModerate);
+			listLevelsToModerateToDisplay = getLevelsList(Type.tomoderate);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(this, "Unable to reach distant winds server, please verify your internet connection and try again !");
 		}
@@ -554,8 +554,12 @@ public class Shop  extends JPanel {
 				int col = tableLevelsToModerate.columnAtPoint(p);
 				int row = tableLevelsToModerate.rowAtPoint(p);
 				if(col == 1){
-					System.out.println("Installation de " + tableLevelsToModerate.getValueAt(row, 0));
-					((DefaultTableModel)tableLevelsToModerate.getModel()).removeRow(row);
+					//System.out.println("Installation de " + tableLevelsToModerate.getValueAt(row, 0));
+					if(ServerConnection.downloadLevel((int)tableLevelsToModerate.getValueAt(row, 2))){
+						JOptionPane.showMessageDialog(null, "New level to moderate installed !!");
+						((DefaultTableModel)tableLevelsToModerate.getModel()).removeRow(row);
+					}
+					
 				}
 		    }  
 		} );

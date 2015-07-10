@@ -261,7 +261,7 @@ public class LevelCategorySelector extends JPanel{
     }                                            
     private void jBtnLevelsToModerateActionPerformed(ActionEvent evt) {
     	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelSelector(Type.toModerate));
+		Window.affect(new LevelSelector(Type.tomoderate));
     }                                                    
 
 }
