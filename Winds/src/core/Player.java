@@ -240,9 +240,9 @@ public class Player extends GameObject{
 					    if(this.life>5)
 					    	this.life = 5;
 					}
-					else if(cid == CollectableId.honey){
+					else if(cid == CollectableId.valuable){
 						AudioPlayer.playSfx("honey");
-						Game.score.setNbItems(Game.score.getNbItems()+2);
+						Game.score.setNbItems(Game.score.getNbItems()+5);
 					}
 					handler.removeObject(tempObject);
 				}

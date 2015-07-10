@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import addon.AddonManager;
 import addon.BufferedImageLoader;
 
 public class Collectable extends GameObject{
@@ -14,9 +15,9 @@ public class Collectable extends GameObject{
 	
 	static {
 		BufferedImageLoader loader = new BufferedImageLoader();
-		sprites[0] = new SpriteSheet(loader.loadImage("/resources/collectables/piece_1.png"), 32).grabImage(0, 0);
+		sprites[0] = new SpriteSheet(loader.loadImage("/resources/collectables/coin.png"), 32).grabImage(0, 0);
 		sprites[1] = new SpriteSheet(loader.loadImage("/resources/collectables/bubulle.png"), 25).grabImage(0, 0);
-		sprites[2] = new SpriteSheet(loader.loadImage("/resources/collectables/honey.png"), 32).grabImage(0, 0);
+		sprites[2] = new SpriteSheet(AddonManager.getLoadedJarTheme().getSpritesCollectable(), 32).grabImage(0, 0);
 	}
 	
 	public Collectable(float x, float y, CollectableId collectableId, ObjectId id) {
@@ -24,29 +25,24 @@ public class Collectable extends GameObject{
 		this.collectableId = collectableId;
 	}
 
-	@Override
-	public void tick(ArrayList<GameObject> object) {
-		
-	}
+	public void tick(ArrayList<GameObject> object) {}
 
-	@Override
 	public void render(Graphics g) {
 		if(collectableId == CollectableId.coin)
 			g.drawImage(sprites[0], (int)x, (int)y, 16, 16, null);
 		if(collectableId == CollectableId.life)
 			g.drawImage(sprites[1], (int)x, (int)y, 25, 25, null);
-		if(collectableId == CollectableId.honey)
+		if(collectableId == CollectableId.valuable)
 			g.drawImage(sprites[2], (int)x, (int)y, 25, 25, null);
 	}
-
-	@Override
+	
 	public ArrayList<CollisionBox> getBounds() {
 		ArrayList<CollisionBox> cs = new ArrayList<CollisionBox>();
 		if(collectableId == CollectableId.coin)
 			cs.add( new CollisionBox((int)x, (int)y, 16, 16, ObjectId.Collectable) );
 		if(collectableId == CollectableId.life)
 			cs.add( new CollisionBox((int)x, (int)y, 25, 25, ObjectId.Collectable) );
-		if(collectableId == CollectableId.honey)
+		if(collectableId == CollectableId.valuable)
 			cs.add( new CollisionBox((int)x, (int)y, 32, 32, ObjectId.Collectable) );
 		return cs;
 	}

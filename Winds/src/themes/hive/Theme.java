@@ -34,7 +34,7 @@ import display.Window;
 @wTheme(idDB = 2, name = "Hive", creator = "admin", date = "2015-07-07", description = "Hive Theme")
 @wFiles(background = "background.jpg", music = "Honey.mp3", logo = "logo.png",
 		interactions = "sprites/interactions.png", sprites64 = "sprites/64.png",
-		sprites128 = "sprites/128.png", spritesBoss = "sprites/boss.png")
+		sprites128 = "sprites/128.png", spritesCollectable = "sprites/collectable.png")
 
 public class Theme extends ThemeBase {
 	protected Map<Point, Integer[]> initSpriteCompatibility(){
@@ -193,7 +193,7 @@ public class Theme extends ThemeBase {
 		switch(id){
 		
 		case 1:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.valuable, ObjectId.Collectable));
 			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
 			break;
 		case 2:
@@ -228,11 +228,11 @@ public class Theme extends ThemeBase {
 			break;
 		case 6:
 			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.valuable, ObjectId.Collectable));
 			break;
 		case 7:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, y+64, CollectableId.honey, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.valuable, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.valuable, ObjectId.Collectable));
 			break;
 		case 8:
 			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));

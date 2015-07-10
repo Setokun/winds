@@ -10,10 +10,10 @@ import annotation.wFiles;
 import annotation.wTheme;
 
 
-@wTheme(idDB = 3, name = "Brambles", creator = "admin", date = "2015-05-17", description = "Brambles Theme")
-@wFiles(background = "background.jpg", music = "Winds_Ice_Cavern.mp3", logo = "logo.png",
+@wTheme(idDB = 1, name = "Pirate", creator = "admin", date = "2015-07-10", description = "Pirate Theme")
+@wFiles(background = "background.jpg", music = "pirate.mp3", logo = "logo.png",
 		interactions = "sprites/interactions.png", sprites64 = "sprites/64.png",
-		sprites128 = "sprites/128.png", spritesBoss = "sprites/boss.png")
+		sprites128 = "sprites/128.png", spritesCollectable = "sprites/collectable.png")
 
 public class Theme extends ThemeBase {
 	protected Map<Point, Integer[]> initSpriteCompatibility(){
@@ -158,8 +158,8 @@ public class Theme extends ThemeBase {
 	protected String[] initInteractionTips(){
 		return new String[]{
 			"Departure", "Arrival", "4 coins", "16 coins",
-			"1 life", "1 flower", "2 flowers", "1 mob",
-			"3 mobs", "3 mobs", "3 mobs", "3 mobs"
+			"1 life", "1 chest", "2 chests", "1 mob",
+			"1 mob", "1 mob", "1 mob", "3 mobs", "right blower", "down blower", "left blower", "up blower"
 		};
 	}
 
