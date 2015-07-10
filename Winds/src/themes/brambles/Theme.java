@@ -13,7 +13,6 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import addon.BufferedImageLoader;
 import addon.ThemeBase;
 import annotation.wFiles;
 import annotation.wTheme;
@@ -482,8 +481,9 @@ public class Theme extends ThemeBase {
 			super(x, y, id);
 			x1 = x - 400;
 			y1= y - 400;
-			BufferedImageLoader loader = new BufferedImageLoader();
-			sprites = new SpriteSheet(loader.loadImage("/resources/feuille.png"), 78).grabImage(0, 0);
+			try {
+				sprites = new SpriteSheet(ImageIO.read(Leaf.class.getResource("sprites/leaf.png")), 78).grabImage(0, 0);
+			} catch (IOException e) { e.printStackTrace(); }
 		}
 
 		public void tick(ArrayList<GameObject> object) {
