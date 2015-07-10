@@ -15,9 +15,9 @@ import java.util.jar.JarFile;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import display.Handler;
 import annotation.wFiles;
 import annotation.wTheme;
+import display.Handler;
 
 
 public class JarTheme {
@@ -55,8 +55,8 @@ public class JarTheme {
 			jf.close();
 		} catch (IllegalAccessException | InstantiationException |
 				 ClassNotFoundException | IOException e) {
-			System.out.println("Unable to open the JAR file named \""+ jarFile.getName() +"\"");
-			e.printStackTrace();
+			//System.out.println("Unable to open the JAR file named \""+ jarFile.getName() +"\"");
+			jarFile.delete();
 			return;
 		}
 		    

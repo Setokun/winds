@@ -260,6 +260,10 @@ public class ServerConnection {
 			}
 			
 		}
+		catch (NullPointerException e){
+			JOptionPane.showMessageDialog(null, "Unable to install this theme !");
+			return false;
+		}
 		catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Unable to reach distant winds server, please verify your internet connection and try again !");
 			return false;
@@ -297,9 +301,14 @@ public class ServerConnection {
 				while ((b = in.read())!= -1)
 					fos.write(b);
 				fos.close();
-				AddonManager.addJarLevel(new File(sb.toString()));
-
-				return level.insertDB();
+				
+				JarLevel jl = new JarLevel(new File(sb.toString()));
+				if(jl.isValid()){
+					AddonManager.addJarLevel(new File(sb.toString()));
+					return level.insertDB();
+				}else{
+					return false;
+				}
 			}
 		} catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Unable to reach distant winds server, please verify your internet connection and try again !");
