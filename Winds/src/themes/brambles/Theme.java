@@ -309,7 +309,7 @@ public class Theme extends ThemeBase {
 		
 			this.collisions = new ArrayList<CollisionBox>();
 		
-			this.collisions.add( new CollisionBox((int)x+4, (int)y+20, 28, 20, ObjectId.Enemy) );
+			this.collisions.add( new CollisionBox((int)x+8, (int)y+25, 44, 20, ObjectId.Enemy) );
 			
 			for (int i = 1; i < spritesRightRaw.length; i++) { spritesRight[i-1] = spritesRightRaw[i]; }
 			for (int i = 1; i < spritesLeftRaw.length; i++)  { spritesLeft[i-1]  = spritesLeftRaw[i];  }
@@ -396,13 +396,15 @@ public class Theme extends ThemeBase {
 	private static class Boss extends GameObject{
 		int count;
 		
-		private Animation animation;
+		private Animation animation, animationLeft;
 		private static BufferedImage[] sprites = new BufferedImage[4], spritesRaw;
+		private static BufferedImage[] spritesLeft = new BufferedImage[4], spritesRawLeft;
 		private ArrayList<CollisionBox> collisions;
 		
 		static {
 			try {
 				spritesRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/dragonfly.png")), 64).getSprites();
+				spritesRawLeft = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/dragonfly_reverse.png")), 64).getSprites();
 			} catch (IOException e) { e.printStackTrace(); }
 		}
 		
@@ -412,21 +414,29 @@ public class Theme extends ThemeBase {
 			this.count = 0;
 			this.collisions = new ArrayList<CollisionBox>();
 
-			this.collisions.add( new CollisionBox((int)x+8, (int)y+40, 56, 40, ObjectId.Boss) );
+			this.collisions.add( new CollisionBox((int)x+16, (int)y+50, 88, 40, ObjectId.Boss) );
 			
 			for (int i = 1; i < spritesRaw.length; i++) {
 				sprites[i-1] = spritesRaw[i];
 			}
+			for (int i = 1; i < spritesRawLeft.length; i++) {
+				spritesLeft[i-1] = spritesRawLeft[i];
+			}
 			
 			animation = new Animation(1, sprites);
+			animationLeft = new Animation(1, spritesLeft);
 		}
 
 		public void tick(ArrayList<GameObject> objects) {
 			animation.runAnimation();
+			animationLeft.runAnimation();
+			
 			if(!Game.isFinished()){
 				count++;
 				GameObject player = objects.get(3600);
 				if(count >= 2){
+					
+					facingRight = ((player.getX()-this.x)<0); 
 					
 					this.x+=((player.getX()-this.x)>0)?1:-1;
 					this.y+=((player.getY()-this.y)>0)?1:-1;
@@ -439,7 +449,10 @@ public class Theme extends ThemeBase {
 		}
 
 		public void render(Graphics g) {
-			animation.drawAnimation(g, (int)x, (int)y, 96, 96);
+			if(facingRight)
+				animation.drawAnimation(g, (int)x, (int)y, 128, 128);
+			else
+				animationLeft.drawAnimation(g, (int)x, (int)y, 128, 128);
 			
 			if(Window.debug){
 				if(this.getBounds() != null){

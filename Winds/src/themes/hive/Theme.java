@@ -394,13 +394,15 @@ public class Theme extends ThemeBase {
 	private static class Boss extends GameObject{
 		int count;
 		
-		private Animation animation;
+		private Animation animation, animationLeft;
 		private static BufferedImage[] sprites = new BufferedImage[6], spritesRaw;
+		private static BufferedImage[] spritesLeft = new BufferedImage[6], spritesRawLeft;
 		private ArrayList<CollisionBox> collisions;
 		
 		static {
 			try {
-				spritesRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/zing_sheet.png")), 96).getSprites();
+				spritesRawLeft = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/zing_sheet.png")), 96).getSprites();
+				spritesRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/zing_sheet_reverse.png")), 96).getSprites();
 			} catch (IOException e) { e.printStackTrace(); }
 		}
 		
@@ -415,16 +417,23 @@ public class Theme extends ThemeBase {
 			for (int i = 1; i < spritesRaw.length; i++) {
 				sprites[i-1] = spritesRaw[i];
 			}
+			for (int i = 1; i < spritesRawLeft.length; i++) {
+				spritesLeft[i-1] = spritesRawLeft[i];
+			}
 			
 			animation = new Animation(1, sprites);
+			animationLeft =  new Animation(1, spritesLeft);
 		}
 
 		public void tick(ArrayList<GameObject> objects) {
 			animation.runAnimation();
+			animationLeft.runAnimation();
 			if(!Game.isFinished()){
 				count++;
 				GameObject player = objects.get(3600);
 				if(count >= 2){
+					
+					facingRight = ((player.getX()-this.x)<0);
 					
 					this.x+=((player.getX()-this.x)>0)?1:-1;
 					this.y+=((player.getY()-this.y)>0)?1:-1;
@@ -437,7 +446,10 @@ public class Theme extends ThemeBase {
 		}
 
 		public void render(Graphics g) {
-			animation.drawAnimation(g, (int)x, (int)y, 96, 96);
+			if(facingRight)
+				animation.drawAnimation(g, (int)x, (int)y, 96, 96);
+			else
+				animationLeft.drawAnimation(g, (int)x, (int)y, 96, 96);
 			
 			if(Window.debug){
 				if(this.getBounds() != null){
