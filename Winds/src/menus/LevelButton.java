@@ -11,6 +11,7 @@ import javax.swing.border.SoftBevelBorder;
 
 import addon.AddonManager;
 import addon.JarLevel;
+import addon.level.Type;
 
 public class LevelButton extends JPanel{
 	private static final long serialVersionUID = -2721501040792454948L;
@@ -18,7 +19,7 @@ public class LevelButton extends JPanel{
 	private JButton button;
 	private JLabel label;
 	
-	public LevelButton(JarLevel jarLvl){
+	public LevelButton(JarLevel jarLvl, Type type){
 		button = new JButton();
 		label = new JLabel();
         button.setBorder(new SoftBevelBorder(0));
@@ -26,7 +27,11 @@ public class LevelButton extends JPanel{
         button.setContentAreaFilled(false);
         BufferedImage logo = AddonManager.getJarThemeByID(jarLvl.getLevel().getIdTheme()).getLogo();
 		button.setIcon(new ImageIcon(logo));
-		button.addActionListener(new LevelLauncherEvent(jarLvl));
+		button.addMouseListener(
+			(type == Type.tomoderate)?
+				new LevelToModerateLauncherEvent(jarLvl)
+				:new LevelLauncherEvent(jarLvl)
+		);
 		label.setText(jarLvl.getLevel().getName());
 	}
 	
