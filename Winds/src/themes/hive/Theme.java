@@ -40,111 +40,131 @@ public class Theme extends ThemeBase {
 	protected Map<Point, Integer[]> initSpriteCompatibility(){
 		Map<Point, Integer[]> compatibility = new HashMap<Point, Integer[]>();
 		
-		compatibility.put(new Point(1,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(1,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(1,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(1,3), new Integer[]{2,4,5,11,12,13,14,17,18,20,21});
+		compatibility.put(new Point(1,0), new Integer[]{1,2,8,9,16,17,21});
+		compatibility.put(new Point(1,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
+		compatibility.put(new Point(1,2), new Integer[]{1,2,3,12,20});
+		compatibility.put(new Point(1,3), new Integer[]{1,2,13,16,17,20,21,22,23,24,25});
 
-		compatibility.put(new Point(2,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(2,1), new Integer[]{1,3,6,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(2,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(2,3), new Integer[]{1,3,6,7,8,9,10,19});
+		compatibility.put(new Point(2,0), new Integer[]{1,2,8,9,16,17,21});
+		compatibility.put(new Point(2,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
+		compatibility.put(new Point(2,2), new Integer[]{1,2,3,12,20});
+		compatibility.put(new Point(2,3), new Integer[]{1,2,13,16,17,20,21,22,23,24,25});
 
-		compatibility.put(new Point(3,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(3,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(3,2), new Integer[]{5,7,11,14});
-		compatibility.put(new Point(3,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-		
-		compatibility.put(new Point(4,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(4,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(4,2), new Integer[]{6,12,13,20});
-		compatibility.put(new Point(4,3), new Integer[]{1,3,6,7,8,9,10,19});
+		compatibility.put(new Point(3,0), new Integer[]{1,2,16,17,21});
+		compatibility.put(new Point(3,1), new Integer[]{12,18,20});
+		compatibility.put(new Point(3,2), new Integer[]{4,7,8,18});
+		compatibility.put(new Point(3,3), new Integer[]{1,2,13,16,17,20,21,22,23,24,25});
 
-		compatibility.put(new Point(5,0), new Integer[]{3,11,16,18,21});
-		compatibility.put(new Point(5,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(5,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(5,3), new Integer[]{1,3,6,7,8,9,10,19});
+		compatibility.put(new Point(4,0), new Integer[]{3,6,7,15});
+		compatibility.put(new Point(4,1), new Integer[]{13,14,19,22,23,24,25});
+		compatibility.put(new Point(4,2), new Integer[]{5,6});
+		compatibility.put(new Point(4,3), new Integer[]{1,2,13,16,17,20,21,22,23,24,25});
 
-		compatibility.put(new Point(6,0), new Integer[]{4,12,17,19});
-		compatibility.put(new Point(6,1), new Integer[]{2,4,8,9,10,20,21});
-		compatibility.put(new Point(6,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(6,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
+		compatibility.put(new Point(5,0), new Integer[]{4,5});
+		compatibility.put(new Point(5,1), new Integer[]{13,14,19,22,23,24,25});
+		compatibility.put(new Point(5,2), new Integer[]{5,6});
+		compatibility.put(new Point(5,3), new Integer[]{1,2,13,16,17,20,21,22,23,24,25});
 
-		compatibility.put(new Point(7,0), new Integer[]{3,11,16,18,21});
-		compatibility.put(new Point(7,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(7,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(7,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
+		compatibility.put(new Point(6,0), new Integer[]{4,5});
+		compatibility.put(new Point(6,1), new Integer[]{13,14,19,22,23,24,25});
+		compatibility.put(new Point(6,2), new Integer[]{4,7,8,18});
+		compatibility.put(new Point(6,3), new Integer[]{1,2,13,16,17,20,21,22,23,24,25});
 
-		compatibility.put(new Point(8,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(8,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(8,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(8,3), new Integer[]{1,3,6,7,8,9,10,19});
+		compatibility.put(new Point(7,0), new Integer[]{3,6,7,15});
+		compatibility.put(new Point(7,1), new Integer[]{13,14,19,22,23,24,25});
+		compatibility.put(new Point(7,2), new Integer[]{4,7,8,18});
+		compatibility.put(new Point(7,3), new Integer[]{1,2,13,16,17,20,21,22,23,24,25});
 
-		compatibility.put(new Point(9,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(9,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(9,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(9,3), new Integer[]{1,3,6,7,8,9,10,19});
+		compatibility.put(new Point(8,0), new Integer[]{3,6,7,15});
+		compatibility.put(new Point(8,1), new Integer[]{9,10,21});
+		compatibility.put(new Point(8,2), new Integer[]{1,2,3,12,20});
+		compatibility.put(new Point(8,3), new Integer[]{1,2,13,16,17,20,21,22,23,24,25});
 
-		compatibility.put(new Point(10,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(10,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(10,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(10,3), new Integer[]{1,3,6,7,8,9,10,19});
+		compatibility.put(new Point(9,0), new Integer[]{12,14,18});
+		compatibility.put(new Point(9,1), new Integer[]{9,10,15,21});
+		compatibility.put(new Point(9,2), new Integer[]{1,2,3,12,20});
+		compatibility.put(new Point(9,3), new Integer[]{8,9,11,19});
 
-		compatibility.put(new Point(11,0), new Integer[]{3,11,16,21});
-		compatibility.put(new Point(11,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(11,2), new Integer[]{5,7,11,14});
-		compatibility.put(new Point(11,3), new Integer[]{2,4,5,11,12,13,14,17,18,20,21});
+		compatibility.put(new Point(10,0), new Integer[]{12,14,18});
+		compatibility.put(new Point(10,1), new Integer[]{11});
+		compatibility.put(new Point(10,2), new Integer[]{16});
+		compatibility.put(new Point(10,3), new Integer[]{8,9,19});
 
-		compatibility.put(new Point(12,0), new Integer[]{4,12,17,19});
-		compatibility.put(new Point(12,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(12,2), new Integer[]{6,12,13,20});
-		compatibility.put(new Point(12,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
+		compatibility.put(new Point(11,0), new Integer[]{12,14,18});
+		compatibility.put(new Point(11,1), new Integer[]{9,15});
+		compatibility.put(new Point(11,2), new Integer[]{1,2,17});
+		compatibility.put(new Point(11,3), new Integer[]{10});
 
-		compatibility.put(new Point(13,0), new Integer[]{4,12,17,19});
-		compatibility.put(new Point(13,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(13,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(13,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
+		compatibility.put(new Point(12,0), new Integer[]{1,2,8,9,11,16,17,21});
+		compatibility.put(new Point(12,1), new Integer[]{18,20});
+		compatibility.put(new Point(12,2), new Integer[]{9,10,11,15,19});
+		compatibility.put(new Point(12,3), new Integer[]{3,12,14});
 
-		compatibility.put(new Point(14,0), new Integer[]{3,11,16,18,21});
-		compatibility.put(new Point(14,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(14,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(14,3), new Integer[]{2,4,5,11,12,13,14,17,18,20,21});
+		compatibility.put(new Point(13,0), new Integer[]{13,19,20,21,25});
+		compatibility.put(new Point(13,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
+		compatibility.put(new Point(13,2), new Integer[]{13,14,21,22,23});
+		compatibility.put(new Point(13,3), new Integer[]{4,5,6,7,15,18});
 
-		compatibility.put(new Point(15,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,20});
-		compatibility.put(new Point(15,1), new Integer[]{16});
-		compatibility.put(new Point(15,2), new Integer[]{1,2,3,4,8,9,10,16,17,18,19,21});
-		compatibility.put(new Point(15,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
+		compatibility.put(new Point(14,0), new Integer[]{13,19,20,21,25});
+		compatibility.put(new Point(14,1), new Integer[]{12,18,20});
+		compatibility.put(new Point(14,2), new Integer[]{9,10,11,15,19});
+		compatibility.put(new Point(14,3), new Integer[]{4,5,6,7,15,18});
 
-		compatibility.put(new Point(16,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(16,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(16,2), new Integer[]{5,7,11,14});
-		compatibility.put(new Point(16,3), new Integer[]{15});
+		compatibility.put(new Point(15,0), new Integer[]{12,14,18});
+		compatibility.put(new Point(15,1), new Integer[]{13,14,19,22,23,24,25});
+		compatibility.put(new Point(15,2), new Integer[]{4,7,8,18});
+		compatibility.put(new Point(15,3), new Integer[]{8,9,11,19});
 
-		compatibility.put(new Point(17,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(17,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(17,2), new Integer[]{6,12,13,20});
-		compatibility.put(new Point(17,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
+		compatibility.put(new Point(16,0), new Integer[]{10});
+		compatibility.put(new Point(16,1), new Integer[]{17});
+		compatibility.put(new Point(16,2), new Integer[]{1,2,3,12,20});
+		compatibility.put(new Point(16,3), new Integer[]{1,2,13,16,17,20,21,22,23,24,25});
 
-		compatibility.put(new Point(18,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(18,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(18,2), new Integer[]{5,7,11,14});
-		compatibility.put(new Point(18,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-	
-		compatibility.put(new Point(19,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(19,1), new Integer[]{2,4,5,8,9,10,20,21});
-		compatibility.put(new Point(19,2), new Integer[]{6,12,13,20});
-		compatibility.put(new Point(19,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
+		compatibility.put(new Point(17,0), new Integer[]{11});
+		compatibility.put(new Point(17,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
+		compatibility.put(new Point(17,2), new Integer[]{1,2,3,12,20});
+		compatibility.put(new Point(17,3), new Integer[]{16});
 
-		compatibility.put(new Point(20,0), new Integer[]{4,12,17,19});
-		compatibility.put(new Point(20,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19,21});
-		compatibility.put(new Point(20,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(20,3), new Integer[]{1,3,6,7,8,9,10,19});
-	
-		compatibility.put(new Point(21,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(21,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(21,2), new Integer[]{5,11,14});
-		compatibility.put(new Point(21,3), new Integer[]{1,3,6,7,8,9,10,19});
-		
+		compatibility.put(new Point(18,0), new Integer[]{3,6,7,15});
+		compatibility.put(new Point(18,1), new Integer[]{13,14,19,22,23,24,25});
+		compatibility.put(new Point(18,2), new Integer[]{9,10,11,15,19});
+		compatibility.put(new Point(18,3), new Integer[]{3,12,14});
+
+		compatibility.put(new Point(19,0), new Integer[]{12,14,18});
+		compatibility.put(new Point(19,1), new Integer[]{9,10,15,21});
+		compatibility.put(new Point(19,2), new Integer[]{13,14,21,22,23});
+		compatibility.put(new Point(19,3), new Integer[]{4,5,6,7,15,18});
+
+		compatibility.put(new Point(20,0), new Integer[]{1,2,8,9,16,17,21});
+		compatibility.put(new Point(20,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
+		compatibility.put(new Point(20,2), new Integer[]{13,14,21,22,23});
+		compatibility.put(new Point(20,3), new Integer[]{3,12,14});
+
+		compatibility.put(new Point(21,0), new Integer[]{13,19,20,21,25});
+		compatibility.put(new Point(21,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
+		compatibility.put(new Point(21,2), new Integer[]{1,2,3,12,20});
+		compatibility.put(new Point(21,3), new Integer[]{8,9,11,19});
+
+		compatibility.put(new Point(22,0), new Integer[]{13,19,20,21,25});
+		compatibility.put(new Point(22,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
+		compatibility.put(new Point(22,2), new Integer[]{4,5,6,7,15,18});
+		compatibility.put(new Point(22,3), new Integer[]{4,5,6,7,15,18});
+
+		compatibility.put(new Point(23,0), new Integer[]{13,19,20,21,25});
+		compatibility.put(new Point(23,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
+		compatibility.put(new Point(23,2), new Integer[]{24,25});
+		compatibility.put(new Point(23,3), new Integer[]{4,5,6,7,15,18});
+
+		compatibility.put(new Point(24,0), new Integer[]{23});
+		compatibility.put(new Point(24,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
+		compatibility.put(new Point(24,2), new Integer[]{25});
+		compatibility.put(new Point(24,3), new Integer[]{4,5,6,7,15,18});
+
+		compatibility.put(new Point(25,0), new Integer[]{23,24});
+		compatibility.put(new Point(25,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
+		compatibility.put(new Point(25,2), new Integer[]{4,5,6,7,15,18});
+		compatibility.put(new Point(25,3), new Integer[]{4,5,6,7,15,18});
+				
 		return compatibility;
 	}
 	protected int[][][] initCollisionsList(){
@@ -162,7 +182,6 @@ public class Theme extends ThemeBase {
 				{{0,108,128,20, 0},{0,104,128,4, 1}},
 				{{0,108,128,20, 0},{0,104,128,4, 1}},
 				{{0,0,128,24, 0}},
-				{{0,0,32, 24, 0}},
 				{{84,0,44,128, 0}},
 				{{96,0,32,24, 0}},
 				{{0,108,24,20, 0}},
