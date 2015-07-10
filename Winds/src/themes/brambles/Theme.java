@@ -179,18 +179,15 @@ public class Theme extends ThemeBase {
 	protected String[] initInteractionTips(){
 		return new String[]{
 			"Departure", "Arrival", "4 coins", "16 coins",
-			"1 life", "1 flower", "2 flowers", "1 mob",
-			"3 mobs", "3 mobs", "3 mobs", "3 mobs", "right blower", "down blower", "left blower", "up blower"
+			"1 life", "1 flower", "2 flowers", "1 dragonfly",
+			"3 dragonflies", "3 dragonflies", "3 dragonflies", "3 dragonflies", 
+			"right blower", "down blower", "left blower", "up blower"
 		};
 	}
 	public void loadInteractions(int x, int y, int id, Handler handler) {
 		Random rand = new Random();
 		switch(id){
 		
-		case 1:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.valuable, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
-			break;
 		case 2:
 			handler.addObject(new Arrival(x+8, y-24, ObjectId.Arrival));
 			break;
@@ -222,7 +219,6 @@ public class Theme extends ThemeBase {
 			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
 			break;
 		case 6:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
 			handler.addObject(new Collectable(x+16, y+16, CollectableId.valuable, ObjectId.Collectable));
 			break;
 		case 7:

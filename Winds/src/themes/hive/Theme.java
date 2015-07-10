@@ -96,7 +96,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(11,3), new Integer[]{10});
 
 		compatibility.put(new Point(12,0), new Integer[]{1,2,8,9,11,16,17,21});
-		compatibility.put(new Point(12,1), new Integer[]{18,20});
+		compatibility.put(new Point(12,1), new Integer[]{12,18,20});
 		compatibility.put(new Point(12,2), new Integer[]{9,10,11,15,19});
 		compatibility.put(new Point(12,3), new Integer[]{3,12,14});
 
@@ -105,7 +105,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(13,2), new Integer[]{13,14,21,22,23});
 		compatibility.put(new Point(13,3), new Integer[]{4,5,6,7,15,18});
 
-		compatibility.put(new Point(14,0), new Integer[]{13,19,20,21,25});
+		compatibility.put(new Point(14,0), new Integer[]{13,19,20,21,22,25});
 		compatibility.put(new Point(14,1), new Integer[]{12,18,20});
 		compatibility.put(new Point(14,2), new Integer[]{9,10,11,15,19});
 		compatibility.put(new Point(14,3), new Integer[]{4,5,6,7,15,18});
@@ -147,7 +147,7 @@ public class Theme extends ThemeBase {
 
 		compatibility.put(new Point(22,0), new Integer[]{13,19,20,21,25});
 		compatibility.put(new Point(22,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
-		compatibility.put(new Point(22,2), new Integer[]{4,5,6,7,15,18});
+		compatibility.put(new Point(22,2), new Integer[]{4,5,6,7,14,15,18});
 		compatibility.put(new Point(22,3), new Integer[]{4,5,6,7,15,18});
 
 		compatibility.put(new Point(23,0), new Integer[]{13,19,20,21,25});
@@ -203,20 +203,16 @@ public class Theme extends ThemeBase {
 	protected String[] initInteractionTips(){
 		return new String[]{
 			"Departure", "Arrival", "4 coins", "16 coins",
-			"1 life", "1 flower", "2 flowers", "1 mob",
-			"3 mobs", "3 mobs", "3 mobs", "3 mobs", "right blower", "down blower", "left blower", "up blower"
+			"1 life", "1 pot of honey", "2 pots of honey", "1 bee",
+			"3 bees", "3 bees", "3 bees", "3 bees", "right blower", "down blower", "left blower", "up blower"
 		};
 	}
 	public void loadInteractions(int x, int y, int id, Handler handler) {
 		Random rand = new Random();
 		switch(id){
 		
-		case 1:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.valuable, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
-			break;
 		case 2:
-			handler.addObject(new Arrival(x+8, y-24, ObjectId.Arrival));
+			handler.addObject(new Arrival(x+8, y+40, ObjectId.Arrival));
 			break;
 		case 3:
 			handler.addObject(new Collectable(x+16, y+16, CollectableId.coin, ObjectId.Collectable));
@@ -246,7 +242,6 @@ public class Theme extends ThemeBase {
 			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
 			break;
 		case 6:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
 			handler.addObject(new Collectable(x+16, y+16, CollectableId.valuable, ObjectId.Collectable));
 			break;
 		case 7:
@@ -313,8 +308,8 @@ public class Theme extends ThemeBase {
 		
 		static {
 			try {
-				spritesRightRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/boss_bee.png")), 96).getSprites();
-				spritesLeftRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/boss_bee.png_reverse.png")), 96).getSprites();
+				spritesRightRaw = new SpriteSheet(ImageIO.read(Enemy.class.getResource("enemies/zing_sheet.png")), 96).getSprites();
+				spritesLeftRaw = new SpriteSheet(ImageIO.read(Enemy.class.getResource("enemies/zing_sheet_reverse.png")), 96).getSprites();
 			} catch (IOException e) { e.printStackTrace(); }
 		}
 	
