@@ -173,9 +173,9 @@ public class Theme extends ThemeBase {
 				{{0,0,128,128, 0}},
 				{{0,0,128,8, 0},{120,0,8,128, 0},{0,120,128,8, 0},{0,0,8,128, 0}},
 				{{0,0,28,128, 0},{0,0,128,24, 0},{28,24,16,32, 0}},
-				{{0,0,32,128, 1}},
-				{{0,0,32,128, 1}},
-				{{0,0,32,128, 1}},
+				{{0,0,28,128, 0},{28,0,4,128, 1}},
+				{{0,0,28,128, 0},{28,0,4,128, 1}},
+				{{0,0,28,128, 0},{28,0,4,128, 1}},
 				{{0,0,28,128, 0}},
 				{{0,0,28,108, 0},{0,108,128,20, 0}},
 				{{0,108,128,20, 0}},
@@ -191,10 +191,10 @@ public class Theme extends ThemeBase {
 				{{84,108,44,20, 0}},
 				{{0,0,128,24, 0},{84,24,44,104, 0}},
 				{{0,108,128,20, 0},{84,0,44,128, 0},{72,84,12,24, 0}},
-				{{80,0,48,128, 1}},
-				{{80,0,48,128, 1}},
-				{{80,0,48,128, 1}},
-				{{80,0,48,128, 1}}
+				{{80,0,4,128, 1},{84,0,44,128, 0}},
+				{{80,0,4,128, 1},{84,0,44,128, 0}},
+				{{80,0,4,128, 1},{84,0,44,128, 0}},
+				{{80,0,4,128, 1},{84,0,44,128, 0}}
 		};
 	}
 	protected int[][] initInteractionsCompatibility(){
@@ -308,8 +308,8 @@ public class Theme extends ThemeBase {
 		
 		static {
 			try {
-				spritesRightRaw = new SpriteSheet(ImageIO.read(Enemy.class.getResource("enemies/zing_sheet.png")), 96).getSprites();
-				spritesLeftRaw = new SpriteSheet(ImageIO.read(Enemy.class.getResource("enemies/zing_sheet_reverse.png")), 96).getSprites();
+				spritesRightRaw = new SpriteSheet(ImageIO.read(Enemy.class.getResource("enemies/zing_sheet_reverse.png")), 96).getSprites();
+				spritesLeftRaw = new SpriteSheet(ImageIO.read(Enemy.class.getResource("enemies/zing_sheet.png")), 96).getSprites();
 			} catch (IOException e) { e.printStackTrace(); }
 		}
 	
@@ -343,14 +343,14 @@ public class Theme extends ThemeBase {
 					if(facingRight){
 						this.x+=(direction == Direction.right)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).x++;
+							getBounds().get(i).x+=(direction == Direction.right)?1:-1;
 						}
 						width++;
 					}
 					else{
 						this.x-=(direction == Direction.right)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).x--;
+							getBounds().get(i).x-=(direction == Direction.right)?1:-1;
 						}
 						width--;
 					}
@@ -381,7 +381,7 @@ public class Theme extends ThemeBase {
 		}
 	
 		public void render(Graphics g) {
-			if(facingRight)
+			if((facingRight && direction == Direction.left) || (!facingRight && direction != Direction.left) )
 				animationRight.drawAnimation(g, (int)x, (int)y, 48, 48);
 			else
 				animationLeft.drawAnimation(g, (int)x, (int)y, 48, 48);
@@ -445,7 +445,7 @@ public class Theme extends ThemeBase {
 			if(!Game.isFinished()){
 				count++;
 				GameObject player = objects.get(3600);
-				if(count >= 2){
+				if(count >= 1){
 					
 					facingRight = ((player.getX()-this.x)<0);
 					

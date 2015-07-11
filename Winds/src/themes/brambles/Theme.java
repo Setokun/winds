@@ -93,7 +93,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(11,0), new Integer[]{3,11,16,21});
 		compatibility.put(new Point(11,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
 		compatibility.put(new Point(11,2), new Integer[]{5,7,11,14});
-		compatibility.put(new Point(11,3), new Integer[]{2,4,5,11,12,13,14,17,18,20,21});
+		compatibility.put(new Point(11,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
 
 		compatibility.put(new Point(12,0), new Integer[]{4,12,17,19});
 		compatibility.put(new Point(12,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
@@ -108,7 +108,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(14,0), new Integer[]{3,11,16,18,21});
 		compatibility.put(new Point(14,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
 		compatibility.put(new Point(14,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(14,3), new Integer[]{2,4,5,11,12,13,14,17,18,20,21});
+		compatibility.put(new Point(14,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
 
 		compatibility.put(new Point(15,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,20});
 		compatibility.put(new Point(15,1), new Integer[]{16});
@@ -216,7 +216,7 @@ public class Theme extends ThemeBase {
 			handler.addObject(new Collectable(x+64, y+64, CollectableId.coin, ObjectId.Collectable));
 			break;
 		case 5:
-			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.life, ObjectId.Collectable));
 			break;
 		case 6:
 			handler.addObject(new Collectable(x+16, y+16, CollectableId.valuable, ObjectId.Collectable));
@@ -326,14 +326,14 @@ public class Theme extends ThemeBase {
 					if(facingRight){
 						this.x+=(direction == Direction.right)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).x++;
+							getBounds().get(i).x+=(direction == Direction.right)?1:-1;
 						}
 						width++;
 					}
 					else{
 						this.x-=(direction == Direction.right)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).x--;
+							getBounds().get(i).x-=(direction == Direction.right)?1:-1;
 						}
 						width--;
 					}
