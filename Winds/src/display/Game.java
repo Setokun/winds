@@ -282,7 +282,9 @@ public class Game extends Canvas implements Runnable{
 		if(finished && !pause){
 			if(!scoreUploaded){
 				scoreUploaded = true;
-				score.setScore(AddonManager.getLoadedJarLevel().getLevel().getIdDB());
+				int id = AddonManager.getLoadedJarLevel().getLevel().getIdDB();
+				if(id != 0)
+					score.setScore(id);
 			}
 			
 			delayVictory--;
