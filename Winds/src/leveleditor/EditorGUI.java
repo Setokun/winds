@@ -470,8 +470,8 @@ public class EditorGUI extends JPanel {
     	if(lvl.getStartPosition() != null && lvl.getEndPosition() != null){
     		Point start = lvl.getStartPosition(),
     			  end	= lvl.getEndPosition();
-    		int startPosition = ((int) start.getX())*NB_TILES_MATRIX + ((int) start.getY()),
-    			endPosition   = ((int) end.getX())  *NB_TILES_MATRIX + ((int) end.getY());
+    		int startPosition = ((int) start.getY())*NB_TILES_MATRIX + ((int) start.getX()),
+    			endPosition   = ((int) end.getY())  *NB_TILES_MATRIX + ((int) end.getX());
     		
     		departure = (Tile) gridMatrix.getComponent(startPosition);
     		arrival   = (Tile) gridMatrix.getComponent(endPosition);
