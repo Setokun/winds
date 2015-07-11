@@ -36,19 +36,21 @@ public class LevelSelector extends JPanel{
     private int compteur, nbElements, nbPages, numPage = 0;    
     private JarLevel[] jarLevels = new JarLevel[nbElements];
     private ArrayList<JarLevel> levelsToDisplay = new ArrayList<JarLevel>();
+    private Type type;
     Boolean hasPrevious = false, hasNext = true;
     JPanel southMiddle, jSouthWest, jSouthEast, south, north, jNorthWest, jNorthEast, middle, grid;
     String title;
     
-	public LevelSelector(Type levelType) {
+	public LevelSelector(Type levelType, int numPage) {
+		type = levelType;
+		this.numPage = numPage;
 		
+		if(type == Type.basic)		 this.title = "Basic levels";
+		if(type == Type.custom)	 this.title = "Custom Levels";
+		if(type == Type.my)		 this.title = "My levels";
+		if(type == Type.tomoderate) this.title = "Levels to moderate";
 		
-		if(levelType == Type.basic)		 this.title = "Basic levels";
-		if(levelType == Type.custom)	 this.title = "Custom Levels";
-		if(levelType == Type.my)		 this.title = "My levels";
-		if(levelType == Type.toModerate) this.title = "Levels to moderate";
-		
-		jarLevels = AddonManager.getJarLevelsByType(levelType);
+		jarLevels = AddonManager.getJarLevelsByType(type);
 		for (int i = 0; i < jarLevels.length; i++) {
 			jarLevels[i].getLevel().getName();
 		}
@@ -61,12 +63,14 @@ public class LevelSelector extends JPanel{
     	int[] idThemesInstalled = AddonManager.getThemesInstalledIds();
     	
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
-			if(LevelData.getStatus(jarLevels[i].getLevel().getIdDB()) == null || !LevelData.getStatus(jarLevels[i].getLevel().getIdDB()).equals("desactivated"))
+			if(LevelData.getStatus(jarLevels[i].getLevel().getIdDB()) == null || !LevelData.getStatus(jarLevels[i].getLevel().getIdDB()).equals("desactivated")){
 				for (int j = 0; j < idThemesInstalled.length; j++) {
 					if(idThemesInstalled[j] == jarLevels[i].getLevel().getIdTheme()){
 						levelsToDisplay.add(jarLevels[i]);
+						break;
 					}
 				}				
+			}
 		}
 		this.removeAll();
 		
@@ -113,7 +117,7 @@ public class LevelSelector extends JPanel{
 		grid.setLayout(gridLayout);
 		
 		for (int i = 0; i < levelsToDisplay.size(); i++) {
-			buttons[i] = new LevelButton(levelsToDisplay.get(i));
+			buttons[i] = new LevelButton(levelsToDisplay.get(i), type, currentPage);
 			grid.add(buttons[i].getButton());
 		}
 		

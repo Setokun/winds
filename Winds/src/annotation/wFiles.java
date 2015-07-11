@@ -15,5 +15,5 @@ public @interface wFiles {
 	String interactions();
 	String sprites64();
 	String sprites128();
-	String spritesBoss();
+	String spritesCollectable();
 }

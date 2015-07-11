@@ -15,9 +15,9 @@ import java.util.jar.JarFile;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import display.Handler;
 import annotation.wFiles;
 import annotation.wTheme;
+import display.Handler;
 
 
 public class JarTheme {
@@ -26,7 +26,7 @@ public class JarTheme {
 	private Class<?> mainClass;
 	private String music;
 	private BufferedImage logo, background, interactions,
-						  sprites64, sprites128, spritesBoss; 
+						  sprites64, sprites128, spritesCollectable; 
 	
 	
 	//region Constructors 
@@ -49,14 +49,14 @@ public class JarTheme {
 				interactions = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).interactions());
 				sprites64	 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).sprites64());
 				sprites128	 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).sprites128());
-				spritesBoss  = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).spritesBoss());
+				spritesCollectable  = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).spritesCollectable());
 				
 			}
 			jf.close();
 		} catch (IllegalAccessException | InstantiationException |
 				 ClassNotFoundException | IOException e) {
-			System.out.println("Unable to open the JAR file named \""+ jarFile.getName() +"\"");
-			e.printStackTrace();
+			//System.out.println("Unable to open the JAR file named \""+ jarFile.getName() +"\"");
+			jarFile.delete();
 			return;
 		}
 		    
@@ -168,7 +168,7 @@ public class JarTheme {
 				+"\", interactions: \""+ getInteractionsPath()
 				+"\", sprites64: \""+ getSprites64Path()
 				+"\", sprites128: \""+ getSprites128Path()
-				+"\", spritesBoss: \""+ getSpritesBossPath()
+				+"\", spritesCollectable: \""+ getSpritesCollectablePath()
 				+"\"]";
 	}
 	public String getMusicPath(){
@@ -195,9 +195,9 @@ public class JarTheme {
 		return mainClass.getPackage().getName() +"/"
 			 + mainClass.getDeclaredAnnotation(wFiles.class).sprites128();
 	}
-	public String getSpritesBossPath(){
+	public String getSpritesCollectablePath(){
 		return mainClass.getPackage().getName() +"/"
-			 + mainClass.getDeclaredAnnotation(wFiles.class).spritesBoss();
+			 + mainClass.getDeclaredAnnotation(wFiles.class).spritesCollectable();
 	}
 	//endregion
 	
@@ -241,8 +241,8 @@ public class JarTheme {
 	public BufferedImage getSprites128() {
 		return sprites128;
 	}
-	public BufferedImage getSpritesBoss() {
-		return spritesBoss;
+	public BufferedImage getSpritesCollectable() {
+		return spritesCollectable;
 	}
 	//endregion
 	

@@ -94,7 +94,7 @@ public class LevelData {
 		else if(type == Type.custom){
 			r = ServerConnection.getCustomLevelsList();
 		}
-		else if(type == Type.toModerate){
+		else if(type == Type.tomoderate){
 			r = ServerConnection.getLevelsToModerateList();
 		}
 

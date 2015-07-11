@@ -19,7 +19,7 @@ public class Player extends GameObject{
 	
 	public static float gravity = 0.03f;
 
-	private final float MAX_SPEED = 3;
+	private final float MAX_SPEED = 4;
 	private final float MAX_SPEED_X = 4;
 	private float wind_force = 1.0f;
 	private int timeElapsed = 0;
@@ -90,10 +90,13 @@ public class Player extends GameObject{
 				if(tempObject.getBounds().get(j).getId() == ObjectId.Block){
 					actionBlock(tempObject, j);
 				}
-				else if(tempObject.getBounds().get(j).getId() == ObjectId.DangerousBlock 
-					 || tempObject.getBounds().get(j).getId() == ObjectId.Enemy){
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.DangerousBlock){
 					actionDangerousBlockOrEnemy(tempObject, j);
 				}
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.Enemy){
+						if(!isHighlander())
+							actionDangerousBlockOrEnemy(tempObject, j);
+					}
 				else if(tempObject.getBounds().get(j).getId() == ObjectId.Boss){
 					actionBoss(tempObject, j);
 				}
@@ -240,9 +243,9 @@ public class Player extends GameObject{
 					    if(this.life>5)
 					    	this.life = 5;
 					}
-					else if(cid == CollectableId.honey){
+					else if(cid == CollectableId.valuable){
 						AudioPlayer.playSfx("honey");
-						Game.score.setNbItems(Game.score.getNbItems()+2);
+						Game.score.setNbItems(Game.score.getNbItems()+5);
 					}
 					handler.removeObject(tempObject);
 				}

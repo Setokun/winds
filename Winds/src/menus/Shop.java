@@ -85,7 +85,7 @@ public class Shop  extends JPanel {
 			listThemesToDisplay = getThemesList();
 			listBasicLevelsToDisplay = getLevelsList(Type.basic);
 			listCustomLevelsToDisplay = getCustomLevelsList(Type.custom);
-			listLevelsToModerateToDisplay = getLevelsList(Type.toModerate);
+			listLevelsToModerateToDisplay = getLevelsList(Type.tomoderate);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(this, "Unable to reach distant winds server, please verify your internet connection and try again !");
 		}
@@ -180,8 +180,6 @@ public class Shop  extends JPanel {
 		
 	}
 
-
-	
 	private void initBackButton() {
 		jBtnBack = new JButton();
 		jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
@@ -220,7 +218,6 @@ public class Shop  extends JPanel {
 		Window.resize(Window.DIM_STANDARD);
 		Window.affect(new MainMenu());
 	}
-	
 	
 	private Object[][] getThemesList() throws IOException{
 		Object[][] listThemes = ThemeData.getThemesList();
@@ -278,7 +275,6 @@ public class Shop  extends JPanel {
 		}
 		return listLevelsToDisplay;
 	}
-
 	
 	private void initializeThemeList(Object[][] listThemesToDisplay){
 		tableNewThemes = new JTable();
@@ -410,6 +406,8 @@ public class Shop  extends JPanel {
 						JOptionPane.showMessageDialog(null, "New level installed !!");
 						((DefaultTableModel)tableNewLevels.getModel()).removeRow(row);
 					}
+					else
+						JOptionPane.showMessageDialog(null, "Unable to install this basic level");
 				}
 		    }  
 		} );
@@ -472,11 +470,13 @@ public class Shop  extends JPanel {
 				if(col == 1){
 					if(tableCustomLevels.getValueAt(row, col) != null){
 						if(ServerConnection.downloadLevel((int)tableCustomLevels.getValueAt(row, 5))){
-							JOptionPane.showMessageDialog(null, "New level installed !!");
+							JOptionPane.showMessageDialog(null, "New custom level installed !!");
+							tableCustomLevels.setValueAt(null, row, col);
+							tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_desactivate.png")), row, 2);
+							tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_uninstall.png")) , row, 3);
 						}
-						tableCustomLevels.setValueAt(null, row, col);
-						tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_desactivate.png")), row, 2);
-						tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_uninstall.png")) , row, 3);
+						else
+							JOptionPane.showMessageDialog(null, "Unable to install this custom level");
 					}
 				}
 				if(col == 2){
@@ -554,8 +554,14 @@ public class Shop  extends JPanel {
 				int col = tableLevelsToModerate.columnAtPoint(p);
 				int row = tableLevelsToModerate.rowAtPoint(p);
 				if(col == 1){
-					System.out.println("Installation de " + tableLevelsToModerate.getValueAt(row, 0));
-					((DefaultTableModel)tableLevelsToModerate.getModel()).removeRow(row);
+					//System.out.println("Installation de " + tableLevelsToModerate.getValueAt(row, 0));
+					if(ServerConnection.downloadLevel((int)tableLevelsToModerate.getValueAt(row, 2))){
+						JOptionPane.showMessageDialog(null, "New level to moderate installed !!");
+						((DefaultTableModel)tableLevelsToModerate.getModel()).removeRow(row);
+					}
+					else
+						JOptionPane.showMessageDialog(null, "Unable to install this level to moderate");
+					
 				}
 		    }  
 		} );

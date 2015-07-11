@@ -146,7 +146,7 @@ public class JarLevel {
 				sb.append((char) bit);
 			jf.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			jar.delete();
 		}
 		
 		return sb.toString();

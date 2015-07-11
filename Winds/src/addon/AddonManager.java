@@ -1,6 +1,8 @@
 package addon;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -25,10 +27,15 @@ public class AddonManager {
 
 	static {
 		// paths initialisation
-		currentPath = JarLevel.class.getProtectionDomain().getCodeSource().getLocation().getFile().replace("Winds.jar", "").substring(1);
+		try {
+			currentPath = URLDecoder.decode(JarLevel.class.getProtectionDomain().getCodeSource().getLocation().getFile().replace("Winds.jar", "").substring(1), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			JOptionPane.showMessageDialog(null, "UTF-8 encoding isn't supported, please check your JAVA version");
+		}
 		themesPath = currentPath+"resources/themes/";
 		levelsPath = currentPath+"resources/levels/";
 		commonPath = currentPath+"resources/common/";
+		
 		File folder = new File(currentPath+"resources/");
 		if(!folder.exists())
 			folder.mkdir();
@@ -49,7 +56,7 @@ public class AddonManager {
 		if(!folder.exists())
 			folder.mkdir();
 		File[] items = folder.listFiles();
-		
+		if(items != null)
 		for (int i = 0; i < items.length; i++){
 		    if (items[i].isFile() && items[i].getName().endsWith(".jar")) {
 		    	JarTheme theme = validateJarTheme(items[i]);
@@ -59,6 +66,7 @@ public class AddonManager {
 		    	}
 		    }
 		}
+		
 	}
 	/**
 	 * Checks the validity of the theme archive.
@@ -102,7 +110,7 @@ public class AddonManager {
 		if(!folder.exists())
 			folder.mkdir();
 		File[] items = folder.listFiles();
-				
+		if(items != null)
 		for (int i = 0; i < items.length; i++)
 			if (items[i].isFile() && items[i].getName().endsWith(".jar")) {
 		    	JarLevel level = validateJarLevel(items[i]);
