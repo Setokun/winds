@@ -89,6 +89,10 @@ public class MouseInput extends MouseAdapter{
 					}
 				}
 			}
+			else{
+				if(Game.getDelayAfterFinished() > 3)
+					Game.goBackToMenu();
+			}
 		}
 		
 	}
