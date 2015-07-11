@@ -26,7 +26,7 @@ public class AddonManager {
 	private static String themesPath, levelsPath, commonPath;
 
 	static {
-		// paths initialisation
+		// paths initialization
 		try {
 			currentPath = URLDecoder.decode(JarLevel.class.getProtectionDomain().getCodeSource().getLocation().getFile().replace("Winds.jar", "").substring(1), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -34,13 +34,12 @@ public class AddonManager {
 		}
 		themesPath = currentPath+"resources/themes/";
 		levelsPath = currentPath+"resources/levels/";
-		commonPath = currentPath+"resources/common/";
 		
 		File folder = new File(currentPath+"resources/");
 		if(!folder.exists())
 			folder.mkdir();
-		// lists initialisation
 		
+		// lists initialization
 		jarThemesList = new ArrayList<JarTheme>();
 		jarLevelsList = new ArrayList<JarLevel>();
 		collectJarThemes();
