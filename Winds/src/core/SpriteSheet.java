@@ -15,6 +15,10 @@ public class SpriteSheet {
 		this.height = image.getHeight(null);
 	}
 	
+	/**
+	 * returns a table of all BufferedImages from this SpriteSheet
+	 * @return BufferedImage table
+	 */
 	public BufferedImage[] getSprites(){
 		ArrayList<BufferedImage> spritesList = new ArrayList<BufferedImage>();
 		spritesList.add(null);
@@ -28,7 +32,12 @@ public class SpriteSheet {
 		BufferedImage[] images = new BufferedImage[ spritesList.size() ];
 		return spritesList.toArray(images);
 	}
-	/*a mettre en private a terme*/
+	/**
+	 * returns a buffered image from a spriteSheet with its coordinates
+	 * @param col the coordinate of the wanted sprite column
+	 * @param row the coordinate of the wanted sprite row
+	 * @return BufferedImage
+	 */
 	public BufferedImage grabImage(int col, int row){
 		return image.getSubimage(col, row, spriteSize, spriteSize);
 	}

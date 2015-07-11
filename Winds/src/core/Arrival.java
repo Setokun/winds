@@ -27,11 +27,16 @@ public class Arrival extends GameObject {
 		this.collisions = new ArrayList<CollisionBox>();
 		this.collisions.add( new CollisionBox((int)x+44, (int)y+2, 7, 60, ObjectId.Arrival) );
 	}
-
-	@Override
+	
+	/**
+	 * determine how the GameObject will act on each frame
+	 * @param ArrayList of GameObject
+	 */
 	public void tick(ArrayList<GameObject> object) {}
-
-	@Override
+	/**
+	 * provides the rendering of the arrival to Canvas' Graphics
+	 * @param Graphics g
+	 */
 	public void render(Graphics g) {
 		if(Game.isFinished())
 			g.drawImage(sprites[1], (int)x, (int)y, 64, 64, null);
@@ -50,8 +55,10 @@ public class Arrival extends GameObject {
 			}
 		}
 	}
-
-	@Override
+	/**
+	 * returns a list of the collision boxes concerning this GameObject
+	 * @return ArrayList of collisionBox
+	 */
 	public ArrayList<CollisionBox> getBounds() {
 		return collisions;
 	}
