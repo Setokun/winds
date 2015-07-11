@@ -100,7 +100,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(12,2), new Integer[]{9,10,11,15,19});
 		compatibility.put(new Point(12,3), new Integer[]{3,12,14});
 
-		compatibility.put(new Point(13,0), new Integer[]{13,19,20,21,25});
+		compatibility.put(new Point(13,0), new Integer[]{13,19,20,22,25});
 		compatibility.put(new Point(13,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
 		compatibility.put(new Point(13,2), new Integer[]{13,14,21,22,23});
 		compatibility.put(new Point(13,3), new Integer[]{4,5,6,7,15,18});
@@ -147,7 +147,7 @@ public class Theme extends ThemeBase {
 
 		compatibility.put(new Point(22,0), new Integer[]{13,19,20,21,22,25});
 		compatibility.put(new Point(22,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
-		compatibility.put(new Point(22,2), new Integer[]{4,5,6,7,14,15,18,21,22,23});
+		compatibility.put(new Point(22,2), new Integer[]{4,5,6,7,13,14,15,18,21,22,23});
 		compatibility.put(new Point(22,3), new Integer[]{4,5,6,7,15,18});
 
 		compatibility.put(new Point(23,0), new Integer[]{13,19,20,21,22,25});
@@ -162,7 +162,7 @@ public class Theme extends ThemeBase {
 
 		compatibility.put(new Point(25,0), new Integer[]{23,24});
 		compatibility.put(new Point(25,1), new Integer[]{1,2,3,4,5,6,7,8,16,17});
-		compatibility.put(new Point(25,2), new Integer[]{4,5,6,7,15,18,21,22});
+		compatibility.put(new Point(25,2), new Integer[]{4,5,6,7,14,15,18,21,22});
 		compatibility.put(new Point(25,3), new Integer[]{4,5,6,7,15,18});
 				
 		return compatibility;
@@ -239,7 +239,7 @@ public class Theme extends ThemeBase {
 			handler.addObject(new Collectable(x+64, y+64, CollectableId.coin, ObjectId.Collectable));
 			break;
 		case 5:
-			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.life, ObjectId.Collectable));
 			break;
 		case 6:
 			handler.addObject(new Collectable(x+16, y+16, CollectableId.valuable, ObjectId.Collectable));
