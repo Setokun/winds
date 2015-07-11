@@ -215,6 +215,7 @@ public class Game extends Canvas implements Runnable{
 			for (int i = 0; i < player.getLife(); i++) {g.drawImage(bubulle, 30 +i*30, 40, this);}
 			
 			//displaying the score
+			g.setColor(Color.white);
 			g.drawString(""+score.getScore(), WIDTH - 150, 32);
 			
 			
