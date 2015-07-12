@@ -92,7 +92,7 @@ public class Game extends Canvas implements Runnable{
 		AddonManager.getLoadedJarTheme().loadInteractions(handler);
 	    AddonManager.getLoadedJarTheme().loadFront(handler);
 	    
-	    this.addKeyListener(new KeyInput(handler));
+	    this.addKeyListener(new KeyInput());
 		this.addMouseListener(new MouseInput(handler));
 	    finishedLoading = true;
 	}

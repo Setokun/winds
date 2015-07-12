@@ -156,7 +156,6 @@ public class ServerConnection {
 		    themeData.setIdTheme(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
 		    themeData.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
 		    themeData.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
-		    themeData.setFileName(jsonObject.get("fileName").toString().replaceAll("\"", ""));
 		}
 		
 		return themeData;

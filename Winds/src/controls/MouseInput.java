@@ -13,14 +13,15 @@ import display.Handler;
 
 public class MouseInput extends MouseAdapter{
 	
-	Handler handler;
+	private Handler handler;
 	
 	public MouseInput(Handler handler){
 		this.handler = handler;
 	}
-	
-	
 
+	/**
+	 * determines what action has to be done when clicking in game
+	 */
 	public void mousePressed(MouseEvent e){
 		int key = e.getModifiers();
 		int mouseX = e.getX();
@@ -96,9 +97,12 @@ public class MouseInput extends MouseAdapter{
 		}
 		
 	}
-	
-	public void mouseReleased(MouseEvent e){}
-	
+	/**
+	 * determines the distance between two points
+	 * @param p1 the first point
+	 * @param p2 the second point
+	 * @return double
+	 */
 	double distance(Point p1, Point p2){
 		double dx,dy;
 		dx=p2.x-p1.x;
