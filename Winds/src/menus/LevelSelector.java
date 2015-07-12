@@ -21,8 +21,8 @@ import javax.swing.border.SoftBevelBorder;
 
 import addon.AddonManager;
 import addon.JarLevel;
+import addon.Level;
 import addon.level.Type;
-import database.LevelData;
 import display.Window;
 
 public class LevelSelector extends JPanel{
@@ -63,7 +63,7 @@ public class LevelSelector extends JPanel{
     	int[] idThemesInstalled = AddonManager.getThemesInstalledIds();
     	
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
-			if(LevelData.getStatus(jarLevels[i].getLevel().getIdDB()) == null || !LevelData.getStatus(jarLevels[i].getLevel().getIdDB()).equals("desactivated")){
+			if(Level.getStatus(jarLevels[i].getLevel().getIdDB()) == null || !Level.getStatus(jarLevels[i].getLevel().getIdDB()).equals("desactivated")){
 				for (int j = 0; j < idThemesInstalled.length; j++) {
 					if(idThemesInstalled[j] == jarLevels[i].getLevel().getIdTheme()){
 						levelsToDisplay.add(jarLevels[i]);
