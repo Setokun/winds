@@ -26,13 +26,12 @@ public class LevelToModerateLauncherEvent implements MouseListener{
 		if(e.getButton() == MouseEvent.BUTTON3){
 			if(JOptionPane.showConfirmDialog(null, "Do you want to delete this level ?") == JOptionPane.YES_OPTION){
 				AddonManager.removeJarLevelById(jarLvl.getLevel().getIdDB());
-				Window.affect(new LevelSelector(Type.tomoderate, numPage));
+				Window.affect(new LevelSelector(Type.tomoderate, numPage), Window.DIM_STANDARD);
 			}
 		}
 		else{
-			Window.resize(Profile.current.getScreenDimensions());
 			AddonManager.loadJarLevel(jarLvl);
-			Window.affect(new Game(jarLvl.getLevel().getType(), numPage));
+			Window.affect(new Game(jarLvl.getLevel().getType(), numPage),Profile.current.getScreenDimensions());
 		}
 	}
 	public void mouseEntered(MouseEvent e) {}

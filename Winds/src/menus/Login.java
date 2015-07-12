@@ -194,13 +194,11 @@ public class Login extends JPanel{
     			}
     			else if(result == 1 || result == 3){
     				Profile.current = Profile.connect(email, password);
-    				Window.resize(Window.DIM_STANDARD);
-    	    		Window.affect(new MainMenu());
+    	    		Window.affect(new MainMenu(),Window.DIM_STANDARD);
     			}
 	    		
 	    	}else{
-	    		Window.resize(Window.DIM_STANDARD);
-	    		Window.affect(new MainMenu());
+	    		Window.affect(new MainMenu(),Window.DIM_STANDARD);
 	    	}
     	}
     }                                         

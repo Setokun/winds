@@ -23,37 +23,108 @@ public class Profile {
 		
 	}
 	
+	/**
+	 * returns the profile's ID
+	 * @return id int
+	 */
 	public int getId() {return id;}
+	/**
+	 * returns profile's email
+	 * @return email String
+	 */
 	public String getEmail() {return email;}
+	/**
+	 * returns profile's password
+	 * @return password String
+	 */
 	public String getPassword() {return password;}
+	/**
+	 * returns profile's type
+	 * @return userType String
+	 */
 	public String getUserType() {return userType;}
+	/**
+	 * returns profile's pseudo
+	 * @return pseudo String
+	 */
 	public String getPseudo() {return pseudo;}
+	/**
+	 * returns profile's music volume
+	 * @return musicVolume int
+	 */
 	public int getMusicVolume() {return musicVolume;}
+	/**
+	 * returns profile's sound effects volume
+	 * @return soundEffectsVolume int
+	 */
 	public int getSoundEffectsVolume() {return soundEffectsVolume;}
+	/**
+	 * returns profile's resolution
+	 * @return resolution int
+	 */
 	public int getResolution() {return resolution;}
 	
+	/**
+	 * sets profile's ID
+	 * @param id int
+	 */
 	public void setId(int id) {this.id = id;}
+	/**
+	 * sets profile's email
+	 * @param email String
+	 */
 	public void setEmail(String email) {this.email = email;}
+	/**
+	 * sets profile's password
+	 * @param password String
+	 */
 	public void setPassword(String password) {this.password = password;}
+	/**
+	 * sets profile's user type
+	 * @param userType String
+	 */
 	public void setUserType(String userType) {this.userType = userType;}
+	/**
+	 * sets profile's pseudo
+	 * @param pseudo String
+	 */
 	public void setPseudo(String pseudo) {this.pseudo = pseudo;}
+	/**
+	 * sets profile's music volume
+	 * @param musicVolume int
+	 */
 	public void setMusicVolume(int musicVolume) {this.musicVolume = musicVolume;}
+	/**
+	 * sets profile's sound effects volume
+	 * @param soundEffectsVolume int
+	 */
 	public void setSoundEffectsVolume(int soundEffectsVolume) {this.soundEffectsVolume = soundEffectsVolume;}
+	/**
+	 * sets profile's resolution
+	 * @param resolution int
+	 */
 	public void setResolution(int resolution) {this.resolution = resolution;}
 	
+	
+	/**
+	 * sets profile's "current" field to false
+	 */
 	public void disconnect(){
 		try {
 			DBClass.connect();
 			DBClass.executeQuery("UPDATE users SET current=false WHERE id="+this.id);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (ClassNotFoundException | SQLException e) {
 		} finally {
 			DBClass.disconnect();
 		}
 	}
 	
+	/**
+	 * returns a Profile from the local Database
+	 * @param email String
+	 * @param password String
+	 * @return Profile
+	 */
 	public static Profile connect(String email, String password){
 		
 		try {
@@ -82,16 +153,24 @@ public class Profile {
 		
 		return null;
 	}
+	/**
+	 * returns a Profile from the server
+	 * @param email String
+	 * @param password String
+	 * @return Profile
+	 */
 	
 	public static Profile connectFromServer(String email, String password){
 		return ServerConnection.downloadProfile(email, password);
 	}
+	/**
+	 * returns a Profile from the local Database
+	 * @param email String
+	 * @param password String
+	 * @return int : 0 for "ko", 1 for "password updated", 2 for "wrong server password" and 3 for "new profile inserted"
+	 */
 	
 	public static int insertOrUpdateProfile(String email, String password){
-		/* 0 -> ko
-		   1 -> password updated
-		   2 -> wrong server password
-		   3 -> new profile inserted*/
 			try {
 				if(isExistingEmail(email)){
 					Profile profile = connectFromServer(email, password);
@@ -121,6 +200,11 @@ public class Profile {
 			}
 		return 0;
 	}
+	/**
+	 * returns if the email already exists in the local database
+	 * @param email String
+	 * @return boolean
+	 */
 	
 	public static boolean isExistingEmail(String email){
 		
@@ -138,6 +222,12 @@ public class Profile {
 		
 		return false;
 	}
+	/**
+	 * returns the current Profile or null if there's no one 
+	 * @param email String
+	 * @param password String
+	 * @return Profile
+	 */
 	
  	public static Profile getCurrentPlayer(){
     	
@@ -157,14 +247,18 @@ public class Profile {
     			return p;
     		}
 			return null;
-		} catch (ClassNotFoundException e) {e.printStackTrace();
-		} catch (SQLException e) {e.printStackTrace();
-		}finally{
-			DBClass.disconnect();
-		}
+		} catch (ClassNotFoundException | SQLException e) {
+		} finally { DBClass.disconnect(); }
     	
     	return null;
     }
+ 	/**
+	 * returns an updated Profile with the new parameters
+	 * @param music int
+	 * @param soundEffects int
+	 * @param resolution int
+	 * @return Profile
+	 */
 
 	public Profile updateConfiguration(int music, int soundEffects, int resolution){
 		
@@ -179,6 +273,10 @@ public class Profile {
 		}
 		return current;
 	}
+	/**
+	 * returns the screen Dimension attached to this Profile
+	 * @return Dimension
+	 */
 	
 	public Dimension getScreenDimensions(){
 		try {
@@ -196,9 +294,13 @@ public class Profile {
     	
     	return null;	
     }
+	/**
+	 * returns a String representation of this Profile
+	 * @return String
+	 */
 	
 	public String toString(){
-		return "email : " + email + ",password : "+password;
+		return "id :" + id + ",email : " + email + ",password : "+password+", user type : " + userType + ", pseudo : " + pseudo + ", id resolution : " + resolution;
 	}
 	
 }

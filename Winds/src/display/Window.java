@@ -20,19 +20,21 @@ public class Window {
 	
 	private static JFrame main;
 	
-	
-	public static void affect(Component c){
+	/**
+	 * affects a new component to the main JFrame and resizes it 
+	 * @param c the component to affect
+	 * @param dim the new dimension
+	 */
+	public static void affect(Component c, Dimension dim){
 		main.remove(main.getContentPane().getComponent(0));
 		main.add(c);
-		main.setVisible(true);
-	}
-	
-	public static void resize(Dimension dim){
 		main.setSize(dim);
-		main.setLocationRelativeTo(null);
 		main.setVisible(true);
 	}
-	
+	/**
+	 * Main method to launch the program
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		main = new JFrame("Winds");
 		main.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -46,7 +48,6 @@ public class Window {
 			DBClass.createStartData();
 		}
 		
-		
 		try {
 			main.setIconImage(ImageIO.read(Window.class.getClass().getResource("/resources/collectables/bubulle.png")));
 		} catch (IOException e) { e.printStackTrace(); }
@@ -55,7 +56,10 @@ public class Window {
 		main.add(Profile.current == null ? new Login() : new MainMenu());
 		main.setVisible(true);		
 	}
-	
+	/**
+	 * returns the main frame
+	 * @return JFrame
+	 */
 	public static JFrame getFrame(){
 		return main;
 	}

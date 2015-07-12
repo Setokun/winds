@@ -272,8 +272,7 @@ public class Scores extends JPanel {
 		}
 	}
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
-		Window.resize(Window.DIM_STANDARD);
-		Window.affect(new MainMenu());
+		Window.affect(new MainMenu(),Window.DIM_STANDARD);
 		
 	}
 	

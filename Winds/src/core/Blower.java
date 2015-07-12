@@ -50,10 +50,17 @@ public class Blower extends GameObject{
 			this.collisions.add( new CollisionBox((int)x+12, (int)y+44, 105, 37, ObjectId.Blower) );
 	}
 
+	/**
+	 * determine how the blower will act on each frame
+	 * @param ArrayList of GameObject
+	 */
 	public void tick(ArrayList<GameObject> objects) {
 		animation.runAnimation();
 	}
-
+	/**
+	 * provides the rendering of the blower to Canvas' Graphics
+	 * @param Graphics g
+	 */
 	public void render(Graphics g) {
 		animation.drawAnimation(g, (int)x, (int)y, 128, 128);
 		
@@ -70,11 +77,17 @@ public class Blower extends GameObject{
 			}
 		}
 	}
-
+	/**
+	 * returns a list of the collision boxes concerning this GameObject
+	 * @return ArrayList of collisionBox
+	 */
 	public ArrayList<CollisionBox> getBounds() {
 		return collisions;
 	}
-	
+	/**
+	 * returns the direction of the blower
+	 * @return up, down, left or right
+	 */
 	public Direction getDirection(){
 		return direction;
 	}

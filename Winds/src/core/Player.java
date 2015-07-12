@@ -44,14 +44,23 @@ public class Player extends GameObject{
 		this.life = 3;
 	}
 	
+	/**
+	 * set the gravity of the player to zero
+	 */
 	public void unsetGravity(){
 		gravity = 0;
 	}
-	
+	/**
+	 * set the gravity of the player to its regular value
+	 */
 	public void resetGravity(){
 		gravity = 0.03f;
 	}
 	
+	/**
+	 * determine how the player will act on each frame
+	 * @param ArrayList of GameObject
+	 */
 	public void tick(ArrayList<GameObject> objects) {
 		x += velX; 
 		y += velY + .005f;
@@ -74,6 +83,10 @@ public class Player extends GameObject{
 		collision(objects);
 	}
 	
+	/**
+	 * method to determine what to do according to the type of other game objects
+	 * @param ArrayList of GameObject
+	 */
 	private void collision(ArrayList<GameObject> object){
 		
 		for(int i = 0; i<handler.objects.size(); i++){
@@ -94,11 +107,12 @@ public class Player extends GameObject{
 					actionDangerousBlockOrEnemy(tempObject, j);
 				}
 				else if(tempObject.getBounds().get(j).getId() == ObjectId.Enemy){
-						if(!isHighlander())
-							actionDangerousBlockOrEnemy(tempObject, j);
+					if(!isHighlander())
+						actionDangerousBlockOrEnemy(tempObject, j);
 					}
 				else if(tempObject.getBounds().get(j).getId() == ObjectId.Boss){
-					actionBoss(tempObject, j);
+					if(!isHighlander())
+						actionBoss(tempObject, j);
 				}
 				else if(tempObject.getBounds().get(j).getId() == ObjectId.Collectable){
 					actionCollectable(tempObject, j);
@@ -114,7 +128,11 @@ public class Player extends GameObject{
 		
 		preventFromExitPlayground();
 	}
-
+	
+	/**
+	 * provides the rendering of the player to Canvas' Graphics
+	 * @param Graphics g
+	 */
 	public void render(Graphics g) {
 
 		if(!(invincibleTime > 0 && invincibleTime % 10 >= 5))
@@ -131,43 +149,85 @@ public class Player extends GameObject{
 		}
 	}
 
+	/**
+	 * returns a rectangle representing the down side of the player
+	 * @return Rectangle
+	 */
 	public Rectangle getBoundsBottom() {
 		return new Rectangle((int) ((int)x+12), (int) ((int)y+height/2), (int)width-24, (int)height/2 - 4);
 	}
+	/**
+	 * returns a rectangle representing the upper side of the player
+	 * @return Rectangle
+	 */
 	public Rectangle getBoundsTop() {
 		return new Rectangle((int) ((int)x+12), (int)y + 4, (int)width-24, (int)height/2 - 4);
 	}
+	/**
+	 * returns a rectangle representing the right side of the player
+	 * @return Rectangle
+	 */
 	public Rectangle getBoundsRight() {
 		return new Rectangle((int) ((int)x+width-12), (int)y+8, (int)8, (int)height-16);
 	}
+	/**
+	 * returns a rectangle representing the left side of the player
+	 * @return Rectangle
+	 */
 	public Rectangle getBoundsLeft() {
 		return new Rectangle((int)x +4, (int)y+8, (int)8, (int)height-16);
 	}
+	/**
+	 * returns a list of the collision boxes concerning this GameObject
+	 * @return ArrayList of collisionBox
+	 */
 	public ArrayList<CollisionBox> getBounds() {
 		return null;
 	}
 
+	/**
+	 * add or remove the specified amount of life
+	 * @param variation the variation of life (+ or -)
+	 */
 	public void setLife(int variation){
 		this.life += variation;
 	}
+	/**
+	 * returns the actual player's amount-of-lives 
+	 * @return int
+	 */
 	public int getLife(){
 		return this.life;
 	}
 	
+	/**
+	 * gets the coordinates of the player as a string representation
+	 * @return the coordinates of the player
+	 */
 	public String toString(){
 		return "player : {"+(int)this.x+","+(int)this.y+"}";
 	}
 	
+	/**
+	 * do whatever is needed when the player gets hurt
+	 */
 	public void getHurt(){
 		this.invincibleTime += 180;
 		this.life--;
 		AudioPlayer.playSfx("splaf");
 	}
 	
+	/**
+	 * tell if the player is temporarily invincible
+	 * @return true or false
+	 */
 	public boolean isHighlander(){
 		return invincibleTime > 0;
 	}
 	
+	/**
+	 * prevent the player from going outside the playground
+	 */
 	private void preventFromExitPlayground() {
 		if(this.getX() <= 0){
 			this.setX(this.getX() + 2);
@@ -188,13 +248,18 @@ public class Player extends GameObject{
 		}
 	}
 	
+	/**
+	 * determine the actions to do when touching an arrival block
+	 * @param tempObject the object the player has to deal with
+	 * @param j the number of the collisionBox concerned
+	 */
 	private void actionArrival(GameObject tempObject, int j) {
 		if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds()) 
 				|| getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())
 				|| getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())
 				|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
 			if(!Game.isFinished()){
-				velX = velX / 10;
+				velX = 0;
 				Game.setFinished();
 				Game.bgMusic.stop();
 				Game.bgMusic = new AudioPlayer("/resources/musics/victory.mp3", false);
@@ -202,6 +267,11 @@ public class Player extends GameObject{
 			}
 		}
 	}
+	/**
+	 * determine the actions to do when touching a blower block
+	 * @param tempObject the object the player has to deal with
+	 * @param j the number of the collisionBox concerned
+	 */
 	private void actionBlower(GameObject tempObject, int j) {
 		if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds()) 
 				|| getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())
@@ -225,6 +295,11 @@ public class Player extends GameObject{
 		else
 			windTime = 0;
 	}
+	/**
+	 * determine the actions to do when touching a collectable
+	 * @param tempObject the object the player has to deal with
+	 * @param j the number of the collisionBox concerned
+	 */
 	private void actionCollectable(GameObject tempObject, int j) {
 		if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds()) 
 				|| getBoundsBottom().intersects(tempObject.getBounds().get(j).getBounds())
@@ -250,6 +325,11 @@ public class Player extends GameObject{
 					handler.removeObject(tempObject);
 				}
 	}
+	/**
+	 * determine the actions to do when touching a boss
+	 * @param tempObject the object the player has to deal with
+	 * @param j the number of the collisionBox concerned
+	 */
 	private void actionBoss(GameObject tempObject, int j) {
 		// TOP
 		if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){
@@ -288,6 +368,11 @@ public class Player extends GameObject{
 			}
 		}
 	}
+	/**
+	 * determine the actions to do when touching a dangerous block or an enemy
+	 * @param tempObject the object the player has to deal with
+	 * @param j the number of the collisionBox concerned
+	 */
 	private void actionDangerousBlockOrEnemy(GameObject tempObject, int j) {
 		// TOP
 		if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){
@@ -326,6 +411,11 @@ public class Player extends GameObject{
 			}
 		}
 	}
+	/**
+	 * determine the actions to do when touching a wall
+	 * @param tempObject the object the player has to deal with
+	 * @param j the number of the collisionBox concerned
+	 */
 	private void actionBlock(GameObject tempObject, int j) {
 		////////////////////////TOP \\\\\\\\\\\\\\\\\\\\\\\\
 		if(getBoundsTop().intersects(tempObject.getBounds().get(j).getBounds())){

@@ -164,8 +164,7 @@ public class EditorListener {
 				+ " unsaved modifications are going to be lost.",
 				"Need confirmation", JOptionPane.OK_CANCEL_OPTION);
 			if(response == JOptionPane.OK_OPTION){
-				Window.resize(Window.DIM_STANDARD);
-				Window.affect(new LevelEditorList());
+				Window.affect(new LevelEditorList(),Window.DIM_STANDARD);
 			}
 		}
 	}

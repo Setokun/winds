@@ -11,40 +11,39 @@ public class Camera {
 		this.y = y;
 	}
 
-	private int largeur_niveau = 60*128; // TODO récupérer les largeurs de niveaux depuis le thème
-	private int hauteur_niveau = 60*128;
+	private int levelWidth = Handler.NB_SQUARES*Handler.DIM_SQUARE;
+	private int levelHeight = Handler.NB_SQUARES*Handler.DIM_SQUARE;
 	
+	/**
+	 * update the Camera position in function of the player position
+	 * @param player
+	 */
 	public void tick(GameObject player){
-		if(player.getX() >= Game.WIDTH/2 && player.getX() <= largeur_niveau - Game.WIDTH/2)
+		if(player.getX() >= Game.WIDTH/2 && player.getX() <= levelWidth - Game.WIDTH/2)
 			x =(int) (-player.getX() + Game.WIDTH/2);
-		if(player.getY() >= Game.HEIGHT/2 && player.getY() <= hauteur_niveau - Game.HEIGHT/2)
+		if(player.getY() >= Game.HEIGHT/2 && player.getY() <= levelHeight - Game.HEIGHT/2)
 			y =(int) (-player.getY() + Game.HEIGHT/2);
 	}
 	
-
-	public void setX(float x) {
-		this.x = x;
-	}
-	public void setY(float y) {
-		this.y = y;
-	}
-	public float getX() {
-		return x;
-	}
-	public float getY() {
-		return y;
-	}
+	/**
+	 * returns x position of the Camera
+	 * @return float
+	 */
+	public float getX() { return x; }
+	/**
+	 * returns y position of the Camera
+	 * @return float
+	 */
+	public float getY() { return y; }
+	/**
+	 * sets x position of the Camera
+	 * @param x
+	 */
+	public void setX(float x) { this.x = x; }
+	/**
+	 * sets y position of the Camera
+	 * @param y
+	 */
+	public void setY(float y) { this.y = y; }
 	
-	public int getLargeur_niveau() {
-		return largeur_niveau;
-	}
-	public void setLargeur_niveau(int largeur_niveau) {
-		this.largeur_niveau = largeur_niveau;
-	}
-	public int getHauteur_niveau() {
-		return hauteur_niveau;
-	}
-	public void setHauteur_niveau(int hauteur_niveau) {
-		this.hauteur_niveau = hauteur_niveau;
-	}
 }

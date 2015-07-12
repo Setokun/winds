@@ -246,19 +246,16 @@ public class LevelEditorList extends JPanel {
 		Level lvl = new Level(levelName, themeUsed.getIdDB());
 		
 		// level editor opening
-		Window.resize(Window.DIM_EDITOR);
-		Window.affect(new EditorGUI(new JarLevel(lvl), themeUsed));
+		Window.affect(new EditorGUI(new JarLevel(lvl), themeUsed),Window.DIM_EDITOR);
 	}
 	/*OK*/private void btnBackClicked(ActionEvent evt) {
-		Window.resize(Window.DIM_STANDARD);
-		Window.affect(new MainMenu());
+		Window.affect(new MainMenu(),Window.DIM_STANDARD);
 	}
 	/*OK*/private void btnEditClicked(ActionEvent evt){
 		JarLevel jarL = getJarLevelAtPoint((Point) evt.getSource());
 		JarTheme jarT = AddonManager.getJarThemeByID(jarL.getLevel().getIdTheme());
 		
-		Window.resize(Window.DIM_EDITOR);
-		Window.affect(new EditorGUI(jarL, jarT));
+		Window.affect(new EditorGUI(jarL, jarT),Window.DIM_EDITOR);
 	}
 	/*OK*/private void btnDuplicateClicked(ActionEvent evt){
 		JarLevel jarL = getJarLevelAtPoint((Point) evt.getSource());

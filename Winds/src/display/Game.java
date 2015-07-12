@@ -33,12 +33,13 @@ public class Game extends Canvas implements Runnable{
 	public static int WIDTH, HEIGHT, numPageFrom;
 	public static Camera cam;
 	public static Score score;
-	private static boolean pause, running, finished, defeat, scoreUploaded, finishedLoading;;
 	public static AudioPlayer bgMusic;
-	private static BufferedImage[] instance;
 	public static Player player;
-	
+	public static int delayAfterFinished;
+	private static boolean pause, running, finished, defeat, scoreUploaded, finishedLoading;;
+	private static BufferedImage[] instance;
 	private static Type typeLvl;
+	
 	public final String TITLE = "Winds";
 	private BufferedImage bubulle, gameover, victory, bg = null, pauseImage = null;
 	private Thread thread;
@@ -62,7 +63,7 @@ public class Game extends Canvas implements Runnable{
 		initializeFont();
 		
 		timeMax = AddonManager.getLoadedJarLevel().getLevel().getTimeMax();
-		seconds = 0; delayVictory = 53; delayGameOver = 20;
+		seconds = 0; delayVictory = 53; delayGameOver = 20; delayAfterFinished = 0;
 		pause = false;
 		finished = false;
 		defeat = false;
@@ -91,7 +92,7 @@ public class Game extends Canvas implements Runnable{
 		AddonManager.getLoadedJarTheme().loadInteractions(handler);
 	    AddonManager.getLoadedJarTheme().loadFront(handler);
 	    
-	    this.addKeyListener(new KeyInput(handler));
+	    this.addKeyListener(new KeyInput());
 		this.addMouseListener(new MouseInput(handler));
 	    finishedLoading = true;
 	}
@@ -138,11 +139,11 @@ public class Game extends Canvas implements Runnable{
 			lastTime = now;
 			if(delta >= 1){
 				tick();
-				updates++;
+				if(Window.debug)updates++;
 				delta--;
 			}
 			render();
-			frames++;
+			if(Window.debug)frames++;
 			
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
@@ -151,10 +152,12 @@ public class Game extends Canvas implements Runnable{
 				if(player.getLife() <= 0 && !defeat)
 					defeat = true;
 				
-				System.out.println(updates + " updates, fps : " + frames);
+				if(Window.debug){
+					System.out.println(updates + " updates, fps : " + frames);
+					updates = 0;
+					frames = 0;
+				}
 				
-				updates = 0;
-				frames = 0;
 			}
 		}
 		stop();
@@ -197,7 +200,7 @@ public class Game extends Canvas implements Runnable{
 			// drawing the background
 			g.drawImage(bg, (int)(cam.getX()/4), (int)(cam.getY()/8), this);
 			
-			
+			// drawing all sprites, including player and interactions, through the handler
 			g2d.translate(cam.getX(), cam.getY());
 			handler.render(g);
 			g2d.translate( -cam.getX(), -cam.getY());
@@ -208,10 +211,15 @@ public class Game extends Canvas implements Runnable{
 				g.setColor(Color.red);
 			else
 				g.setColor(Color.white);
-			g.drawString((timeMax - seconds)/60 + ":" + (timeMax - seconds)%60, 32, 32);
+			g.drawString((timeMax - seconds)/60 + ":" + (((timeMax - seconds)%60 < 10)? "0"+(timeMax - seconds)%60:(timeMax - seconds)%60), 32, 32);
 			
 			// rendering the lifes count
 			for (int i = 0; i < player.getLife(); i++) {g.drawImage(bubulle, 30 +i*30, 40, this);}
+			
+			//displaying the score
+			g.setColor(Color.white);
+			g.drawString(""+score.getScore(), WIDTH - 150, 32);
+			
 			
 			if(player.getLife() <= 0 || (timeMax - seconds) == 0){
 				if(!defeat){
@@ -222,6 +230,8 @@ public class Game extends Canvas implements Runnable{
 				}	
 				g.drawImage(gameover, 0, 0, WIDTH, HEIGHT, this);
 			}
+			
+			// rendering victory screen ^^ 
 			if(finished) g.drawImage(victory, 0, 0, WIDTH, HEIGHT, this);
 		}
 
@@ -274,6 +284,7 @@ public class Game extends Canvas implements Runnable{
 		bubulle = new SpriteSheet(loader.loadImage("/resources/collectables/bubulle.png"), 25).grabImage(0, 0);
 	}
 	private void endLevel() {
+		
 		if(!getPause() && player.getLife() > 0 && !finished && !defeat)
 		{
 			seconds++;
@@ -286,11 +297,16 @@ public class Game extends Canvas implements Runnable{
 				if(id != 0)
 					score.setScore(id);
 			}
-			
 			delayVictory--;
 		}
+		
+		// decreasing the delay of GameOver before returning to Menu 
 		if(defeat && !pause) delayGameOver--;
 		
+		// increasing delay to be able to click to pass through the end screens
+		if(finished || defeat) delayAfterFinished++;
+		
+		// after delay and little music, we go back to Menu automatically
 		if(delayVictory == 0 || delayGameOver == 0) goBackToMenu();
 	}
 	
@@ -311,15 +327,17 @@ public class Game extends Canvas implements Runnable{
 	public static void goBackToMenu(){
 		Game.bgMusic.stop();
 		Game.running = false;
-		Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelSelector(typeLvl, numPageFrom));
+		Window.affect(new LevelSelector(typeLvl, numPageFrom), Window.DIM_STANDARD);
 	}
 	
 	public static boolean isFinished(){
-		return finished;
+		return finished || defeat;
 	}
 	public static void setFinished(){
 		finished = true;
+	}
+	public static int getDelayAfterFinished(){
+		return delayAfterFinished;
 	}
 	private void initializeFont() {
 		try {

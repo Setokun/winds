@@ -28,8 +28,8 @@ import javax.swing.table.DefaultTableModel;
 import server.ServerConnection;
 import account.Profile;
 import addon.AddonManager;
+import addon.Level;
 import addon.level.Type;
-import database.LevelData;
 import database.LevelStatus;
 import database.ThemeData;
 import display.Window;
@@ -215,8 +215,7 @@ public class Shop  extends JPanel {
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
-		Window.resize(Window.DIM_STANDARD);
-		Window.affect(new MainMenu());
+		Window.affect(new MainMenu(),Window.DIM_STANDARD);
 	}
 	
 	private Object[][] getThemesList() throws IOException{
@@ -233,7 +232,7 @@ public class Shop  extends JPanel {
 		return listThemesToDisplay;
 	}
 	private Object[][] getLevelsList(Type type) throws IOException{
-		Object[][] listLevels = LevelData.getLevelsList(type);
+		Object[][] listLevels = Level.getLevelsList(type);
 		Object[][] listLevelsToDisplay = null;
 		if(listLevels != null){
 			listLevelsToDisplay = new Object[listLevels.length][3];
@@ -246,7 +245,7 @@ public class Shop  extends JPanel {
 		return listLevelsToDisplay;
 	}
 	private Object[][] getCustomLevelsList(Type type) throws IOException{
-		Object[][] listLevels = LevelData.getCustomLevelsList();
+		Object[][] listLevels = Level.getCustomLevelsList();
 		Object[][] listLevelsToDisplay = null;
 		int[] ids = AddonManager.getThemesInstalledIds();
 		int nbElementsToDisplay = 0;
@@ -327,19 +326,19 @@ public class Shop  extends JPanel {
 						int idThemeInstalled = (int)tableNewThemes.getValueAt(row, 2);
 						JOptionPane.showMessageDialog(null, "New theme "+ themeName +" installed !!");
 						((DefaultTableModel)tableNewThemes.getModel()).removeRow(row);
-						ArrayList<LevelData> rows;
+						ArrayList<Level> rows;
 						try {
 							rows = ServerConnection.getBasicLevelsList();
 							for (int i = 0; i < rows.size(); i++) {
 								if(rows.get(i).getIdTheme() == idThemeInstalled){
-									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")), rows.get(i).getIdLevel()};
+									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")), rows.get(i).getIdDB()};
 									((DefaultTableModel)tableNewLevels.getModel()).addRow(rowToInsert);
 								}
 							}
 							rows = ServerConnection.getCustomLevelsList();
 							for (int i = 0; i < rows.size(); i++) {
 								if(rows.get(i).getIdTheme() == idThemeInstalled){
-									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")),null, null, true, rows.get(i).getIdLevel()};
+									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")),null, null, true, rows.get(i).getIdDB()};
 									((DefaultTableModel)tableCustomLevels.getModel()).addRow(rowToInsert);
 								}
 							}
@@ -482,14 +481,14 @@ public class Shop  extends JPanel {
 				if(col == 2){
 					if(tableCustomLevels.getValueAt(row, 1) == null){
 						if((Boolean)tableCustomLevels.getValueAt(row, 4)){
-							if(LevelData.setStatus((int)tableCustomLevels.getValueAt(row, 5), LevelStatus.installed)){
+							if(Level.setStatus((int)tableCustomLevels.getValueAt(row, 5), LevelStatus.installed)){
 								tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_desactivate.png")) , row, col);
 								tableCustomLevels.setValueAt(false, row, 4);
 							}
 							
 						}
 						else{
-							if(LevelData.setStatus((int)tableCustomLevels.getValueAt(row, 5), LevelStatus.desactivated)){
+							if(Level.setStatus((int)tableCustomLevels.getValueAt(row, 5), LevelStatus.desactivated)){
 								tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_activate.png")) , row, col);
 								tableCustomLevels.setValueAt(true, row, 4);
 							}
@@ -499,7 +498,7 @@ public class Shop  extends JPanel {
 				if(col == 3){
 					if(tableCustomLevels.getValueAt(row, 1) == null){
 						int idLevel = (int)tableCustomLevels.getValueAt(row, 5);
-						if(LevelData.setStatus(idLevel, LevelStatus.uninstalled)){
+						if(Level.setStatus(idLevel, LevelStatus.uninstalled)){
 							if(AddonManager.removeJarLevelById(idLevel)){
 								tableCustomLevels.setValueAt(new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")) , row, 1);
 								tableCustomLevels.setValueAt(null, row, 2);

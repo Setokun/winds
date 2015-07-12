@@ -24,9 +24,16 @@ public class Collectable extends GameObject{
 		super(x, y, id);
 		this.collectableId = collectableId;
 	}
-
+	
+	/**
+	 * determine how the collectable will act on each frame
+	 * @param ArrayList of GameObject
+	 */
 	public void tick(ArrayList<GameObject> object) {}
-
+	/**
+	 * determine how the collectable will be displayed on each frame
+	 * @param g Canvas' Graphics
+	 */
 	public void render(Graphics g) {
 		if(collectableId == CollectableId.coin)
 			g.drawImage(sprites[0], (int)x, (int)y, 16, 16, null);
@@ -35,7 +42,10 @@ public class Collectable extends GameObject{
 		if(collectableId == CollectableId.valuable)
 			g.drawImage(sprites[2], (int)x, (int)y, 25, 25, null);
 	}
-	
+	/**
+	 * returns a list of the collision boxes concerning this GameObject
+	 * @return ArrayList of collisionBox
+	 */
 	public ArrayList<CollisionBox> getBounds() {
 		ArrayList<CollisionBox> cs = new ArrayList<CollisionBox>();
 		if(collectableId == CollectableId.coin)
@@ -46,7 +56,10 @@ public class Collectable extends GameObject{
 			cs.add( new CollisionBox((int)x, (int)y, 32, 32, ObjectId.Collectable) );
 		return cs;
 	}
-	
+	/**
+	 * returns th ID of the collectable
+	 * @return CollectableId
+	 */
 	public CollectableId getCollectableId(){
 		return this.collectableId;
 	}

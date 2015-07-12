@@ -27,6 +27,9 @@ import javax.swing.JOptionPane;
 import account.Profile;
 import addon.AddonManager;
 import addon.JarLevel;
+import addon.Level;
+import addon.level.Mode;
+import addon.level.Type;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -34,7 +37,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import database.DBClass;
-import database.LevelData;
+import database.LevelStatus;
 import database.Score;
 import database.ThemeData;
 import database.Trophy;
@@ -153,84 +156,96 @@ public class ServerConnection {
 		    themeData.setIdTheme(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
 		    themeData.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
 		    themeData.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
-		    themeData.setFileName(jsonObject.get("fileName").toString().replaceAll("\"", ""));
 		}
 		
 		return themeData;
 	}
 	
-	/*OK*/public static LevelData getLevelInfos(int idLevel) throws IOException{
-		LevelData levelData = null;
+	/*OK*/public static Level getLevelInfos(int idLevel) throws IOException{
+		Level level = null;
 
 		JsonArray jArray = getJsonArrayOfGetRequest("action=getLevelInfos&idLevel="+idLevel);
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-		    levelData = new LevelData();
-		    levelData.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
-		    levelData.setLevelType(jsonObject.get("levelType").toString().replaceAll("\"", ""));
-		    levelData.setLevelStatus(jsonObject.get("levelStatus").toString().replaceAll("\"", ""));
-		    levelData.setLevelMode(jsonObject.get("levelMode").toString().replaceAll("\"", ""));
-		    levelData.setIdLevel(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
-		    levelData.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
-		    levelData.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
-		    levelData.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
-		    levelData.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
+		    level = new Level();
+		    level.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
+		    
+		    String type = jsonObject.get("levelType").toString().replaceAll("\"", "");
+		    if(type.equals("basic"))
+		    	level.setType(Type.basic);
+		    else if(type.equals("custom"))
+		    	level.setType(Type.custom);
+		    else if(type.equals("tomoderate"))
+		    	level.setType(Type.tomoderate);
+
+		    String mode = jsonObject.get("levelMode").toString().replaceAll("\"", "");
+		    if(mode.equals("standard"))
+		    	level.setMode(Mode.standard);
+		    if(mode.equals("boss"))
+		    	level.setMode(Mode.boss);
+		    
+		    level.setStatus(LevelStatus.installed);
+		    level.setIdDB(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
+		    level.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
+		    level.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
+		    level.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
+		    level.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
 		}
 		
-		return levelData;
+		return level;
 	}
 	
-	/*OK*/public static ArrayList<LevelData> getBasicLevelsList() throws IOException{
-		ArrayList<LevelData> basicLevels = new ArrayList<LevelData>();
+	/*OK*/public static ArrayList<Level> getBasicLevelsList() throws IOException{
+		ArrayList<Level> basicLevels = new ArrayList<Level>();
 
 		JsonArray jArray = getJsonArrayOfGetRequest("action=getBasicLevels");
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-		    LevelData lvl = new LevelData();
+		    Level lvl = new Level();
 		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
 		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
 		    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
 		    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
 		    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
-		    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+		    lvl.setIdDB(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
 		    basicLevels.add(lvl);
 		}
 		
 		return basicLevels;
 	}
 	
-	/*OK*/public static ArrayList<LevelData> getCustomLevelsList() throws IOException{
-		ArrayList<LevelData> customLevels = new ArrayList<LevelData>();
+	/*OK*/public static ArrayList<Level> getCustomLevelsList() throws IOException{
+		ArrayList<Level> customLevels = new ArrayList<Level>();
 
 		JsonArray jArray = getJsonArrayOfGetRequest("action=getCustomLevels");
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-		    LevelData lvl = new LevelData();
+		    Level lvl = new Level();
 		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
 		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
 		    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
 		    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
 		    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
-		    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+		    lvl.setIdDB(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
 		    customLevels.add(lvl);
 		}
 
 		return customLevels;
 	}
 	
-	/*OK*/public static ArrayList<LevelData> getLevelsToModerateList() throws IOException{
-		ArrayList<LevelData> levelsToModerate = new ArrayList<LevelData>();
+	/*OK*/public static ArrayList<Level> getLevelsToModerateList() throws IOException{
+		ArrayList<Level> levelsToModerate = new ArrayList<Level>();
 
 		JsonArray jArray = getJsonArrayOfGetRequest("action=getLevelsToModerate");
 		for (int i=0;i<jArray.size();i++) {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-		    LevelData lvl = new LevelData();
+		    Level lvl = new Level();
 		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
 		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
 		    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
 		    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
 		    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
-		    lvl.setIdLevel(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+		    lvl.setIdDB(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
 		    levelsToModerate.add(lvl);
 		}
 
@@ -274,25 +289,24 @@ public class ServerConnection {
 	@SuppressWarnings("unused")
 	/*OK*/public static boolean downloadLevel(int idLevel){
 		try {
-			LevelData level = getLevelInfos(idLevel);
-			if(level.getLevelType().equals("custom")){
-				level.setLevelStatus("installed");
+			Level level = getLevelInfos(idLevel);
+			if(level.getType().equals("custom")){
+				level.setStatus(LevelStatus.installed);
 			}
 			
 			if(level != null){
 				String s = URL_API_SERVER +"?email="+ Profile.current.getEmail().replace("\"", "")
 						 + "&password="+ Profile.current.getPassword().replace("\"", "");
 				
-				switch( level.getLevelType() ){
-					case "basic":		s += "&action=downloadBasicLevel&idBasicLevel="+ idLevel;			break;
-					case "custom" :		s += "&action=downloadCustomLevel&idCustomLevel="+ idLevel;			break;
-					case "tomoderate":	s += "&action=downloadLevelToModerate&idLevelToModerate="+ idLevel;	break;
-					default : return false;
-				}
+				if(level.getType() == Type.basic) 			s += "&action=downloadBasicLevel&idBasicLevel="+ idLevel;
+				else if(level.getType() == Type.custom) 	s += "&action=downloadCustomLevel&idCustomLevel="+ idLevel;
+				else if(level.getType() == Type.tomoderate) s += "&action=downloadLevelToModerate&idLevelToModerate="+ idLevel;
+				else return false;
+				
 				
 				URLConnection ucon = new URL(s).openConnection();  
 				StringBuilder sb = new StringBuilder(AddonManager.currentPath+ "/resources/levels/");
-				sb.append(level.getIdLevel());
+				sb.append(level.getIdDB());
 				sb.append(".jar");
 				
 				FileOutputStream fos = new FileOutputStream(sb.toString());

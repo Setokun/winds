@@ -21,8 +21,8 @@ import javax.swing.border.SoftBevelBorder;
 
 import addon.AddonManager;
 import addon.JarLevel;
+import addon.Level;
 import addon.level.Type;
-import database.LevelData;
 import display.Window;
 
 public class LevelSelector extends JPanel{
@@ -63,7 +63,7 @@ public class LevelSelector extends JPanel{
     	int[] idThemesInstalled = AddonManager.getThemesInstalledIds();
     	
 		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
-			if(LevelData.getStatus(jarLevels[i].getLevel().getIdDB()) == null || !LevelData.getStatus(jarLevels[i].getLevel().getIdDB()).equals("desactivated")){
+			if(Level.getStatus(jarLevels[i].getLevel().getIdDB()) == null || !Level.getStatus(jarLevels[i].getLevel().getIdDB()).equals("desactivated")){
 				for (int j = 0; j < idThemesInstalled.length; j++) {
 					if(idThemesInstalled[j] == jarLevels[i].getLevel().getIdTheme()){
 						levelsToDisplay.add(jarLevels[i]);
@@ -109,19 +109,29 @@ public class LevelSelector extends JPanel{
 		FlowLayout flMiddle = new FlowLayout();
 		middle.setLayout(flMiddle);
 		
-		
-		grid = new JPanel();
-		GridLayout gridLayout = new GridLayout(0,5);
-		gridLayout.setHgap(50);
-		gridLayout.setVgap(30);
-		grid.setLayout(gridLayout);
-		
-		for (int i = 0; i < levelsToDisplay.size(); i++) {
-			buttons[i] = new LevelButton(levelsToDisplay.get(i), type, currentPage);
-			grid.add(buttons[i].getButton());
+		if(levelsToDisplay.size() == 0){
+			JPanel nothingToDisplay = new JPanel();
+			FlowLayout flNothingToDisplay = new FlowLayout();
+			flNothingToDisplay.setVgap(160);
+			nothingToDisplay.setLayout(flNothingToDisplay);
+			nothingToDisplay.add(new JLabel("No levels available for this category, please go to the \"Shop\" menu to download Themes and Levels !"));
+			
+			middle.add(nothingToDisplay);
 		}
-		
-		middle.add(grid);
+		else{
+			grid = new JPanel();
+			GridLayout gridLayout = new GridLayout(0,5);
+			gridLayout.setHgap(50);
+			gridLayout.setVgap(30);
+			grid.setLayout(gridLayout);
+			
+			for (int i = 0; i < levelsToDisplay.size(); i++) {
+				buttons[i] = new LevelButton(levelsToDisplay.get(i), type, currentPage);
+				grid.add(buttons[i].getButton());
+			}
+			
+			middle.add(grid);
+		}
 
 	}
 	private void createNorth() {
@@ -284,8 +294,7 @@ public class LevelSelector extends JPanel{
 		}
 	}
 	private void jBtnBackActionPerformed(ActionEvent evt) {
-    	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelCategorySelector());
+		Window.affect(new LevelCategorySelector(),Window.DIM_STANDARD);
     }
 	protected void jBtnPreviousActionPerformed(ActionEvent evt) {
 		numPage--;
