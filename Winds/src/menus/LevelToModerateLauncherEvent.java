@@ -17,11 +17,19 @@ public class LevelToModerateLauncherEvent implements MouseListener{
 	private JarLevel jarLvl;
 	private int numPage;
 	
+	/**
+	 * constructor that specifies the targeted jar level and the page it is displayed
+	 * @param jarLvl The targeted jar level
+	 * @param numPage The page number where the event has been called 
+	 */
 	public LevelToModerateLauncherEvent(JarLevel jarLvl, int numPage) {
 		this.jarLvl = jarLvl;
 		this.numPage = numPage;
 	}
 	
+	/**
+	 * The actions done when clicking
+	 */
 	public void mouseClicked(MouseEvent e) {
 		if(e.getButton() == MouseEvent.BUTTON3){
 			if(JOptionPane.showConfirmDialog(null, "Do you want to delete this level ?") == JOptionPane.YES_OPTION){

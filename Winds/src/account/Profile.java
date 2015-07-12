@@ -13,8 +13,6 @@ public class Profile {
 	private String password;
 	private String userType;
 	private String pseudo;
-	private int musicVolume;
-	private int soundEffectsVolume;
 	private int resolution;
 	
 	public static Profile current = null;
@@ -49,16 +47,6 @@ public class Profile {
 	 */
 	public String getPseudo() {return pseudo;}
 	/**
-	 * returns profile's music volume
-	 * @return musicVolume int
-	 */
-	public int getMusicVolume() {return musicVolume;}
-	/**
-	 * returns profile's sound effects volume
-	 * @return soundEffectsVolume int
-	 */
-	public int getSoundEffectsVolume() {return soundEffectsVolume;}
-	/**
 	 * returns profile's resolution
 	 * @return resolution int
 	 */
@@ -89,16 +77,6 @@ public class Profile {
 	 * @param pseudo String
 	 */
 	public void setPseudo(String pseudo) {this.pseudo = pseudo;}
-	/**
-	 * sets profile's music volume
-	 * @param musicVolume int
-	 */
-	public void setMusicVolume(int musicVolume) {this.musicVolume = musicVolume;}
-	/**
-	 * sets profile's sound effects volume
-	 * @param soundEffectsVolume int
-	 */
-	public void setSoundEffectsVolume(int soundEffectsVolume) {this.soundEffectsVolume = soundEffectsVolume;}
 	/**
 	 * sets profile's resolution
 	 * @param resolution int
@@ -138,8 +116,6 @@ public class Profile {
     			p.setPassword(r.getString("password"));
     			p.setUserType(r.getString("userType"));
     			p.setPseudo(r.getString("pseudo"));
-    			p.setMusicVolume(r.getInt("music"));
-    			p.setSoundEffectsVolume(r.getInt("effects"));
     			p.setResolution(r.getInt("resolution"));
     			DBClass.executeQuery("UPDATE users SET current=true WHERE id="+id);
     			return p;
@@ -241,8 +217,6 @@ public class Profile {
     			p.setPassword(r.getString("password"));
     			p.setUserType(r.getString("userType"));
     			p.setPseudo(r.getString("pseudo"));
-    			p.setMusicVolume(r.getInt("music"));
-    			p.setSoundEffectsVolume(r.getInt("effects"));
     			p.setResolution(r.getInt("resolution"));
     			return p;
     		}
@@ -260,11 +234,11 @@ public class Profile {
 	 * @return Profile
 	 */
 
-	public Profile updateConfiguration(int music, int soundEffects, int resolution){
+	public Profile updateConfiguration(int resolution){
 		
 		try {
 			DBClass.connect();
-    		DBClass.requestQuery("UPDATE users SET music="+music+", effects="+soundEffects+", resolution="+resolution+" WHERE id="+this.getId());
+    		DBClass.requestQuery("UPDATE users SET resolution="+resolution+" WHERE id="+this.getId());
     		return connect(current.getEmail(), current.getPassword());
 		} catch (ClassNotFoundException e) {e.printStackTrace();
 		} catch (SQLException e) {e.printStackTrace();
