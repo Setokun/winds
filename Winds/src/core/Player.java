@@ -107,11 +107,12 @@ public class Player extends GameObject{
 					actionDangerousBlockOrEnemy(tempObject, j);
 				}
 				else if(tempObject.getBounds().get(j).getId() == ObjectId.Enemy){
-						if(!isHighlander())
-							actionDangerousBlockOrEnemy(tempObject, j);
+					if(!isHighlander())
+						actionDangerousBlockOrEnemy(tempObject, j);
 					}
 				else if(tempObject.getBounds().get(j).getId() == ObjectId.Boss){
-					actionBoss(tempObject, j);
+					if(!isHighlander())
+						actionBoss(tempObject, j);
 				}
 				else if(tempObject.getBounds().get(j).getId() == ObjectId.Collectable){
 					actionCollectable(tempObject, j);
