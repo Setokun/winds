@@ -7,6 +7,9 @@ import core.GameObject;
 
 public class Handler {
 	
+	private final int NB_SQUARES = 60;
+	private final int DIM_SQUARE = 128;
+	
 	public ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	
 	private GameObject tempObject;
@@ -20,26 +23,30 @@ public class Handler {
 	}
 	
 	public void render(Graphics g){
+		int coefX = (int) (Game.WIDTH / (DIM_SQUARE * 1.5f));
+		int coefY = (int) (Game.HEIGHT / (DIM_SQUARE * 1.5f));
 		
-		int wIndex = ((int) objects.get(3600).getX())/128 - 4;
-		int hIndex = ((int) objects.get(3600).getY())/128 - 3;
+		int wIndex = ((int) objects.get(NB_SQUARES*NB_SQUARES).getX())/DIM_SQUARE - coefX;
+		int coefXMax = 2*coefX + 1;
+		int hIndex = ((int) objects.get(NB_SQUARES*NB_SQUARES).getY())/DIM_SQUARE - coefY; 
+		int coefYMax = 2*coefY + 1;
 		
 		if(wIndex < 0) wIndex = 0;
 		if(hIndex < 0) hIndex = 0;
 		
-		if(wIndex > 51) wIndex = 51;
-		if(hIndex > 53) hIndex = 53;
+		if(wIndex > (NB_SQUARES - coefXMax)) wIndex = NB_SQUARES - coefXMax;
+		if(hIndex > (NB_SQUARES - coefYMax)) hIndex = NB_SQUARES - coefYMax;
 		
-		for (int i = wIndex; i < wIndex + 9; i++) {
-			for (int j = hIndex; j < hIndex + 7; j++) {
+		for (int i = wIndex; i < wIndex + coefXMax; i++) {
+			for (int j = hIndex; j < hIndex + coefYMax; j++) {
 
-				tempObject = objects.get(j*60 + i);
+				tempObject = objects.get(j*NB_SQUARES + i);
 				
 				tempObject.render(g);
 			}
 		}
 
-		for (int i = 3600; i < objects.size(); i++) {
+		for (int i = NB_SQUARES*NB_SQUARES; i < objects.size(); i++) {
 			objects.get(i).render(g);
 		}
 		
