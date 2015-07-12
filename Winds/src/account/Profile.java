@@ -52,6 +52,7 @@ public class Profile {
 	 */
 	public int getResolution() {return resolution;}
 	
+	
 	/**
 	 * sets profile's ID
 	 * @param id int
@@ -96,7 +97,6 @@ public class Profile {
 			DBClass.disconnect();
 		}
 	}
-	
 	/**
 	 * returns a Profile from the local Database
 	 * @param email String
@@ -135,7 +135,6 @@ public class Profile {
 	 * @param password String
 	 * @return Profile
 	 */
-	
 	public static Profile connectFromServer(String email, String password){
 		return ServerConnection.downloadProfile(email, password);
 	}
@@ -145,7 +144,6 @@ public class Profile {
 	 * @param password String
 	 * @return int : 0 for "ko", 1 for "password updated", 2 for "wrong server password" and 3 for "new profile inserted"
 	 */
-	
 	public static int insertOrUpdateProfile(String email, String password){
 			try {
 				if(isExistingEmail(email)){
@@ -164,8 +162,8 @@ public class Profile {
 					if(profile == null)return 0;
 					if(profile.getEmail() == null)return 2;
 					DBClass.connect();
-					DBClass.executeQuery("INSERT INTO users (id, email, password, pseudo, userType, current, music, effects, resolution) "
-							+ "VALUES ('"+profile.getId()+"','"+profile.getEmail()+"','"+password+"','"+profile.getPseudo()+"','"+profile.getUserType()+"',true, 5, 5, 1);");
+					DBClass.executeQuery("INSERT INTO users (id, email, password, pseudo, userType, current, resolution) "
+							+ "VALUES ('"+profile.getId()+"','"+profile.getEmail()+"','"+password+"','"+profile.getPseudo()+"','"+profile.getUserType()+"',true, 1);");
 					return 3;
 				}
 			} 
@@ -181,7 +179,6 @@ public class Profile {
 	 * @param email String
 	 * @return boolean
 	 */
-	
 	public static boolean isExistingEmail(String email){
 		
 		try {
@@ -204,7 +201,6 @@ public class Profile {
 	 * @param password String
 	 * @return Profile
 	 */
-	
  	public static Profile getCurrentPlayer(){
     	
     	try {
@@ -233,7 +229,6 @@ public class Profile {
 	 * @param resolution int
 	 * @return Profile
 	 */
-
 	public Profile updateConfiguration(int resolution){
 		
 		try {
@@ -251,7 +246,6 @@ public class Profile {
 	 * returns the screen Dimension attached to this Profile
 	 * @return Dimension
 	 */
-	
 	public Dimension getScreenDimensions(){
 		try {
 			DBClass.connect();
@@ -272,7 +266,6 @@ public class Profile {
 	 * returns a String representation of this Profile
 	 * @return String
 	 */
-	
 	public String toString(){
 		return "id :" + id + ",email : " + email + ",password : "+password+", user type : " + userType + ", pseudo : " + pseudo + ", id resolution : " + resolution;
 	}
