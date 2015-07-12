@@ -258,7 +258,7 @@ public class Player extends GameObject{
 				|| getBoundsRight().intersects(tempObject.getBounds().get(j).getBounds())
 				|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
 			if(!Game.isFinished()){
-				velX = velX / 10;
+				velX = 0;
 				Game.setFinished();
 				Game.bgMusic.stop();
 				Game.bgMusic = new AudioPlayer("/resources/musics/victory.mp3", false);

@@ -139,11 +139,11 @@ public class Game extends Canvas implements Runnable{
 			lastTime = now;
 			if(delta >= 1){
 				tick();
-				updates++;
+				if(Window.debug)updates++;
 				delta--;
 			}
 			render();
-			frames++;
+			if(Window.debug)frames++;
 			
 			if(System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
@@ -152,10 +152,12 @@ public class Game extends Canvas implements Runnable{
 				if(player.getLife() <= 0 && !defeat)
 					defeat = true;
 				
-				System.out.println(updates + " updates, fps : " + frames);
+				if(Window.debug){
+					System.out.println(updates + " updates, fps : " + frames);
+					updates = 0;
+					frames = 0;
+				}
 				
-				updates = 0;
-				frames = 0;
 			}
 		}
 		stop();
