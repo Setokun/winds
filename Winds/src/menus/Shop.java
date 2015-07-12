@@ -215,8 +215,7 @@ public class Shop  extends JPanel {
 	}
 
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
-		Window.resize(Window.DIM_STANDARD);
-		Window.affect(new MainMenu());
+		Window.affect(new MainMenu(),Window.DIM_STANDARD);
 	}
 	
 	private Object[][] getThemesList() throws IOException{

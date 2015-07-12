@@ -21,15 +21,10 @@ public class Window {
 	private static JFrame main;
 	
 	
-	public static void affect(Component c){
+	public static void affect(Component c, Dimension dim){
 		main.remove(main.getContentPane().getComponent(0));
 		main.add(c);
-		main.setVisible(true);
-	}
-	
-	public static void resize(Dimension dim){
 		main.setSize(dim);
-		main.setLocationRelativeTo(null);
 		main.setVisible(true);
 	}
 	

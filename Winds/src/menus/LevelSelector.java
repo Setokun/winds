@@ -294,8 +294,7 @@ public class LevelSelector extends JPanel{
 		}
 	}
 	private void jBtnBackActionPerformed(ActionEvent evt) {
-    	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelCategorySelector());
+		Window.affect(new LevelCategorySelector(),Window.DIM_STANDARD);
     }
 	protected void jBtnPreviousActionPerformed(ActionEvent evt) {
 		numPage--;

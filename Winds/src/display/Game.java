@@ -327,8 +327,7 @@ public class Game extends Canvas implements Runnable{
 	public static void goBackToMenu(){
 		Game.bgMusic.stop();
 		Game.running = false;
-		Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelSelector(typeLvl, numPageFrom));
+		Window.affect(new LevelSelector(typeLvl, numPageFrom), Window.DIM_STANDARD);
 	}
 	
 	public static boolean isFinished(){

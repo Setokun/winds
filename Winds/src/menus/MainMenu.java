@@ -214,24 +214,19 @@ public class MainMenu extends JPanel{
 	}
 	
     private void jBtnPlayActionPerformed(java.awt.event.ActionEvent evt) {
-    	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelCategorySelector());
+		Window.affect(new LevelCategorySelector(),Window.DIM_STANDARD);
     }
     private void jBtnScoresActionPerformed(java.awt.event.ActionEvent evt) {
-    	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new Scores());
+		Window.affect(new Scores(),Window.DIM_STANDARD);
     }
     private void jBtnConfigurationActionPerformed(java.awt.event.ActionEvent evt) {
-    	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new ConfigMenu());
+		Window.affect(new ConfigMenu(),Window.DIM_STANDARD);
     }
     private void jBtnShopActionPerformed(java.awt.event.ActionEvent evt) {
-    	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new Shop());
+		Window.affect(new Shop(),Window.DIM_STANDARD);
     }
     private void jBtnLevelEditorActionPerformed(java.awt.event.ActionEvent evt) {
-    	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new LevelEditorList());
+    	Window.affect(new LevelEditorList(),Window.DIM_STANDARD);
     }
     private void jBtnChangeProfileActionPerformed(java.awt.event.ActionEvent evt) {
     	try {
@@ -243,8 +238,7 @@ public class MainMenu extends JPanel{
 			DBClass.disconnect();
 		}
     	Profile.current = null;
-    	Window.resize(Window.DIM_STANDARD);
-		Window.affect(new Login());
+		Window.affect(new Login(),Window.DIM_STANDARD);
     }
     private void jBtnQuitActionPerformed(java.awt.event.ActionEvent evt) {
         System.exit(1);
