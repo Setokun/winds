@@ -289,12 +289,6 @@ public class Theme extends ThemeBase {
 		}
 	}
 	public void loadFront(Handler handler){}
-	public void run() {
-		methodTest();
-	}
-	private void methodTest(){
-		System.out.println("running unknown method");
-	}
 	
 	private static class Enemy extends GameObject{
 	

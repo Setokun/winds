@@ -163,12 +163,6 @@ public class Theme extends ThemeBase {
 		};
 	}
 
-	public void run() {
-		methodTest();
-	}
-	private void methodTest(){
-		System.out.println("running unknown method");
-	}
 	public void loadInteractions(int x, int y, int id, Handler handler) {
 		// TODO Auto-generated method stub
 		

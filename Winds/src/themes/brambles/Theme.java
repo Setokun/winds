@@ -272,12 +272,6 @@ public class Theme extends ThemeBase {
 			handler.addObject(new Leaf(rand.nextInt(2000)-2000,rand.nextInt(600), ObjectId.Interactions));
 		}
 	}
-	public void run() {
-		methodTest();
-	}
-	private void methodTest(){
-		System.out.println("running unknown method");
-	}
 	
 	private static class Enemy extends GameObject{
 	
