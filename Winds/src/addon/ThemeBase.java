@@ -33,10 +33,13 @@ public abstract class ThemeBase {
 	abstract protected String[] initInteractionTips();
 
 	/**
-	 * Runs the theme.
+	 * load specified set of GameObjects identified by their id
 	 */
-	abstract public void run();
 	abstract public void loadInteractions(int x, int y, int id, Handler handler);
+	/**
+	 * display whatever you want on the screen
+	 * @param handler
+	 */
 	abstract public void loadFront(Handler handler);
 	
 }

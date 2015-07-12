@@ -19,6 +19,12 @@ public class LevelButton extends JPanel{
 	private JButton button;
 	private JLabel label;
 	
+	/**
+	 * constructor to create a level button, with the information of where it comes from
+	 * @param jarLvl The targeted jar level 
+	 * @param type The level type : basic, custom, my or tomoderate
+	 * @param numPage the number of the page where the button will be placed
+	 */
 	public LevelButton(JarLevel jarLvl, Type type, int numPage){
 		button = new JButton();
 		label = new JLabel();
@@ -35,6 +41,10 @@ public class LevelButton extends JPanel{
 		label.setText(jarLvl.getLevel().getName());
 	}
 	
+	/**
+	 * return a JPanel containing the logo and the name of the level
+	 * @return JPanel
+	 */
 	public JPanel getButton(){
 		JPanel j = new JPanel();
 		j.setLayout(new BoxLayout(j, BoxLayout.PAGE_AXIS));

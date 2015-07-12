@@ -50,6 +50,9 @@ public class Shop  extends JPanel {
 	private boolean isModoAdmin;
 	// end declarations
 	
+	/**
+	 * constructor of the Shop GUI
+	 */
 	public Shop() {
 
 		this.isModoAdmin = Profile.current.getUserType().equals("administrator") 
@@ -74,12 +77,17 @@ public class Shop  extends JPanel {
 		if(isModoAdmin)initializeLevelsToModerateList(listLevelsToModerateToDisplay);
 		
 	}
-
+	
+	/**
+	 * initialize GUI title
+	 */
 	private void initTitle() {
 		title = new JLabel("Shop");
 		title.setFont(windsPolice48);
 	}
-
+	/**
+	 * initialize variables that will populate each of the 4 tables
+	 */
 	private void populateLists() {
 		try {
 			listThemesToDisplay = getThemesList();
@@ -90,7 +98,9 @@ public class Shop  extends JPanel {
 			JOptionPane.showMessageDialog(this, "Unable to reach distant winds server, please verify your internet connection and try again !");
 		}
 	}
-
+	/**
+	 * create the north section of this GUI
+	 */
 	private void createNorth() {
 		
 		initTitle();
@@ -130,6 +140,9 @@ public class Shop  extends JPanel {
 		this.add(north, BorderLayout.NORTH);
 		
 	}
+	/**
+	 * create the middle section of this GUI
+	 */
 	private void createMiddle() {
 		
 		scrollPaneNewThemes = new JScrollPane();
@@ -166,6 +179,9 @@ public class Shop  extends JPanel {
 		
 		
 	}
+	/**
+	 * create the south section of this GUI
+	 */
 	private void createSouth() {
 		
 		scrollPaneLevelsToModerate = new JScrollPane();
@@ -180,6 +196,9 @@ public class Shop  extends JPanel {
 		
 	}
 
+	/**
+	 * initialize Back button 
+	 */
 	private void initBackButton() {
 		jBtnBack = new JButton();
 		jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
@@ -204,6 +223,9 @@ public class Shop  extends JPanel {
 		});
 	}
 
+	/**
+	 * initialize custom font
+	 */
 	private void initializeFont() {
 		try {
     		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,18F);
@@ -214,10 +236,19 @@ public class Shop  extends JPanel {
 		}
 	}
 
+	/**
+	 * determines what action has to be done when clicking on Back button 
+	 * @param evt the event that occured
+	 */
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
 		Window.affect(new MainMenu(),Window.DIM_STANDARD);
 	}
 	
+	/**
+	 * returns a double dimension object used to provide "New Themes" table
+	 * @return Object[][]
+	 * @throws IOException
+	 */
 	private Object[][] getThemesList() throws IOException{
 		Object[][] listThemes = ThemeData.getThemesList();
 		Object[][] listThemesToDisplay = null;
@@ -231,6 +262,12 @@ public class Shop  extends JPanel {
 		}
 		return listThemesToDisplay;
 	}
+	/**
+	 * returns a double dimension object used to provide "New Levels" or "levels to moderate" tables
+	 * @param type the type of level : basic or tomoderate
+	 * @return
+	 * @throws IOException
+	 */
 	private Object[][] getLevelsList(Type type) throws IOException{
 		Object[][] listLevels = Level.getLevelsList(type);
 		Object[][] listLevelsToDisplay = null;
@@ -244,6 +281,12 @@ public class Shop  extends JPanel {
 		}
 		return listLevelsToDisplay;
 	}
+	/**
+	 * returns a double dimension object used to provide "Custom Levels" table
+	 * @param type
+	 * @return
+	 * @throws IOException
+	 */
 	private Object[][] getCustomLevelsList(Type type) throws IOException{
 		Object[][] listLevels = Level.getCustomLevelsList();
 		Object[][] listLevelsToDisplay = null;
@@ -274,7 +317,11 @@ public class Shop  extends JPanel {
 		}
 		return listLevelsToDisplay;
 	}
-	
+
+	/**
+	 * Initializes "New Themes" table
+	 * @param listThemesToDisplay Object[][] The prepared data
+	 */
 	private void initializeThemeList(Object[][] listThemesToDisplay){
 		tableNewThemes = new JTable();
 		tableNewThemes.getTableHeader().setBackground(new Color(23,182,255));
@@ -357,6 +404,10 @@ public class Shop  extends JPanel {
 		scrollPaneNewThemes.setPreferredSize(standardTableDimension);
 		scrollPaneNewThemes.setViewportView(tableNewThemes);
 	}
+	/**
+	 * Initializes "New Levels" table
+	 * @param listBasicLevelsToDisplay Object[][] The prepared data
+	 */
 	private void initializeNewBasicLevelsList(Object[][] listBasicLevelsToDisplay){
 		tableNewLevels = new JTable();
 		tableNewLevels.getTableHeader().setBackground(new Color(23,182,255));
@@ -414,6 +465,10 @@ public class Shop  extends JPanel {
 		scrollPaneNewLevels.setViewportView(tableNewLevels);
 		
 	}
+	/**
+	 * Initializes "Custom Levels" table
+	 * @param listCustomLevelsToDisplay Object[][] The prepared data
+	 */
 	private void initializeCustomLevelsList(Object[][] listCustomLevelsToDisplay){
 		tableCustomLevels = new JTable();
 		tableCustomLevels.getTableHeader().setBackground(new Color(23,182,255));
@@ -425,7 +480,7 @@ public class Shop  extends JPanel {
 		tableCustomLevels.setModel(new DefaultTableModel(
 				listCustomLevelsToDisplay,
 			new String[] {
-				"Custom level name", "", "", "", "", ""
+				"Custom levels", "", "", "", "", ""
 			}
 		) {
 			private static final long serialVersionUID = 5700292645347825439L;
@@ -512,6 +567,10 @@ public class Shop  extends JPanel {
 		scrollPaneCustomLevels.setPreferredSize(new Dimension(600,(isModoAdmin)?200:300));
 		scrollPaneCustomLevels.setViewportView(tableCustomLevels);
 	}
+	/**
+	 * Initializes "Levels to moderate" table
+	 * @param listLevelsToModerateToDisplay Object[][] The prepared data
+	 */
 	private void initializeLevelsToModerateList(Object[][] listLevelsToModerateToDisplay){
 		tableLevelsToModerate = new JTable();
 		tableLevelsToModerate.getTableHeader().setBackground(new Color(23,182,255));

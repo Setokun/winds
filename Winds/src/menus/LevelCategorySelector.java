@@ -29,8 +29,12 @@ public class LevelCategorySelector extends JPanel{
     private JPanel north, jNorthWest, jNorthEast, middle, center;
     private boolean isModoAdmin;
 	
+    /**
+     * constructor of the Level Category Selector GUI
+     */
 	public LevelCategorySelector() {
         //AddonManager.getJarLevels();
+		this.setLayout(new BorderLayout());
 		
 		this.isModoAdmin = Profile.current.getUserType().equals("administrator") 
         				|| Profile.current.getUserType().equals("moderator");
@@ -38,11 +42,6 @@ public class LevelCategorySelector extends JPanel{
 		initializeFont();
     	initTitle();
     	initBackButton();
-
-    	this.setLayout(new BorderLayout());
-    	
-    	//this.add(north, BorderLayout.NORTH);
-    	//this.add(middle, BorderLayout.CENTER);
     	
         initBasicLevelsButton();
         initCustomLevelsButton();
@@ -51,11 +50,11 @@ public class LevelCategorySelector extends JPanel{
 
         createNorth();
     	createMiddle();
-    	
-        /*initHGroup();
-        initVGroup();*/
     }
 
+	/**
+	 * create the north section of this GUI
+	 */
 	private void createNorth() {
 		
 		jNorthWest = new JPanel();
@@ -81,6 +80,9 @@ public class LevelCategorySelector extends JPanel{
 		north.add(jNorthEast, BorderLayout.EAST);
 		this.add(north, BorderLayout.NORTH);
 	}
+	/**
+	 * create the middle section of this GUI
+	 */
 	private void createMiddle() {
 		
 		middle = new JPanel();
@@ -107,83 +109,9 @@ public class LevelCategorySelector extends JPanel{
     	
 	}
 
-	private void initTitle() {
-    	jLblTitle = new JLabel("Please select a category :");
-        jLblTitle.setFont(windsPolice36);
-	}
-
-	private void initToModerateButton() {
-    	jBtnLevelsToModerate = new JButton();
-        jBtnLevelsToModerate.setFont(windsPolice24);
-        jBtnLevelsToModerate.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/LevelsToModerate.png")));
-        jBtnLevelsToModerate.setBorder(new SoftBevelBorder(0));
-        jBtnLevelsToModerate.setBorderPainted(false);
-        jBtnLevelsToModerate.setContentAreaFilled(false);
-        jBtnLevelsToModerate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnLevelsToModerateActionPerformed(evt);
-            }
-        });
-        jBtnLevelsToModerate.addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {
-				jBtnLevelsToModerate.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/LevelsToModerate.png")));
-			}
-			public void mouseEntered(MouseEvent e) {
-				jBtnLevelsToModerate.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/LevelsToModerate_hover.png")));
-			}
-			public void mouseClicked(MouseEvent e) {}
-		});
-	}
-	private void initMyLevelsButton() {
-    	jBtnMyLevels = new JButton();
-    	jBtnMyLevels.setFont(windsPolice24);
-        jBtnMyLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/MyLevels.png")));
-        jBtnMyLevels.setBorder(new SoftBevelBorder(0));
-        jBtnMyLevels.setBorderPainted(false);
-        jBtnMyLevels.setContentAreaFilled(false);
-        jBtnMyLevels.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnMyLevelsActionPerformed(evt);
-            }
-        });
-        jBtnMyLevels.addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {
-				jBtnMyLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/MyLevels.png")));
-			}
-			public void mouseEntered(MouseEvent e) {
-				jBtnMyLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/MyLevels_hover.png")));
-			}
-			public void mouseClicked(MouseEvent e) {}
-		});
-	}
-	private void initCustomLevelsButton() {
-		jBtnCustomLevels = new JButton();
-		jBtnCustomLevels.setFont(windsPolice24);
-        jBtnCustomLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/CustomLevels.png")));
-        jBtnCustomLevels.setBorder(new SoftBevelBorder(0));
-        jBtnCustomLevels.setBorderPainted(false);
-        jBtnCustomLevels.setContentAreaFilled(false);
-        jBtnCustomLevels.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnCustomLevelsActionPerformed(evt);
-            }
-        });
-        jBtnCustomLevels.addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {
-				jBtnCustomLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/CustomLevels.png")));
-			}
-			public void mouseEntered(MouseEvent e) {
-				jBtnCustomLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/CustomLevels_hover.png")));
-			}
-			public void mouseClicked(MouseEvent e) {}
-		});
-	}
+	/**
+	 * initialize "Basic Levels" button
+	 */
 	private void initBasicLevelsButton() {
     	jBtnBasicLevels = new JButton();
         jBtnBasicLevels.setFont(windsPolice24);
@@ -208,6 +136,93 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
+	/**
+	 * initialize "Custom Levels" button
+	 */
+	private void initCustomLevelsButton() {
+		jBtnCustomLevels = new JButton();
+		jBtnCustomLevels.setFont(windsPolice24);
+        jBtnCustomLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/CustomLevels.png")));
+        jBtnCustomLevels.setBorder(new SoftBevelBorder(0));
+        jBtnCustomLevels.setBorderPainted(false);
+        jBtnCustomLevels.setContentAreaFilled(false);
+        jBtnCustomLevels.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jBtnCustomLevelsActionPerformed(evt);
+            }
+        });
+        jBtnCustomLevels.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				jBtnCustomLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/CustomLevels.png")));
+			}
+			public void mouseEntered(MouseEvent e) {
+				jBtnCustomLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/CustomLevels_hover.png")));
+			}
+			public void mouseClicked(MouseEvent e) {}
+		});
+	}
+	/**
+	 * initialize "My Levels" button
+	 */
+	private void initMyLevelsButton() {
+    	jBtnMyLevels = new JButton();
+    	jBtnMyLevels.setFont(windsPolice24);
+        jBtnMyLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/MyLevels.png")));
+        jBtnMyLevels.setBorder(new SoftBevelBorder(0));
+        jBtnMyLevels.setBorderPainted(false);
+        jBtnMyLevels.setContentAreaFilled(false);
+        jBtnMyLevels.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jBtnMyLevelsActionPerformed(evt);
+            }
+        });
+        jBtnMyLevels.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				jBtnMyLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/MyLevels.png")));
+			}
+			public void mouseEntered(MouseEvent e) {
+				jBtnMyLevels.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/MyLevels_hover.png")));
+			}
+			public void mouseClicked(MouseEvent e) {}
+		});
+	}
+	/**
+	 * initialize "Levels to Moderate" button
+	 */
+	private void initToModerateButton() {
+    	jBtnLevelsToModerate = new JButton();
+        jBtnLevelsToModerate.setFont(windsPolice24);
+        jBtnLevelsToModerate.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/LevelsToModerate.png")));
+        jBtnLevelsToModerate.setBorder(new SoftBevelBorder(0));
+        jBtnLevelsToModerate.setBorderPainted(false);
+        jBtnLevelsToModerate.setContentAreaFilled(false);
+        jBtnLevelsToModerate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jBtnLevelsToModerateActionPerformed(evt);
+            }
+        });
+        jBtnLevelsToModerate.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {
+				jBtnLevelsToModerate.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/LevelsToModerate.png")));
+			}
+			public void mouseEntered(MouseEvent e) {
+				jBtnLevelsToModerate.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/LevelsToModerate_hover.png")));
+			}
+			public void mouseClicked(MouseEvent e) {}
+		});
+	}
+	
+
+
+	/**
+	 * initialize "Back" button
+	 */
 	private void initBackButton() {
     	jBtnBack = new JButton();
         jBtnBack.setFont(windsPolice24);
@@ -232,7 +247,16 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
-
+	/**
+	 * initialize GUI title
+	 */
+	private void initTitle() {
+    	jLblTitle = new JLabel("Please select a category :");
+        jLblTitle.setFont(windsPolice36);
+	}
+	/**
+	 * initialize custom font
+	 */
 	private void initializeFont() {
     	try {
     		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,24F);
@@ -243,18 +267,38 @@ public class LevelCategorySelector extends JPanel{
 		}
 	}
 
+	/**
+	 * determines what action has to be done when clicking on the "Back" button
+	 * @param evt
+	 */
 	private void jBtnBackActionPerformed(ActionEvent evt) {
 		Window.affect(new MainMenu(),Window.DIM_STANDARD);
     }                                        
-    private void jBtnBasicLevelsActionPerformed(ActionEvent evt) {
+    /**
+     * determines what action has to be done when clicking on the "Basic Levels" button
+     * @param evt
+     */
+	private void jBtnBasicLevelsActionPerformed(ActionEvent evt) {
 		Window.affect(new LevelSelector(Type.basic, 0),Window.DIM_STANDARD);
     }                                               
+    /**
+     * determines what action has to be done when clicking on the "Custom Levels" button
+     * @param evt
+     */
     private void jBtnCustomLevelsActionPerformed(ActionEvent evt) {
 		Window.affect(new LevelSelector(Type.custom, 0),Window.DIM_STANDARD);
     }                                                
+    /**
+     * determines what action has to be done when clicking on the "My Levels" button
+     * @param evt
+     */
     private void jBtnMyLevelsActionPerformed(ActionEvent evt) {
 		Window.affect(new LevelSelector(Type.my, 0),Window.DIM_STANDARD);
     }                                            
+    /**
+     * determines what action has to be done when clicking on the "Levels to Moderate" button
+     * @param evt
+     */
     private void jBtnLevelsToModerateActionPerformed(ActionEvent evt) {
 		Window.affect(new LevelSelector(Type.tomoderate, 0),Window.DIM_STANDARD);
     }                                                    

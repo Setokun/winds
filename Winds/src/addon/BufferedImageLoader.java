@@ -9,13 +9,15 @@ public class BufferedImageLoader {
 
 	private BufferedImage image;
 	
+	/**
+	 * returns a BufferedImage from an image resource identified by the path
+	 * @param path
+	 * @return BufferedImage
+	 */
 	public BufferedImage loadImage(String path){
 		try {
 			image = ImageIO.read(getClass().getResource(path));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (IOException e){ return null;}
 		return image;
 	}
 	

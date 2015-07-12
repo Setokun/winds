@@ -1,5 +1,9 @@
 package menus;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
@@ -8,8 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -28,103 +30,121 @@ public class ConfigMenu extends JPanel{
 	
 	private Font windsPolice30 = null, windsPolice36 = null;
 	private JButton jBtnBack, btnSave;
-	private JSlider sliderMusic, sliderSounds, sliderResolution;
-	private JLabel title, lblMusic, lblSounds, lblResolution, lblDisplayMusicvolume, lblDisplaySoundsvolume, lblDisplayResolution;
-	private GroupLayout groupLayout;
+	private JSlider sliderResolution;
+	private JPanel north, jNorthWest, jNorthEast, jNorthCenter, middle, middleCenter, south, southEast;
+	private JLabel title, lblResolution, lblDisplayResolution;
 	
-	
+	/**
+	 * constructor of the ConfigMenu GUI
+	 */
 	public ConfigMenu() {
+		
+		this.setLayout(new BorderLayout());
 		
 		initializeFont();
 		
-		title = new JLabel("Configuration");
-		title.setFont(windsPolice36);
-		
 		initBackButton();
 		initSaveButton();
-		
-		initMusic();
-		initSounds();
+
 		initResolution();
 		
-		groupLayout = new GroupLayout(this);
-		initHGroup();
-		initVGroup();
-		
-		setLayout(groupLayout);
+		createNorth();
+		createMiddle();
+		createSouth();
 		
 	}
 
-	private void initVGroup() {
-		groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-					.addGroup(groupLayout.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(title)
-								.addGap(115)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblMusic)
-									.addComponent(sliderMusic, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblDisplayMusicvolume))
-								.addGap(46)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(sliderSounds, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblSounds)
-									.addComponent(lblDisplaySoundsvolume))
-								.addGap(52)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblResolution)
-										.addComponent(sliderResolution, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblDisplayResolution)))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(jBtnBack)
-								.addGap(355)
-								.addComponent(btnSave)))
-						.addGap(139))
-			);
+	/**
+	 * create the north section of this GUI
+	 */
+	private void createNorth() {
+		initTitle();
+		
+		jNorthWest = new JPanel();
+		FlowLayout flNorthWest = new FlowLayout();
+		flNorthWest.setHgap(10);
+		flNorthWest.setVgap(10);
+		jNorthWest.setLayout(flNorthWest);
+		JButton b = new JButton();
+		b.setPreferredSize(new Dimension(131,63));
+		b.setBorder(new SoftBevelBorder(0));
+		b.setBorderPainted(false);
+		b.setContentAreaFilled(false);
+		jNorthWest.add(b);
+		
+		jNorthCenter = new JPanel();
+		FlowLayout flNorthCenter = new FlowLayout();
+		flNorthCenter.setVgap(25);
+		jNorthCenter.setLayout(flNorthCenter);
+		jNorthCenter.add(title);
+		
+		jNorthEast = new JPanel();
+		FlowLayout flNorthEast = new FlowLayout();
+		flNorthEast.setHgap(10);
+		flNorthEast.setVgap(10);
+		jNorthEast.setLayout(flNorthEast);
+		jNorthEast.add(jBtnBack);
+		
+		north = new JPanel();
+		BorderLayout northLayout = new BorderLayout();
+		north.setLayout(northLayout);
+		north.add(jNorthWest, BorderLayout.WEST);
+		north.add(jNorthCenter, BorderLayout.CENTER);
+		north.add(jNorthEast, BorderLayout.EAST);
+		this.add(north, BorderLayout.NORTH);
 	}
-
-	private void initHGroup() {
-		groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.TRAILING)
-					.addGroup(groupLayout.createSequentialGroup()
-						.addContainerGap(150, Short.MAX_VALUE)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-											.addComponent(lblSounds)
-											.addComponent(lblMusic)
-											.addComponent(lblResolution))
-										.addGap(18)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-											.addComponent(sliderResolution, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-											.addComponent(sliderSounds, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-											.addComponent(sliderMusic, GroupLayout.PREFERRED_SIZE, 298, GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblDisplayMusicvolume)
-											.addComponent(lblDisplaySoundsvolume)
-											.addComponent(lblDisplayResolution)))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGap(240)
-										.addComponent(title)
-								.addGap(110)
-								.addComponent(jBtnBack))
-								.addGroup(groupLayout.createSequentialGroup()
-										.addGap(240)
-										.addComponent(title)
-								.addGap(100)
-								.addComponent(btnSave))))
-								)
-						.addContainerGap())
-			);
+	/**
+	 * create the middle section of this GUI
+	 */
+	private void createMiddle() {
+		
+		middleCenter = new JPanel();
+		FlowLayout flMiddle = new FlowLayout();
+		flMiddle.setHgap(250);
+		flMiddle.setVgap(65);
+		middleCenter.setLayout(flMiddle);
+		
+		middleCenter.add(lblResolution);
+		middleCenter.add(sliderResolution);
+		middleCenter.add(lblDisplayResolution);
+		middleCenter.setAlignmentY(Component.CENTER_ALIGNMENT);
+		
+		middle = new JPanel();
+		middle.setLayout(new BorderLayout(300,400));
+		middle.add(middleCenter, BorderLayout.CENTER);
+		
+		this.add(middle);
+		
 	}
-
+	/**
+	 * create the south section of this GUI
+	 */
+	private void createSouth() {
+		
+		southEast = new JPanel();
+		FlowLayout flSouth = new FlowLayout();
+		flSouth.setHgap(10);
+		flSouth.setVgap(10);
+		southEast.setLayout(flSouth);
+		southEast.add(btnSave);
+		
+		south = new JPanel();
+		south.setLayout(new BorderLayout());
+		south.add(southEast, BorderLayout.EAST);
+		this.add(south, BorderLayout.SOUTH);
+		
+	}
+	
+	/**
+	 * initialize GUI title
+	 */
+	private void initTitle() {
+		title = new JLabel("Configuration");
+		title.setFont(windsPolice36);
+	}
+	/**
+	 * initialize resolution slider and text
+	 */
 	private void initResolution() {
 		sliderResolution = new JSlider();
 		sliderResolution.setValue(Profile.current.getResolution());
@@ -161,41 +181,9 @@ public class ConfigMenu extends JPanel{
 		}
 		lblDisplayResolution.setFont(windsPolice30);
 	}
-
-	private void initSounds() {
-		sliderSounds = new JSlider();
-		sliderSounds.setValue(Profile.current.getSoundEffectsVolume()); //TODO à récupérer de la BDD en fonction du profil connecté
-		sliderSounds.setMaximum(10);
-		sliderSounds.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				// TODO Auto-generated method stub
-				lblDisplaySoundsvolume.setText(String.valueOf(sliderSounds.getValue()));
-			}
-		});
-		lblSounds = new JLabel("Sounds volume");
-		lblSounds.setFont(windsPolice30);
-		lblDisplaySoundsvolume = new JLabel();
-		lblDisplaySoundsvolume.setText(String.valueOf(sliderSounds.getValue()));
-		lblDisplaySoundsvolume.setFont(new Font("bubble & soap", Font.PLAIN, 30));
-	}
-
-	private void initMusic() {
-		sliderMusic = new JSlider();
-		sliderMusic.setValue(Profile.current.getMusicVolume());
-		sliderMusic.setMaximum(10);
-		sliderMusic.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				// TODO 
-				lblDisplayMusicvolume.setText(String.valueOf(sliderMusic.getValue()));
-			}
-		});
-		lblMusic = new JLabel("Music volume");
-		lblMusic.setFont(windsPolice30);
-		lblDisplayMusicvolume = new JLabel();
-		lblDisplayMusicvolume.setText(String.valueOf(sliderMusic.getValue()));
-		lblDisplayMusicvolume.setFont(new Font("bubble & soap", Font.PLAIN, 30));
-	}
-
+	/**
+	 * initialize "Save" button
+	 */
 	private void initSaveButton() {
 		btnSave = new JButton();
 		btnSave.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Save.png")));
@@ -219,7 +207,9 @@ public class ConfigMenu extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
-
+	/**
+	 * initialize "Back" button
+	 */
 	private void initBackButton() {
 		jBtnBack = new JButton();
 		jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
@@ -243,7 +233,9 @@ public class ConfigMenu extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
-
+	/**
+	 * initialize custom font
+	 */
 	private void initializeFont() {
 		try {
     		windsPolice30 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,30F);
@@ -254,11 +246,18 @@ public class ConfigMenu extends JPanel{
 		}
 	}
 	
+	/**
+	 * determines what has to be done when clicking on the "Save" button
+	 * @param evt
+	 */
 	protected void jBtnSaveActionPerformed(ActionEvent evt) {
-		Profile.current = Profile.current.updateConfiguration(sliderMusic.getValue(), sliderSounds.getValue(), sliderResolution.getValue());
+		Profile.current = Profile.current.updateConfiguration(sliderResolution.getValue());
 		JOptionPane.showMessageDialog(null, "Configuration updated !");
 	}
-
+	/**
+	 * determines what has to be done when clicking on the "Back" button
+	 * @param evt
+	 */
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
 		Window.affect(new MainMenu(),Window.DIM_STANDARD);
 	}

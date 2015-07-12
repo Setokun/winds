@@ -41,6 +41,11 @@ public class LevelSelector extends JPanel{
     JPanel southMiddle, jSouthWest, jSouthEast, south, north, jNorthWest, jNorthEast, middle, grid;
     String title;
     
+    /**
+     * constructor of the Level Selector GUI
+     * @param levelType Type of levels to be displayed : basic, custom, my or tomoderate
+     * @param numPage The page number to be displayer first
+     */
 	public LevelSelector(Type levelType, int numPage) {
 		type = levelType;
 		this.numPage = numPage;
@@ -77,32 +82,67 @@ public class LevelSelector extends JPanel{
 		initComponents(numPage, nbPages, levelsToDisplay);
 	}
 	
+	/**
+	 * initialize the components on start or on refreshing the GUI when clicking on next or previous
+	 * @param currentPage The page number to display
+	 * @param nbPages The total of pages
+	 * @param levelsToDisplay The ArrayList of levels for this page number
+	 */
 	private void initComponents(int currentPage, int nbPages, ArrayList<JarLevel> levelsToDisplay) {
 		this.setLayout(new BorderLayout());
 		
 		initializeFont();
-		initButtonsAndLabels();
+		initTitle();
 		initBackButton();
 		initPreviousButton();
 		initNextButton();
-		
-		hasPrevious = (numPage != 0);
-		hasNext = (numPage != nbPages);
-		
-		jLblTitle.setFont(windsPolice36);
-        jLblTitle.setText(title);
+		initPageNumber();
 		
 		createNorth();
 		createSouth();
-		createMiddle(currentPage, nbPages, levelsToDisplay);
+		createMiddle(currentPage, levelsToDisplay);
 		
 		this.add(north, BorderLayout.NORTH);
 		this.add(middle, BorderLayout.CENTER);
 		this.add(south, BorderLayout.SOUTH);
 		this.validate();
 	}
-	
-	private void createMiddle(int currentPage, int nbPages, ArrayList<JarLevel> levelsToDisplay) {
+
+	/**
+	 * create the north section of this GUI
+	 */
+	private void createNorth() {
+		
+		jNorthWest = new JPanel();
+		FlowLayout flNorthWest = new FlowLayout();
+		flNorthWest.setHgap(20);
+		flNorthWest.setVgap(25);
+		jNorthWest.setLayout(flNorthWest);
+		jNorthWest.add(jLblTitle);
+		
+		jNorthEast = new JPanel();
+		FlowLayout flNorthEast = new FlowLayout();
+		flNorthEast.setHgap(10);
+		flNorthEast.setVgap(10);
+		jNorthEast.setLayout(flNorthEast);
+		jNorthEast.add(jBtnBack);
+		
+		
+		north = new JPanel();
+		BorderLayout northLayout = new BorderLayout();
+		north.setLayout(northLayout);
+		
+		north.add(jNorthWest, BorderLayout.WEST);
+		//north.add(southMiddle, BorderLayout.CENTER);
+		north.add(jNorthEast, BorderLayout.EAST);
+		
+	}
+	/**
+	 * create the middle section of this GUI
+	 * @param currentPage The page number to display
+	 * @param levelsToDisplay The ArrayList of levels for this page number
+	 */
+	private void createMiddle(int currentPage, ArrayList<JarLevel> levelsToDisplay) {
 		
 		middle = new JPanel();
 		
@@ -134,32 +174,9 @@ public class LevelSelector extends JPanel{
 		}
 
 	}
-	private void createNorth() {
-		
-		jNorthWest = new JPanel();
-		FlowLayout flNorthWest = new FlowLayout();
-		flNorthWest.setHgap(20);
-		flNorthWest.setVgap(25);
-		jNorthWest.setLayout(flNorthWest);
-		jNorthWest.add(jLblTitle);
-		
-		jNorthEast = new JPanel();
-		FlowLayout flNorthEast = new FlowLayout();
-		flNorthEast.setHgap(10);
-		flNorthEast.setVgap(10);
-		jNorthEast.setLayout(flNorthEast);
-		jNorthEast.add(jBtnBack);
-		
-		
-		north = new JPanel();
-		BorderLayout northLayout = new BorderLayout();
-		north.setLayout(northLayout);
-		
-		north.add(jNorthWest, BorderLayout.WEST);
-		//north.add(southMiddle, BorderLayout.CENTER);
-		north.add(jNorthEast, BorderLayout.EAST);
-		
-	}
+	/**
+	 * create the south section of this GUI
+	 */
 	private void createSouth() {
 		southMiddle = new JPanel();
 		FlowLayout flSouthMiddle = new FlowLayout();
@@ -208,7 +225,11 @@ public class LevelSelector extends JPanel{
 		south.add(jSouthEast, BorderLayout.EAST);
 	}
 
+	/**
+	 * initialize Previous button
+	 */
 	private void initPreviousButton() {
+		jBtnPrevious = new JButton();
 		jBtnPrevious.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Prev.png")));
         jBtnPrevious.setBorder(new SoftBevelBorder(0));
         jBtnPrevious.setBorderPainted(false);
@@ -230,7 +251,11 @@ public class LevelSelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
+	/**
+	 * initialize Next button
+	 */
 	private void initNextButton() {
+		jBtnNext = new JButton();
 		jBtnNext.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Next.png")));
         jBtnNext.setBorder(new SoftBevelBorder(0));
         jBtnNext.setBorderPainted(false);
@@ -252,7 +277,11 @@ public class LevelSelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
+	/**
+	 * initialize Back button
+	 */
 	private void initBackButton() {
+		jBtnBack = new JButton();
 		jBtnBack.setFont(windsPolice24);
         jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
         jBtnBack.setBorder(new SoftBevelBorder(0));
@@ -275,15 +304,25 @@ public class LevelSelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
-	private void initButtonsAndLabels() {
-		jBtnBack = new JButton();
+	/**
+	 * initialize title of this GUI
+	 */
+	private void initTitle() {	
         jLblTitle = new JLabel();
-        
-        jBtnNext = new JButton();
-        jBtnPrevious = new JButton();
-        
-        jLblNumPage = new JLabel();
+        jLblTitle.setFont(windsPolice36);
+        jLblTitle.setText(title);        
 	}
+	/**
+	 * initialize page numbers
+	 */
+	private void initPageNumber() {
+		jLblNumPage = new JLabel();
+		hasPrevious = (numPage != 0);
+		hasNext = (numPage != nbPages);
+	}
+	/**
+	 * initialize custom font
+	 */
 	private void initializeFont() {
 		try {
     		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,24F);
@@ -293,9 +332,17 @@ public class LevelSelector extends JPanel{
     		windsPolice36 = new Font ("Serif", Font.BOLD, 36);
 		}
 	}
+	/**
+	 * determines what action has to be done when clicking on the "Back" button
+	 * @param evt
+	 */
 	private void jBtnBackActionPerformed(ActionEvent evt) {
 		Window.affect(new LevelCategorySelector(),Window.DIM_STANDARD);
     }
+	/**
+	 * determines what action has to be done when clicking on the "Previous" button
+	 * @param evt
+	 */
 	protected void jBtnPreviousActionPerformed(ActionEvent evt) {
 		numPage--;
 				
@@ -307,6 +354,10 @@ public class LevelSelector extends JPanel{
 		this.removeAll();
 		initComponents(numPage, nbPages, levelsToDisplay);
 	}
+	/**
+	 * determines what action has to be done when clicking on the "Next" button
+	 * @param evt
+	 */
 	protected void jBtnNextActionPerformed(ActionEvent evt) {
 		numPage++;
 		
