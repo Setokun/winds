@@ -50,7 +50,10 @@ public class Score {
 	 * returns the score
 	 * @return int
 	 */
-	public int getScore() {return 10000 - time * 100 + nbItems * 75 - nbClicks * 10;}
+	public int getScore() {
+		int score = 10000 - time * 100 + nbItems * 75 - nbClicks * 10;
+		return (score > 0)? score : 0 ;
+	}
 	/**
 	 * returns the amount of clicks
 	 * @return int
@@ -211,7 +214,8 @@ public class Score {
      * @return int
      */
 	public static int calculateScore(int time, int nbItems, int nbClicks){
-		return 10000 - time * 100 + nbItems * 75 - nbClicks * 10;
+		int score = 10000 - time * 100 + nbItems * 75 - nbClicks * 10; 
+		return (score > 0)? score : 0;
 	}
 	/**
 	 * returns a String representation used to prepare score sending to the remote server

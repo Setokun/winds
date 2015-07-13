@@ -41,9 +41,9 @@ public class Theme extends ThemeBase {
 		Map<Point, Integer[]> compatibility = new HashMap<Point, Integer[]>();
 		
 		compatibility.put(new Point(1,0), new Integer[]{2,3,4,6,10,11,12,13,15,17,21,22,23,24});
-		compatibility.put(new Point(1,1), new Integer[]{2,4,6,16,17,21,22});
+		compatibility.put(new Point(1,1), new Integer[]{1,2,4,6,16,17,21,22});
 		compatibility.put(new Point(1,2), new Integer[]{11,13,14});
-		compatibility.put(new Point(1,3), new Integer[]{2,3,5,6,7,9,10,14,15,16,17,18,19,20,21});
+		compatibility.put(new Point(1,3), new Integer[]{1,2,3,5,6,7,9,10,14,15,16,17,18,19,20,21});
 
 		compatibility.put(new Point(2,0), new Integer[]{2,3,4,5,6,10,15,17,19,20,21});
 		compatibility.put(new Point(2,1), new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24});
