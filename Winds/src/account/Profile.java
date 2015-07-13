@@ -2,12 +2,16 @@ package account;
 
 import java.awt.Dimension;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import server.ServerConnection;
 import database.DBClass;
 
+/**
+ * Class used to represent a Winds account.
+ */
 public class Profile {
+	public static Profile current = null;
+	
 	private int id;
 	private String email;
 	private String password;
@@ -15,11 +19,11 @@ public class Profile {
 	private String pseudo;
 	private int resolution;
 	
-	public static Profile current = null;
 	
-	public Profile(){
-		
-	}
+	/**
+	 * Forbid the instantiation by the default way.
+	 */
+	private Profile(){}
 	
 	/**
 	 * returns the profile's ID
@@ -92,7 +96,7 @@ public class Profile {
 		try {
 			DBClass.connect();
 			DBClass.executeQuery("UPDATE users SET current=false WHERE id="+this.id);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (Exception e) {
 		} finally {
 			DBClass.disconnect();
 		}
@@ -104,7 +108,6 @@ public class Profile {
 	 * @return Profile
 	 */
 	public static Profile connect(String email, String password){
-		
 		try {
 			DBClass.connect();
 			ResultSet r = DBClass.requestQuery("SELECT * FROM users WHERE email='"+email+"' AND password='"+password+"'");
@@ -121,8 +124,7 @@ public class Profile {
     			return p;
     		}
 			return null;
-		} catch (ClassNotFoundException e) {e.printStackTrace();
-		} catch (SQLException e) {e.printStackTrace();
+		} catch (Exception e) {
 		} finally {
 			DBClass.disconnect();
 		}
@@ -145,33 +147,33 @@ public class Profile {
 	 * @return int : 0 for "ko", 1 for "password updated", 2 for "wrong server password" and 3 for "new profile inserted"
 	 */
 	public static int insertOrUpdateProfile(String email, String password){
-			try {
-				if(isExistingEmail(email)){
-					Profile profile = connectFromServer(email, password);
-					if(profile.getEmail() != null){
-						DBClass.connect();
-						DBClass.executeQuery("UPDATE users set password='"+password+"', current=true WHERE email='"+email+"'");
-						return 1;
-					}else{
-						return 2;
-					}
-				}
-				else
-				{
-					Profile profile = connectFromServer(email, password);
-					if(profile == null)return 0;
-					if(profile.getEmail() == null)return 2;
+		try {
+			if(isExistingEmail(email)){
+				Profile profile = connectFromServer(email, password);
+				if(profile.getEmail() != null){
 					DBClass.connect();
-					DBClass.executeQuery("INSERT INTO users (id, email, password, pseudo, userType, current, resolution) "
-							+ "VALUES ('"+profile.getId()+"','"+profile.getEmail()+"','"+password+"','"+profile.getPseudo()+"','"+profile.getUserType()+"',true, 1);");
-					return 3;
+					DBClass.executeQuery("UPDATE users set password='"+password+"', current=true WHERE email='"+email+"'");
+					return 1;
+				}else{
+					return 2;
 				}
-			} 
-			catch (ClassNotFoundException e) {e.printStackTrace();}
-			catch (SQLException e) {e.printStackTrace();}
-			finally{
-				DBClass.disconnect();
 			}
+			else
+			{
+				Profile profile = connectFromServer(email, password);
+				if(profile == null)return 0;
+				if(profile.getEmail() == null)return 2;
+				DBClass.connect();
+				DBClass.executeQuery("INSERT INTO users (id, email, password, pseudo, userType, current, resolution) "
+						+ "VALUES ('"+profile.getId()+"','"+profile.getEmail()+"','"+password+"','"+profile.getPseudo()
+						+"','"+profile.getUserType()+"',true, 1);");
+				return 3;
+			}
+		} 
+		catch (Exception e) {}
+		finally{
+			DBClass.disconnect();
+		}
 		return 0;
 	}
 	/**
@@ -180,15 +182,11 @@ public class Profile {
 	 * @return boolean
 	 */
 	public static boolean isExistingEmail(String email){
-		
 		try {
 			DBClass.connect();
     		ResultSet r = DBClass.requestQuery("SELECT * FROM users WHERE email='"+email+"'");
-    		if(r.next()){
-    			return true;
-    		}
-		} catch (ClassNotFoundException e) {e.printStackTrace();
-		} catch (SQLException e) {e.printStackTrace();
+    		if( r.next() ) return true;
+		} catch (Exception e) {
 		} finally{
 			DBClass.disconnect();
 		}
@@ -212,13 +210,11 @@ public class Profile {
 	 * @return Profile
 	 */
 	public Profile updateConfiguration(int resolution){
-		
 		try {
 			DBClass.connect();
     		DBClass.requestQuery("UPDATE users SET resolution="+resolution+" WHERE id="+this.getId());
     		return connect(current.getEmail(), current.getPassword());
-		} catch (ClassNotFoundException e) {e.printStackTrace();
-		} catch (SQLException e) {e.printStackTrace();
+		} catch (Exception e) {
 		} finally{
 			DBClass.disconnect();
 		}
@@ -232,12 +228,8 @@ public class Profile {
 		try {
 			DBClass.connect();
     		ResultSet r = DBClass.requestQuery("SELECT width, height FROM resolutions WHERE id="+this.resolution);
-    		if(r.next()){
-    			return new Dimension(r.getInt("width"), r.getInt("height"));
-    		}
-			return null;
-		} catch (ClassNotFoundException e) {e.printStackTrace();
-		} catch (SQLException e) {e.printStackTrace();
+    		return r.next() ? new Dimension(r.getInt("width"), r.getInt("height")) : null;
+		} catch (Exception e) {
 		} finally{
 			DBClass.disconnect();
 		}
@@ -252,6 +244,10 @@ public class Profile {
 		return "id :" + id + ",email : " + email + ",password : "+password+", user type : " + userType + ", pseudo : " + pseudo + ", id resolution : " + resolution;
 	}
 	
+	/**
+	 * Initializes the current profile.<br>
+	 * This method must be called only by the splash screen.
+	 */
 	public static void init(){
 		try {
     		DBClass.connect();
