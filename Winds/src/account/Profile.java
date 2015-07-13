@@ -202,25 +202,7 @@ public class Profile {
 	 * @return Profile
 	 */
  	public static Profile getCurrentPlayer(){
-    	
-    	try {
-    		DBClass.connect();
-    		ResultSet r = DBClass.requestQuery("SELECT * FROM users WHERE current=true");
-    		if(r.next()){
-    			Profile p = new Profile();
-    			p.setId(r.getInt("id"));
-    			p.setEmail(r.getString("email"));
-    			p.setPassword(r.getString("password"));
-    			p.setUserType(r.getString("userType"));
-    			p.setPseudo(r.getString("pseudo"));
-    			p.setResolution(r.getInt("resolution"));
-    			return p;
-    		}
-			return null;
-		} catch (ClassNotFoundException | SQLException e) {
-		} finally { DBClass.disconnect(); }
-    	
-    	return null;
+    	return current;    	
     }
  	/**
 	 * returns an updated Profile with the new parameters
@@ -268,6 +250,24 @@ public class Profile {
 	 */
 	public String toString(){
 		return "id :" + id + ",email : " + email + ",password : "+password+", user type : " + userType + ", pseudo : " + pseudo + ", id resolution : " + resolution;
+	}
+	
+	public static void init(){
+		try {
+    		DBClass.connect();
+    		ResultSet r = DBClass.requestQuery("SELECT * FROM users WHERE current=true");
+    		if(r.next()){
+    			Profile p = new Profile();
+    			p.setId(r.getInt("id"));
+    			p.setEmail(r.getString("email"));
+    			p.setPassword(r.getString("password"));
+    			p.setUserType(r.getString("userType"));
+    			p.setPseudo(r.getString("pseudo"));
+    			p.setResolution(r.getInt("resolution"));
+    			current = p;
+    		}
+		} catch (Exception e) {
+		} finally { DBClass.disconnect(); }
 	}
 	
 }

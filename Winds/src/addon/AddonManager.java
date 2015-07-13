@@ -14,37 +14,13 @@ import addon.level.Type;
  * Class used to manage theme and level archives.
  */
 public class AddonManager {
-	
 	public static String currentPath;
-	
 	private static ArrayList<JarTheme> jarThemesList;
 	private static ArrayList<JarLevel> jarLevelsList;
-	
 	private static JarTheme loadedJarTheme;
 	private static JarLevel loadedJarLevel;
-	
 	private static String themesPath, levelsPath, commonPath;
 
-	static {
-		// paths initialization
-		try {
-			currentPath = URLDecoder.decode(JarLevel.class.getProtectionDomain().getCodeSource().getLocation().getFile().replace("Winds.jar", "").substring(1), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			JOptionPane.showMessageDialog(null, "UTF-8 encoding isn't supported, please check your JAVA version");
-		}
-		themesPath = currentPath+"resources/themes/";
-		levelsPath = currentPath+"resources/levels/";
-		
-		File folder = new File(currentPath+"resources/");
-		if(!folder.exists())
-			folder.mkdir();
-		
-		// lists initialization
-		jarThemesList = new ArrayList<JarTheme>();
-		jarLevelsList = new ArrayList<JarLevel>();
-		collectJarThemes();
-		collectJarLevels();
-	}
 	
 	//region Theme methods 
 	/**
@@ -301,5 +277,25 @@ public class AddonManager {
 
 	}
 	//endregion
+	
+	public static void init(){
+		// paths initialization
+		try {
+			currentPath = URLDecoder.decode(JarLevel.class.getProtectionDomain().getCodeSource().getLocation().getFile().replace("Winds.jar", "").substring(1), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			JOptionPane.showMessageDialog(null, "UTF-8 encoding isn't supported, please check your JAVA version");
+		}
+		themesPath = currentPath +"resources/themes/";
+		levelsPath = currentPath +"resources/levels/";
+		
+		File folder = new File(currentPath +"resources/");
+		if( !folder.exists() ) folder.mkdir();
+		
+		// lists initialization
+		jarThemesList = new ArrayList<JarTheme>();
+		jarLevelsList = new ArrayList<JarLevel>();
+		collectJarThemes();
+		collectJarLevels();
+	}
 	
 }
