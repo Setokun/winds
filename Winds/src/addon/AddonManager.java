@@ -19,20 +19,20 @@ public class AddonManager {
 	private static ArrayList<JarLevel> jarLevelsList;
 	private static JarTheme loadedJarTheme;
 	private static JarLevel loadedJarLevel;
-	private static String themesPath, levelsPath, commonPath;
+	private static String themesPath, levelsPath;
 
 	
 	//region Theme methods 
 	/**
 	 * Collects the valid theme archives.
 	 */
-	/*OK*/private static void collectJarThemes(){
+	private static void collectJarThemes(){
 		File folder = new File(themesPath);
-		if(!folder.exists())
-			folder.mkdir();
+		if( !folder.exists() ) folder.mkdir();
+		
 		File[] items = folder.listFiles();
 		if(items != null)
-		for (int i = 0; i < items.length; i++){
+		for (int i = 0; i < items.length; i++)
 		    if (items[i].isFile() && items[i].getName().endsWith(".jar")) {
 		    	JarTheme theme = validateJarTheme(items[i]);
 		    	if(theme != null){ 
@@ -40,15 +40,13 @@ public class AddonManager {
 		    		jarThemesList.add(theme); 
 		    	}
 		    }
-		}
-		
 	}
 	/**
 	 * Checks the validity of the theme archive.
 	 * @param jarFile File which represents the theme archive
 	 * @return	JarTheme or null
 	 */
-	/*OK*/private static JarTheme validateJarTheme(File jarFile){
+	private static JarTheme validateJarTheme(File jarFile){
 		JarTheme current = new JarTheme(jarFile);
 		return current.isValid() ? current : null;
 	}
@@ -56,7 +54,7 @@ public class AddonManager {
 	 * Add the specified theme archive to the themes list if valid.
 	 * @param jarFile File which represents the theme archive
 	 */
-	/*OK*/public static void addJarTheme(File jarFile){
+	public static void addJarTheme(File jarFile){
 		JarTheme current = validateJarTheme(jarFile);
 		if(current != null && !jarThemesList.contains(current)){
 			current.setJarFilePath(jarFile.getAbsolutePath().replace("\\", "/"));
@@ -68,7 +66,7 @@ public class AddonManager {
 	 * @param idTheme the ID of the theme to find
 	 * @return JarTheme or null
 	 */
-	/*OK*/public static JarTheme getJarThemeByID(int idTheme){
+	public static JarTheme getJarThemeByID(int idTheme){
 		for (JarTheme jt : jarThemesList)
 			if(jt.getIdDB() == idTheme)
 				return jt;
@@ -80,10 +78,10 @@ public class AddonManager {
 	/**
 	 * Collects the valid level archives.
 	 */
-	/*OK*/private static void collectJarLevels(){
+	private static void collectJarLevels(){
 		File folder = new File(levelsPath);
-		if(!folder.exists())
-			folder.mkdir();
+		if( !folder.exists() ) folder.mkdir();
+		
 		File[] items = folder.listFiles();
 		if(items != null)
 		for (int i = 0; i < items.length; i++)
@@ -97,7 +95,7 @@ public class AddonManager {
 	 * @param jarFile File which represents the level archive
 	 * @return	JarLevel or null
 	 */
-	/*OK*/private static JarLevel validateJarLevel(File jarFile){
+	private static JarLevel validateJarLevel(File jarFile){
 		JarLevel current = new JarLevel(jarFile);		
 		return current.isValid() ? current : null;
 	}
@@ -105,7 +103,7 @@ public class AddonManager {
 	 * Add the specified level archive to the levels list if valid.
 	 * @param jarFile File which represents the level archive
 	 */
-	/*OK*/public static void addJarLevel(File jarFile){
+	public static void addJarLevel(File jarFile){
 		JarLevel current = validateJarLevel(jarFile);
 		if(current != null && !jarLevelsList.contains(current))
 			jarLevelsList.add(current);
@@ -114,9 +112,9 @@ public class AddonManager {
 	 * Removes the specified level archive from the levels list<br>
 	 * and returns the success statement.
 	 * @param jar JarLevel which must be removed
-	 * @return boolean true or false
+	 * @return boolean
 	 */
-	/*OK*/public static boolean removeJarLevel(JarLevel jar){
+	public static boolean removeJarLevel(JarLevel jar){
 		return jarLevelsList.remove(jar);
 	}
 	/**
@@ -125,8 +123,8 @@ public class AddonManager {
 	 * @param idLevel the ID of the level archive to remove
 	 * @return boolean
 	 */
-	/*OK*/public static boolean removeJarLevelById(int idLevel){
-		for (int i = 0; i < jarLevelsList.size(); i++) {
+	public static boolean removeJarLevelById(int idLevel){
+		for (int i = 0; i < jarLevelsList.size(); i++)
 			if(jarLevelsList.get(i).getLevel().getIdDB() == idLevel){
 				JarLevel jar = jarLevelsList.get(i);
 				jarLevelsList.remove(jar);
@@ -138,7 +136,6 @@ public class AddonManager {
 				}
 				return true;
 			}
-		}
 		return false;
 	}
 	/**
@@ -146,7 +143,7 @@ public class AddonManager {
 	 * @param levelType the type of the level archives to find
 	 * @return JarLevel[]
 	 */
-	/*OK*/public static JarLevel[] getJarLevelsByType(Type levelType){
+	public static JarLevel[] getJarLevelsByType(Type levelType){
 		ArrayList<JarLevel> list = new ArrayList<JarLevel>();
 		for (JarLevel lvl : jarLevelsList)
 			if (lvl.getLevel().getType().equals(levelType))
@@ -171,13 +168,6 @@ public class AddonManager {
 	 */
 	public static String getLevelsPath(){
 		return levelsPath;
-	}
-	/**
-	 * Get the full path of the commons folder.
-	 * @return String
-	 */
-	public static String getCommonPath(){
-		return commonPath;
 	}
 
 	/**
@@ -270,18 +260,23 @@ public class AddonManager {
 		JarLevel[] levels = getJarLevelsByType(type);
 		int nbLevels = levels.length;
 		int[] ids = new int[nbLevels];
-		for (int i = 0; i < nbLevels; i++) {
+		for (int i = 0; i < nbLevels; i++)
 			ids[i] = levels[i].getLevel().getIdDB();
-		}
 		return ids;
 
 	}
 	//endregion
 	
+	/**
+	 * Initializes the lists of valid available themes and levels.<br>
+	 * This method must be called only by the splash screen.
+	 */
 	public static void init(){
 		// paths initialization
 		try {
-			currentPath = URLDecoder.decode(JarLevel.class.getProtectionDomain().getCodeSource().getLocation().getFile().replace("Winds.jar", "").substring(1), "UTF-8");
+			currentPath = URLDecoder.decode(JarLevel.class.getProtectionDomain()
+							.getCodeSource().getLocation().getFile()
+							.replace("Winds.jar", "").substring(1), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			JOptionPane.showMessageDialog(null, "UTF-8 encoding isn't supported, please check your JAVA version");
 		}
