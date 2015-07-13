@@ -278,8 +278,11 @@ public class Theme extends ThemeBase {
 		}
 	}
 	public void loadFront(Handler handler) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static class Enemy extends GameObject{
@@ -469,4 +472,5 @@ public class Theme extends ThemeBase {
 			return collisions;
 		}
 	}
+	
 }

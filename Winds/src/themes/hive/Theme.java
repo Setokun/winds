@@ -288,7 +288,13 @@ public class Theme extends ThemeBase {
 			break;
 		}
 	}
-	public void loadFront(Handler handler){}
+	public void loadFront(Handler handler){
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	private static class Enemy extends GameObject{
 	
