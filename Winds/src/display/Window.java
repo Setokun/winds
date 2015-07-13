@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import database.DBClass;
 import menus.Login;
@@ -21,21 +22,9 @@ public class Window {
 	private static JFrame main;
 	
 	/**
-	 * affects a new component to the main JFrame and resizes it 
-	 * @param c the component to affect
-	 * @param dim the new dimension
+	 * Constructor of Window Class, creates a JFrame which will hold all JPanel and Canvas of the Program
 	 */
-	public static void affect(Component c, Dimension dim){
-		main.remove(main.getContentPane().getComponent(0));
-		main.add(c);
-		main.setSize(dim);
-		main.setVisible(true);
-	}
-	/**
-	 * Main method to launch the program
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	public Window(){
 		main = new JFrame("Winds");
 		main.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		main.addWindowListener(new CloseWindowEvent());
@@ -54,7 +43,32 @@ public class Window {
 		
 		Profile.current = Profile.getCurrentPlayer();
 		main.add(Profile.current == null ? new Login() : new MainMenu());
-		main.setVisible(true);		
+		main.setVisible(true);	
+	}
+	
+	/**
+	 * affects a new component to the main JFrame and resizes it 
+	 * @param c the component to affect into the JFrame
+	 * @param dim the new dimensionz
+	 */
+	public static void affect(Component c, Dimension dim){
+		main.remove(main.getContentPane().getComponent(0));
+		main.add(c);
+		main.setSize(dim);
+		main.setVisible(true);
+	}
+	/**
+	 * Main method to launch the program with a Runnable
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Runnable r  = new Runnable() {
+			public void run() {
+				new Window();
+			}
+		};
+		
+		SwingUtilities.invokeLater(r);
 	}
 	/**
 	 * returns the main frame
