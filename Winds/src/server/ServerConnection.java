@@ -67,7 +67,7 @@ public class ServerConnection {
 	}
 	
 	/*OK*/public static ArrayList<Score> getScores() throws IOException{
-		ArrayList<Score> oldScores = Score.getLocalScores();
+		ArrayList<Score> oldScores = Score.getLocalScoresForUpload();
 		uploadScores(oldScores);
 
 		ArrayList<Score> scores = new ArrayList<Score>();

@@ -109,10 +109,7 @@ public class Score {
 					oldScore = new Score(idLevel, r.getInt("nbClicks"),r.getInt("nbItems"), r.getInt("time"));
 				
 				if(oldScore != null && this.getScore() > oldScore.getScore())
-					DBClass.executeQuery("UPDATE scores SET nbItems = "+this.nbItems+", "
-														 + "nbClicks="+this.nbClicks+", "
-														 + "time="+this.time+" "
-														 + "WHERE idLevel="+idLevel);
+					DBClass.executeQuery("UPDATE scores SET nbItems = "+this.nbItems+", nbClicks="+this.nbClicks+", time="+this.time+" WHERE idLevel="+idLevel+" AND idPlayer="+Profile.current.getId());
 			}
 			else
 				DBClass.executeQuery("INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
@@ -148,10 +145,30 @@ public class Score {
 			
 			return scores;
 		} catch (ClassNotFoundException | SQLException e) {
-			//TODO
-			e.printStackTrace();
+		} finally{
+			DBClass.disconnect();
 		}
-		finally{
+		return null;
+	}
+	/**
+	 * returns an ArrayList of local database scores
+	 * @return ArrayList of Score
+	 */
+	public static ArrayList<Score> getLocalScoresForUpload(){
+		try {
+			DBClass.connect();
+			ResultSet r = DBClass.requestQuery("SELECT idLevel, nbItems, nbClicks, time FROM scores WHERE idPlayer="+Profile.current.getId());
+			
+			ArrayList<Score> scores = new ArrayList<Score>();
+
+			while(r.next()) {
+				Score s = new Score(r.getInt("idLevel"), r.getInt("nbClicks"), r.getInt("nbItems"),r.getInt("time"));
+				scores.add(s);
+			}
+			
+			return scores;
+		} catch (ClassNotFoundException | SQLException e) {
+		} finally{
 			DBClass.disconnect();
 		}
 		return null;
