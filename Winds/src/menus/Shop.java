@@ -91,9 +91,9 @@ public class Shop  extends JPanel {
 	private void populateLists() {
 		try {
 			listThemesToDisplay = getThemesList();
-			listBasicLevelsToDisplay = getLevelsList(Type.basic);
-			listCustomLevelsToDisplay = getCustomLevelsList(Type.custom);
-			listLevelsToModerateToDisplay = getLevelsList(Type.tomoderate);
+			listBasicLevelsToDisplay = getLevelsList(Type.BASIC);
+			listCustomLevelsToDisplay = getCustomLevelsList(Type.CUSTOM);
+			listLevelsToModerateToDisplay = getLevelsList(Type.TOMODERATE);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(this, "Unable to reach distant winds server, please verify your internet connection and try again !");
 		}

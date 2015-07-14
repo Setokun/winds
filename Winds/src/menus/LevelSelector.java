@@ -50,10 +50,10 @@ public class LevelSelector extends JPanel{
 		type = levelType;
 		this.numPage = numPage;
 		
-		if(type == Type.basic)		 this.title = "Basic levels";
-		if(type == Type.custom)	 this.title = "Custom Levels";
-		if(type == Type.my)		 this.title = "My levels";
-		if(type == Type.tomoderate) this.title = "Levels to moderate";
+		if(type == Type.BASIC)		 this.title = "Basic levels";
+		if(type == Type.CUSTOM)	 this.title = "Custom Levels";
+		if(type == Type.MY)		 this.title = "My levels";
+		if(type == Type.TOMODERATE) this.title = "Levels to moderate";
 		
 		jarLevels = AddonManager.getJarLevelsByType(type);
 		for (int i = 0; i < jarLevels.length; i++) {

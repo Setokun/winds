@@ -1,14 +1,13 @@
 package core;
 
 public enum ObjectId {
-	Player,
-	Block,
-	DangerousBlock,
-	Interactions,
-	Boss,
-	Collectable,
-	Enemy,
-	Arrival,
-	InteractionBlock,
-	Blower;
+	PLAYER,
+	BLOCK,
+	DANGER,
+	INTERACTION,
+	BOSS,
+	COLLECTABLE,
+	ENEMY,
+	ARRIVAL,
+	BLOWER;
 }

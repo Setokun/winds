@@ -34,7 +34,7 @@ public class LevelToModerateLauncherEvent implements MouseListener{
 		if(e.getButton() == MouseEvent.BUTTON3){
 			if(JOptionPane.showConfirmDialog(null, "Do you want to delete this level ?") == JOptionPane.YES_OPTION){
 				AddonManager.removeJarLevelById(jarLvl.getLevel().getIdDB());
-				Window.affect(new LevelSelector(Type.tomoderate, numPage), Window.DIM_STANDARD);
+				Window.affect(new LevelSelector(Type.TOMODERATE, numPage), Window.DIM_STANDARD);
 			}
 		}
 		else{

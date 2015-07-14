@@ -35,11 +35,11 @@ public class Collectable extends GameObject{
 	 * @param g Canvas' Graphics
 	 */
 	public void render(Graphics g) {
-		if(collectableId == CollectableId.coin)
+		if(collectableId == CollectableId.COIN)
 			g.drawImage(sprites[0], (int)x, (int)y, 16, 16, null);
-		if(collectableId == CollectableId.life)
+		if(collectableId == CollectableId.LIFE)
 			g.drawImage(sprites[1], (int)x, (int)y, 25, 25, null);
-		if(collectableId == CollectableId.valuable)
+		if(collectableId == CollectableId.VALUABLE)
 			g.drawImage(sprites[2], (int)x, (int)y, 25, 25, null);
 	}
 	/**
@@ -48,12 +48,12 @@ public class Collectable extends GameObject{
 	 */
 	public ArrayList<CollisionBox> getBounds() {
 		ArrayList<CollisionBox> cs = new ArrayList<CollisionBox>();
-		if(collectableId == CollectableId.coin)
-			cs.add( new CollisionBox((int)x, (int)y, 16, 16, ObjectId.Collectable) );
-		if(collectableId == CollectableId.life)
-			cs.add( new CollisionBox((int)x, (int)y, 25, 25, ObjectId.Collectable) );
-		if(collectableId == CollectableId.valuable)
-			cs.add( new CollisionBox((int)x, (int)y, 32, 32, ObjectId.Collectable) );
+		if(collectableId == CollectableId.COIN)
+			cs.add( new CollisionBox((int)x, (int)y, 16, 16, ObjectId.COLLECTABLE) );
+		if(collectableId == CollectableId.LIFE)
+			cs.add( new CollisionBox((int)x, (int)y, 25, 25, ObjectId.COLLECTABLE) );
+		if(collectableId == CollectableId.VALUABLE)
+			cs.add( new CollisionBox((int)x, (int)y, 32, 32, ObjectId.COLLECTABLE) );
 		return cs;
 	}
 	/**

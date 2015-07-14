@@ -212,79 +212,79 @@ public class Theme extends ThemeBase {
 		switch(id){
 		
 		case 2:
-			handler.addObject(new Arrival(x+8, y+40, ObjectId.Arrival));
+			handler.addObject(new Arrival(x+8, y+40, ObjectId.ARRIVAL));
 			break;
 		case 3:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+16, y+32, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+16, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
 			break;
 		case 4:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+16, y+32, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+32, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+48, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+48, y+32, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, y+32, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+16, y+48, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+48, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+16, y+64, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+64, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+48, y+48, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, y+48, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+48, y+64, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, y+64, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+16, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+48, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+64, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+48, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+64, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+16, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+16, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+48, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+64, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+48, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
 			break;
 		case 5:
-			handler.addObject(new Collectable(x+64, y+64, CollectableId.life, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.LIFE, ObjectId.COLLECTABLE));
 			break;
 		case 6:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.valuable, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.VALUABLE, ObjectId.COLLECTABLE));
 			break;
 		case 7:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.valuable, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, y+64, CollectableId.valuable, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.VALUABLE, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.VALUABLE, ObjectId.COLLECTABLE));
 			break;
 		case 8:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			handler.addObject(new Enemy(x   , y   , ObjectId.ENEMY, rand.nextInt(100)+50, Direction.RIGHT));
 			break;
 		case 9:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
-			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
-			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			handler.addObject(new Enemy(x   , y   , ObjectId.ENEMY, rand.nextInt(100)+50, Direction.RIGHT));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.RIGHT));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.RIGHT));
 			break;
 		case 10:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
-			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
-			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
+			handler.addObject(new Enemy(x   , y   , ObjectId.ENEMY, rand.nextInt(100)+50, Direction.DOWN));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.DOWN));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.DOWN));
 			break;
 		case 11:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
-			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
-			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
+			handler.addObject(new Enemy(x   , y   , ObjectId.ENEMY, rand.nextInt(100)+50, Direction.LEFT));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.LEFT));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.LEFT));
 			break;
 		case 12:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
-			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
-			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
+			handler.addObject(new Enemy(x   , y   , ObjectId.ENEMY, rand.nextInt(100)+50, Direction.UP));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.UP));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.UP));
 			break;
 		case 13:
-			handler.addObject(new Blower(x   , y   , ObjectId.Blower, Direction.right));
+			handler.addObject(new Blower(x   , y   , ObjectId.BLOWER, Direction.RIGHT));
 			break;
 		case 14:
-			handler.addObject(new Blower(x   , y   , ObjectId.Blower, Direction.down));
+			handler.addObject(new Blower(x   , y   , ObjectId.BLOWER, Direction.DOWN));
 			break;
 		case 15:
-			handler.addObject(new Blower(x   , y   , ObjectId.Blower, Direction.left));
+			handler.addObject(new Blower(x   , y   , ObjectId.BLOWER, Direction.LEFT));
 			break;
 		case 16:
-			handler.addObject(new Blower(x   , y   , ObjectId.Blower, Direction.up));
+			handler.addObject(new Blower(x   , y   , ObjectId.BLOWER, Direction.UP));
 			break;
 		case 17:
-			handler.addObject(new Boss(x   , y   , ObjectId.Enemy));
+			handler.addObject(new Boss(x   , y   , ObjectId.ENEMY));
 			break;
 		}
 	}
@@ -321,7 +321,7 @@ public class Theme extends ThemeBase {
 		
 			this.collisions = new ArrayList<CollisionBox>();
 		
-			this.collisions.add( new CollisionBox((int)x+4, (int)y+20, 28, 20, ObjectId.Enemy) );
+			this.collisions.add( new CollisionBox((int)x+4, (int)y+20, 28, 20, ObjectId.ENEMY) );
 			
 			for (int i = 1; i < spritesRightRaw.length; i++) { spritesRight[i-1] = spritesRightRaw[i]; }
 			for (int i = 1; i < spritesLeftRaw.length; i++)  { spritesLeft[i-1]  = spritesLeftRaw[i];  }
@@ -335,44 +335,44 @@ public class Theme extends ThemeBase {
 			animationLeft.runAnimation();
 			animationRight.runAnimation();
 			
-			if(direction == Direction.left || direction == Direction.right){
+			if(direction == Direction.LEFT || direction == Direction.RIGHT){
 				if( this.widthPath > 0){
 					if(width == this.widthPath){facingRight = false;}
 					if(width == 0){facingRight = true;}
 					
 					if(facingRight){
-						this.x+=(direction == Direction.right)?1:-1;
+						this.x+=(direction == Direction.RIGHT)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).x+=(direction == Direction.right)?1:-1;
+							getBounds().get(i).x+=(direction == Direction.RIGHT)?1:-1;
 						}
 						width++;
 					}
 					else{
-						this.x-=(direction == Direction.right)?1:-1;
+						this.x-=(direction == Direction.RIGHT)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).x-=(direction == Direction.right)?1:-1;
+							getBounds().get(i).x-=(direction == Direction.RIGHT)?1:-1;
 						}
 						width--;
 					}
 				}
 			}
 			
-			if(direction == Direction.up || direction == Direction.down){
+			if(direction == Direction.UP || direction == Direction.DOWN){
 				if( this.widthPath > 0){
 					if(width == this.widthPath){facingRight = false;}
 					if(width == 0){facingRight = true;}
 					
 					if(facingRight){
-						this.y+=(direction == Direction.down)?1:-1;
+						this.y+=(direction == Direction.DOWN)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).y+=(direction == Direction.down)?1:-1;
+							getBounds().get(i).y+=(direction == Direction.DOWN)?1:-1;
 						}
 						width++;
 					}
 					else{
-						this.y-=(direction == Direction.down)?1:-1;
+						this.y-=(direction == Direction.DOWN)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).y-=(direction == Direction.down)?1:-1;
+							getBounds().get(i).y-=(direction == Direction.DOWN)?1:-1;
 						}
 						width--;
 					}
@@ -381,7 +381,7 @@ public class Theme extends ThemeBase {
 		}
 	
 		public void render(Graphics g) {
-			if((facingRight && direction == Direction.left) || (!facingRight && direction != Direction.left) )
+			if((facingRight && direction == Direction.LEFT) || (!facingRight && direction != Direction.LEFT) )
 				animationRight.drawAnimation(g, (int)x, (int)y, 48, 48);
 			else
 				animationLeft.drawAnimation(g, (int)x, (int)y, 48, 48);
@@ -392,7 +392,7 @@ public class Theme extends ThemeBase {
 					g.setColor(Color.red);
 	
 					for (int i = 0; i < getBounds().size(); i++) {
-						if(getBounds().get(i).getId() == ObjectId.Enemy)
+						if(getBounds().get(i).getId() == ObjectId.ENEMY)
 							g2d.setColor(Color.YELLOW);
 						g2d.draw(getBounds().get(i).getBounds());
 					}
@@ -426,7 +426,7 @@ public class Theme extends ThemeBase {
 			this.count = 0;
 			this.collisions = new ArrayList<CollisionBox>();
 
-			this.collisions.add( new CollisionBox((int)x+8, (int)y+40, 56, 40, ObjectId.Boss) );
+			this.collisions.add( new CollisionBox((int)x+8, (int)y+40, 56, 40, ObjectId.BOSS) );
 			
 			for (int i = 1; i < spritesRaw.length; i++) {
 				sprites[i-1] = spritesRaw[i];
@@ -471,7 +471,7 @@ public class Theme extends ThemeBase {
 					g.setColor(Color.red);
 
 					for (int i = 0; i < getBounds().size(); i++) {
-						if(getBounds().get(i).getId() == ObjectId.Boss)
+						if(getBounds().get(i).getId() == ObjectId.BOSS)
 							g2d.setColor(Color.MAGENTA);
 						g2d.draw(getBounds().get(i).getBounds());
 					}

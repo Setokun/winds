@@ -53,9 +53,9 @@ public class Block extends GameObject{
 				Graphics2D g2d = (Graphics2D) g;
 				g.setColor(Color.red);
 				for (int i = 0; i < getBounds().size(); i++) {
-					if(getBounds().get(i).getId() == ObjectId.DangerousBlock)
+					if(getBounds().get(i).getId() == ObjectId.DANGER)
 						g2d.setColor(Color.red);
-					if(getBounds().get(i).getId() == ObjectId.Block)
+					if(getBounds().get(i).getId() == ObjectId.BLOCK)
 						g2d.setColor(Color.green);
 					g2d.draw(getBounds().get(i).getBounds());
 				}

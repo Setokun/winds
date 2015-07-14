@@ -93,7 +93,7 @@ public class Game extends Canvas implements Runnable{
 	    loadLevelByMatrix(AddonManager.getLoadedJarLevel().getLevel().getMatrix());
 	    
 	    Point startPoint = AddonManager.getLoadedJarLevel().getLevel().getStartPosition();
-	    player = new Player(startPoint.x*128, startPoint.y*128, handler, ObjectId.Player);
+	    player = new Player(startPoint.x*128, startPoint.y*128, handler, ObjectId.PLAYER);
 		handler.addObject(player);
 		
 		AddonManager.getLoadedJarTheme().loadInteractions(handler);
@@ -186,7 +186,7 @@ public class Game extends Canvas implements Runnable{
 			handler.tick();
 			
 			for(int i = 0; i < handler.objects.size(); i++){
-				if(handler.objects.get(i).getId() == ObjectId.Player){
+				if(handler.objects.get(i).getId() == ObjectId.PLAYER){
 					cam.tick(handler.objects.get(i));
 				}
 			}
@@ -282,8 +282,8 @@ public class Game extends Canvas implements Runnable{
 				
 				ArrayList<CollisionBox> collisions = new ArrayList<CollisionBox>();
 				for (int k = 0; k < collisionsList[number].length; k++) {
-					ObjectId id = ObjectId.Block;
-					if(collisionsList[number][k][4] == 1) id = ObjectId.DangerousBlock;
+					ObjectId id = ObjectId.BLOCK;
+					if(collisionsList[number][k][4] == 1) id = ObjectId.DANGER;
 					collisions.add(new CollisionBox(collisionsList[number][k][0],
 													collisionsList[number][k][1],
 													collisionsList[number][k][2],

@@ -25,7 +25,7 @@ public class Arrival extends GameObject {
 		super(x, y, id);
 
 		this.collisions = new ArrayList<CollisionBox>();
-		this.collisions.add( new CollisionBox((int)x+44, (int)y+2, 7, 60, ObjectId.Arrival) );
+		this.collisions.add( new CollisionBox((int)x+44, (int)y+2, 7, 60, ObjectId.ARRIVAL) );
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public class Arrival extends GameObject {
 				Graphics2D g2d = (Graphics2D) g;
 				
 				for (int i = 0; i < getBounds().size(); i++) {
-					if(getBounds().get(i).getId() == ObjectId.Arrival)
+					if(getBounds().get(i).getId() == ObjectId.ARRIVAL)
 						g2d.setColor(Color.BLUE);
 					g2d.draw(getBounds().get(i).getBounds());
 				}

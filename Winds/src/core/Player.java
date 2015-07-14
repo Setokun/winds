@@ -94,33 +94,33 @@ public class Player extends GameObject{
 			
 			if(Math.abs(tempObject.getX() - this.getX()) > 128) continue;
 			if(Math.abs(tempObject.getY() - this.getY()) > 128)	continue;
-			if(tempObject.getId() == ObjectId.Player) continue;
+			if(tempObject.getId() == ObjectId.PLAYER) continue;
 			if(tempObject.getBounds() == null) continue;
 			
 			falling = true;
 			
 			for (int j = 0; j < tempObject.getBounds().size(); j++) {
-				if(tempObject.getBounds().get(j).getId() == ObjectId.Block){
+				if(tempObject.getBounds().get(j).getId() == ObjectId.BLOCK){
 					actionBlock(tempObject, j);
 				}
-				else if(tempObject.getBounds().get(j).getId() == ObjectId.DangerousBlock){
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.DANGER){
 					actionDangerousBlockOrEnemy(tempObject, j);
 				}
-				else if(tempObject.getBounds().get(j).getId() == ObjectId.Enemy){
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.ENEMY){
 					if(!isHighlander())
 						actionDangerousBlockOrEnemy(tempObject, j);
 					}
-				else if(tempObject.getBounds().get(j).getId() == ObjectId.Boss){
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.BOSS){
 					if(!isHighlander())
 						actionBoss(tempObject, j);
 				}
-				else if(tempObject.getBounds().get(j).getId() == ObjectId.Collectable){
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.COLLECTABLE){
 					actionCollectable(tempObject, j);
 				}
-				else if(tempObject.getBounds().get(j).getId() == ObjectId.Arrival){
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.ARRIVAL){
 					actionArrival(tempObject, j);
 				}
-				else if(tempObject.getBounds().get(j).getId() == ObjectId.Blower){
+				else if(tempObject.getBounds().get(j).getId() == ObjectId.BLOWER){
 					actionBlower(tempObject, j);
 				}
 			}
@@ -279,13 +279,13 @@ public class Player extends GameObject{
 				|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
 			
 			if(windTime <= 0){
-				if(((Blower)tempObject).getDirection() == Direction.down)
+				if(((Blower)tempObject).getDirection() == Direction.DOWN)
 					Game.player.setVelY(Math.abs(Game.player.getVelY()) + wind_force);
-				if(((Blower)tempObject).getDirection() == Direction.up) 
+				if(((Blower)tempObject).getDirection() == Direction.UP) 
 					Game.player.setVelY(-Math.abs(Game.player.getVelY()) - wind_force);
-				if(((Blower)tempObject).getDirection() == Direction.left) 
+				if(((Blower)tempObject).getDirection() == Direction.LEFT) 
 					Game.player.setVelX(-Math.abs(Game.player.getVelX()) - wind_force);
-				if(((Blower)tempObject).getDirection() == Direction.right) 
+				if(((Blower)tempObject).getDirection() == Direction.RIGHT) 
 					Game.player.setVelX(Math.abs(Game.player.getVelX()) + wind_force);
 				
 				windTime = 30;
@@ -307,18 +307,18 @@ public class Player extends GameObject{
 				|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
 					CollectableId cid = ((Collectable) tempObject).getCollectableId();
 					
-					if(cid == CollectableId.coin){
+					if(cid == CollectableId.COIN){
 						AudioPlayer.playSfx("piece");
 						Game.score.setNbItems(Game.score.getNbItems()+1);
 					}
-					else if(cid == CollectableId.life){
+					else if(cid == CollectableId.LIFE){
 						AudioPlayer.playSfx("1up");
 						Game.score.setNbItems(Game.score.getNbItems()+10);
 					    this.life++;
 					    if(this.life>5)
 					    	this.life = 5;
 					}
-					else if(cid == CollectableId.valuable){
+					else if(cid == CollectableId.VALUABLE){
 						AudioPlayer.playSfx("honey");
 						Game.score.setNbItems(Game.score.getNbItems()+5);
 					}

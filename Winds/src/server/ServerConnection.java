@@ -172,17 +172,17 @@ public class ServerConnection {
 		    
 		    String type = jsonObject.get("levelType").toString().replaceAll("\"", "");
 		    if(type.equals("basic"))
-		    	level.setType(Type.basic);
+		    	level.setType(Type.BASIC);
 		    else if(type.equals("custom"))
-		    	level.setType(Type.custom);
+		    	level.setType(Type.CUSTOM);
 		    else if(type.equals("tomoderate"))
-		    	level.setType(Type.tomoderate);
+		    	level.setType(Type.TOMODERATE);
 
 		    String mode = jsonObject.get("levelMode").toString().replaceAll("\"", "");
 		    if(mode.equals("standard"))
-		    	level.setMode(Mode.standard);
+		    	level.setMode(Mode.STANDARD);
 		    if(mode.equals("boss"))
-		    	level.setMode(Mode.boss);
+		    	level.setMode(Mode.BOSS);
 		    
 		    level.setStatus(LevelStatus.installed);
 		    level.setIdDB(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
@@ -298,9 +298,9 @@ public class ServerConnection {
 				String s = URL_API_SERVER +"?email="+ Profile.current.getEmail().replace("\"", "")
 						 + "&password="+ Profile.current.getPassword().replace("\"", "");
 				
-				if(level.getType() == Type.basic) 			s += "&action=downloadBasicLevel&idBasicLevel="+ idLevel;
-				else if(level.getType() == Type.custom) 	s += "&action=downloadCustomLevel&idCustomLevel="+ idLevel;
-				else if(level.getType() == Type.tomoderate) s += "&action=downloadLevelToModerate&idLevelToModerate="+ idLevel;
+				if(level.getType() == Type.BASIC) 			s += "&action=downloadBasicLevel&idBasicLevel="+ idLevel;
+				else if(level.getType() == Type.CUSTOM) 	s += "&action=downloadCustomLevel&idCustomLevel="+ idLevel;
+				else if(level.getType() == Type.TOMODERATE) s += "&action=downloadLevelToModerate&idLevelToModerate="+ idLevel;
 				else return false;
 				
 				

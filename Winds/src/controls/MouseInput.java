@@ -48,7 +48,7 @@ public class MouseInput extends MouseAdapter{
 					
 					
 					
-					if(tempObject.getId() == ObjectId.Player){
+					if(tempObject.getId() == ObjectId.PLAYER){
 						int playerX = (int) (tempObject.getX()+32 + Game.cam.getX() );
 						int playerY = (int) (tempObject.getY()+32 + Game.cam.getY() );
 						
