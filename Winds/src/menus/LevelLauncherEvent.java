@@ -1,7 +1,7 @@
 package menus;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import account.Profile;
 import addon.AddonManager;
@@ -9,7 +9,7 @@ import addon.JarLevel;
 import display.Game;
 import display.Window;
 
-public class LevelLauncherEvent implements MouseListener{
+public class LevelLauncherEvent extends MouseAdapter{
 
 	private JarLevel jarLvl;
 	private int numPage;
@@ -31,9 +31,5 @@ public class LevelLauncherEvent implements MouseListener{
 		AddonManager.loadJarLevel(jarLvl);
 		Window.affect(new Game(jarLvl.getLevel().getType(), numPage), Profile.current.getScreenDimensions());
 	}
-	public void mouseEntered(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
 
 }
