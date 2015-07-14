@@ -41,7 +41,7 @@ public class Splash extends JFrame {
 		JLabel lblBack = new JLabel("Welcome into Winds");
 		lblBack.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblBack.setVerticalTextPosition(SwingConstants.CENTER);
-		lblBack.setIcon(new ImageIcon(getClass().getResource("/resources/background/splash.jpg")));
+		lblBack.setIcon(new ImageIcon(getClass().getResource("/resources/background/splash.png")));
 		try { lblBack.setFont( Font.createFont(0, getClass()
     			    .getResourceAsStream("/resources/font/bubble.ttf"))
     			    .deriveFont(Font.PLAIN,34F) );
