@@ -10,11 +10,10 @@ public abstract class GameObject {
 	protected float velX = 0, velY = 0;
 	protected final float MAX_VEL_X = 2, MIN_VEL_X = -MAX_VEL_X;
 	protected final float MAX_VEL_Y = 5, MIN_VEL_Y = -MAX_VEL_Y;
-	public boolean falling = true;
-	protected boolean acting = false;
-	public boolean facingRight = true, facingDown = true;
+	protected boolean falling = true, acting = false;
+	protected boolean facingRight = true, facingDown = true;
 	
-
+	
 	public GameObject(float x, float y, ObjectId id)
 	{
 		this.x = x;
