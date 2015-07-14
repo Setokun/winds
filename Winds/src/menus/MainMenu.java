@@ -6,7 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -30,9 +29,11 @@ public class MainMenu extends JPanel{
     private Dimension btnDimension = new Dimension(300, 50);
     private int gap = 5;
     
+    /**
+     * Constructs a Winds main menu.
+     */
 	public MainMenu() {
-		
-		this.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		
 		initializeFont();
     	initTitle();
@@ -94,15 +95,10 @@ public class MainMenu extends JPanel{
      * initialize "Play" button
      */
     private void initBtnPlay(){
-    	
     	btnPlay = new JButton("Play");
     	btnPlay.setPreferredSize(btnDimension);
         btnPlay.setFont(windsPolice18);
-        btnPlay.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnPlayActionPerformed(evt);
-            }
-        });
+        btnPlay.addActionListener((evt)->{ jBtnPlayActionPerformed(evt); });
         
     	JPanel jpBtnPlay = new JPanel();
     	FlowLayout flBtnPlay = new FlowLayout();
@@ -118,11 +114,7 @@ public class MainMenu extends JPanel{
 		btnScores = new JButton("Scores");
 		btnScores.setPreferredSize(btnDimension);
 		btnScores.setFont(windsPolice18);
-        btnScores.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnScoresActionPerformed(evt);
-            }
-        });
+        btnScores.addActionListener((evt)->{ jBtnScoresActionPerformed(evt); });
         
         JPanel jpBtnScores = new JPanel();
     	FlowLayout flBtnScores = new FlowLayout();
@@ -138,11 +130,7 @@ public class MainMenu extends JPanel{
 		btnConfiguration = new JButton("Configuration");
 		btnConfiguration.setPreferredSize(btnDimension);
 		btnConfiguration.setFont(windsPolice18);
-        btnConfiguration.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnConfigurationActionPerformed(evt);
-            }
-        });
+        btnConfiguration.addActionListener((evt)->{ jBtnConfigurationActionPerformed(evt); });
         
         JPanel jpBtnConfig = new JPanel();
     	FlowLayout flBtnConfig = new FlowLayout();
@@ -158,11 +146,7 @@ public class MainMenu extends JPanel{
 		btnShop = new JButton("shop");
 		btnShop.setPreferredSize(btnDimension);
 		btnShop.setFont(windsPolice18);
-        btnShop.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnShopActionPerformed(evt);
-            }
-        });
+        btnShop.addActionListener((evt)->{ jBtnShopActionPerformed(evt); });
         
         JPanel jpBtnShop = new JPanel();
     	FlowLayout flBtnShop = new FlowLayout();
@@ -178,11 +162,7 @@ public class MainMenu extends JPanel{
 		btnLevelEditor = new JButton("level editor");
 		btnLevelEditor.setPreferredSize(btnDimension);
 		btnLevelEditor.setFont(windsPolice18);
-        btnLevelEditor.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnLevelEditorActionPerformed(evt);
-            }
-        });
+        btnLevelEditor.addActionListener((evt)->{ jBtnLevelEditorActionPerformed(evt); });
         
         JPanel jpBtnLevelEditor = new JPanel();
     	FlowLayout flBtnLevelEditor= new FlowLayout();
@@ -198,11 +178,7 @@ public class MainMenu extends JPanel{
 		btnChangeProfile = new JButton("Change Profile");
 		btnChangeProfile.setPreferredSize(btnDimension);
 		btnChangeProfile.setFont(windsPolice18);
-        btnChangeProfile.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnChangeProfileActionPerformed(evt);
-            }
-        });
+        btnChangeProfile.addActionListener((evt)->{ jBtnChangeProfileActionPerformed(evt); });
         
         JPanel jpBtnChangeProfile = new JPanel();
     	FlowLayout flBtnChangeProfile = new FlowLayout();
@@ -218,11 +194,7 @@ public class MainMenu extends JPanel{
 		btnQuit = new JButton("Quit");
 		btnQuit.setPreferredSize(btnDimension);
         btnQuit.setFont(windsPolice18);
-        btnQuit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBtnQuitActionPerformed(evt);
-            }
-        });
+        btnQuit.addActionListener((evt)->{ jBtnQuitActionPerformed(evt); });
         
         JPanel jpBtnQuit = new JPanel();
     	FlowLayout flBtnQuit = new FlowLayout();
@@ -292,8 +264,7 @@ public class MainMenu extends JPanel{
     	try {
     		DBClass.connect();
 			DBClass.executeQuery("UPDATE users SET current = false");
-		} catch (ClassNotFoundException e) {e.printStackTrace();
-		} catch (SQLException e) {e.printStackTrace();
+		} catch (ClassNotFoundException | SQLException e) {
 		} finally {
 			DBClass.disconnect();
 		}
