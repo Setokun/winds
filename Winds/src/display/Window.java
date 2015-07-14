@@ -6,25 +6,53 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
-import database.DBClass;
 import menus.Login;
 import menus.MainMenu;
 import account.Profile;
+import database.DBClass;
 
-
+/**
+ * Class used to centralize and hold all JPanel and Canvas of the Winds application.
+ */
 public class Window {
 	public static final Dimension DIM_STANDARD = new Dimension(800, 550);
 	public static final Dimension DIM_EDITOR = new Dimension(1024, 600);
+	public static final Dimension DIM_SPLASH = new Dimension(400, 300);
 	public static final boolean debug = false;
 	
 	private static JFrame main;
 	
 	/**
-	 * Constructor of Window Class, creates a JFrame which will hold all JPanel and Canvas of the Program
+	 * Forbid to instantiate by the default way.
 	 */
-	public Window(){
+	private Window(){}
+	
+	/**
+	 * affects a new component to the main JFrame and resizes it 
+	 * @param c the component to affect into the JFrame
+	 * @param dim the new dimension
+	 */
+	public static void affect(Component c, Dimension dim){
+		if(main.getContentPane().getComponentCount() > 0) main.getContentPane().removeAll();
+		main.add(c);
+		main.toFront();
+		main.setSize(dim);
+		main.setVisible(true);
+		main.revalidate();
+	}
+	/**
+	 * returns the main frame
+	 * @return JFrame
+	 */
+	public static JFrame getFrame(){
+		return main;
+	}
+	/**
+	 * Builds the Winds main frame.<br>
+	 * This method must be called only by the splash screen.
+	 */
+	public static void init(){
 		main = new JFrame("Winds");
 		main.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		main.addWindowListener(new CloseWindowEvent());
@@ -39,43 +67,14 @@ public class Window {
 		
 		try {
 			main.setIconImage(ImageIO.read(Window.class.getClass().getResource("/resources/collectables/bubulle.png")));
-		} catch (IOException e) { e.printStackTrace(); }
-		
-		Profile.current = Profile.getCurrentPlayer();
-		main.add(Profile.current == null ? new Login() : new MainMenu());
-		main.setVisible(true);	
-	}
-	
-	/**
-	 * affects a new component to the main JFrame and resizes it 
-	 * @param c the component to affect into the JFrame
-	 * @param dim the new dimensionz
-	 */
-	public static void affect(Component c, Dimension dim){
-		main.remove(main.getContentPane().getComponent(0));
-		main.add(c);
-		main.setSize(dim);
-		main.setVisible(true);
+		} catch (IOException e) {}
 	}
 	/**
-	 * Main method to launch the program with a Runnable
-	 * @param args
+	 * Displays the main frame.<br>
+	 * This method must be called only by the splash screen.
 	 */
-	public static void main(String[] args) {
-		Runnable r  = new Runnable() {
-			public void run() {
-				new Window();
-			}
-		};
-		
-		SwingUtilities.invokeLater(r);
-	}
-	/**
-	 * returns the main frame
-	 * @return JFrame
-	 */
-	public static JFrame getFrame(){
-		return main;
+	public static void start(){
+		affect( Profile.getCurrentPlayer() == null ? new Login() : new MainMenu(), DIM_STANDARD);
 	}
 	
 }
