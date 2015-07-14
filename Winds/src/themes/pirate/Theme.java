@@ -120,7 +120,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(16,2), new Integer[]{11,13,14});
 		compatibility.put(new Point(16,3), new Integer[]{2,3,5,6,7,9,10,14,15,16,17,18,19,20,21});
 
-		compatibility.put(new Point(17,0), new Integer[]{7,8,14,18});
+		compatibility.put(new Point(17,0), new Integer[]{7,8,9,14,18});
 		compatibility.put(new Point(17,1), new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24});
 		compatibility.put(new Point(17,2), new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24});
 		compatibility.put(new Point(17,3), new Integer[]{2,3,5,6,7,9,10,14,15,16,17,18,19,20,21});
