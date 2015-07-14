@@ -22,7 +22,7 @@ import javax.swing.border.SoftBevelBorder;
 import addon.AddonManager;
 import addon.JarLevel;
 import addon.Level;
-import addon.level.Type;
+import addon.level.LevelType;
 import display.Window;
 
 public class LevelSelector extends JPanel{
@@ -36,7 +36,7 @@ public class LevelSelector extends JPanel{
     private int compteur, nbElements, nbPages, numPage = 0;    
     private JarLevel[] jarLevels = new JarLevel[nbElements];
     private ArrayList<JarLevel> levelsToDisplay = new ArrayList<JarLevel>();
-    private Type type;
+    private LevelType type;
     Boolean hasPrevious = false, hasNext = true;
     JPanel southMiddle, jSouthWest, jSouthEast, south, north, jNorthWest, jNorthEast, middle, grid;
     String title;
@@ -46,14 +46,14 @@ public class LevelSelector extends JPanel{
      * @param levelType Type of levels to be displayed : basic, custom, my or tomoderate
      * @param numPage The page number to be displayer first
      */
-	public LevelSelector(Type levelType, int numPage) {
+	public LevelSelector(LevelType levelType, int numPage) {
 		type = levelType;
 		this.numPage = numPage;
 		
-		if(type == Type.basic)		 this.title = "Basic levels";
-		if(type == Type.custom)	 this.title = "Custom Levels";
-		if(type == Type.my)		 this.title = "My levels";
-		if(type == Type.tomoderate) this.title = "Levels to moderate";
+		if(type == LevelType.basic)		 this.title = "Basic levels";
+		if(type == LevelType.custom)	 this.title = "Custom Levels";
+		if(type == LevelType.my)		 this.title = "My levels";
+		if(type == LevelType.tomoderate) this.title = "Levels to moderate";
 		
 		jarLevels = AddonManager.getJarLevelsByType(type);
 		for (int i = 0; i < jarLevels.length; i++) {

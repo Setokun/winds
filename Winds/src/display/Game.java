@@ -16,7 +16,7 @@ import menus.LevelSelector;
 import account.Profile;
 import addon.AddonManager;
 import addon.BufferedImageLoader;
-import addon.level.Type;
+import addon.level.LevelType;
 import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
@@ -38,7 +38,7 @@ public class Game extends Canvas implements Runnable{
 	public static int delayAfterFinished;
 	private static boolean pause, running, finished, defeat, scoreUploaded, finishedLoading;;
 	private static BufferedImage[] instance;
-	private static Type typeLvl;
+	private static LevelType typeLvl;
 	
 	public final String TITLE = "Winds";
 	private BufferedImage bubulle, gameoverImage, victory, bg = null, pauseImage = null;
@@ -52,7 +52,7 @@ public class Game extends Canvas implements Runnable{
 	 * @param typeLevel
 	 * @param numPage
 	 */
-	public Game(Type typeLevel, int numPage){
+	public Game(LevelType typeLevel, int numPage){
 		typeLvl = typeLevel;
 		numPageFrom = numPage;
 		this.setBackground(Color.BLACK);

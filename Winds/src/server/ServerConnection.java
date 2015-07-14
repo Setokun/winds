@@ -28,8 +28,9 @@ import account.Profile;
 import addon.AddonManager;
 import addon.JarLevel;
 import addon.Level;
-import addon.level.Mode;
-import addon.level.Type;
+import addon.level.LevelMode;
+import addon.level.LevelStatus;
+import addon.level.LevelType;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -37,7 +38,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import database.DBClass;
-import database.LevelStatus;
 import database.Score;
 import database.ThemeData;
 import database.Trophy;
@@ -172,17 +172,17 @@ public class ServerConnection {
 		    
 		    String type = jsonObject.get("levelType").toString().replaceAll("\"", "");
 		    if(type.equals("basic"))
-		    	level.setType(Type.basic);
+		    	level.setType(LevelType.basic);
 		    else if(type.equals("custom"))
-		    	level.setType(Type.custom);
+		    	level.setType(LevelType.custom);
 		    else if(type.equals("tomoderate"))
-		    	level.setType(Type.tomoderate);
+		    	level.setType(LevelType.tomoderate);
 
 		    String mode = jsonObject.get("levelMode").toString().replaceAll("\"", "");
 		    if(mode.equals("standard"))
-		    	level.setMode(Mode.standard);
+		    	level.setMode(LevelMode.standard);
 		    if(mode.equals("boss"))
-		    	level.setMode(Mode.boss);
+		    	level.setMode(LevelMode.boss);
 		    
 		    level.setStatus(LevelStatus.installed);
 		    level.setIdDB(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
@@ -298,9 +298,9 @@ public class ServerConnection {
 				String s = URL_API_SERVER +"?email="+ Profile.current.getEmail().replace("\"", "")
 						 + "&password="+ Profile.current.getPassword().replace("\"", "");
 				
-				if(level.getType() == Type.basic) 			s += "&action=downloadBasicLevel&idBasicLevel="+ idLevel;
-				else if(level.getType() == Type.custom) 	s += "&action=downloadCustomLevel&idCustomLevel="+ idLevel;
-				else if(level.getType() == Type.tomoderate) s += "&action=downloadLevelToModerate&idLevelToModerate="+ idLevel;
+				if(level.getType() == LevelType.basic) 			s += "&action=downloadBasicLevel&idBasicLevel="+ idLevel;
+				else if(level.getType() == LevelType.custom) 	s += "&action=downloadCustomLevel&idCustomLevel="+ idLevel;
+				else if(level.getType() == LevelType.tomoderate) s += "&action=downloadLevelToModerate&idLevelToModerate="+ idLevel;
 				else return false;
 				
 				

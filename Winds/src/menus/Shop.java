@@ -29,8 +29,8 @@ import server.ServerConnection;
 import account.Profile;
 import addon.AddonManager;
 import addon.Level;
-import addon.level.Type;
-import database.LevelStatus;
+import addon.level.LevelStatus;
+import addon.level.LevelType;
 import database.ThemeData;
 import display.Window;
 
@@ -91,9 +91,9 @@ public class Shop  extends JPanel {
 	private void populateLists() {
 		try {
 			listThemesToDisplay = getThemesList();
-			listBasicLevelsToDisplay = getLevelsList(Type.basic);
-			listCustomLevelsToDisplay = getCustomLevelsList(Type.custom);
-			listLevelsToModerateToDisplay = getLevelsList(Type.tomoderate);
+			listBasicLevelsToDisplay = getLevelsList(LevelType.basic);
+			listCustomLevelsToDisplay = getCustomLevelsList(LevelType.custom);
+			listLevelsToModerateToDisplay = getLevelsList(LevelType.tomoderate);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(this, "Unable to reach distant winds server, please verify your internet connection and try again !");
 		}
@@ -268,7 +268,7 @@ public class Shop  extends JPanel {
 	 * @return
 	 * @throws IOException
 	 */
-	private Object[][] getLevelsList(Type type) throws IOException{
+	private Object[][] getLevelsList(LevelType type) throws IOException{
 		Object[][] listLevels = Level.getLevelsList(type);
 		Object[][] listLevelsToDisplay = null;
 		if(listLevels != null){
@@ -287,7 +287,7 @@ public class Shop  extends JPanel {
 	 * @return
 	 * @throws IOException
 	 */
-	private Object[][] getCustomLevelsList(Type type) throws IOException{
+	private Object[][] getCustomLevelsList(LevelType type) throws IOException{
 		Object[][] listLevels = Level.getCustomLevelsList();
 		Object[][] listLevelsToDisplay = null;
 		int[] ids = AddonManager.getThemesInstalledIds();
