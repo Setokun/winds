@@ -1,7 +1,7 @@
 package menus;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JOptionPane;
 
@@ -12,7 +12,7 @@ import addon.level.LevelType;
 import display.Game;
 import display.Window;
 
-public class LevelToModerateLauncherEvent implements MouseListener{
+public class LevelToModerateLauncherEvent extends MouseAdapter{
 
 	private JarLevel jarLvl;
 	private int numPage;
@@ -42,9 +42,5 @@ public class LevelToModerateLauncherEvent implements MouseListener{
 			Window.affect(new Game(jarLvl.getLevel().getType(), numPage),Profile.current.getScreenDimensions());
 		}
 	}
-	public void mouseEntered(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
-
+	
 }
