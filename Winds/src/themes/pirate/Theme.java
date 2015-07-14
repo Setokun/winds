@@ -34,7 +34,7 @@ import display.Window;
 @wTheme(idDB = 1, name = "Pirate", creator = "admin", date = "2015-07-10", description = "Pirate Theme")
 @wFiles(background = "background.jpg", music = "pirate.mp3", logo = "logo.png",
 		interactions = "sprites/interactions.png", sprites64 = "sprites/64.png",
-		sprites128 = "sprites/128.png", spritesCollectable = "sprites/collectable.png")
+		sprites128 = "sprites/128.png", spritesCollectable = "sprites/collectable.png", logoboss = "logo_boss.png")
 
 public class Theme extends ThemeBase {
 	protected Map<Point, Integer[]> initSpriteCompatibility(){
@@ -310,7 +310,7 @@ public class Theme extends ThemeBase {
 		
 			this.collisions = new ArrayList<CollisionBox>();
 		
-			this.collisions.add( new CollisionBox((int)x+4, (int)y+20, 28, 20, ObjectId.ENEMY) );
+			this.collisions.add( new CollisionBox((int)x+8, (int)y+27, 28, 27, ObjectId.ENEMY) );
 			
 			for (int i = 1; i < spritesRightRaw.length; i++) { spritesRight[i-1] = spritesRightRaw[i]; }
 			for (int i = 1; i < spritesLeftRaw.length; i++)  { spritesLeft[i-1]  = spritesLeftRaw[i];  }
@@ -371,9 +371,9 @@ public class Theme extends ThemeBase {
 	
 		public void render(Graphics g) {
 			if((facingRight && direction == Direction.LEFT) || (!facingRight && direction != Direction.LEFT) )
-				animationRight.drawAnimation(g, (int)x, (int)y, 48, 48);
+				animationRight.drawAnimation(g, (int)x, (int)y, 64, 64);
 			else
-				animationLeft.drawAnimation(g, (int)x, (int)y, 48, 48);
+				animationLeft.drawAnimation(g, (int)x, (int)y, 64, 64);
 			
 			if(Window.debug){
 				if(this.getBounds() != null){
@@ -415,7 +415,8 @@ public class Theme extends ThemeBase {
 			this.count = 0;
 			this.collisions = new ArrayList<CollisionBox>();
 
-			this.collisions.add( new CollisionBox((int)x+8, (int)y+40, 56, 40, ObjectId.BOSS) );
+			this.collisions.add( new CollisionBox((int)x+16, (int)y+16, 92, 40, ObjectId.BOSS) );
+			this.collisions.add( new CollisionBox((int)x+32, (int)y+56, 56, 48, ObjectId.BOSS) );
 			
 			for (int i = 1; i < spritesRaw.length; i++) {
 				sprites[i-1] = spritesRaw[i];
@@ -441,10 +442,26 @@ public class Theme extends ThemeBase {
 					
 					facingRight = ((player.getX()-this.x)<0);
 					
-					this.x+=((player.getX()-this.x)>0)?1:-1;
-					this.y+=((player.getY()-this.y)>0)?1:-1;
-					this.collisions.get(0).x+=((player.getX()-this.x)>0)?1:-1;
-					this.collisions.get(0).y+=((player.getY()-this.y)>0)?1:-1;
+					if((player.getX()-this.x)>0){
+						this.x+=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).x+=1;
+					}else{
+						this.x-=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).x-=1;
+					}
+					
+					if((player.getY()-this.y)>0){
+						this.y+=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).y+=1;
+					}else{
+						this.y-=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).y-=1;
+					}
+					
 					count = 0;
 				}
 			}
@@ -453,9 +470,9 @@ public class Theme extends ThemeBase {
 
 		public void render(Graphics g) {
 			if(facingRight)
-				animation.drawAnimation(g, (int)x, (int)y, 96, 96);
+				animation.drawAnimation(g, (int)x, (int)y, 128, 128);
 			else
-				animationLeft.drawAnimation(g, (int)x, (int)y, 96, 96);
+				animationLeft.drawAnimation(g, (int)x, (int)y, 128, 128);
 			
 			if(Window.debug){
 				if(this.getBounds() != null){
