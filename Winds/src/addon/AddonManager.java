@@ -23,7 +23,7 @@ public class AddonManager {
 	private static JarTheme loadedJarTheme;
 	private static JarLevel loadedJarLevel;
 	
-	private static String themesPath, levelsPath, commonPath;
+	private static String themesPath, levelsPath;
 
 	static {
 		// paths initialization
@@ -195,13 +195,6 @@ public class AddonManager {
 	 */
 	public static String getLevelsPath(){
 		return levelsPath;
-	}
-	/**
-	 * Get the full path of the commons folder.
-	 * @return String
-	 */
-	public static String getCommonPath(){
-		return commonPath;
 	}
 
 	/**

@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import addon.BufferedImageLoader;
-import display.Animation;
 import display.Window;
 
 public class Blower extends GameObject{
