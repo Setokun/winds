@@ -95,7 +95,7 @@ public class Score {
 	 * save this current score into the local database
 	 * @param idLevel
 	 */
-	public void setScore(int idLevel){
+	public void saveScore(){
 		try {
 			Score oldScore = null;
 			int counter = 0;	
