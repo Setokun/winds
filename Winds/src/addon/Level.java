@@ -39,8 +39,8 @@ public class Level implements Cloneable {
 		updateDate();
 		name = "my new level";
 		creator = Profile.getCurrentPlayer().getPseudo();
-		mode = Mode.STANDARD;
-		type = Type.MY;
+		mode = Mode.standard;
+		type = Type.my;
 		uploaded = false;
 		startPosition = new Point(1,1);
 		matrix = new int[EditorGUI.NB_TILES_MATRIX][EditorGUI.NB_TILES_MATRIX];
@@ -179,13 +179,13 @@ public class Level implements Cloneable {
 		
 		ArrayList<Level> r = null;
 
-		if(type == Type.BASIC){
+		if(type == Type.basic){
 			r = ServerConnection.getBasicLevelsList();
 		}
-		else if(type == Type.CUSTOM){
+		else if(type == Type.custom){
 			r = ServerConnection.getCustomLevelsList();
 		}
-		else if(type == Type.TOMODERATE){
+		else if(type == Type.tomoderate){
 			r = ServerConnection.getLevelsToModerateList();
 		}
 

@@ -188,7 +188,7 @@ public class LevelEditorList extends JPanel {
 	 * initialize data for the levels list table
 	 */
 	private void initTableData(){
-		JarLevel[] jars = AddonManager.getJarLevelsByType(Type.MY);
+		JarLevel[] jars = AddonManager.getJarLevelsByType(Type.my);
 		
 		DefaultTableModel model = new DefaultTableModel(){
 			private static final long serialVersionUID = 218805739056532012L;

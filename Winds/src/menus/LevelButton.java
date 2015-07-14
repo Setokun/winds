@@ -34,7 +34,7 @@ public class LevelButton extends JPanel{
         BufferedImage logo = AddonManager.getJarThemeByID(jarLvl.getLevel().getIdTheme()).getLogo();
 		button.setIcon(new ImageIcon(logo));
 		button.addMouseListener(
-			(type == Type.TOMODERATE)?
+			(type == Type.tomoderate)?
 				new LevelToModerateLauncherEvent(jarLvl, numPage)
 				:new LevelLauncherEvent(jarLvl, numPage)
 		);

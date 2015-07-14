@@ -279,28 +279,28 @@ public class LevelCategorySelector extends JPanel{
      * @param evt
      */
 	private void jBtnBasicLevelsActionPerformed(ActionEvent evt) {
-		Window.affect(new LevelSelector(Type.BASIC, 0),Window.DIM_STANDARD);
+		Window.affect(new LevelSelector(Type.basic, 0),Window.DIM_STANDARD);
     }                                               
     /**
      * determines what action has to be done when clicking on the "Custom Levels" button
      * @param evt
      */
     private void jBtnCustomLevelsActionPerformed(ActionEvent evt) {
-		Window.affect(new LevelSelector(Type.CUSTOM, 0),Window.DIM_STANDARD);
+		Window.affect(new LevelSelector(Type.custom, 0),Window.DIM_STANDARD);
     }                                                
     /**
      * determines what action has to be done when clicking on the "My Levels" button
      * @param evt
      */
     private void jBtnMyLevelsActionPerformed(ActionEvent evt) {
-		Window.affect(new LevelSelector(Type.MY, 0),Window.DIM_STANDARD);
+		Window.affect(new LevelSelector(Type.my, 0),Window.DIM_STANDARD);
     }                                            
     /**
      * determines what action has to be done when clicking on the "Levels to Moderate" button
      * @param evt
      */
     private void jBtnLevelsToModerateActionPerformed(ActionEvent evt) {
-		Window.affect(new LevelSelector(Type.TOMODERATE, 0),Window.DIM_STANDARD);
+		Window.affect(new LevelSelector(Type.tomoderate, 0),Window.DIM_STANDARD);
     }                                                    
 
 }
