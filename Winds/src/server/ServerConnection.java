@@ -109,6 +109,7 @@ public class ServerConnection {
 				} catch (ClassNotFoundException e1) {
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, "Unable to save your scores from the server, please try again...");
+					break;
 				}
 			}finally{
 				DBClass.disconnect();
