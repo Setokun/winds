@@ -11,6 +11,10 @@ import core.Player;
 import display.Game;
 import display.Handler;
 
+
+/**
+ * Class used to catch the mouse click in game.
+ */
 public class MouseInput extends MouseAdapter{
 	
 	private Handler handler;
@@ -30,15 +34,9 @@ public class MouseInput extends MouseAdapter{
 		
 		if(Game.getPause()){
 			if(key == InputEvent.BUTTON1_MASK){
-				if(mouseX >= 122 && mouseX <= 302 && mouseY >= 169 && mouseY <= 209){
-					Game.setPause();
-				}
-				if(mouseX >= 47 && mouseX <= 377 && mouseY >= 235 && mouseY <= 275){
-					Game.goBackToMenu();
-				}
-				if(mouseX >= 148 && mouseX <= 398 && mouseY >= 307 && mouseY <= 347){
-					System.exit(0);
-				}
+				if(mouseX >= 122 && mouseX <= 302 && mouseY >= 169 && mouseY <= 209) Game.setPause();
+				if(mouseX >= 47 && mouseX <= 377 && mouseY >= 235 && mouseY <= 275)  Game.goBackToMenu();
+				if(mouseX >= 148 && mouseX <= 398 && mouseY >= 307 && mouseY <= 347) System.exit(0);
 			}
 		}
 		else{
@@ -46,14 +44,11 @@ public class MouseInput extends MouseAdapter{
 				for(int i = 0; i<handler.objects.size(); i++){
 					GameObject tempObject = handler.objects.get(i);
 					
-					
-					
 					if(tempObject.getId() == ObjectId.Player){
 						int playerX = (int) (tempObject.getX()+32 + Game.cam.getX() );
 						int playerY = (int) (tempObject.getY()+32 + Game.cam.getY() );
 						
-						if(key == InputEvent.BUTTON1_MASK)
-						{				
+						if(key == InputEvent.BUTTON1_MASK){				
 							Player.gravity = 0.03f;
 							
 							// distance calculation
@@ -91,8 +86,7 @@ public class MouseInput extends MouseAdapter{
 				}
 			}
 			else{
-				if(Game.getDelayAfterFinished() > 3)
-					Game.goBackToMenu();
+				if(Game.getDelayAfterFinished() > 3) Game.goBackToMenu();
 			}
 		}
 		

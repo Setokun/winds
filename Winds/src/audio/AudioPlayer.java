@@ -8,7 +8,9 @@ import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import addon.AddonManager;
 
-
+/**
+ * Class used to play musics.
+ */
 public class AudioPlayer {
 	
     private String filename;
@@ -55,10 +57,8 @@ public class AudioPlayer {
     	if (player != null){
 	        loop = false;
     		try {
-				pauseLocation = bis.available();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+    			pauseLocation = bis.available();
+			} catch (IOException e) {}
 	        player.close();
     	}
     }
@@ -83,8 +83,7 @@ public class AudioPlayer {
         				player = new Player(bis);
         				totalLength = bis.available();
         				player.play(); }while(loop); 
-                }
-                catch (Exception e) { System.out.println(e); }
+                } catch (Exception e) {}
             }
         }.start();
         
