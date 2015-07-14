@@ -135,7 +135,7 @@ public class ServerConnection {
 		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
 		    Trophy trophy = new Trophy();
 		    trophy.setDescription(jsonObject.get("trophy").toString().replaceAll("\"", ""));
-		    trophy.setAchieved(jsonObject.get("ok").toString().replaceAll("\"", ""));
+		    trophy.setAchieved(jsonObject.get("ok").toString().replaceAll("\"", "").equals("ok"));
 		    trophies.add(trophy);
 		}
 		} catch (IOException e) {

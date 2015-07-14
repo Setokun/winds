@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -267,17 +268,17 @@ public class Scores extends JPanel {
 	}
 
 	/**
-	 * returns a double dimension table used to provide "Trophies" table
+	 * returns an ArrayList of Trophy, used to provide "Trophies" table
 	 * @return
 	 */
 	private Object[][] getTrophies(){
-		Object[][] listTrophies = Trophy.getTrophies();
+		ArrayList<Trophy> listTrophies = Trophy.getTrophies();
 		Object[][] listTrophiesToDisplay = null;
 		if(listTrophies != null){
-			listTrophiesToDisplay = new Object[listTrophies.length][2];
-			for(int i=0; i<listTrophies.length; i++){
-				listTrophiesToDisplay[i][0] = listTrophies[i][0];
-				listTrophiesToDisplay[i][1] = listTrophies[i][1].equals("ok")? new ImageIcon(this.getClass().getResource("/resources/tick.png")):null;
+			listTrophiesToDisplay = new Object[listTrophies.size()][2];
+			for(int i=0; i<listTrophies.size(); i++){
+				listTrophiesToDisplay[i][0] = listTrophies.get(i).getDescription();
+				listTrophiesToDisplay[i][1] = listTrophies.get(i).getAchieved()? new ImageIcon(this.getClass().getResource("/resources/tick.png")):null;
 			}
 		}
 		return listTrophiesToDisplay;

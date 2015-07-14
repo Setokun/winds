@@ -6,7 +6,7 @@ import server.ServerConnection;
 
 public class Trophy {
 	private String description;
-	private String achieved;
+	private boolean achieved;
 	
 	public Trophy(){}
 
@@ -19,7 +19,7 @@ public class Trophy {
 	 * returns if the Trophy was achieved or not
 	 * @return String
 	 */
-	public String getAchieved() {return achieved;}
+	public boolean getAchieved() {return achieved;}
 	
 	
 	/**
@@ -31,7 +31,7 @@ public class Trophy {
 	 * sets if the Trophy was achieved or not
 	 * @param achieved
 	 */
-	public void setAchieved(String achieved) {this.achieved = achieved;}
+	public void setAchieved(boolean achieved) {this.achieved = achieved;}
 	
 	/**
 	 * returns a String representation of the Trophy
@@ -44,20 +44,8 @@ public class Trophy {
 	 * returns a double dimension table used to provide a GUI table
 	 * @return Object[][]
 	 */
-	public static Object[][] getTrophies(){
-		
-		Object[][] results = null;
-		
-		ArrayList<Trophy> t = ServerConnection.getTrophies();
-		int count = t.size();
-		
-		results = new String[count][2];
-
-		for (int i = 0; i < count; i++) {
-			results[i][0] =  t.get(i).getDescription();
-			results[i][1] =  t.get(i).getAchieved();
-		}
-		return results;
+	public static ArrayList<Trophy> getTrophies(){
+		return ServerConnection.getTrophies();
 	}
 	
 }
