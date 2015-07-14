@@ -273,7 +273,7 @@ public class Theme extends ThemeBase {
 			handler.addObject(new Blower(x   , y   , ObjectId.BLOWER, Direction.UP));
 			break;
 		case 17:
-			handler.addObject(new Boss(x   , y   , ObjectId.ENEMY));
+			handler.addObject(new Boss(x   , y   , ObjectId.BOSS));
 			break;
 		}
 	}
@@ -404,8 +404,8 @@ public class Theme extends ThemeBase {
 		
 		static {
 			try {
-				spritesRawLeft = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/pirate_boss_reverse.png")), 128).getSprites();
-				spritesRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/pirate_boss.png")), 128).getSprites();
+				spritesRawLeft = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/pirate_boss.png")), 128).getSprites();
+				spritesRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/pirate_boss_reverse.png")), 128).getSprites();
 			} catch (IOException e) { e.printStackTrace(); }
 		}
 		
@@ -424,13 +424,16 @@ public class Theme extends ThemeBase {
 				spritesLeft[i-1] = spritesRawLeft[i];
 			}
 			
-			animation = new Animation(1, sprites);
-			animationLeft =  new Animation(1, spritesLeft);
+			animation = new Animation(5, sprites);
+			animationLeft =  new Animation(5, spritesLeft);
 		}
 
 		public void tick(ArrayList<GameObject> objects) {
-			animation.runAnimation();
-			animationLeft.runAnimation();
+			if(!Game.isFinished()){
+				animation.runAnimation();
+				animationLeft.runAnimation();
+			}
+			
 			if(!Game.isFinished()){
 				count++;
 				GameObject player = objects.get(3600);

@@ -16,6 +16,7 @@ import menus.LevelSelector;
 import account.Profile;
 import addon.AddonManager;
 import addon.BufferedImageLoader;
+import addon.level.Mode;
 import addon.level.Type;
 import audio.AudioPlayer;
 import controls.KeyInput;
@@ -86,7 +87,12 @@ public class Game extends Canvas implements Runnable{
 		
 		
 		/////////////// sound initialization ///////////////
-	    bgMusic = new AudioPlayer(true);
+	    if(AddonManager.getLoadedJarLevel().getLevel().getMode() == Mode.boss){
+	    	bgMusic = new AudioPlayer("/resources/musics/dragon.mp3", true);
+	    }else
+	    {
+	    	bgMusic = new AudioPlayer(true);
+	    }
 	    bgMusic.play();
 	    ////////////////////////////////////////////////////
 	    
