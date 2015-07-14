@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 public @interface wFiles {
 	String music();
 	String logo();
+	String logoboss();
 	String background();
 	String interactions();
 	String sprites64();

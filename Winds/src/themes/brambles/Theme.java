@@ -34,7 +34,7 @@ import display.Window;
 @wTheme(idDB = 3, name = "Brambles", creator = "admin", date = "2015-05-17", description = "Brambles Theme")
 @wFiles(background = "background.jpg", music = "brambles.mp3", logo = "logo.png",
 		interactions = "sprites/interactions.png", sprites64 = "sprites/64.png",
-		sprites128 = "sprites/128.png", spritesCollectable = "sprites/collectable.png")
+		sprites128 = "sprites/128.png", spritesCollectable = "sprites/collectable.png", logoboss = "logo_boss.png")
 
 public class Theme extends ThemeBase {
 	protected Map<Point, Integer[]> initSpriteCompatibility(){
@@ -427,10 +427,26 @@ public class Theme extends ThemeBase {
 					
 					facingRight = ((player.getX()-this.x)<0); 
 					
-					this.x+=((player.getX()-this.x)>0)?1:-1;
-					this.y+=((player.getY()-this.y)>0)?1:-1;
-					this.collisions.get(0).x+=((player.getX()-this.x)>0)?1:-1;
-					this.collisions.get(0).y+=((player.getY()-this.y)>0)?1:-1;
+					if((player.getX()-this.x)>0){
+						this.x+=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).x+=1;
+					}else{
+						this.x-=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).x-=1;
+					}
+					
+					if((player.getY()-this.y)>0){
+						this.y+=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).y+=1;
+					}else{
+						this.y-=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).y-=1;
+					}
+					
 					count = 0;
 				}
 			}

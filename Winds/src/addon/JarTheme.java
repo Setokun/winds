@@ -26,7 +26,7 @@ public class JarTheme {
 	private Class<?> mainClass;
 	private String music;
 	private BufferedImage logo, background, interactions,
-						  sprites64, sprites128, spritesCollectable; 
+						  sprites64, sprites128, spritesCollectable, logoboss; 
 	
 	
 	//region Constructors 
@@ -50,6 +50,7 @@ public class JarTheme {
 				sprites64	 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).sprites64());
 				sprites128	 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).sprites128());
 				spritesCollectable  = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).spritesCollectable());
+				logoboss	 = getBufferedImage(jf, packageName, mainClass.getDeclaredAnnotation(wFiles.class).logoboss());
 				
 			}
 			jf.close();
@@ -82,6 +83,7 @@ public class JarTheme {
 			
 			&& music.equals(j.music)
 			&& new ImageIcon(logo).getDescription().equals(new ImageIcon(j.logo).getDescription())
+			&& new ImageIcon(logoboss).getDescription().equals(new ImageIcon(j.logoboss).getDescription())
 			&& new ImageIcon(background).getDescription().equals(new ImageIcon(j.background).getDescription())
 			&& new ImageIcon(interactions).getDescription().equals(new ImageIcon(j.interactions).getDescription())
 			&& new ImageIcon(sprites64).getDescription().equals(new ImageIcon(j.sprites64).getDescription())
@@ -179,6 +181,10 @@ public class JarTheme {
 		return mainClass.getPackage().getName() +"/"
 			 + mainClass.getDeclaredAnnotation(wFiles.class).logo();
 	}
+	public String getLogobossPath(){
+		return mainClass.getPackage().getName() +"/"
+			 + mainClass.getDeclaredAnnotation(wFiles.class).logoboss();
+	}
 	public String getBackgroundPath(){
 		return mainClass.getPackage().getName() +"/"
 			 + mainClass.getDeclaredAnnotation(wFiles.class).background();
@@ -228,6 +234,9 @@ public class JarTheme {
 	}
 	public BufferedImage getLogo(){
 		return logo;
+	}
+	public BufferedImage getLogoboss(){
+		return logoboss;
 	}
 	public BufferedImage getBackground() {
 		return background;

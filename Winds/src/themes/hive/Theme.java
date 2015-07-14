@@ -34,7 +34,7 @@ import display.Window;
 @wTheme(idDB = 2, name = "Hive", creator = "admin", date = "2015-07-07", description = "Hive Theme")
 @wFiles(background = "background.jpg", music = "Honey.mp3", logo = "logo.png",
 		interactions = "sprites/interactions.png", sprites64 = "sprites/64.png",
-		sprites128 = "sprites/128.png", spritesCollectable = "sprites/collectable.png")
+		sprites128 = "sprites/128.png", spritesCollectable = "sprites/collectable.png", logoboss = "logo_boss.png")
 
 public class Theme extends ThemeBase {
 	protected Map<Point, Integer[]> initSpriteCompatibility(){
@@ -426,7 +426,7 @@ public class Theme extends ThemeBase {
 			this.count = 0;
 			this.collisions = new ArrayList<CollisionBox>();
 
-			this.collisions.add( new CollisionBox((int)x+8, (int)y+40, 56, 40, ObjectId.BOSS) );
+			this.collisions.add( new CollisionBox((int)x+20, (int)y+40, 52, 40, ObjectId.BOSS) );
 			
 			for (int i = 1; i < spritesRaw.length; i++) {
 				sprites[i-1] = spritesRaw[i];
@@ -449,10 +449,26 @@ public class Theme extends ThemeBase {
 					
 					facingRight = ((player.getX()-this.x)<0);
 					
-					this.x+=((player.getX()-this.x)>0)?1:-1;
-					this.y+=((player.getY()-this.y)>0)?1:-1;
-					this.collisions.get(0).x+=((player.getX()-this.x)>0)?1:-1;
-					this.collisions.get(0).y+=((player.getY()-this.y)>0)?1:-1;
+					if((player.getX()-this.x)>0){
+						this.x+=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).x+=1;
+					}else{
+						this.x-=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).x-=1;
+					}
+					
+					if((player.getY()-this.y)>0){
+						this.y+=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).y+=1;
+					}else{
+						this.y-=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).y-=1;
+					}
+					
 					count = 0;
 				}
 			}
