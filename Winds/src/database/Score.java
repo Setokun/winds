@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import server.ServerConnection;
 import account.Profile;
 
+
+/**
+ * Class used to represent a Winds score.
+ */
 public class Score {
 	private int idLevel;
 	private String levelName;
@@ -133,7 +137,6 @@ public class Score {
 					+ "WHERE idPlayer="+Profile.current.getId()+"ORDER BY levels.id");
 			
 			ArrayList<Score> scores = new ArrayList<Score>();
-
 			while(r.next()) {
 				Score s = new Score(r.getInt("levelID"));
 				s.setLevelName(r.getString("levelname"));
@@ -144,10 +147,7 @@ public class Score {
 			}
 			
 			return scores;
-		} catch (ClassNotFoundException | SQLException e) {
-			//TODO
-			e.printStackTrace();
-		}
+		} catch (ClassNotFoundException | SQLException e) {}
 		finally{
 			DBClass.disconnect();
 		}
@@ -172,10 +172,9 @@ public class Score {
 			}
 			r = Score.getLocalScores();
 		}
-		int nbScores = r.size();
 		
+		int nbScores = r.size();
 		results = new String[nbScores][5];
-
 		for(int i=0; i < r.size();i++){
 			results[i][0] =  r.get(i).getLevelName();
 			results[i][1] =  String.valueOf(r.get(i).getNbItems());
@@ -195,12 +194,9 @@ public class Score {
 		int hours = time / 3600;
 		int minutes = time / 60;
 		int seconds = time % 60;
-		if(hours> 0){
-			result += hours+":";
-		}
+		if(hours> 0) result += hours+":";
 		
 		result += minutes + ":" + ((seconds > 9)?String.valueOf(seconds):"0"+seconds);
-		
 		return result;
 	}
     /**

@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import server.ServerConnection;
 import addon.AddonManager;
 
+
+/**
+ * Class used to represent a Winds theme into local DB.
+ */
 public class ThemeData {
 	
 	private int idTheme;
@@ -59,11 +63,8 @@ public class ThemeData {
 	 * @throws IOException
 	 */
 	public static Object[][] getThemesList() throws IOException{
-		
 		Object[][] results = null;
-		
 		ArrayList<ThemeData> r = null;
-		
 		r = ServerConnection.getThemesList();
 		
 		int[] ids = AddonManager.getThemesInstalledIds();
@@ -79,8 +80,7 @@ public class ThemeData {
 				if(ids[k] == r.get(i).getIdTheme())
 					exists = true;
 			}
-			if(!exists)
-				j++;
+			if(!exists) j++;
 		}
 		return results;
 	}
@@ -95,7 +95,6 @@ public class ThemeData {
 								+ "VALUES ('"+idTheme+"', '"+name+"','"+description+");");
 			
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			try {
 				DBClass.executeQuery("UPDATE themes SET name='"+name+"', description='"+description+"' WHERE id='"+idTheme+"'");
