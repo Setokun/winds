@@ -22,7 +22,7 @@ import javax.swing.border.SoftBevelBorder;
 import addon.AddonManager;
 import addon.JarLevel;
 import addon.Level;
-import addon.level.Type;
+import addon.level.LevelType;
 import display.Window;
 
 public class LevelSelector extends JPanel{
@@ -36,7 +36,7 @@ public class LevelSelector extends JPanel{
     private int compteur, nbElements, nbPages, numPage = 0;    
     private JarLevel[] jarLevels = new JarLevel[nbElements];
     private ArrayList<JarLevel> levelsToDisplay = new ArrayList<JarLevel>();
-    private Type type;
+    private LevelType type;
     Boolean hasPrevious = false, hasNext = true;
     JPanel southMiddle, jSouthWest, jSouthEast, south, north, jNorthWest, jNorthEast, middle, grid;
     String title;
@@ -46,19 +46,18 @@ public class LevelSelector extends JPanel{
      * @param levelType Type of levels to be displayed : basic, custom, my or tomoderate
      * @param numPage The page number to be displayer first
      */
-	public LevelSelector(Type levelType, int numPage) {
+	public LevelSelector(LevelType levelType, int numPage) {
 		type = levelType;
 		this.numPage = numPage;
 		
-		if(type == Type.basic)		 this.title = "Basic levels";
-		if(type == Type.custom)	 this.title = "Custom Levels";
-		if(type == Type.my)		 this.title = "My levels";
-		if(type == Type.tomoderate) this.title = "Levels to moderate";
+		if(type == LevelType.basic)		 this.title = "Basic levels";
+		if(type == LevelType.custom)	 this.title = "Custom Levels";
+		if(type == LevelType.my)		 this.title = "My levels";
+		if(type == LevelType.tomoderate) this.title = "Levels to moderate";
 		
 		jarLevels = AddonManager.getJarLevelsByType(type);
-		for (int i = 0; i < jarLevels.length; i++) {
+		for (int i = 0; i < jarLevels.length; i++)
 			jarLevels[i].getLevel().getName();
-		}
 		nbElements = jarLevels.length;
 		
 		nbPages = nbElements / 15;
@@ -67,18 +66,15 @@ public class LevelSelector extends JPanel{
 		
     	int[] idThemesInstalled = AddonManager.getThemesInstalledIds();
     	
-		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
-			if(Level.getStatus(jarLevels[i].getLevel().getIdDB()) == null || !Level.getStatus(jarLevels[i].getLevel().getIdDB()).equals("desactivated")){
-				for (int j = 0; j < idThemesInstalled.length; j++) {
+		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++)
+			if(Level.getStatus(jarLevels[i].getLevel().getIdDB()) == null || !Level.getStatus(jarLevels[i].getLevel().getIdDB()).equals("desactivated"))
+				for (int j = 0; j < idThemesInstalled.length; j++) 
 					if(idThemesInstalled[j] == jarLevels[i].getLevel().getIdTheme()){
 						levelsToDisplay.add(jarLevels[i]);
 						break;
 					}
-				}				
-			}
-		}
+
 		this.removeAll();
-		
 		initComponents(numPage, nbPages, levelsToDisplay);
 	}
 	
@@ -112,7 +108,6 @@ public class LevelSelector extends JPanel{
 	 * create the north section of this GUI
 	 */
 	private void createNorth() {
-		
 		jNorthWest = new JPanel();
 		FlowLayout flNorthWest = new FlowLayout();
 		flNorthWest.setHgap(20);
@@ -126,16 +121,13 @@ public class LevelSelector extends JPanel{
 		flNorthEast.setVgap(10);
 		jNorthEast.setLayout(flNorthEast);
 		jNorthEast.add(jBtnBack);
-		
-		
+				
 		north = new JPanel();
 		BorderLayout northLayout = new BorderLayout();
 		north.setLayout(northLayout);
 		
 		north.add(jNorthWest, BorderLayout.WEST);
-		//north.add(southMiddle, BorderLayout.CENTER);
 		north.add(jNorthEast, BorderLayout.EAST);
-		
 	}
 	/**
 	 * create the middle section of this GUI
@@ -143,7 +135,6 @@ public class LevelSelector extends JPanel{
 	 * @param levelsToDisplay The ArrayList of levels for this page number
 	 */
 	private void createMiddle(int currentPage, ArrayList<JarLevel> levelsToDisplay) {
-		
 		middle = new JPanel();
 		
 		FlowLayout flMiddle = new FlowLayout();
@@ -172,7 +163,6 @@ public class LevelSelector extends JPanel{
 			
 			middle.add(grid);
 		}
-
 	}
 	/**
 	 * create the south section of this GUI
@@ -187,8 +177,6 @@ public class LevelSelector extends JPanel{
         jLblNumPage.setText((numPage+1)+"/"+(nbPages+1));
 		southMiddle.add(jLblNumPage);
         
-		
-		//////
 		JButton jBtnPreviousBlank = new JButton();
 		jBtnPreviousBlank.setPreferredSize(new Dimension(100,50));
 		jBtnPreviousBlank.setBorder(new SoftBevelBorder(0));
@@ -201,7 +189,6 @@ public class LevelSelector extends JPanel{
 		flSouthWest.setVgap(5);
 		jSouthWest.setLayout(flSouthWest);
 		jSouthWest.add((hasPrevious)?jBtnPrevious:jBtnPreviousBlank);
-		//////
 		
 		JButton jBtnNextBlank = new JButton();
 		jBtnNextBlank.setPreferredSize(new Dimension(100,50));
@@ -332,6 +319,7 @@ public class LevelSelector extends JPanel{
     		windsPolice36 = new Font ("Serif", Font.BOLD, 36);
 		}
 	}
+	
 	/**
 	 * determines what action has to be done when clicking on the "Back" button
 	 * @param evt
@@ -345,12 +333,11 @@ public class LevelSelector extends JPanel{
 	 */
 	protected void jBtnPreviousActionPerformed(ActionEvent evt) {
 		numPage--;
-				
 		levelsToDisplay.removeAll(levelsToDisplay);
 		
-		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
+		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++)
 			levelsToDisplay.add(jarLevels[i]);
-		}
+		
 		this.removeAll();
 		initComponents(numPage, nbPages, levelsToDisplay);
 	}
@@ -362,13 +349,11 @@ public class LevelSelector extends JPanel{
 		numPage++;
 		
 		levelsToDisplay.removeAll(levelsToDisplay);
-		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++){
+		for(int i= (numPage * 15); i<((numPage == nbPages)?(numPage * 15) + compteur:((numPage+1) * 15)); i++)
 			levelsToDisplay.add(jarLevels[i]);
-		}
+		
 		this.removeAll();
 		initComponents(numPage, nbPages, levelsToDisplay);
 	}
-	
-	
 	
 }

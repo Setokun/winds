@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import core.GameObject;
 
 public class Handler {
-	
 	public static final int NB_SQUARES = 60;
 	public static final int DIM_SQUARE = 128;
 	
 	public ArrayList<GameObject> objects = new ArrayList<GameObject>();
-	
 	private GameObject tempObject;
 	
 	/**
@@ -20,7 +18,6 @@ public class Handler {
 	public void tick(){
 		for(int i=0; i<objects.size(); i++){
 			tempObject = objects.get(i);
-			
 			tempObject.tick(objects);
 		}
 	}
@@ -43,19 +40,14 @@ public class Handler {
 		if(wIndex > (NB_SQUARES - coefXMax)) wIndex = NB_SQUARES - coefXMax;
 		if(hIndex > (NB_SQUARES - coefYMax)) hIndex = NB_SQUARES - coefYMax;
 		
-		for (int i = wIndex; i < wIndex + coefXMax; i++) {
+		for (int i = wIndex; i < wIndex + coefXMax; i++)
 			for (int j = hIndex; j < hIndex + coefYMax; j++) {
-
 				tempObject = objects.get(j*NB_SQUARES + i);
-				
 				tempObject.render(g);
 			}
-		}
 
-		for (int i = NB_SQUARES*NB_SQUARES; i < objects.size(); i++) {
+		for (int i = NB_SQUARES*NB_SQUARES; i < objects.size(); i++)
 			objects.get(i).render(g);
-		}
-		
 	}
 	/**
 	 * adds a GameObject to the ArrayList

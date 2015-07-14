@@ -22,26 +22,29 @@ public class JarLevel {
 	
 	//region Constructors 
 	/**
-	 * Create a new level archive with the specified level.
+	 * Creates a new level archive with the specified level.
 	 * @param lvl the level to insert in the archive
 	 */
-	/*OK*/public JarLevel(Level lvl){
+	public JarLevel(Level lvl){
 		this.lvl = lvl;
 	}
 	/**
-	 * Create a new level archive from the specified level archive.
+	 * Creates a new level archive from the specified level archive.
 	 * @param jar the archive which contains the data to pick up
 	 */
-	/*OK*/public JarLevel(File jarFile){
+	public JarLevel(File jarFile){
 		this.jar = jarFile;
-		String jsonDecoded = encodeJson(getLevelContent(), false);
-		this.lvl = new Gson().fromJson(jsonDecoded, Level.class);
+		this.lvl = new Gson().fromJson(getLevelContent(), Level.class);
 	}
 	//endregion
 	
 	
 	//region Public methods 
-	/*OK*/public void save() throws Exception {
+	/**
+	 * Saves physically the current JarLevel into its file.
+	 * @throws Exception 
+	 */
+	public void save() throws Exception {
 		createFile();
 		writeFile();
 	}
@@ -49,14 +52,14 @@ public class JarLevel {
 	 * Checks if the current level archive is valid.
 	 * @return boolean
 	 */
-	/*OK*/public boolean isValid(){
+	public boolean isValid(){
 		return jar != null && jar.exists() && lvl != null;
 	}
 	/**
-	 * Checks if the specified argument is equals to the current level.
+	 * Checks if the specified object is equals to the current level.
 	 * @return boolean
 	 */
-	/*OK*/public boolean equals(Object obj) {
+	public boolean equals(Object obj) {
 		if( !(obj instanceof JarLevel) )  return false;
 		
 		JarLevel jl = (JarLevel) obj;
@@ -66,7 +69,7 @@ public class JarLevel {
 	 * Get the string representation of the current level archive.
 	 * @return String
 	 */
-	/*OK*/public String toString(){
+	public String toString(){
 		return "JarLevel {jar: \""+ (jar==null ? "null" : jar.toURI()) +"\", lvl: \""+ lvl.toString() +"\"}";
 	}
 	//endregion
@@ -74,9 +77,9 @@ public class JarLevel {
 	
 	//region Private methods 
 	/**
-	 * Creates a new file for this level archive if it doesn't exists.
+	 * Reserves a new file for this level archive if it doesn't exists.
 	 */
-	/*OK*/private void createFile(){
+	private void createFile(){
 		if(jar != null && jar.exists())	 return;
 		
 		// first save - need to create the physical file
@@ -90,8 +93,12 @@ public class JarLevel {
 			jar = new File(AddonManager.getLevelsPath(), name);
 		} while( jar.exists() );
 	}
-	/*OK*/private void writeFile() throws Exception {
-		String json = encodeJson(lvl.toJson(), true);
+	/**
+	 * Writes the archive file.
+	 * @throws Exception
+	 */
+	private void writeFile() throws Exception {
+		String json = lvl.toJson();
 		checkWritableFile(json);
 		
 		try {
@@ -106,23 +113,11 @@ public class JarLevel {
 		}
 	}
 	/**
-	 * Get the encoding/decoding string from the specified text.
-	 * @param text the text to encode/decode
-	 * @param encoding true to encode, false to decode
-	 * @return String
+	 * Checks if the specified string can be written on the levels folder. 
+	 * @param json A JSON-formated text
+	 * @throws Exception
 	 */
-	private String encodeJson(String text, boolean encoding){
-		/*int offset = encoding ? -1 : 1;
-		char[] cs = text.toCharArray();
-		StringBuilder sb = new StringBuilder();
-		
-		for (int i=0; i<cs.length; i++) {
-			int code = ((int) cs[i]) + offset;
-			sb.append((char) code);
-		}*/
-		return text; //sb.toString(); le temps du dev
-	}
-	/*OK*/private void checkWritableFile(String json) throws Exception {
+	private void checkWritableFile(String json) throws Exception {
 		File levelsFolder = new File(AddonManager.getLevelsPath());
 		
 		if( !levelsFolder.canWrite() )
@@ -134,7 +129,7 @@ public class JarLevel {
 	 * Get the level data of the current level archive.
 	 * @return String
 	 */
-	/*OK*/private String getLevelContent(){
+	private String getLevelContent(){
 		StringBuilder sb = new StringBuilder();
 		InputStream is = null;
 		int bit;

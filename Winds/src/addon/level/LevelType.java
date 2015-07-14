@@ -3,6 +3,6 @@ package addon.level;
 /**
  * Enumeration of level's types
  */
-public enum Type {
+public enum LevelType {
 	basic, tomoderate, custom, my
 }

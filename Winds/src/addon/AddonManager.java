@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import addon.level.Type;
+import addon.level.LevelType;
 
 
 /**
@@ -143,7 +143,7 @@ public class AddonManager {
 	 * @param levelType the type of the level archives to find
 	 * @return JarLevel[]
 	 */
-	public static JarLevel[] getJarLevelsByType(Type levelType){
+	public static JarLevel[] getJarLevelsByType(LevelType levelType){
 		ArrayList<JarLevel> list = new ArrayList<JarLevel>();
 		for (JarLevel lvl : jarLevelsList)
 			if (lvl.getLevel().getType().equals(levelType))
@@ -256,7 +256,7 @@ public class AddonManager {
 	 * @param type the type of the level archives to find
 	 * @return int[]
 	 */
-	public static int[] getLevelsInstalledIds(Type type){
+	public static int[] getLevelsInstalledIds(LevelType type){
 		JarLevel[] levels = getJarLevelsByType(type);
 		int nbLevels = levels.length;
 		int[] ids = new int[nbLevels];

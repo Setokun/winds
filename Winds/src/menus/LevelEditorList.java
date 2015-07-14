@@ -31,7 +31,7 @@ import addon.JarLevel;
 import addon.JarTheme;
 import addon.Level;
 import addon.level.LevelCreationDialog;
-import addon.level.Type;
+import addon.level.LevelType;
 
 import com.google.gson.Gson;
 
@@ -188,7 +188,7 @@ public class LevelEditorList extends JPanel {
 	 * initialize data for the levels list table
 	 */
 	private void initTableData(){
-		JarLevel[] jars = AddonManager.getJarLevelsByType(Type.my);
+		JarLevel[] jars = AddonManager.getJarLevelsByType(LevelType.my);
 		
 		DefaultTableModel model = new DefaultTableModel(){
 			private static final long serialVersionUID = 218805739056532012L;

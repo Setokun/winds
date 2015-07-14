@@ -28,7 +28,7 @@ public class EditorListener {
 	/**
 	 * Class to listen actions onto "Save" button in EditorGUI.
 	 */
-	/*OK*/public static class SaveListener implements ActionListener {
+	public static class SaveListener implements ActionListener {
 		private EditorGUI gui;
 		
 		/**
@@ -50,7 +50,7 @@ public class EditorListener {
 	/**
 	 * Class to listen actions onto "TimeMax" field in EditorGUI.
 	 */
-	/*OK*/public static class TimeMaxListener extends KeyAdapter implements FocusListener {
+	public static class TimeMaxListener extends KeyAdapter implements FocusListener {
 		private final int maxChar = 3;
 		private JTextField field;
 		
@@ -111,7 +111,7 @@ public class EditorListener {
 	/**
 	 * Class to listen actions onto "Description" field in EditorGUI.
 	 */
-	/*OK*/public static class DescriptionListener extends KeyAdapter implements FocusListener {
+	public static class DescriptionListener extends KeyAdapter implements FocusListener {
 		private final int maxChar = 255;
 		private JTextArea area;
 		
@@ -154,7 +154,7 @@ public class EditorListener {
 	/**
 	 * Class to listen actions onto "Back" button in EditorGUI.
 	 */
-	/*OK*/public static class BackListener implements ActionListener {
+	public static class BackListener implements ActionListener {
 		/**
 		 * Back to the LevelEditorList when the button is performed.
 		 */
@@ -163,16 +163,15 @@ public class EditorListener {
 				"Do you really want to quit the level editor ?\nThe"
 				+ " unsaved modifications are going to be lost.",
 				"Need confirmation", JOptionPane.OK_CANCEL_OPTION);
-			if(response == JOptionPane.OK_OPTION){
+			if(response == JOptionPane.OK_OPTION)
 				Window.affect(new LevelEditorList(),Window.DIM_STANDARD);
-			}
 		}
 	}
 	
 	/**
 	 * Class to listen actions onto "Empty" button in EditorGUI.
 	 */
-	/*OK*/public static class EmptyListener extends MouseAdapter {
+	public static class EmptyListener extends MouseAdapter {
 		/**
 		 * Affect an empty tile to the current tile when the button is performed.
 		 */
@@ -184,7 +183,7 @@ public class EditorListener {
 	/**
 	 * Class to listen actions onto legend tile in EditorGUI.
 	 */
-	/*OK*/public static class TileLegendListener extends MouseAdapter {
+	public static class TileLegendListener extends MouseAdapter {
 		/**
 		 * Update the current tile from the clicked legend tile.
 		 */
@@ -197,7 +196,7 @@ public class EditorListener {
 	/**
 	 * Class to listen actions onto matrix tile in EditorGUI.
 	 */
-	/*OK*/public static class TileMatrixListener extends MouseAdapter {
+	public static class TileMatrixListener extends MouseAdapter {
 		private final int delay = 200;	// milliseconds
 		
 		/**

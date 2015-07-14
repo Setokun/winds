@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.border.SoftBevelBorder;
 
 import account.Profile;
-import addon.level.Type;
+import addon.level.LevelType;
 import display.Window;
 
 public class LevelCategorySelector extends JPanel{
@@ -33,9 +33,7 @@ public class LevelCategorySelector extends JPanel{
      * constructor of the Level Category Selector GUI
      */
 	public LevelCategorySelector() {
-        //AddonManager.getJarLevels();
 		this.setLayout(new BorderLayout());
-		
 		this.isModoAdmin = Profile.current.getUserType().equals("administrator") 
         				|| Profile.current.getUserType().equals("moderator");
 		
@@ -52,11 +50,11 @@ public class LevelCategorySelector extends JPanel{
     	createMiddle();
     }
 
+	
 	/**
 	 * create the north section of this GUI
 	 */
 	private void createNorth() {
-		
 		jNorthWest = new JPanel();
 		FlowLayout flNorthWest = new FlowLayout();
 		flNorthWest.setHgap(20);
@@ -71,7 +69,6 @@ public class LevelCategorySelector extends JPanel{
 		jNorthEast.setLayout(flNorthEast);
 		jNorthEast.add(jBtnBack);
 		
-		
 		north = new JPanel();
 		BorderLayout northLayout = new BorderLayout();
 		north.setLayout(northLayout);
@@ -84,14 +81,12 @@ public class LevelCategorySelector extends JPanel{
 	 * create the middle section of this GUI
 	 */
 	private void createMiddle() {
-		
 		middle = new JPanel();
 		
 		FlowLayout flMiddle = new FlowLayout();
 		flMiddle.setHgap(30);
 		flMiddle.setVgap(30);
 		middle.setLayout(flMiddle);
-		
 		
 		center = new JPanel();
 		BorderLayout gridLayout = new BorderLayout();
@@ -106,9 +101,9 @@ public class LevelCategorySelector extends JPanel{
 		
 		middle.add(center);
     	this.add(middle, BorderLayout.CENTER);
-    	
 	}
 
+	
 	/**
 	 * initialize "Basic Levels" button
 	 */
@@ -135,7 +130,7 @@ public class LevelCategorySelector extends JPanel{
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
-	}
+	}	
 	/**
 	 * initialize "Custom Levels" button
 	 */
@@ -162,7 +157,7 @@ public class LevelCategorySelector extends JPanel{
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
-	}
+	}	
 	/**
 	 * initialize "My Levels" button
 	 */
@@ -189,7 +184,7 @@ public class LevelCategorySelector extends JPanel{
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
-	}
+	}	
 	/**
 	 * initialize "Levels to Moderate" button
 	 */
@@ -217,9 +212,6 @@ public class LevelCategorySelector extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
-	
-
-
 	/**
 	 * initialize "Back" button
 	 */
@@ -246,7 +238,7 @@ public class LevelCategorySelector extends JPanel{
 			}
 			public void mouseClicked(MouseEvent e) {}
 		});
-	}
+	}	
 	/**
 	 * initialize GUI title
 	 */
@@ -267,6 +259,7 @@ public class LevelCategorySelector extends JPanel{
 		}
 	}
 
+	
 	/**
 	 * determines what action has to be done when clicking on the "Back" button
 	 * @param evt
@@ -279,28 +272,28 @@ public class LevelCategorySelector extends JPanel{
      * @param evt
      */
 	private void jBtnBasicLevelsActionPerformed(ActionEvent evt) {
-		Window.affect(new LevelSelector(Type.basic, 0),Window.DIM_STANDARD);
+		Window.affect(new LevelSelector(LevelType.basic, 0),Window.DIM_STANDARD);
     }                                               
     /**
      * determines what action has to be done when clicking on the "Custom Levels" button
      * @param evt
      */
     private void jBtnCustomLevelsActionPerformed(ActionEvent evt) {
-		Window.affect(new LevelSelector(Type.custom, 0),Window.DIM_STANDARD);
+		Window.affect(new LevelSelector(LevelType.custom, 0),Window.DIM_STANDARD);
     }                                                
     /**
      * determines what action has to be done when clicking on the "My Levels" button
      * @param evt
      */
     private void jBtnMyLevelsActionPerformed(ActionEvent evt) {
-		Window.affect(new LevelSelector(Type.my, 0),Window.DIM_STANDARD);
+		Window.affect(new LevelSelector(LevelType.my, 0),Window.DIM_STANDARD);
     }                                            
     /**
      * determines what action has to be done when clicking on the "Levels to Moderate" button
      * @param evt
      */
     private void jBtnLevelsToModerateActionPerformed(ActionEvent evt) {
-		Window.affect(new LevelSelector(Type.tomoderate, 0),Window.DIM_STANDARD);
+		Window.affect(new LevelSelector(LevelType.tomoderate, 0),Window.DIM_STANDARD);
     }                                                    
 
 }

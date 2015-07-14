@@ -16,8 +16,8 @@ import menus.LevelSelector;
 import account.Profile;
 import addon.AddonManager;
 import addon.BufferedImageLoader;
-import addon.level.Mode;
-import addon.level.Type;
+import addon.level.LevelMode;
+import addon.level.LevelType;
 import audio.AudioPlayer;
 import controls.KeyInput;
 import controls.MouseInput;
@@ -39,7 +39,7 @@ public class Game extends Canvas implements Runnable{
 	public static int delayAfterFinished;
 	private static boolean pause, running, finished, defeat, scoreUploaded, finishedLoading;;
 	private static BufferedImage[] instance;
-	private static Type typeLvl;
+	private static LevelType typeLvl;
 	
 	public final String TITLE = "Winds";
 	private BufferedImage bubulle, gameoverImage, victory, bg = null, pauseImage = null;
@@ -53,7 +53,7 @@ public class Game extends Canvas implements Runnable{
 	 * @param typeLevel
 	 * @param numPage
 	 */
-	public Game(Type typeLevel, int numPage){
+	public Game(LevelType typeLevel, int numPage){
 		typeLvl = typeLevel;
 		numPageFrom = numPage;
 		this.setBackground(Color.BLACK);
@@ -67,7 +67,6 @@ public class Game extends Canvas implements Runnable{
 	 * Initialize variables and load every resources to launch the game
 	 */
 	private void init(){
-		
 		initializeFont();
 		
 		timeMax = AddonManager.getLoadedJarLevel().getLevel().getTimeMax();
@@ -85,9 +84,8 @@ public class Game extends Canvas implements Runnable{
 		
 	    instance = new SpriteSheet(AddonManager.getLoadedJarTheme().getSprites128(), 128).getSprites();
 		
-		
 		/////////////// sound initialization ///////////////
-	    if(AddonManager.getLoadedJarLevel().getLevel().getMode() == Mode.boss){
+	    if(AddonManager.getLoadedJarLevel().getLevel().getMode() == LevelMode.boss){
 	    	bgMusic = new AudioPlayer("/resources/musics/dragon.mp3", true);
 	    }else
 	    {
@@ -114,8 +112,7 @@ public class Game extends Canvas implements Runnable{
 	 * launch the Game thread
 	 */
 	public synchronized void start(){
-		if(running)
-			return;
+		if(running) return;
 		
 		running = true;
 		thread = new Thread(this);
@@ -131,9 +128,7 @@ public class Game extends Canvas implements Runnable{
 		running = false;
 		try {
 			thread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		} catch (InterruptedException e) {}
 		System.exit(1);
 	}
 	
@@ -152,8 +147,6 @@ public class Game extends Canvas implements Runnable{
 		int updates = 0;
 		int frames = 0;
 		long timer = System.currentTimeMillis();
-		
-		
 		
 		while(running){
 			long now = System.nanoTime();
@@ -179,7 +172,6 @@ public class Game extends Canvas implements Runnable{
 					updates = 0;
 					frames = 0;
 				}
-				
 			}
 		}
 		stop();
@@ -191,18 +183,15 @@ public class Game extends Canvas implements Runnable{
 		if(finishedLoading && !getPause() && !defeat){
 			handler.tick();
 			
-			for(int i = 0; i < handler.objects.size(); i++){
-				if(handler.objects.get(i).getId() == ObjectId.PLAYER){
+			for(int i = 0; i < handler.objects.size(); i++)
+				if(handler.objects.get(i).getId() == ObjectId.PLAYER)
 					cam.tick(handler.objects.get(i));
-				}
-			}
 		}
 	}
 	/**
 	 * diplays all that has to be displayed : handler, menu screen, victory or gameover screens, etc...
 	 */
 	private void render(){
-		
 		this.requestFocus();
 		
 		BufferStrategy bs = this.getBufferStrategy();
@@ -210,11 +199,9 @@ public class Game extends Canvas implements Runnable{
 		Graphics g = bs.getDrawGraphics();
 		Graphics2D g2d = (Graphics2D) g;
 		
-		
 		g.setFont(new Font("bubble & soap", 0, 36));
 		g.setColor(Color.WHITE);
 		
-
 		if(pause){
 			g.setColor(Color.red);
 			g.drawImage(pauseImage, 0, 0, this);
@@ -233,12 +220,9 @@ public class Game extends Canvas implements Runnable{
 			handler.render(g);
 			g2d.translate( -cam.getX(), -cam.getY());
 			
-			
 			// draw elapsed time
-			if((timeMax - seconds) < 10)
-				g.setColor(Color.red);
-			else
-				g.setColor(Color.white);
+			if((timeMax - seconds) < 10) g.setColor(Color.red);
+			else						 g.setColor(Color.white);
 			g.drawString((timeMax - seconds)/60 + ":" + (((timeMax - seconds)%60 < 10)? "0"+(timeMax - seconds)%60:(timeMax - seconds)%60), 32, 32);
 			
 			// rendering the lifes count
@@ -247,7 +231,6 @@ public class Game extends Canvas implements Runnable{
 			//displaying the score
 			g.setColor(Color.white);
 			g.drawString(""+score.getScore(), WIDTH - 150, 32);
-			
 			
 			if(player.getLife() <= 0 || (timeMax - seconds) == 0){
 				if(!defeat){
@@ -273,14 +256,12 @@ public class Game extends Canvas implements Runnable{
 	 */
 	private void loadLevelByMatrix(int[][] elements){
 		int[][][] collisionsList = AddonManager.getLoadedJarTheme().getCollisions();
-		
 		int number;
 		
 		for(int i = 0; i < 60; i++){
 			for(int j = 0; j < 60; j++){
 				
 				number = elements[i][j];
-				
 				if (number == 0) {
 					handler.addObject(new Block(j*128, i*128, number, null));
 					continue;
@@ -300,7 +281,6 @@ public class Game extends Canvas implements Runnable{
 				handler.addObject(new Block(j*128, i*128, number, collisions));
 			}
 		}
-		
 	}
 
 	/**
@@ -319,16 +299,14 @@ public class Game extends Canvas implements Runnable{
 		pauseImage = loader.loadImage("/resources/background/menu_pause.png");
 		gameoverImage = loader.loadImage("/resources/background/gameover.png");
 		victory = loader.loadImage("/resources/background/victory.png");
-		//life sprite
 		bubulle = new SpriteSheet(loader.loadImage("/resources/collectables/bubulle.png"), 25).grabImage(0, 0);
 	}
 	/**
 	 * determinates what has to be done concerning level's end
 	 */
 	private void endLevel() {
-		
-		if(!getPause() && player.getLife() > 0 && !finished && !defeat)
-		{
+
+		if(!getPause() && player.getLife() > 0 && !finished && !defeat){
 			seconds++;
 			score.setTime(seconds);
 		}
@@ -336,8 +314,7 @@ public class Game extends Canvas implements Runnable{
 			if(!scoreUploaded){
 				scoreUploaded = true;
 				int id = AddonManager.getLoadedJarLevel().getLevel().getIdDB();
-				if(id != 0)
-					score.saveScore();
+				if(id != 0) score.saveScore();
 			}
 			delayVictory--;
 		}
