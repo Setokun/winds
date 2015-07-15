@@ -207,7 +207,7 @@ public class Theme extends ThemeBase {
 		switch(id){
 		
 		case 2:
-			handler.addObject(new Arrival(x+8, y+40, ObjectId.ARRIVAL));
+			handler.addObject(new Arrival(x+24, y, ObjectId.ARRIVAL));
 			break;
 		case 3:
 			handler.addObject(new Collectable(x+16, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
