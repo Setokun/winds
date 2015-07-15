@@ -42,7 +42,7 @@ public class Theme extends ThemeBase {
 		
 		compatibility.put(new Point(1,0), new Integer[]{2,3,4,6,10,11,12,13,15,17,21,22,23,24});
 		compatibility.put(new Point(1,1), new Integer[]{1,2,4,6,16,17,21,22});
-		compatibility.put(new Point(1,2), new Integer[]{11,13,14});
+		compatibility.put(new Point(1,2), new Integer[]{3,11,13,14});
 		compatibility.put(new Point(1,3), new Integer[]{1,2,3,5,6,7,9,10,14,15,16,17,18,19,20,21});
 
 		compatibility.put(new Point(2,0), new Integer[]{2,3,4,5,6,10,15,17,19,20,21});
@@ -50,7 +50,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(2,2), new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24});
 		compatibility.put(new Point(2,3), new Integer[]{1,2,3,5,6,7,9,10,14,15,15,17,18,19,20,21});
 
-		compatibility.put(new Point(3,0), new Integer[]{2,3,4,6,15,17,21});
+		compatibility.put(new Point(3,0), new Integer[]{1,2,3,4,6,10,15,16,17,21});
 		compatibility.put(new Point(3,1), new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24});
 		compatibility.put(new Point(3,2), new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24});
 		compatibility.put(new Point(3,3), new Integer[]{2,3,9,10,14,17,18,19,20,21});
@@ -61,7 +61,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(4,3), new Integer[]{1,2,3,5,6,7,9,10,14,15,16,17,18,19,20,21});
 
 		compatibility.put(new Point(5,0), new Integer[]{2,3,4,6,10,11,12,13,15,17,21,22,23,24});
-		compatibility.put(new Point(5,1), new Integer[]{2,4,6,16,17,21,22});
+		compatibility.put(new Point(5,1), new Integer[]{1,2,4,6,16,17,21,22});
 		compatibility.put(new Point(5,2), new Integer[]{2,18,19,21,24});
 		compatibility.put(new Point(5,3), new Integer[]{2,3,4,8,9,10,11,12,13,14,17,18,19,20,21,22,23,24});
 
@@ -80,7 +80,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(8,2), new Integer[]{9,17});
 		compatibility.put(new Point(8,3), new Integer[]{2,3,4,8,9,10,11,12,13,14,17,18,19,20,21,22,23,24});
 
-		compatibility.put(new Point(9,0), new Integer[]{7,8,14,18});
+		compatibility.put(new Point(9,0), new Integer[]{7,8,9,14,18});
 		compatibility.put(new Point(9,1), new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24});
 		compatibility.put(new Point(9,2), new Integer[]{9,17});
 		compatibility.put(new Point(9,3), new Integer[]{2,3,4,8,9,10,11,12,13,14,17,18,19,20,21,22,23,24});
@@ -90,7 +90,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(10,2), new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24});
 		compatibility.put(new Point(10,3), new Integer[]{2,3,9,10,14,17,18,19,20,21});
 
-		compatibility.put(new Point(11,0), new Integer[]{2,3,4,6,10,15,16,17,21});
+		compatibility.put(new Point(11,0), new Integer[]{1,2,3,4,6,10,15,16,17,21});
 		compatibility.put(new Point(11,1), new Integer[]{5,7,8,9,13,14,18,19,20,23,24});
 		compatibility.put(new Point(11,2), new Integer[]{1,4,5,6,7,8,15,16,22,23});
 		compatibility.put(new Point(11,3), new Integer[]{2,3,9,10,14,17,18,19,20,21});
@@ -111,13 +111,13 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(14,3), new Integer[]{2,3,9,10,11,12,13,14,17,18,19,20,21,24});
 
 		compatibility.put(new Point(15,0), new Integer[]{2,3,4,6,10,11,12,15,16,17,21,22});
-		compatibility.put(new Point(15,1), new Integer[]{2,4,6,16,17,21,22});
+		compatibility.put(new Point(15,1), new Integer[]{1,2,4,6,16,17,21,22});
 		compatibility.put(new Point(15,2), new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24});
 		compatibility.put(new Point(15,3), new Integer[]{2,3,9,10,14,17,18,19,20,21});
 
 		compatibility.put(new Point(16,0), new Integer[]{2,3,4,6,10,11,12,13,15,17,21,22,23,24});
 		compatibility.put(new Point(16,1), new Integer[]{2,4,6,16,17,21,22});
-		compatibility.put(new Point(16,2), new Integer[]{11,13,14});
+		compatibility.put(new Point(16,2), new Integer[]{3,11,13,14});
 		compatibility.put(new Point(16,3), new Integer[]{2,3,5,6,7,9,10,14,15,16,17,18,19,20,21});
 
 		compatibility.put(new Point(17,0), new Integer[]{7,8,9,14,18});
@@ -216,32 +216,32 @@ public class Theme extends ThemeBase {
 			handler.addObject(new Collectable(x+32, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
 			break;
 		case 4:
+			handler.addObject(new Collectable(x,    y, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+16, y, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x,    y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
 			handler.addObject(new Collectable(x+16, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+48, y, CollectableId.COIN, ObjectId.COLLECTABLE));
 			handler.addObject(new Collectable(x+32, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
-			handler.addObject(new Collectable(x+16, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
-			handler.addObject(new Collectable(x+32, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
 			handler.addObject(new Collectable(x+48, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
-			handler.addObject(new Collectable(x+64, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
-			handler.addObject(new Collectable(x+48, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
-			handler.addObject(new Collectable(x+64, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x,    y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+16, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x,    y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
 			handler.addObject(new Collectable(x+16, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+48, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
 			handler.addObject(new Collectable(x+32, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
-			handler.addObject(new Collectable(x+16, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
-			handler.addObject(new Collectable(x+32, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
 			handler.addObject(new Collectable(x+48, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
-			handler.addObject(new Collectable(x+64, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
-			handler.addObject(new Collectable(x+48, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
-			handler.addObject(new Collectable(x+64, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
 			break;
 		case 5:
-			handler.addObject(new Collectable(x+64, y+64, CollectableId.LIFE, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+64, CollectableId.LIFE, ObjectId.COLLECTABLE));
 			break;
 		case 6:
 			handler.addObject(new Collectable(x+16, y+16, CollectableId.VALUABLE, ObjectId.COLLECTABLE));
 			break;
 		case 7:
 			handler.addObject(new Collectable(x+16, y+16, CollectableId.VALUABLE, ObjectId.COLLECTABLE));
-			handler.addObject(new Collectable(x+64, y+64, CollectableId.VALUABLE, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+64, y+16, CollectableId.VALUABLE, ObjectId.COLLECTABLE));
 			break;
 		case 8:
 			handler.addObject(new Enemy(x   , y   , ObjectId.ENEMY, rand.nextInt(100)+50, Direction.RIGHT));
