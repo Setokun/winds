@@ -31,7 +31,7 @@ import addon.JarLevel;
 import addon.JarTheme;
 import addon.Level;
 import addon.level.LevelCreationDialog;
-import addon.level.Type;
+import addon.level.LevelType;
 
 import com.google.gson.Gson;
 
@@ -49,7 +49,7 @@ public class LevelEditorList extends JPanel {
 	
 	
 	//region Constructor 
-	/*OK*/public LevelEditorList() {
+	public LevelEditorList() {
 		initComponents();
 		initComponentsConfig();
 		initStructure();
@@ -63,7 +63,10 @@ public class LevelEditorList extends JPanel {
 	//endregion
 	
 	//region Initialisation 
-	/*OK*/private void initComponents(){
+	/**
+	 * initialize components
+	 */
+	private void initComponents(){
 		title = new JLabel();
 		btnNewLevel = new JButton();
 		btnBack = new JButton();
@@ -71,10 +74,13 @@ public class LevelEditorList extends JPanel {
 		scroll = new JScrollPane();
 		groupLayout = new GroupLayout(this);
 	}
-	/*OK*/private void initComponentsConfig() {
+	/**
+	 * initialize title and buttons
+	 */
+	private void initComponentsConfig() {
     	try {
-    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,18F);
-    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,18F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,36F);
 		} catch (FontFormatException | IOException e) {
 			windsPolice18 = new Font ("Serif", Font.BOLD, 18);
     		windsPolice36 = new Font ("Serif", Font.BOLD, 36);
@@ -118,7 +124,10 @@ public class LevelEditorList extends JPanel {
 		
 		scroll.setViewportView(table);
 	}
-	/*OK*/private void initStructure() {
+	/**
+	 * initialize GUI structure
+	 */
+	private void initStructure() {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -151,6 +160,9 @@ public class LevelEditorList extends JPanel {
 					.addContainerGap(149, Short.MAX_VALUE))
 		);
 	}
+	/**
+	 * initialize levels list table
+	 */
 	private void initTableConfig(){
 		table.getTableHeader().setBackground(new Color(23,182,255));
 		table.getTableHeader().setFont(windsPolice18);
@@ -172,8 +184,11 @@ public class LevelEditorList extends JPanel {
 		    }  
 		} );
 	}
-	/*OK*/private void initTableData(){
-		JarLevel[] jars = AddonManager.getJarLevelsByType(Type.my);
+	/**
+	 * initialize data for the levels list table
+	 */
+	private void initTableData(){
+		JarLevel[] jars = AddonManager.getJarLevelsByType(LevelType.my);
 		
 		DefaultTableModel model = new DefaultTableModel(){
 			private static final long serialVersionUID = 218805739056532012L;
@@ -221,14 +236,23 @@ public class LevelEditorList extends JPanel {
 	//endregion
 	
 	//region Methods 
-	/*OK*/private JarLevel getJarLevelAtPoint(Point p){
+	/**
+	 * returns the JarLevel hidden in a row of the levels list item
+	 * @param p the position to identify what JarLevel is required
+	 * @return JarLevel
+	 */
+	private JarLevel getJarLevelAtPoint(Point p){
 		if(p == null)	return null;
 		return (JarLevel) table.getValueAt((int) p.x, (int) p.y);
 	}
 	//endregion
 	
 	//region Button Events 
-	/*OK*/private void btnNewClicked(ActionEvent evt) {
+	/**
+	 * determines what action has to be done when clicking on "New Level" button
+	 * @param evt
+	 */
+	private void btnNewClicked(ActionEvent evt) {
 		// requirements
 		LevelCreationDialog lcd = LevelCreationDialog.show(null);
 		if(lcd.canceled())  return;
@@ -246,21 +270,30 @@ public class LevelEditorList extends JPanel {
 		Level lvl = new Level(levelName, themeUsed.getIdDB());
 		
 		// level editor opening
-		Window.resize(Window.DIM_EDITOR);
-		Window.affect(new EditorGUI(new JarLevel(lvl), themeUsed));
+		Window.affect(new EditorGUI(new JarLevel(lvl), themeUsed),Window.DIM_EDITOR);
 	}
-	/*OK*/private void btnBackClicked(ActionEvent evt) {
-		Window.resize(Window.DIM_STANDARD);
-		Window.affect(new MainMenu());
+	/**
+	 * determines what action has to be done when clicking on "Back" button
+	 * @param evt
+	 */
+	private void btnBackClicked(ActionEvent evt) {
+		Window.affect(new MainMenu(),Window.DIM_STANDARD);
 	}
-	/*OK*/private void btnEditClicked(ActionEvent evt){
+	/**
+	 * determines what action has to be done when clicking on "Edit" button
+	 * @param evt
+	 */
+	private void btnEditClicked(ActionEvent evt){
 		JarLevel jarL = getJarLevelAtPoint((Point) evt.getSource());
 		JarTheme jarT = AddonManager.getJarThemeByID(jarL.getLevel().getIdTheme());
 		
-		Window.resize(Window.DIM_EDITOR);
-		Window.affect(new EditorGUI(jarL, jarT));
+		Window.affect(new EditorGUI(jarL, jarT),Window.DIM_EDITOR);
 	}
-	/*OK*/private void btnDuplicateClicked(ActionEvent evt){
+	/**
+	 * determines what action has to be done when clicking on "Duplicate" button
+	 * @param evt
+	 */
+	private void btnDuplicateClicked(ActionEvent evt){
 		JarLevel jarL = getJarLevelAtPoint((Point) evt.getSource());
 		JarTheme jarT = AddonManager.getJarThemeByID(jarL.getLevel().getIdTheme());
 		
@@ -306,7 +339,11 @@ public class LevelEditorList extends JPanel {
 				"Level duplicated.",
 				"Duplicated", JOptionPane.INFORMATION_MESSAGE);
 	}
-	/*OK*/private void btnDeleteClicked(ActionEvent evt){
+	/**
+	 * determines what action has to be done when clicking on "Delete" button
+	 * @param evt
+	 */
+	private void btnDeleteClicked(ActionEvent evt){
 		// requirements
 		Point p = (Point) evt.getSource();
 		int response = JOptionPane.showConfirmDialog(this, "Are you sure to delete this level ?",
@@ -334,7 +371,11 @@ public class LevelEditorList extends JPanel {
 		JOptionPane.showMessageDialog(this, "Deletion succeeded.",
 			"Deleted", JOptionPane.INFORMATION_MESSAGE);
 	}
-	/*OK*/private void btnUploadClicked(ActionEvent evt){
+	/**
+	 * determines what action has to be done when clicking on "Upload" button
+	 * @param evt
+	 */
+	private void btnUploadClicked(ActionEvent evt){
 		Point p = (Point) evt.getSource();
 		if(table.getModel().getValueAt(p.x, 5).equals("Uploaded")) return;
 		

@@ -1,6 +1,5 @@
 package menus;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
@@ -34,7 +33,9 @@ public class Login extends JPanel{
     private GroupLayout layout;
     private int titleMargin;
 	
-	
+	/**
+	 * constructor of the Login GUI
+	 */
 	public Login() {
 		
 		initializeFont();
@@ -56,7 +57,9 @@ public class Login extends JPanel{
         
         this.setLayout(layout);
     }
-
+	/**
+	 * initialize text fields
+	 */
     private void initFields() {
     	jLblLogin = new JLabel("Login");
         jLblLogin.setFont(windsPolice24);
@@ -67,7 +70,9 @@ public class Login extends JPanel{
         jLblPwd.setFont(windsPolice24);
         jPwdPassword = new JPasswordField();
 	}
-
+    /**
+     * initialize the vertical alignment of elements inside the GroupLayout
+     */
 	private void initVGroup() {
     	layout.setVerticalGroup(
             	layout.createParallelGroup(Alignment.LEADING)
@@ -89,7 +94,9 @@ public class Login extends JPanel{
             			.addContainerGap(220, Short.MAX_VALUE))
             );
 	}
-
+	/**
+	 * initialize the horizontal alignment of elements inside the GroupLayout
+	 */
 	private void initHGroup() {
     	layout.setHorizontalGroup(
             	layout.createParallelGroup(Alignment.TRAILING)
@@ -115,7 +122,9 @@ public class Login extends JPanel{
             			.addGap(214))
             );
 	}
-
+	/**
+	 * initialize "Log On" button
+	 */
 	private void initLogOnButton() {
     	jBtnLogOn = new JButton(); 
         jBtnLogOn.setFont(windsPolice24);
@@ -139,7 +148,9 @@ public class Login extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
-
+	/**
+	 * initialize "Quit" button
+	 */
 	private void initQuitButton() {
     	jBtnQuit = new JButton();
     	jBtnQuit.setFont(windsPolice24);
@@ -163,22 +174,30 @@ public class Login extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 		});
 	}
-
+	/**
+	 * initialize custom font
+	 */
 	private void initializeFont() {
     	try {
-    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
-    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,36F);
+    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,24F);
+    		windsPolice36 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,36F);
 		} catch (FontFormatException | IOException e) {
 			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
     		windsPolice36 = new Font ("Serif", Font.BOLD, 36);
 		}
 	}
-
-	private void jBtnQuitActionPerformed(java.awt.event.ActionEvent evt) {
+	/**
+	 * determines what action has to be done when clicking on "Quit" button
+	 * @param evt
+	 */
+	private void jBtnQuitActionPerformed(ActionEvent evt) {
         System.exit(1);
     }                                        
-
-    private void jBtnLogOnActionPerformed(java.awt.event.ActionEvent evt) {
+	/**
+	 * determines what action has to be done when clicking on "Log On" button
+	 * @param evt
+	 */
+    private void jBtnLogOnActionPerformed(ActionEvent evt) {
     	String email = "", password = "";
     	email = jTxtLogin.getText();
     	password = String.valueOf(jPwdPassword.getPassword());
@@ -186,22 +205,20 @@ public class Login extends JPanel{
     	if(email.equals("") || password.equals(""))
     		JOptionPane.showMessageDialog(null, "Missing email or password !");
     	else {
-    		Window.profile = Profile.connect(email, password);
+    		Profile.current = Profile.connect(email, password);
     		
-    		if(Window.profile == null){
+    		if(Profile.current == null){
     			int result = Profile.insertOrUpdateProfile(email, password);
     			if(result == 2){
     				JOptionPane.showMessageDialog(null, "Bad creditentials, please try again !");
     			}
     			else if(result == 1 || result == 3){
-    				Window.profile = Profile.connect(email, password);
-    				Window.resize(new Dimension(800, 550));
-    	    		Window.affect(new MainMenu());
+    				Profile.current = Profile.connect(email, password);
+    	    		Window.affect(new MainMenu(),Window.DIM_STANDARD);
     			}
 	    		
 	    	}else{
-	    		Window.resize(new Dimension(800, 550));
-	    		Window.affect(new MainMenu());
+	    		Window.affect(new MainMenu(),Window.DIM_STANDARD);
 	    	}
     	}
     }                                         

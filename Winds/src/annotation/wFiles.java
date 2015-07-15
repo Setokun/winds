@@ -8,12 +8,17 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 
+
+/**
+ * Annotation used in Winds theme archives.
+ */
 public @interface wFiles {
 	String music();
 	String logo();
+	String logoboss();
 	String background();
 	String interactions();
 	String sprites64();
 	String sprites128();
-	String spritesBoss();
+	String spritesCollectable();
 }

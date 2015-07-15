@@ -10,48 +10,71 @@ import javax.swing.JFrame;
 import menus.Login;
 import menus.MainMenu;
 import account.Profile;
+import database.DBClass;
 
-
+/**
+ * Class used to centralize and hold all JPanel and Canvas of the Winds application.
+ */
 public class Window {
 	public static final Dimension DIM_STANDARD = new Dimension(800, 550);
 	public static final Dimension DIM_EDITOR = new Dimension(1024, 600);
+	public static final Dimension DIM_SPLASH = new Dimension(400, 300);
 	public static final boolean debug = false;
 	
-	public static Profile profile = null;
 	private static JFrame main;
 	
+	/**
+	 * Forbid to instantiate by the default way.
+	 */
+	private Window(){}
 	
-	public static void affect(Component c){
-		main.remove(main.getContentPane().getComponent(0));
+	/**
+	 * affects a new component to the main JFrame and resizes it 
+	 * @param c the component to affect into the JFrame
+	 * @param dim the new dimension
+	 */
+	public static void affect(Component c, Dimension dim){
+		if(main.getContentPane().getComponentCount() > 0) main.getContentPane().removeAll();
 		main.add(c);
-		main.setVisible(true);
-	}
-	
-	public static void resize(Dimension dim){
+		main.toFront();
 		main.setSize(dim);
-		main.setLocationRelativeTo(null);
 		main.setVisible(true);
+		main.revalidate();
 	}
-	
-	public static void main(String[] args) {
+	/**
+	 * returns the main frame
+	 * @return JFrame
+	 */
+	public static JFrame getFrame(){
+		return main;
+	}
+	/**
+	 * Builds the Winds main frame.<br>
+	 * This method must be called only by the splash screen.
+	 */
+	public static void init(){
 		main = new JFrame("Winds");
 		main.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		main.addWindowListener(new CloseWindowEvent());
-		main.setSize(new Dimension(800, 550));
+		main.setSize(DIM_STANDARD);
 		main.setResizable(false);
 		main.setLocationRelativeTo(null);
 		
-		try {
-			main.setIconImage(ImageIO.read(Window.class.getClass().getResource("/bubulle.png")));
-		} catch (IOException e) { e.printStackTrace(); }
+		if(!DBClass.existStructure()){
+			DBClass.createStructures();
+			DBClass.createStartData();
+		}
 		
-		profile = Profile.getCurrentPlayer();
-		main.add(profile == null ? new Login() : new MainMenu());
-		main.setVisible(true);		
+		try {
+			main.setIconImage(ImageIO.read(Window.class.getClass().getResource("/resources/collectables/bubulle.png")));
+		} catch (IOException e) {}
 	}
-	
-	public static JFrame getFrame(){
-		return main;
+	/**
+	 * Displays the main frame.<br>
+	 * This method must be called only by the splash screen.
+	 */
+	public static void start(){
+		affect( Profile.getCurrentPlayer() == null ? new Login() : new MainMenu(), DIM_STANDARD);
 	}
 	
 }

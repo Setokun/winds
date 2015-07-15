@@ -5,16 +5,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import addon.BufferedImageLoader;
+import javax.imageio.ImageIO;
+
 import addon.ThemeBase;
 import annotation.wFiles;
 import annotation.wTheme;
+import core.Animation;
 import core.Arrival;
+import core.Blower;
 import core.Collectable;
 import core.CollectableId;
 import core.CollisionBox;
@@ -28,9 +32,9 @@ import display.Window;
 
 
 @wTheme(idDB = 3, name = "Brambles", creator = "admin", date = "2015-05-17", description = "Brambles Theme")
-@wFiles(background = "background.jpg", music = "Winds_Ice_Cavern.mp3", logo = "logo.png",
+@wFiles(background = "background.jpg", music = "brambles.mp3", logo = "logo.png",
 		interactions = "sprites/interactions.png", sprites64 = "sprites/64.png",
-		sprites128 = "sprites/128.png", spritesBoss = "sprites/boss.png")
+		sprites128 = "sprites/128.png", spritesCollectable = "sprites/collectable.png", logoboss = "logo_boss.png")
 
 public class Theme extends ThemeBase {
 	protected Map<Point, Integer[]> initSpriteCompatibility(){
@@ -89,7 +93,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(11,0), new Integer[]{3,11,16,21});
 		compatibility.put(new Point(11,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
 		compatibility.put(new Point(11,2), new Integer[]{5,7,11,14});
-		compatibility.put(new Point(11,3), new Integer[]{2,4,5,11,12,13,14,17,18,20,21});
+		compatibility.put(new Point(11,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
 
 		compatibility.put(new Point(12,0), new Integer[]{4,12,17,19});
 		compatibility.put(new Point(12,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
@@ -104,7 +108,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(14,0), new Integer[]{3,11,16,18,21});
 		compatibility.put(new Point(14,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
 		compatibility.put(new Point(14,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(14,3), new Integer[]{2,4,5,11,12,13,14,17,18,20,21});
+		compatibility.put(new Point(14,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
 
 		compatibility.put(new Point(15,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,20});
 		compatibility.put(new Point(15,1), new Integer[]{16});
@@ -175,81 +179,89 @@ public class Theme extends ThemeBase {
 	protected String[] initInteractionTips(){
 		return new String[]{
 			"Departure", "Arrival", "4 coins", "16 coins",
-			"1 life", "1 flower", "2 flowers", "1 mob",
-			"3 mobs", "3 mobs", "3 mobs", "3 mobs"
+			"1 life", "1 flower", "2 flowers", "1 dragonfly",
+			"3 dragonflies", "3 dragonflies", "3 dragonflies", "3 dragonflies", 
+			"right blower", "down blower", "left blower", "up blower"
 		};
 	}
 	public void loadInteractions(int x, int y, int id, Handler handler) {
 		Random rand = new Random();
 		switch(id){
 		
-		case 1:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
-			break;
 		case 2:
-			handler.addObject(new Arrival(x+8, y-24, ObjectId.Arrival));
+			handler.addObject(new Arrival(x+8, y-24, ObjectId.ARRIVAL));
 			break;
 		case 3:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+16, y+32, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+32, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+16, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
 			break;
 		case 4:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+16, y+32, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+32, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+48, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, y+16, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+48, y+32, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, y+32, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+16, y+48, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+48, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+16, y+64, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+32, y+64, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+48, y+48, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, y+48, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+48, y+64, CollectableId.coin, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, y+64, CollectableId.coin, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+16, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+48, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+64, y+16, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+48, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+64, y+32, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+16, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+16, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+32, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+48, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+64, y+48, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+48, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.COIN, ObjectId.COLLECTABLE));
 			break;
 		case 5:
-			handler.addObject(new Collectable(x+64, x+64, CollectableId.life, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.LIFE, ObjectId.COLLECTABLE));
 			break;
 		case 6:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.VALUABLE, ObjectId.COLLECTABLE));
 			break;
 		case 7:
-			handler.addObject(new Collectable(x+16, y+16, CollectableId.honey, ObjectId.Collectable));
-			handler.addObject(new Collectable(x+64, y+64, CollectableId.honey, ObjectId.Collectable));
+			handler.addObject(new Collectable(x+16, y+16, CollectableId.VALUABLE, ObjectId.COLLECTABLE));
+			handler.addObject(new Collectable(x+64, y+64, CollectableId.VALUABLE, ObjectId.COLLECTABLE));
 			break;
 		case 8:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			handler.addObject(new Enemy(x   , y   , ObjectId.ENEMY, rand.nextInt(100)+50, Direction.RIGHT));
 			break;
 		case 9:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
-			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
-			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.right));
+			handler.addObject(new Enemy(x   , y   , ObjectId.ENEMY, rand.nextInt(100)+50, Direction.RIGHT));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.RIGHT));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.RIGHT));
 			break;
 		case 10:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
-			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
-			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.down));
+			handler.addObject(new Enemy(x   , y   , ObjectId.ENEMY, rand.nextInt(100)+50, Direction.DOWN));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.DOWN));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.DOWN));
 			break;
 		case 11:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
-			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
-			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.left));
+			handler.addObject(new Enemy(x   , y   , ObjectId.ENEMY, rand.nextInt(100)+50, Direction.LEFT));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.LEFT));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.LEFT));
 			break;
 		case 12:
-			handler.addObject(new Enemy(x   , y   , ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
-			handler.addObject(new Enemy(x+32, y+32, ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
-			handler.addObject(new Enemy(x+64, y+64, ObjectId.Enemy, rand.nextInt(100)+50, Direction.up));
+			handler.addObject(new Enemy(x   , y   , ObjectId.ENEMY, rand.nextInt(100)+50, Direction.UP));
+			handler.addObject(new Enemy(x+32, y+32, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.UP));
+			handler.addObject(new Enemy(x+64, y+64, ObjectId.ENEMY, rand.nextInt(100)+50, Direction.UP));
 			break;
 		case 13:
-			handler.addObject(new Boss(x   , y   , ObjectId.Enemy));
+			handler.addObject(new Blower(x   , y   , ObjectId.BLOWER, Direction.RIGHT));
+			break;
+		case 14:
+			handler.addObject(new Blower(x   , y   , ObjectId.BLOWER, Direction.DOWN));
+			break;
+		case 15:
+			handler.addObject(new Blower(x   , y   , ObjectId.BLOWER, Direction.LEFT));
+			break;
+		case 16:
+			handler.addObject(new Blower(x   , y   , ObjectId.BLOWER, Direction.UP));
+			break;
+		case 17:
+			handler.addObject(new Boss(x   , y   , ObjectId.ENEMY));
 			break;
 		}
 	}
@@ -257,84 +269,87 @@ public class Theme extends ThemeBase {
 		Random rand = new Random();
 		
 		for (int i = 0; i < 30; i++) {
-			handler.addObject(new Leaf(rand.nextInt(2000)-2000,rand.nextInt(600), ObjectId.Interactions));
+			handler.addObject(new Leaf(rand.nextInt(2000)-2000,rand.nextInt(600), ObjectId.INTERACTION));
 		}
-	}
-	public void run() {
-		methodTest();
-	}
-	private void methodTest(){
-		System.out.println("running unknown method");
 	}
 	
 	private static class Enemy extends GameObject{
 	
-		//private Animation animation;
+		private static BufferedImage[] spritesRight = new BufferedImage[4], spritesRightRaw;
+		private static BufferedImage[] spritesLeft = new BufferedImage[4], spritesLeftRaw;
+		private Animation animationRight, animationLeft;
+		private ArrayList<CollisionBox> collisions;
+		private int width = 0, widthPath;
+		private boolean facingRight;
+		private Direction direction;
+		
+		static {
+			try {
+				spritesRightRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/dragonfly.png")), 64).getSprites();
+				spritesLeftRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/dragonfly_reverse.png")), 64).getSprites();
+			} catch (IOException e) { e.printStackTrace(); }
+		}
 	
-	private BufferedImage[] sprites = new BufferedImage[2];
-	private ArrayList<CollisionBox> collisions;
-	private int width = 0, widthPath;
-	private boolean facingRight;
-	private Direction direction;
+		public Enemy(float x, float y,ObjectId id, int widthPath, Direction direction) {
+			super(x, y, id);
 	
-	
-	
-	public Enemy(float x, float y,ObjectId id, int widthPath, Direction direction) {
-		super(x, y, id);
-		BufferedImageLoader loader = new BufferedImageLoader();
-		sprites[0] = new SpriteSheet(loader.loadImage("/enemies/boss_bee.png"), 96).grabImage(0, 0);
-		sprites[1] = new SpriteSheet(loader.loadImage("/enemies/boss_bee_reverse.png"), 96).grabImage(0, 0);
-		this.widthPath = widthPath;
-		this.direction = direction;
-	
-		this.collisions = new ArrayList<CollisionBox>();
-	
-		this.collisions.add( new CollisionBox((int)x+4, (int)y+20, 28, 20, ObjectId.Enemy) );
-		//this.collisions.add( new CollisionBox((int)x+40, (int)y, 16, 48, ObjectId.Boss) );
+			this.widthPath = widthPath;
+			this.direction = direction;
+		
+			this.collisions = new ArrayList<CollisionBox>();
+		
+			this.collisions.add( new CollisionBox((int)x+8, (int)y+25, 44, 20, ObjectId.ENEMY) );
 			
+			for (int i = 1; i < spritesRightRaw.length; i++) { spritesRight[i-1] = spritesRightRaw[i]; }
+			for (int i = 1; i < spritesLeftRaw.length; i++)  { spritesLeft[i-1]  = spritesLeftRaw[i];  }
 			
+			animationRight = new Animation(1, spritesRight);
+			animationLeft = new Animation(1, spritesLeft);
+
 		}
 	
 		public void tick(ArrayList<GameObject> object) {
+			animationLeft.runAnimation();
+			animationRight.runAnimation();
 			
-			if(direction == Direction.left || direction == Direction.right){
+			if(direction == Direction.LEFT || direction == Direction.RIGHT){
 				if( this.widthPath > 0){
 					if(width == this.widthPath){facingRight = false;}
 					if(width == 0){facingRight = true;}
 					
 					if(facingRight){
-						this.x+=(direction == Direction.right)?1:-1;
+						this.x+=(direction == Direction.RIGHT)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).x++;
+							getBounds().get(i).x+=(direction == Direction.RIGHT)?1:-1;
 						}
 						width++;
 					}
 					else{
-						this.x-=(direction == Direction.right)?1:-1;
+						this.x-=(direction == Direction.RIGHT)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).x--;
+							getBounds().get(i).x-=(direction == Direction.RIGHT)?1:-1;
 						}
 						width--;
 					}
 				}
 			}
 			
-			if(direction == Direction.up || direction == Direction.down){
+			if(direction == Direction.UP || direction == Direction.DOWN){
 				if( this.widthPath > 0){
 					if(width == this.widthPath){facingRight = false;}
 					if(width == 0){facingRight = true;}
 					
 					if(facingRight){
-						this.y+=(direction == Direction.down)?1:-1;
+						this.y+=(direction == Direction.DOWN)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).y+=(direction == Direction.down)?1:-1;
+							getBounds().get(i).y+=(direction == Direction.DOWN)?1:-1;
 						}
 						width++;
 					}
 					else{
-						this.y-=(direction == Direction.down)?1:-1;
+						this.y-=(direction == Direction.DOWN)?1:-1;
 						for (int i = 0; i < collisions.size(); i++) {
-							getBounds().get(i).y-=(direction == Direction.down)?1:-1;
+							getBounds().get(i).y-=(direction == Direction.DOWN)?1:-1;
 						}
 						width--;
 					}
@@ -343,10 +358,10 @@ public class Theme extends ThemeBase {
 		}
 	
 		public void render(Graphics g) {
-			if(facingRight)
-				g.drawImage(sprites[0], (int)x, (int)y, 48, 48, null);
+			if((facingRight && direction == Direction.LEFT) || (!facingRight && direction != Direction.LEFT) )
+					animationRight.drawAnimation(g, (int)x, (int)y, 64, 64);
 			else
-				g.drawImage(sprites[1], (int)x, (int)y, 48, 48, null);
+				animationLeft.drawAnimation(g, (int)x, (int)y, 64, 64);
 			
 			if(Window.debug){
 				if(this.getBounds() != null){
@@ -354,7 +369,7 @@ public class Theme extends ThemeBase {
 					g.setColor(Color.red);
 	
 					for (int i = 0; i < getBounds().size(); i++) {
-						if(getBounds().get(i).getId() == ObjectId.Enemy)
+						if(getBounds().get(i).getId() == ObjectId.ENEMY)
 							g2d.setColor(Color.YELLOW);
 						g2d.draw(getBounds().get(i).getBounds());
 					}
@@ -370,12 +385,16 @@ public class Theme extends ThemeBase {
 	private static class Boss extends GameObject{
 		int count;
 		
-		private static BufferedImage sprite;
+		private Animation animation, animationLeft;
+		private static BufferedImage[] sprites = new BufferedImage[4], spritesRaw;
+		private static BufferedImage[] spritesLeft = new BufferedImage[4], spritesRawLeft;
 		private ArrayList<CollisionBox> collisions;
 		
 		static {
-			BufferedImageLoader loader = new BufferedImageLoader();
-			sprite = new SpriteSheet(loader.loadImage("/enemies/boss_bee.png"), 96).grabImage(0, 0);
+			try {
+				spritesRaw = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/dragonfly.png")), 64).getSprites();
+				spritesRawLeft = new SpriteSheet(ImageIO.read(Boss.class.getResource("enemies/dragonfly_reverse.png")), 64).getSprites();
+			} catch (IOException e) { e.printStackTrace(); }
 		}
 		
 		public Boss(float x, float y,ObjectId id) {
@@ -384,28 +403,61 @@ public class Theme extends ThemeBase {
 			this.count = 0;
 			this.collisions = new ArrayList<CollisionBox>();
 
-			this.collisions.add( new CollisionBox((int)x+8, (int)y+40, 56, 40, ObjectId.Boss) );
-			//this.collisions.add( new CollisionBox((int)x+40, (int)y, 16, 48, ObjectId.Boss) );
+			this.collisions.add( new CollisionBox((int)x+16, (int)y+50, 88, 40, ObjectId.BOSS) );
 			
+			for (int i = 1; i < spritesRaw.length; i++) {
+				sprites[i-1] = spritesRaw[i];
+			}
+			for (int i = 1; i < spritesRawLeft.length; i++) {
+				spritesLeft[i-1] = spritesRawLeft[i];
+			}
 			
+			animation = new Animation(1, sprites);
+			animationLeft = new Animation(1, spritesLeft);
 		}
 
 		public void tick(ArrayList<GameObject> objects) {
-			count++;
-			GameObject player = objects.get(3600);
-			if(count >= 3){
-				
-				this.x+=((player.getX()-this.x)>0)?1:-1;
-				this.y+=((player.getY()-this.y)>0)?1:-1;
-				this.collisions.get(0).x+=((player.getX()-this.x)>0)?1:-1;
-				this.collisions.get(0).y+=((player.getY()-this.y)>0)?1:-1;
-				count = 0;
+			animation.runAnimation();
+			animationLeft.runAnimation();
+			
+			if(!Game.isFinished()){
+				count++;
+				GameObject player = objects.get(3600);
+				if(count >= 2){
+					
+					facingRight = ((player.getX()-this.x)<0); 
+					
+					if((player.getX()-this.x)>0){
+						this.x+=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).x+=1;
+					}else{
+						this.x-=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).x-=1;
+					}
+					
+					if((player.getY()-this.y)>0){
+						this.y+=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).y+=1;
+					}else{
+						this.y-=1;		
+						for (int i = 0; i < getBounds().size(); i++)
+							this.collisions.get(i).y-=1;
+					}
+					
+					count = 0;
+				}
 			}
 			
 		}
 
 		public void render(Graphics g) {
-			g.drawImage(sprite, (int)x, (int)y, 96, 96, null);
+			if(facingRight)
+				animation.drawAnimation(g, (int)x, (int)y, 128, 128);
+			else
+				animationLeft.drawAnimation(g, (int)x, (int)y, 128, 128);
 			
 			if(Window.debug){
 				if(this.getBounds() != null){
@@ -413,7 +465,7 @@ public class Theme extends ThemeBase {
 					g.setColor(Color.red);
 
 					for (int i = 0; i < getBounds().size(); i++) {
-						if(getBounds().get(i).getId() == ObjectId.Boss)
+						if(getBounds().get(i).getId() == ObjectId.BOSS)
 							g2d.setColor(Color.MAGENTA);
 						g2d.draw(getBounds().get(i).getBounds());
 					}
@@ -435,8 +487,9 @@ public class Theme extends ThemeBase {
 			super(x, y, id);
 			x1 = x - 400;
 			y1= y - 400;
-			BufferedImageLoader loader = new BufferedImageLoader();
-			sprites = new SpriteSheet(loader.loadImage("/feuille.png"), 78).grabImage(0, 0);
+			try {
+				sprites = new SpriteSheet(ImageIO.read(Leaf.class.getResource("sprites/leaf.png")), 78).grabImage(0, 0);
+			} catch (IOException e) { e.printStackTrace(); }
 		}
 
 		public void tick(ArrayList<GameObject> object) {

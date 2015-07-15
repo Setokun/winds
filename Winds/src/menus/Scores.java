@@ -11,19 +11,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
-import server.ServerConnection;
 import database.Score;
 import database.Trophy;
 import display.Window;
@@ -34,31 +32,33 @@ public class Scores extends JPanel {
 	private Font windsPolice48 = null, windsPolice18 = null;
 	private JTable tableScores, tableTrophies;
 	private JLabel title;
-	private JButton jBtnBack, btnUploadMyScores;
+	private JButton jBtnBack;
 	private Object[][] results = null, resultsTrophies = null;
 	private JScrollPane scrollPaneScores, scrollPaneTrophies;
-	private JPanel north, middle, south, jNorthWest, jNorthEast, jNorthCenter, northSouth;
+	private JPanel north, middle, south, jNorthWest, jNorthEast, jNorthCenter;
 	
-	
+	/**
+	 * constructor of the Scores GUI
+	 */
 	public Scores() {
 				
     	initializeFont();
 		this.setLayout(new BorderLayout());
 		
 		initBackButton();
-		initUploadMyScoresButton();
-		
-		
+
 		initTableScores();
 		initTableTrophies();
-		
-		
+
 		createNorth();
 		createMiddle();
 		createSouth();
 
 	}
-	
+
+	/**
+	 * create the north section of this GUI 
+	 */
 	private void createNorth() {
 		
 		initTitle();
@@ -87,20 +87,18 @@ public class Scores extends JPanel {
 		jNorthEast.setLayout(flNorthEast);
 		jNorthEast.add(jBtnBack);
 		
-		northSouth = new JPanel();
-		northSouth.setLayout(new BoxLayout(northSouth, BoxLayout.LINE_AXIS));
-		northSouth.add(btnUploadMyScores);
-		
 		north = new JPanel();
 		BorderLayout northLayout = new BorderLayout();
 		north.setLayout(northLayout);
 		north.add(jNorthWest, BorderLayout.WEST);
 		north.add(jNorthCenter, BorderLayout.CENTER);
 		north.add(jNorthEast, BorderLayout.EAST);
-		north.add(northSouth, BorderLayout.SOUTH);
 		this.add(north, BorderLayout.NORTH);
 		
 	}
+	/**
+	 * create the middle section of this GUI
+	 */
 	private void createMiddle() {
 		
 		middle = new JPanel();
@@ -113,6 +111,9 @@ public class Scores extends JPanel {
 		this.add(middle, BorderLayout.CENTER);
 		
 	}
+	/**
+	 * create the south section of this GUI
+	 */
 	private void createSouth() {
 		
 		south = new JPanel();
@@ -127,21 +128,29 @@ public class Scores extends JPanel {
 		
 	}
 	
-
+	/**
+	 * Initialize title of this GUI
+	 */
 	private void initTitle() {
 		title = new JLabel("Scores");
 		title.setFont(windsPolice48);	
 	}
+	/**
+	 * initialize custom font
+	 */
 	private void initializeFont() {
 		try {
-    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,18F);
-    		windsPolice48 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,48F);
+    		windsPolice18 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,18F);
+    		windsPolice48 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,48F);
 		} catch (FontFormatException | IOException e) {
 			windsPolice18 = new Font ("Serif", Font.BOLD, 18);
     		windsPolice48 = new Font ("Serif", Font.BOLD, 48);
 		}
 	}
-	
+
+	/**
+	 * initialize scores table
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initTableScores() {
 		scrollPaneScores = new JScrollPane();
@@ -181,9 +190,12 @@ public class Scores extends JPanel {
 		for (int i = 0; i < 5; i++) {
 			tableScores.getColumnModel().getColumn(i).setResizable(false);
 		}
-		scrollPaneScores.setPreferredSize(new Dimension(760, 170));
+		scrollPaneScores.setPreferredSize(new Dimension(760, 225));
 		scrollPaneScores.setViewportView(tableScores);
 	}
+	/**
+	 * initialize trophies table
+	 */
 	private void initTableTrophies() {
 		scrollPaneTrophies = new JScrollPane();
 		
@@ -217,30 +229,10 @@ public class Scores extends JPanel {
 		new ButtonColumn(tableTrophies, null, 1);
 		scrollPaneTrophies.setPreferredSize(new Dimension(700, 145));
 		scrollPaneTrophies.setViewportView(tableTrophies);
-	}	
-	private void initUploadMyScoresButton() {
-		btnUploadMyScores = new JButton();
-		btnUploadMyScores.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/UploadMyScores.png")));
-		btnUploadMyScores.setBorder(new javax.swing.border.SoftBevelBorder(0));
-		btnUploadMyScores.setBorderPainted(false);
-		btnUploadMyScores.setContentAreaFilled(false);
-		btnUploadMyScores.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-            	btnUploadMyScoresActionPerformed(evt);
-            }
-        });
-		btnUploadMyScores.addMouseListener(new MouseListener() {
-			public void mouseReleased(MouseEvent e) {}
-			public void mousePressed(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {
-				btnUploadMyScores.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/UploadMyScores.png")));
-			}
-			public void mouseEntered(MouseEvent e) {
-				btnUploadMyScores.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/UploadMyScores_hover.png")));
-			}
-			public void mouseClicked(MouseEvent e) {}
-		});
 	}
+	/**
+	 * initialize Back button
+	 */
 	private void initBackButton() {
 		jBtnBack = new JButton();
 		jBtnBack.setIcon(new ImageIcon(this.getClass().getResource("/resources/buttons/Back.png")));
@@ -266,25 +258,27 @@ public class Scores extends JPanel {
 		});
 	}
 
-	protected void btnUploadMyScoresActionPerformed(ActionEvent evt) {
-		if(ServerConnection.uploadScores(Score.getLocalScores())){
-			JOptionPane.showMessageDialog(null, "Scores uploaded");
-		}
-	}
+	/**
+	 * determines what has to be done when clicking on the Back button
+	 * @param evt
+	 */
 	protected void jBtnBackActionPerformed(ActionEvent evt) {
-		Window.resize(new Dimension(800, 550));
-		Window.affect(new MainMenu());
+		Window.affect(new MainMenu(),Window.DIM_STANDARD);
 		
 	}
-	
+
+	/**
+	 * returns an ArrayList of Trophy, used to provide "Trophies" table
+	 * @return
+	 */
 	private Object[][] getTrophies(){
-		Object[][] listTrophies = Trophy.getTrophies();
+		ArrayList<Trophy> listTrophies = Trophy.getTrophies();
 		Object[][] listTrophiesToDisplay = null;
 		if(listTrophies != null){
-			listTrophiesToDisplay = new Object[listTrophies.length][2];
-			for(int i=0; i<listTrophies.length; i++){
-				listTrophiesToDisplay[i][0] = listTrophies[i][0];
-				listTrophiesToDisplay[i][1] = listTrophies[i][1].equals("ok")? new ImageIcon(this.getClass().getResource("/resources/tick.png")):null;
+			listTrophiesToDisplay = new Object[listTrophies.size()][2];
+			for(int i=0; i<listTrophies.size(); i++){
+				listTrophiesToDisplay[i][0] = listTrophies.get(i).getDescription();
+				listTrophiesToDisplay[i][1] = listTrophies.get(i).getAchieved()? new ImageIcon(this.getClass().getResource("/resources/tick.png")):null;
 			}
 		}
 		return listTrophiesToDisplay;

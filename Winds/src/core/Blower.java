@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import addon.BufferedImageLoader;
-import display.Animation;
 import display.Window;
 
 public class Blower extends GameObject{
@@ -24,17 +23,17 @@ public class Blower extends GameObject{
 		
 		loader = new BufferedImageLoader();
 		spritesRaw = null;
-		if(direction == Direction.down) {
-			spritesRaw = new SpriteSheet(loader.loadImage("/souffle_down.png"), 303).getSprites();
+		if(direction == Direction.DOWN) {
+			spritesRaw = new SpriteSheet(loader.loadImage("/resources/souffle_down.png"), 303).getSprites();
 		}
-		else if(direction == Direction.up) {
-			spritesRaw = new SpriteSheet(loader.loadImage("/souffle_up.png"), 303).getSprites();
+		else if(direction == Direction.UP) {
+			spritesRaw = new SpriteSheet(loader.loadImage("/resources/souffle_up.png"), 303).getSprites();
 		}
-		else if(direction == Direction.left) {
-			spritesRaw = new SpriteSheet(loader.loadImage("/souffle_left.png"), 303).getSprites();
+		else if(direction == Direction.LEFT) {
+			spritesRaw = new SpriteSheet(loader.loadImage("/resources/souffle_left.png"), 303).getSprites();
 		}
-		else if(direction == Direction.right) {
-			spritesRaw = new SpriteSheet(loader.loadImage("/souffle_right.png"), 303).getSprites();
+		else if(direction == Direction.RIGHT) {
+			spritesRaw = new SpriteSheet(loader.loadImage("/resources/souffle_right.png"), 303).getSprites();
 		}
 		
 		for (int i = 1; i < spritesRaw.length; i++) {
@@ -44,18 +43,25 @@ public class Blower extends GameObject{
 		
 		this.collisions = new ArrayList<CollisionBox>();
 
-		if(direction == Direction.down || direction == Direction.up)
-			this.collisions.add( new CollisionBox((int)x+64, (int)y+24, 56, 160, ObjectId.Blower) );
-		if(direction == Direction.left || direction == Direction.right)
-			this.collisions.add( new CollisionBox((int)x+24, (int)y+64, 160, 56, ObjectId.Blower) );
+		if(direction == Direction.DOWN || direction == Direction.UP)
+			this.collisions.add( new CollisionBox((int)x+44, (int)y+12, 37, 105, ObjectId.BLOWER) );
+		if(direction == Direction.LEFT || direction == Direction.RIGHT)
+			this.collisions.add( new CollisionBox((int)x+12, (int)y+44, 105, 37, ObjectId.BLOWER) );
 	}
 
+	/**
+	 * determine how the blower will act on each frame
+	 * @param ArrayList of GameObject
+	 */
 	public void tick(ArrayList<GameObject> objects) {
 		animation.runAnimation();
 	}
-
+	/**
+	 * provides the rendering of the blower to Canvas' Graphics
+	 * @param Graphics g
+	 */
 	public void render(Graphics g) {
-		animation.drawAnimation(g, (int)x, (int)y, 192, 192);
+		animation.drawAnimation(g, (int)x, (int)y, 128, 128);
 		
 		if(Window.debug){
 			if(this.getBounds() != null){
@@ -63,18 +69,24 @@ public class Blower extends GameObject{
 				g.setColor(Color.red);
 
 				for (int i = 0; i < getBounds().size(); i++) {
-					if(getBounds().get(i).getId() == ObjectId.Blower)
+					if(getBounds().get(i).getId() == ObjectId.BLOWER)
 						g2d.setColor(Color.YELLOW);
 					g2d.draw(getBounds().get(i).getBounds());
 				}
 			}
 		}
 	}
-
+	/**
+	 * returns a list of the collision boxes concerning this GameObject
+	 * @return ArrayList of collisionBox
+	 */
 	public ArrayList<CollisionBox> getBounds() {
 		return collisions;
 	}
-	
+	/**
+	 * returns the direction of the blower
+	 * @return up, down, left or right
+	 */
 	public Direction getDirection(){
 		return direction;
 	}

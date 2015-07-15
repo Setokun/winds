@@ -33,35 +33,39 @@ public class Block extends GameObject{
 		
 	}
 	
-	@Override
-	public void tick(ArrayList<GameObject> object) {
-		
-	}
-
-	@Override
+	/**
+	 * determine how the GameObject will act on each frame
+	 * @param ArrayList of GameObject
+	 */
+	public void tick(ArrayList<GameObject> object) {}
+	/**
+	 * provides the rendering of the block to Canvas' Graphics
+	 * @param Graphics g
+	 */
 	public void render(Graphics g) {
 		
 		if(this.numBlock != 0){
 			g.drawImage(bi[numBlock], (int)x, (int)y, null);
 		}
 		
-		
-		
 		if(Window.debug){
 			if(this.getBounds() != null){
 				Graphics2D g2d = (Graphics2D) g;
 				g.setColor(Color.red);
 				for (int i = 0; i < getBounds().size(); i++) {
-					if(getBounds().get(i).getId() == ObjectId.DangerousBlock)
+					if(getBounds().get(i).getId() == ObjectId.DANGER)
 						g2d.setColor(Color.red);
-					if(getBounds().get(i).getId() == ObjectId.Block)
+					if(getBounds().get(i).getId() == ObjectId.BLOCK)
 						g2d.setColor(Color.green);
 					g2d.draw(getBounds().get(i).getBounds());
 				}
 			}
 		}
 	}
-
+	/**
+	 * returns a list of the collision boxes concerning this GameObject
+	 * @return ArrayList of collisionBox
+	 */
 	public ArrayList<CollisionBox> getBounds(){
 		return this.collisions;
 	}

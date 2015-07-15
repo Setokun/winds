@@ -31,17 +31,17 @@ public class Tile extends JLabel implements Cloneable {
 	
 	static {
 		ClassLoader loader = Tile.class.getClassLoader();
-		ImageIcon empty = new ImageIcon( loader.getResource("leveleditor/empty_64.png") );
+		ImageIcon empty = new ImageIcon( loader.getResource("resources/empty_tile.png") );
 		emptyMatrix  = new Tile(MATRIX,  empty.getImage(), createTransparentImage(), DEFAULT, DEFAULT, DEFAULT, null);
 		emptyCurrent = new Tile(CURRENT, empty.getImage(), createTransparentImage(), DEFAULT, DEFAULT, DEFAULT, null);
 	}
 	
-	//region Constructors - OK 
+	//region Constructors 
 	/**
 	 * Create a tile with an empty background and no interaction for the current tile.
 	 * @return Tile
 	 */
-	/*OK*/static Tile createEmptyCurrent(){
+	static Tile createEmptyCurrent(){
 		return emptyCurrent.clone();
 	}
 	/**
@@ -49,7 +49,7 @@ public class Tile extends JLabel implements Cloneable {
 	 * @param position index of the tile in the matrix
 	 * @return Tile
 	 */
-	/*OK*/static Tile createEmptyMatrix(int position){
+	static Tile createEmptyMatrix(int position){
 		Tile t = emptyMatrix.clone();
 		t.position = position;
 		return t;
@@ -63,7 +63,7 @@ public class Tile extends JLabel implements Cloneable {
 	 * @param position		Index of the tile in the matrix
 	 * @return Tile
 	 */
-	/*OK*/static Tile createMatrix(Image backImage, Image frontImage, int backIndex, int frontIndex, int position){
+	static Tile createMatrix(Image backImage, Image frontImage, int backIndex, int frontIndex, int position){
 		return new Tile(MATRIX, backImage, frontImage, backIndex, frontIndex, position, null);
 	}
 	/**
@@ -72,7 +72,7 @@ public class Tile extends JLabel implements Cloneable {
 	 * @param backIndex		Index of the sprite
 	 * @return Tile
 	 */
-	/*OK*/static Tile createSprite(Image backImage, int backIndex){
+	static Tile createSprite(Image backImage, int backIndex){
 		return new Tile(LEGEND, backImage, null, backIndex, DEFAULT, DEFAULT, null);
 	}
 	/**
@@ -82,7 +82,7 @@ public class Tile extends JLabel implements Cloneable {
 	 * @param tips			Tooltip text displayed when the mouse is over the tile
 	 * @return Tile
 	 */
-	/*OK*/static Tile createInteraction(Image frontImage, int frontIndex, String tips){
+	static Tile createInteraction(Image frontImage, int frontIndex, String tips){
 		return new Tile(LEGEND, null, frontImage, DEFAULT, frontIndex, DEFAULT, tips);
 	}		
 	
@@ -97,7 +97,7 @@ public class Tile extends JLabel implements Cloneable {
 	 * @param tips			Tooltip text displayed when the mouse is over the tile
 	 * @return Tile
 	 */
-	/*OK*/private Tile(int type, Image backImage, Image frontImage, int backIndex, int frontIndex, int position, String tips){
+	private Tile(int type, Image backImage, Image frontImage, int backIndex, int frontIndex, int position, String tips){
 		super();
 		
 		this.tips = tips;
@@ -125,7 +125,7 @@ public class Tile extends JLabel implements Cloneable {
 	/**
 	 * Checks if the specified object is equals to this tile.
 	 */	
-	/*OK*/public boolean equals(Object obj){
+	public boolean equals(Object obj){
 		if( !(obj instanceof Tile) )  return false;
 		
 		Tile t = (Tile) obj;
@@ -136,19 +136,16 @@ public class Tile extends JLabel implements Cloneable {
 	 * Clones the tile.
 	 * @return Tile
 	 */
-	/*OK*/public Tile clone(){
-		try {
-			return (Tile) super.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
+	public Tile clone(){
+		try {  return (Tile) super.clone();
+		} catch (CloneNotSupportedException e) {}
 		return null;
 	}
 	/**
 	 * Serializes this tile to a string.
 	 * @return String
 	 */
-	/*OK*/public String toString(){
+	public String toString(){
 		return "Tile [tips: "+ tips
 					+", type: "+ ((type == 0) ? "matrix" : (type == 1) ? "current" : "legend")
 					+", position: "+ position
@@ -162,7 +159,7 @@ public class Tile extends JLabel implements Cloneable {
 	/**
 	 * Paints the tile.
 	 */
-	/*OK*/public void paintComponent(Graphics g){
+	public void paintComponent(Graphics g){
         super.paintComponent(g);
         if(mixed != null)
         	g.drawImage(mixed.getImage(), 0, 0, getWidth(), getHeight(), this);
@@ -172,27 +169,27 @@ public class Tile extends JLabel implements Cloneable {
 	 * Checks if the tile has a "departure" interaction.
 	 * @return boolean
 	 */
-	/*OK*/public boolean isDeparture(){
+	public boolean isDeparture(){
 		return frontIndex == 1;
 	}
 	/**
 	 * Checks if the tile has a "arrival" interaction.
 	 * @return boolean
 	 */
-	/*OK*/public boolean isArrival(){
+	public boolean isArrival(){
 		return frontIndex == 2;
 	}
 	/**
 	 * Checks if the tile has no interaction.
 	 * @return boolean
 	 */
-	/*OK*/public boolean isEmptyInteraction(){
+	public boolean isEmptyInteraction(){
 		return frontIndex == DEFAULT;
 	}
 	/**
 	 * Remove the interaction of the tile.
 	 */
-	/*OK*/public void removeInteraction(){
+	public void removeInteraction(){
 		frontIndex = emptyCurrent.frontIndex;
 		frontImage = emptyCurrent.frontImage;
 		if(backIndex == DEFAULT){
@@ -207,7 +204,7 @@ public class Tile extends JLabel implements Cloneable {
 	 * Updates this tile with the attributes of the specified tile.
 	 * @param source Tile where the attributes will be picked up
 	 */
-	/*OK*/public void updateFrom(Tile source){
+	public void updateFrom(Tile source){
 		if(this.type == CURRENT && source.type == CURRENT)	updateFromEmpty();
 		if(this.type == CURRENT && source.type == LEGEND)	updateCurrentFromLegend(source);
 		if(this.type == MATRIX  && source.type == CURRENT)	updateMatrixFromCurrent(source);
@@ -222,7 +219,7 @@ public class Tile extends JLabel implements Cloneable {
 	 * Get an image which represents the superposition of the interaction and sprite images.
 	 * @return ImageIcon
 	 */
-	/*OK*/private ImageIcon mixImages(){
+	private ImageIcon mixImages(){
 		BufferedImage mix = createBlankImage();
 		Graphics g = mix.getGraphics();
 
@@ -237,7 +234,7 @@ public class Tile extends JLabel implements Cloneable {
 	 * Used for a tile which will contain only an interaction.
 	 * @return BufferedImage
 	 */
-	/*OK*/private BufferedImage createBlankImage(){
+	private BufferedImage createBlankImage(){
 		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = bi.getGraphics();
 		g.setColor(new Color(238, 238, 238));
@@ -250,7 +247,7 @@ public class Tile extends JLabel implements Cloneable {
 	 * Used for a tile which will contain only a sprite.
 	 * @return BufferedImage
 	 */
-	/*OK*/private static BufferedImage createTransparentImage(){
+	private static BufferedImage createTransparentImage(){
 		BufferedImage bi = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setComposite(AlphaComposite.Clear);
@@ -261,7 +258,7 @@ public class Tile extends JLabel implements Cloneable {
 	/**
 	 * Updates the tile with the attributes of a empty tile.
 	 */
-	/*OK*/private void updateFromEmpty(){
+	private void updateFromEmpty(){
 		backIndex  = emptyCurrent.backIndex;
 		backImage  = emptyCurrent.backImage;
 		frontIndex = emptyCurrent.frontIndex;
@@ -271,7 +268,7 @@ public class Tile extends JLabel implements Cloneable {
 	 * Updates the current tile in GUI with the attributes of the specified legend tile.
 	 * @param source Tile where the attributes will be picked up
 	 */
-	/*OK*/private void updateCurrentFromLegend(Tile source){
+	private void updateCurrentFromLegend(Tile source){
 		backIndex  = source.backIndex;
 		backImage  = source.backImage;
 		frontIndex = source.frontIndex;
@@ -281,7 +278,7 @@ public class Tile extends JLabel implements Cloneable {
 	 * Updates the matrix tile with the attributes of the current tile in GUI.
 	 * @param source Tile where the attributes will be picked up
 	 */
-	/*OK*/private void updateMatrixFromCurrent(Tile source){
+	private void updateMatrixFromCurrent(Tile source){
 		if(source.backIndex == DEFAULT && source.frontIndex == DEFAULT){
 			updateFromEmpty();
 			return;

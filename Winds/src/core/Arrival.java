@@ -17,21 +17,26 @@ public class Arrival extends GameObject {
 	
 	static {
 		BufferedImageLoader loader = new BufferedImageLoader();
-		sprites[0] = new SpriteSheet(loader.loadImage("/arrival/pole_nok.png"), 64).grabImage(0, 0);
-		sprites[1] = new SpriteSheet(loader.loadImage("/arrival/pole_ok.png"), 64).grabImage(0, 0);
+		sprites[0] = new SpriteSheet(loader.loadImage("/resources/arrival/pole_nok.png"), 64).grabImage(0, 0);
+		sprites[1] = new SpriteSheet(loader.loadImage("/resources/arrival/pole_ok.png"), 64).grabImage(0, 0);
 	}
 	
 	public Arrival(float x, float y, ObjectId id) {
 		super(x, y, id);
 
 		this.collisions = new ArrayList<CollisionBox>();
-		this.collisions.add( new CollisionBox((int)x+44, (int)y+2, 7, 60, ObjectId.Arrival) );
+		this.collisions.add( new CollisionBox((int)x+44, (int)y+2, 7, 60, ObjectId.ARRIVAL) );
 	}
-
-	@Override
+	
+	/**
+	 * determine how the GameObject will act on each frame
+	 * @param ArrayList of GameObject
+	 */
 	public void tick(ArrayList<GameObject> object) {}
-
-	@Override
+	/**
+	 * provides the rendering of the arrival to Canvas' Graphics
+	 * @param Graphics g
+	 */
 	public void render(Graphics g) {
 		if(Game.isFinished())
 			g.drawImage(sprites[1], (int)x, (int)y, 64, 64, null);
@@ -43,15 +48,17 @@ public class Arrival extends GameObject {
 				Graphics2D g2d = (Graphics2D) g;
 				
 				for (int i = 0; i < getBounds().size(); i++) {
-					if(getBounds().get(i).getId() == ObjectId.Arrival)
+					if(getBounds().get(i).getId() == ObjectId.ARRIVAL)
 						g2d.setColor(Color.BLUE);
 					g2d.draw(getBounds().get(i).getBounds());
 				}
 			}
 		}
 	}
-
-	@Override
+	/**
+	 * returns a list of the collision boxes concerning this GameObject
+	 * @return ArrayList of collisionBox
+	 */
 	public ArrayList<CollisionBox> getBounds() {
 		return collisions;
 	}

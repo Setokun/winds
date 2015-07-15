@@ -80,7 +80,7 @@ public class EditorGUI extends JPanel {
 	 * @param jl	JarLevel to manipulate
 	 * @param jt	JarTheme to use
 	 */
-	/*OK*/public EditorGUI(JarLevel jl, JarTheme jt) {
+	public EditorGUI(JarLevel jl, JarTheme jt) {
 		jarLevelUsed = jl;
         jarThemeUsed = jt;
         spritesComp = jt.getSpritesCompatibility();
@@ -99,14 +99,13 @@ public class EditorGUI extends JPanel {
     }
 	//endregion
 	
-	
     //region GUI Initialisation 
 	/**
 	 * Initializes the GUI's components.
 	 */
-    /*OK*/private void initComponents(){
+    private void initComponents(){
     	try {
-    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/bubble.ttf")).deriveFont(Font.PLAIN,24F);
+    		windsPolice24 = Font.createFont(0, getClass().getResourceAsStream("/resources/font/bubble.ttf")).deriveFont(Font.PLAIN,24F);
 		} catch (FontFormatException | IOException e) {
 			windsPolice24 = new Font ("Serif", Font.BOLD, 24);
 		}
@@ -118,7 +117,7 @@ public class EditorGUI extends JPanel {
     /**
      * Initializes the pseudo-menu's components.
      */
-    /*OK*/private void initHeaderComponents(){
+    private void initHeaderComponents(){
         header = new JPanel();
         btnSave = new JButton();
         sep1 = new JSeparator();
@@ -139,14 +138,14 @@ public class EditorGUI extends JPanel {
     /**
      * Initializes the matrix's components.
      */
-    /*OK*/private void initMatrixComponents(){
+    private void initMatrixComponents(){
     	gridMatrix = new JPanel();
         scrollMatrix = new JScrollPane();
     }
     /**
      * Initializes the legend's components.
      */
-    /*OK*/private void initLegendComponents(){
+    private void initLegendComponents(){
     	legend = new JPanel();
         current = new JPanel();
         lblCurrent = new JLabel();
@@ -157,13 +156,12 @@ public class EditorGUI extends JPanel {
         gridInteractions = new JPanel();
         scrollInteractions = new JScrollPane();
         btnEmpty = new JButton();
-    }
-    
+    }    
     
     /**
      * Configures the GUI's components.
      */
-    /*OK*/private void initComponentsConfig(){
+    private void initComponentsConfig(){
     	initHeaderConfig();
     	initMatrixConfig();
         initLegendConfig();
@@ -171,7 +169,7 @@ public class EditorGUI extends JPanel {
     /**
      * Configures the pseudo-menu's components.
      */
-    /*OK*/private void initHeaderConfig(){
+    private void initHeaderConfig(){
     	btnSave.setText("Save");
     	btnSave.setCursor(CURSOR_HAND);
     	btnSave.setFont(windsPolice24);
@@ -233,7 +231,7 @@ public class EditorGUI extends JPanel {
     /**
      * Configures the matrix's components.
      */
-    /*OK*/private void initMatrixConfig(){
+    private void initMatrixConfig(){
     	gridMatrix.setLayout(new GridLayout(NB_TILES_MATRIX, NB_TILES_MATRIX, MARGIN_TILES, MARGIN_TILES));
     	gridMatrix.setCursor(CURSOR_HAND);
     	scrollMatrix.setViewportView(gridMatrix);
@@ -241,7 +239,7 @@ public class EditorGUI extends JPanel {
     /**
      * Configures the legend's components.
      */
-    /*OK*/private void initLegendConfig(){
+    private void initLegendConfig(){
     	GridLayout layLegend = new GridLayout(0, NB_COLS_LEGEND, MARGIN_TILES, MARGIN_TILES);
     	
     	current.setBorder(BorderFactory.createLineBorder(new Color(204, 204, 204)));
@@ -276,11 +274,10 @@ public class EditorGUI extends JPanel {
         btnEmpty.addMouseListener(new EditorListener.EmptyListener());
     }
     
-    
     /**
      * Builds the GUI's structure.
      */
-    /*OK*/private void initStructure() {
+    private void initStructure() {
     	GroupLayout grpLabels = new GroupLayout(labels);
         labels.setLayout(grpLabels);
         grpLabels.setHorizontalGroup(
@@ -443,13 +440,12 @@ public class EditorGUI extends JPanel {
     }
     //endregion
     
-    
     //region Methods 
     /**
      * Initializes the matrix's tiles with their corresponding sprite
      * and interaction from the current JarLevel. 
      */
-    /*OK*/private void initMatrix(){
+    private void initMatrix(){
     	Level lvl = jarLevelUsed.getLevel();
     	int[][] matrix = lvl.getMatrix();
     	int[][] inters = lvl.getInteractions();
@@ -470,8 +466,8 @@ public class EditorGUI extends JPanel {
     	if(lvl.getStartPosition() != null && lvl.getEndPosition() != null){
     		Point start = lvl.getStartPosition(),
     			  end	= lvl.getEndPosition();
-    		int startPosition = ((int) start.getX())*NB_TILES_MATRIX + ((int) start.getY()),
-    			endPosition   = ((int) end.getX())  *NB_TILES_MATRIX + ((int) end.getY());
+    		int startPosition = ((int) start.getY())*NB_TILES_MATRIX + ((int) start.getX()),
+    			endPosition   = ((int) end.getY())  *NB_TILES_MATRIX + ((int) end.getX());
     		
     		departure = (Tile) gridMatrix.getComponent(startPosition);
     		arrival   = (Tile) gridMatrix.getComponent(endPosition);
@@ -480,18 +476,17 @@ public class EditorGUI extends JPanel {
     /**
      * Initializes the legend's sprite tiles from the current JarTheme. 
      */
-    /*OK*/private void initSprites(){
+    private void initSprites(){
 		for (int i=1; i<backImages.length; i++)
 			gridSprites.add( Tile.createSprite(backImages[i],i) );
     }
     /**
      * Initializes the legend's interaction tiles from the current JarTheme. 
      */    
-    /*OK*/private void initInteractions(){
+    private void initInteractions(){
     	for (int i=1; i<frontImages.length; i++)
 			gridInteractions.add( Tile.createInteraction(frontImages[i], i, intersTips[i-1]) );
     }
-    
     
     /**
      * Get an array of tiles which represents the neighbors of this tile in the matrix's<br>list 
@@ -501,7 +496,7 @@ public class EditorGUI extends JPanel {
      * @return Tile[4]
      * 
      */
-    /*OK*/static Tile[] getNeighbors(int position){
+    static Tile[] getNeighbors(int position){
     	int nbTilesPerRow = NB_TILES_MATRIX,
     		nbMaxTiles = NB_TILES_MATRIX*NB_TILES_MATRIX;
     	
@@ -519,7 +514,7 @@ public class EditorGUI extends JPanel {
     /**
      * Saves the current JarLevel. 
      */
-    /*OK*/public JarLevel saveJarLevel(){
+    public JarLevel saveJarLevel(){
     	String timeMaxValue = txtTimeMax.getText();
     	String descriptionValue = areaDescription.getText();
     	
@@ -560,7 +555,7 @@ public class EditorGUI extends JPanel {
      * Get the departure point of this level.
      * @return Point or null
      */
-    /*OK*/private Point getStartPosition(){
+    private Point getStartPosition(){
     	Point p = null;
     	if(departure != null){
     		int x = departure.getPosition() % NB_TILES_MATRIX,
@@ -573,7 +568,7 @@ public class EditorGUI extends JPanel {
      * Get the arrival point of this level.
      * @return Point or null
      */
-    /*OK*/private Point getEndPosition(){
+    private Point getEndPosition(){
     	Point p = null;
     	if(arrival != null){
     		int x = arrival.getPosition() % NB_TILES_MATRIX,
@@ -586,7 +581,7 @@ public class EditorGUI extends JPanel {
      * Extracts the sprites' indexes of tiles positioned in matrix.
      * @return int[][]
      */
-    /*OK*/private int[][] extractMatrix(){
+    private int[][] extractMatrix(){
     	Component[] components = gridMatrix.getComponents();
   	   
     	int[][] matrix = new int[NB_TILES_MATRIX][NB_TILES_MATRIX];
@@ -602,7 +597,7 @@ public class EditorGUI extends JPanel {
      * Extracts the interactions' indexes of tiles positioned in matrix.
      * @return int[][]
      */
-    /*OK*/private int[][] extractInteractions(){
+    private int[][] extractInteractions(){
     	Component[] components = gridMatrix.getComponents();
    	   
     	int[][] matrix = new int[NB_TILES_MATRIX][NB_TILES_MATRIX];
@@ -615,7 +610,6 @@ public class EditorGUI extends JPanel {
     	return matrix;
     }
     //endregion
-
     
     //region Getters & Setters 
     /**
@@ -636,7 +630,7 @@ public class EditorGUI extends JPanel {
      * Set the specified tile to become the current departure tile.
      * @param newDeparture Tile which represents the new departure
      */
-    /*OK*/static void setDeparture(Tile newDeparture){
+    static void setDeparture(Tile newDeparture){
     	if(arrival != null && arrival.equals(newDeparture))
     		arrival = null;
     	
@@ -654,7 +648,7 @@ public class EditorGUI extends JPanel {
      * Set the specified tile to become the current arrival tile.
      * @param newArrival Tile which represents the new arrival
      */
-    /*OK*/static void setArrival(Tile newArrival){
+    static void setArrival(Tile newArrival){
     	if(departure != null && departure.equals(newArrival))
     		departure = null;
     	

@@ -7,53 +7,64 @@ import java.util.ArrayList;
 import server.ServerConnection;
 import addon.AddonManager;
 
+
+/**
+ * Class used to represent a Winds theme into local DB.
+ */
 public class ThemeData {
 	
 	private int idTheme;
 	private String name;
 	private String description;
-	private String fileName;
 	
-	public ThemeData(){
-		
-	}
+	public ThemeData(){}
 
-	public int getIdTheme() {
-		return idTheme;
-	}
-	public String getName() {
-		return name;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public String getFileName() {
-		return fileName;
-	}
+	/**
+	 * returns id of the Theme
+	 * @return int
+	 */
+	public int getIdTheme() { return idTheme; }
+	/**
+	 * returns name of the Theme
+	 * @return String
+	 */
+	public String getName() { return name; }
+	/**
+	 * returns description of the Theme
+	 * @return String
+	 */
+	public String getDescription() { return description; }
 
-	public void setIdTheme(int idTheme) {
-		this.idTheme = idTheme;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+	/**
+	 * sets the id of the Theme
+	 * @param idTheme int
+	 */
+	public void setIdTheme(int idTheme) { this.idTheme = idTheme; }
+	/**
+	 * sets the name of the Theme
+	 * @param name String
+	 */
+	public void setName(String name) { this.name = name; }
+	/**
+	 * sets the description of the Theme
+	 * @param description String
+	 */
+	public void setDescription(String description) { this.description = description; }
 	
+	/**
+	 * returns e String representation of this object
+	 */
 	public String toString(){
-		return "idTheme:"+idTheme+",name:"+name+",description:"+description+",fileName:"+fileName;
+		return "idTheme:"+idTheme+",name:"+name+",description:"+description;
 	}
-	
+	/**
+	 * returns a double dimension table used to provide a GUI table
+	 * @return Object[][]
+	 * @throws IOException
+	 */
 	public static Object[][] getThemesList() throws IOException{
-		
 		Object[][] results = null;
-		
 		ArrayList<ThemeData> r = null;
-		
 		r = ServerConnection.getThemesList();
 		
 		int[] ids = AddonManager.getThemesInstalledIds();
@@ -69,26 +80,29 @@ public class ThemeData {
 				if(ids[k] == r.get(i).getIdTheme())
 					exists = true;
 			}
-			if(!exists)
-				j++;
+			if(!exists) j++;
 		}
 		return results;
 	}
-
+	/**
+	 * insert or update Theme data into the local database, returns false if it fails
+	 * @return boolean
+	 */
 	public boolean insertDB(){
 		try {
-			
+			DBClass.connect();
 			DBClass.executeQuery("INSERT INTO themes (id, name, description) "
 								+ "VALUES ('"+idTheme+"', '"+name+"','"+description+");");
 			
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			try {
 				DBClass.executeQuery("UPDATE themes SET name='"+name+"', description='"+description+"' WHERE id='"+idTheme+"'");
 			} catch (ClassNotFoundException | SQLException e1) {
 				return false;
 			}
+		}finally{
+			DBClass.disconnect();
 		}
 		return true;
 	}

@@ -1,5 +1,5 @@
 package core;
 
 public enum CollectableId {
-	coin, life, honey
+	COIN, LIFE, VALUABLE
 }
