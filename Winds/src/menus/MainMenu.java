@@ -25,7 +25,7 @@ public class MainMenu extends JPanel{
 	private Font windsPolice48 = null, windsPolice18 = null;
 	private JButton btnChangeProfile, btnConfiguration, btnLevelEditor, btnPlay, btnQuit, btnScores, btnShop;
     private JLabel title;
-    private JPanel north, middle;
+    private JPanel north, northMiddle, northSouth, middle;
     private Dimension btnDimension = new Dimension(300, 50);
     private int gap = 5;
     
@@ -46,9 +46,21 @@ public class MainMenu extends JPanel{
 	 * create the north section of this GUI
 	 */
 	private void initNorth() {
+		
+		northMiddle = new JPanel();
+		northMiddle.setLayout(new FlowLayout());
+		northMiddle.add(title);
+		
+		northSouth = new JPanel();
+		northSouth.setLayout(new BoxLayout(northSouth, BoxLayout.LINE_AXIS));
+		JLabel welcome = new JLabel("  Welcome, " + Profile.current.getPseudo());
+		welcome.setFont(windsPolice18);
+		northSouth.add(welcome);
+		
 		north = new JPanel();
-        north.setLayout(new FlowLayout());
-        north.add(title);
+        north.setLayout(new BorderLayout());
+        north.add(northMiddle, BorderLayout.CENTER);
+        north.add(northSouth, BorderLayout.SOUTH);
         this.add(north, BorderLayout.NORTH);
 	}
 	/**
@@ -213,7 +225,7 @@ public class MainMenu extends JPanel{
 		flBlankButton.setVgap(10);
 		blankButton.setLayout(flBlankButton);
 		JButton b = new JButton();
-		b.setPreferredSize(new Dimension(300,20));
+		b.setPreferredSize(new Dimension(300,2));
 		b.setBorder(new SoftBevelBorder(0));
 		b.setBorderPainted(false);
 		b.setContentAreaFilled(false);
