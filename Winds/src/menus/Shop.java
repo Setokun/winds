@@ -302,16 +302,18 @@ public class Shop  extends JPanel {
 				}
 			}
 			
+			int k=0;
 			listLevelsToDisplay = new Object[nbElementsToDisplay][6];
 			for(int i=0; i<listLevels.length; i++){
 				for (int j = 0; j < ids.length; j++) {
 					if(ids[j] == (int)listLevels[i][3]){
-						listLevelsToDisplay[i][0] = listLevels[i][0];
-						listLevelsToDisplay[i][1] = (listLevels[i][2] == null || listLevels[i][2].equals("uninstalled"))?new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")):null;
-						listLevelsToDisplay[i][2] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?(listLevels[i][2].equals("installed"))?new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_desactivate.png")):new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_activate.png")):null;
-						listLevelsToDisplay[i][3] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_uninstall.png")):null;
-						listLevelsToDisplay[i][4] = (listLevels[i][2] != null && listLevels[i][2].equals("desactivated"));
-						listLevelsToDisplay[i][5] = listLevels[i][1];
+						listLevelsToDisplay[k][0] = listLevels[i][0];
+						listLevelsToDisplay[k][1] = (listLevels[i][2] == null || listLevels[i][2].equals("uninstalled"))?new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")):null;
+						listLevelsToDisplay[k][2] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?(listLevels[i][2].equals("installed"))?new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_desactivate.png")):new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_activate.png")):null;
+						listLevelsToDisplay[k][3] = (listLevels[i][2] != null && !listLevels[i][2].equals("uninstalled"))?new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_uninstall.png")):null;
+						listLevelsToDisplay[k][4] = (listLevels[i][2] != null && listLevels[i][2].equals("desactivated"));
+						listLevelsToDisplay[k][5] = listLevels[i][1];
+						k++;
 					}
 				}
 			}
