@@ -231,6 +231,8 @@ public class ServerConnection {
 		    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
 		    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
 		    lvl.setIdDB(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+		    String mode = jsonObject.get("levelMode").toString().replaceAll("\"", "");
+		    lvl.setMode((mode.equals("boss"))?LevelMode.boss:LevelMode.standard);
 		    basicLevels.add(lvl);
 		}
 		

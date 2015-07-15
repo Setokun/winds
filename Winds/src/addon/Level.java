@@ -372,19 +372,19 @@ public class Level implements Cloneable {
 				boolean exists = false;
 				boolean requiredThemeInstalled = false;
 				
-				//on test 
+				// we check if the level already exists in local
 				for (int k = 0; k < idLevels.length; k++)
 					if(idLevels[k] == r.get(i).getIdDB())
 						exists = true;
 				
-				//on teste si le thème requis est installé
+				// we check if the required theme is installed
 				for (int k2 = 0; k2 < idThemes.length; k2++)
 					if(idThemes[k2] == r.get(i).getIdTheme())
 						requiredThemeInstalled = true;
 				
 				if(!exists){
 					Object[] result = new Object[2]; 
-					result[0] =  String.valueOf(r.get(i).getName());
+					result[0] =  String.valueOf(r.get(i).getName())+((r.get(i).getMode() == LevelMode.boss)?" (boss)":"");
 					result[1] =  r.get(i).getIdDB();
 					if(requiredThemeInstalled)intermediary.add(result);
 				}

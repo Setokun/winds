@@ -29,6 +29,7 @@ import server.ServerConnection;
 import account.Profile;
 import addon.AddonManager;
 import addon.Level;
+import addon.level.LevelMode;
 import addon.level.LevelStatus;
 import addon.level.LevelType;
 import database.ThemeData;
@@ -378,7 +379,7 @@ public class Shop  extends JPanel {
 							rows = ServerConnection.getBasicLevelsList();
 							for (int i = 0; i < rows.size(); i++) {
 								if(rows.get(i).getIdTheme() == idThemeInstalled){
-									Object[] rowToInsert = {rows.get(i).getName(), new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")), rows.get(i).getIdDB()};
+									Object[] rowToInsert = {rows.get(i).getName()+((rows.get(i).getMode() == LevelMode.boss)?" (boss)":""), new ImageIcon(this.getClass().getResource("/resources/buttons/Btn_install.png")), rows.get(i).getIdDB()};
 									((DefaultTableModel)tableNewLevels.getModel()).addRow(rowToInsert);
 								}
 							}
