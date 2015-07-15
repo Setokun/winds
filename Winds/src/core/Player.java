@@ -279,13 +279,13 @@ public class Player extends GameObject{
 				|| getBoundsLeft().intersects(tempObject.getBounds().get(j))){
 			
 			if(windTime <= 0){
-				if(((Blower)tempObject).getDirection() == Direction.DOWN)
+				if(((Blower)tempObject).getDirection() == Direction.DOWN && Math.abs(Game.player.getVelY()) < (MAX_SPEED_X+2))
 					Game.player.setVelY(Math.abs(Game.player.getVelY()) + wind_force);
-				if(((Blower)tempObject).getDirection() == Direction.UP) 
+				if(((Blower)tempObject).getDirection() == Direction.UP && Math.abs(Game.player.getVelY()) < (MAX_SPEED_X+2)) 
 					Game.player.setVelY(-Math.abs(Game.player.getVelY()) - wind_force);
-				if(((Blower)tempObject).getDirection() == Direction.LEFT) 
+				if(((Blower)tempObject).getDirection() == Direction.LEFT && Math.abs(Game.player.getVelX()) < (MAX_SPEED+2)) 
 					Game.player.setVelX(-Math.abs(Game.player.getVelX()) - wind_force);
-				if(((Blower)tempObject).getDirection() == Direction.RIGHT) 
+				if(((Blower)tempObject).getDirection() == Direction.RIGHT && Math.abs(Game.player.getVelX()) < (MAX_SPEED+2)) 
 					Game.player.setVelX(Math.abs(Game.player.getVelX()) + wind_force);
 				
 				windTime = 30;
