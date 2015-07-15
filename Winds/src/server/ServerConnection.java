@@ -204,7 +204,7 @@ public class ServerConnection {
 		    if(mode.equals("boss"))		level.setMode(LevelMode.boss);
 		    
 		    level.setStatus(LevelStatus.installed);
-		    level.setIdDB(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
+		    level.setIdDB(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
 		    level.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
 		    level.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
 		    level.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
@@ -298,6 +298,8 @@ public class ServerConnection {
 						+"&action=downloadTheme&idTheme="+ idTheme)
 					.openConnection();  
 				StringBuilder sb = new StringBuilder(AddonManager.getThemesPath());
+				File folder = new File(AddonManager.getThemesPath());
+				if( !folder.exists()) folder.mkdir();
 				sb.append(theme.getName().replaceAll("\"", ""));
 				sb.append(".jar");
 				FileOutputStream fos = new FileOutputStream(sb.toString());
@@ -344,10 +346,12 @@ public class ServerConnection {
 				else return false;
 				
 				URLConnection ucon = new URL(s).openConnection();  
-				StringBuilder sb = new StringBuilder(AddonManager.currentPath+ "/resources/levels/");
+				StringBuilder sb = new StringBuilder(AddonManager.getLevelsPath());
+				File folder = new File(AddonManager.getLevelsPath());
+				if( !folder.exists()) folder.mkdir();
 				sb.append(level.getIdDB());
 				sb.append(".jar");
-				
+
 				FileOutputStream fos = new FileOutputStream(sb.toString());
 				InputStream in = ucon.getInputStream();
 				int b = 0;
