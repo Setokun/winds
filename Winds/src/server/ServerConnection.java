@@ -108,8 +108,10 @@ public class ServerConnection {
 					DBClass.executeQuery(s);
 				} catch (ClassNotFoundException e1) {
 				} catch (SQLException e1) {
-					JOptionPane.showMessageDialog(null, "Unable to save your scores from the server, please try again...");
-					break;
+					JOptionPane.showMessageDialog(null, "Critical database issue, please restart the game.");
+					DBClass.createStructures();
+					DBClass.createStartData();
+					System.exit(1);
 				}
 			}finally{
 				DBClass.disconnect();

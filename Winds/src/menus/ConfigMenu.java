@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,6 +24,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import account.Profile;
+import database.DBClass;
 import display.Window;
 
 public class ConfigMenu extends JPanel{
@@ -251,8 +253,18 @@ public class ConfigMenu extends JPanel{
 	 * @param evt
 	 */
 	protected void jBtnSaveActionPerformed(ActionEvent evt) {
-		Profile.current = Profile.current.updateConfiguration(sliderResolution.getValue());
-		JOptionPane.showMessageDialog(null, "Configuration updated !");
+		try {
+			Profile.current = Profile.current.updateConfiguration(sliderResolution.getValue());
+			JOptionPane.showMessageDialog(null, "Configuration updated !");
+		} catch (ClassNotFoundException | SQLException e) {
+			JOptionPane.showMessageDialog(null, "Critical database issue, please restart the game.");
+			DBClass.createStructures();
+			DBClass.createStartData();
+			System.exit(1);
+		} finally {
+			DBClass.disconnect();
+		}
+		
 	}
 	/**
 	 * determines what has to be done when clicking on the "Back" button

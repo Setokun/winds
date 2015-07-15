@@ -8,6 +8,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import leveleditor.EditorGUI;
 import server.ServerConnection;
 import account.Profile;
@@ -119,7 +121,10 @@ public class Level implements Cloneable {
 						+ ", levelType='"+getType()+"', levelStatus='"+getStatus()+"', levelMode='"+getMode()+"',"
 						+ " creator='"+getCreator()+"', idTheme='"+getIdTheme()+"' WHERE id="+getIdDB());
 			}catch (ClassNotFoundException | SQLException e1) {
-				return false;
+				JOptionPane.showMessageDialog(null, "Critical database issue, please restart the game.");
+				DBClass.createStructures();
+				DBClass.createStartData();
+				System.exit(1);
 			}
 		}finally{
 			DBClass.disconnect();

@@ -12,6 +12,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import menus.LevelSelector;
 import account.Profile;
 import addon.AddonManager;
@@ -58,10 +60,17 @@ public class Game extends Canvas implements Runnable{
 		numPageFrom = numPage;
 		this.setBackground(Color.BLACK);
 		finishedLoading = false;
-		WIDTH = (int) Profile.current.getScreenDimensions().getWidth();
-		HEIGHT = (int) Profile.current.getScreenDimensions().getHeight();
-	    AddonManager.loadJarTheme(AddonManager.getLoadedJarLevel().getLevel().getIdTheme());
-	    start();
+		
+		try{
+			WIDTH = (int) Profile.current.getScreenDimensions().getWidth();
+			HEIGHT = (int) Profile.current.getScreenDimensions().getHeight();
+			AddonManager.loadJarTheme(AddonManager.getLoadedJarLevel().getLevel().getIdTheme());
+		    start();
+		} catch(Exception e){
+			JOptionPane.showMessageDialog(null, "Critical database issue, please restart the game.");
+			System.exit(1);
+		}
+	    
 	}
 	/**
 	 * Initialize variables and load every resources to launch the game

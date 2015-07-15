@@ -2,6 +2,9 @@ package account;
 
 import java.awt.Dimension;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
 
 import server.ServerConnection;
 import database.DBClass;
@@ -97,6 +100,10 @@ public class Profile {
 			DBClass.connect();
 			DBClass.executeQuery("UPDATE users SET current=false WHERE id="+this.id);
 		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Critical database issue, please restart the game.");
+			DBClass.createStructures();
+			DBClass.createStartData();
+			System.exit(1);
 		} finally {
 			DBClass.disconnect();
 		}
@@ -208,17 +215,13 @@ public class Profile {
 	 * @param soundEffects int
 	 * @param resolution int
 	 * @return Profile
+ 	 * @throws SQLException 
+ 	 * @throws ClassNotFoundException 
 	 */
-	public Profile updateConfiguration(int resolution){
-		try {
-			DBClass.connect();
-    		DBClass.requestQuery("UPDATE users SET resolution="+resolution+" WHERE id="+this.getId());
-    		return connect(current.getEmail(), current.getPassword());
-		} catch (Exception e) {
-		} finally{
-			DBClass.disconnect();
-		}
-		return current;
+	public Profile updateConfiguration(int resolution) throws ClassNotFoundException, SQLException{
+		DBClass.connect();
+		DBClass.requestQuery("UPDATE users SET resolution="+resolution+" WHERE id="+this.getId());
+		return connect(current.getEmail(), current.getPassword());
 	}
 	/**
 	 * returns the screen Dimension attached to this Profile
