@@ -216,8 +216,9 @@ public class Game extends Canvas implements Runnable{
 			g.drawImage(pauseImage, 0, 0, this);
 			if(Window.debug){
 				g.drawRect(122,169,180,40);
-				g.drawRect(47,235,330,40);
-				g.drawRect(148,307,250,40);
+				g.drawRect(47,235,495,40);
+				g.drawRect(145,307,325,40);
+				g.drawRect(215, 380, 255, 40);
 			}
 		}else{
 			
@@ -366,6 +367,14 @@ public class Game extends Canvas implements Runnable{
 		Game.bgMusic.stop();
 		Game.running = false;
 		Window.affect(new LevelSelector(typeLvl, numPageFrom), Window.DIM_STANDARD);
+	}
+	/**
+	 * restarts the current level from the start
+	 */
+	public static void restartLevel(){
+		Game.bgMusic.stop();
+		Game.running = false;
+		Window.affect(new Game(typeLvl, numPageFrom), Profile.current.getScreenDimensions());
 	}
 	
 	/**
