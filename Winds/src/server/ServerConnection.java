@@ -156,7 +156,7 @@ public class ServerConnection {
 	 * Get the trophies of the current player from the remote server.
 	 * @return ArrayList<Trophy>
 	 */
-	public static ArrayList<Trophy> getTrophies() throws IllegalStateException{
+	public static ArrayList<Trophy> getTrophies(){
 		ArrayList<Trophy> trophies = null;
 		
 		try {
@@ -233,7 +233,7 @@ public class ServerConnection {
 	 * @return ArrayList<Level>
 	 * @throws IOException
 	 */
-	public static ArrayList<Level> getBasicLevelsList() throws IOException, IllegalStateException{
+	public static ArrayList<Level> getBasicLevelsList() throws IOException{
 		ArrayList<Level> basicLevels = new ArrayList<Level>();
 
 		JsonArray jArray = null;
@@ -353,6 +353,10 @@ public class ServerConnection {
 			}
 			
 		}
+		catch (IOException e){
+			JOptionPane.showMessageDialog(null, "Unable to create the file, \nplease verify you have enough space on your hard drive \nand full access to the directory.");
+			return false;
+		}
 		catch (NullPointerException e){
 			JOptionPane.showMessageDialog(null, "Unable to install this theme !");
 			return false;
@@ -404,7 +408,11 @@ public class ServerConnection {
 					return level.insertDB();
 				}else return false;
 			}
-		} catch (Exception e){
+		} catch(IOException e){
+			JOptionPane.showMessageDialog(null, "Unable to create the file, \nplease verify you have enough space on your hard drive \nand full access to the directory.");
+			return false;
+		}
+		catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Unable to reach distant winds server, please verify your internet connection and try again !");
 			return false;
 		}
