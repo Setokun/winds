@@ -39,7 +39,7 @@ public class Game extends Canvas implements Runnable{
 	public static AudioPlayer bgMusic;
 	public static Player player;
 	public static int delayAfterFinished;
-	private static boolean pause, running, finished, defeat, scoreUploaded, finishedLoading;;
+	private static boolean pause, running, finished, defeat, scoreUploaded;
 	private static BufferedImage[] instance;
 	private static LevelType typeLvl;
 	
@@ -59,7 +59,6 @@ public class Game extends Canvas implements Runnable{
 		typeLvl = typeLevel;
 		numPageFrom = numPage;
 		this.setBackground(Color.BLACK);
-		finishedLoading = false;
 		
 		try{
 			WIDTH = (int) Profile.current.getScreenDimensions().getWidth();
@@ -114,7 +113,6 @@ public class Game extends Canvas implements Runnable{
 	    
 	    this.addKeyListener(new KeyInput());
 		this.addMouseListener(new MouseInput(handler));
-	    finishedLoading = true;
 	}
 
 	/**
@@ -145,43 +143,47 @@ public class Game extends Canvas implements Runnable{
 	 * Runnable method that run the Game
 	 */
 	public void run() {
-		
-		init();
-		this.requestFocus();
-		
-		long lastTime = System.nanoTime();
-		final double amountOfTicks = 60.0;
-		double ns = 1000000000 / amountOfTicks;
-		double delta = 0;
-		int updates = 0;
-		int frames = 0;
-		long timer = System.currentTimeMillis();
-		
-		while(running){
-			long now = System.nanoTime();
-			delta += (now - lastTime) / ns;
-			lastTime = now;
-			if(delta >= 1){
-				tick();
-				if(Window.debug)updates++;
-				delta--;
-			}
-			render();
-			if(Window.debug)frames++;
+		try{
+			init();
+			this.requestFocus();
 			
-			if(System.currentTimeMillis() - timer > 1000){
-				timer += 1000;
-
-				endLevel();
-				if(player.getLife() <= 0 && !defeat)
-					defeat = true;
+			long lastTime = System.nanoTime();
+			final double amountOfTicks = 60.0;
+			double ns = 1000000000 / amountOfTicks;
+			double delta = 0;
+			int updates = 0;
+			int frames = 0;
+			long timer = System.currentTimeMillis();
+			
+			while(running){
+				long now = System.nanoTime();
+				delta += (now - lastTime) / ns;
+				lastTime = now;
+				if(delta >= 1){
+					tick();
+					if(Window.debug)updates++;
+					delta--;
+				}
+				render();
+				if(Window.debug)frames++;
 				
-				if(Window.debug){
-					System.out.println(updates + " updates, fps : " + frames);
-					updates = 0;
-					frames = 0;
+				if(System.currentTimeMillis() - timer > 1000){
+					timer += 1000;
+	
+					endLevel();
+					if(player.getLife() <= 0 && !defeat)
+						defeat = true;
+					
+					if(Window.debug){
+						System.out.println(updates + " updates, fps : " + frames);
+						updates = 0;
+						frames = 0;
+					}
 				}
 			}
+		} catch (Exception e){
+			JOptionPane.showMessageDialog(this, "Unable to load this level");
+			goBackToMenu();
 		}
 		stop();
 	}
@@ -189,7 +191,7 @@ public class Game extends Canvas implements Runnable{
 	 * calls the tick method of the handler, to calculate what has to be done on the next frame
 	 */
 	private void tick(){
-		if(finishedLoading && !getPause() && !defeat){
+		if(!getPause() && !defeat){
 			handler.tick();
 			
 			for(int i = 0; i < handler.objects.size(); i++)
