@@ -3,6 +3,8 @@ package controls;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JOptionPane;
+
 import display.Game;
 
 
@@ -16,7 +18,9 @@ public class KeyInput extends KeyAdapter{
 	 */
 	public void keyPressed(KeyEvent e){
 		int key = e.getKeyCode();
-		if(key == KeyEvent.VK_Q && Game.getPause()) System.exit(1);
+		if(key == KeyEvent.VK_Q && Game.getPause()) 
+			if(JOptionPane.showConfirmDialog(null, "Are you sure you want to quit the game ?") == JOptionPane.YES_OPTION)
+				System.exit(0);
 		if(key == KeyEvent.VK_ESCAPE)				Game.setPause();
 	}
 }
