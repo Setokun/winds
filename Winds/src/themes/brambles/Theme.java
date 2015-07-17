@@ -43,18 +43,18 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(1,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
 		compatibility.put(new Point(1,1), new Integer[]{2,4,5,8,9,10,20,21});
 		compatibility.put(new Point(1,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
-		compatibility.put(new Point(1,3), new Integer[]{2,4,5,11,12,13,14,17,18,20,21});
+		compatibility.put(new Point(1,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
 
 		compatibility.put(new Point(2,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
-		compatibility.put(new Point(2,1), new Integer[]{1,3,6,11,12,13,14,15,17,18,19});
+		compatibility.put(new Point(2,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
 		compatibility.put(new Point(2,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
 		compatibility.put(new Point(2,3), new Integer[]{1,3,6,7,8,9,10,19});
-
+		
 		compatibility.put(new Point(3,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
 		compatibility.put(new Point(3,1), new Integer[]{2,4,5,8,9,10,20,21});
 		compatibility.put(new Point(3,2), new Integer[]{5,7,11,14});
 		compatibility.put(new Point(3,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-		
+				
 		compatibility.put(new Point(4,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
 		compatibility.put(new Point(4,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
 		compatibility.put(new Point(4,2), new Integer[]{6,12,13,20});
@@ -66,7 +66,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(5,3), new Integer[]{1,3,6,7,8,9,10,19});
 
 		compatibility.put(new Point(6,0), new Integer[]{4,12,17,19});
-		compatibility.put(new Point(6,1), new Integer[]{2,4,8,9,10,20,21});
+		compatibility.put(new Point(6,1), new Integer[]{2,4,5,8,9,10,20,21});
 		compatibility.put(new Point(6,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
 		compatibility.put(new Point(6,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
 
@@ -90,7 +90,7 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(10,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
 		compatibility.put(new Point(10,3), new Integer[]{1,3,6,7,8,9,10,19});
 
-		compatibility.put(new Point(11,0), new Integer[]{3,11,16,21});
+		compatibility.put(new Point(11,0), new Integer[]{3,11,16,18,21});
 		compatibility.put(new Point(11,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
 		compatibility.put(new Point(11,2), new Integer[]{5,7,11,14});
 		compatibility.put(new Point(11,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
@@ -129,20 +129,20 @@ public class Theme extends ThemeBase {
 		compatibility.put(new Point(18,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
 		compatibility.put(new Point(18,2), new Integer[]{5,7,11,14});
 		compatibility.put(new Point(18,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
-	
+
 		compatibility.put(new Point(19,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
 		compatibility.put(new Point(19,1), new Integer[]{2,4,5,8,9,10,20,21});
 		compatibility.put(new Point(19,2), new Integer[]{6,12,13,20});
 		compatibility.put(new Point(19,3), new Integer[]{2,4,5,11,12,13,14,16,17,18,20,21});
 
 		compatibility.put(new Point(20,0), new Integer[]{4,12,17,19});
-		compatibility.put(new Point(20,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19,21});
+		compatibility.put(new Point(20,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
 		compatibility.put(new Point(20,2), new Integer[]{1,2,3,4,8,9,10,15,16,17,18,19,21});
 		compatibility.put(new Point(20,3), new Integer[]{1,3,6,7,8,9,10,19});
-	
+			
 		compatibility.put(new Point(21,0), new Integer[]{1,2,5,6,7,8,9,10,13,14,15,20});
 		compatibility.put(new Point(21,1), new Integer[]{1,3,6,7,11,12,13,14,15,17,18,19});
-		compatibility.put(new Point(21,2), new Integer[]{5,11,14});
+		compatibility.put(new Point(21,2), new Integer[]{5,7,11,14});
 		compatibility.put(new Point(21,3), new Integer[]{1,3,6,7,8,9,10,19});
 		
 		return compatibility;
