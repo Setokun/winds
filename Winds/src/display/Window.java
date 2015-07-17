@@ -39,6 +39,7 @@ public class Window {
 		main.toFront();
 		main.setSize(dim);
 		main.setVisible(true);
+		main.setAlwaysOnTop((c instanceof Game)?true:false);
 		main.revalidate();
 	}
 	/**
