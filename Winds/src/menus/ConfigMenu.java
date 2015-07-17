@@ -256,6 +256,7 @@ public class ConfigMenu extends JPanel{
 		try {
 			Profile.current = Profile.current.updateConfiguration(sliderResolution.getValue());
 			JOptionPane.showMessageDialog(null, "Configuration updated !");
+			Window.affect(new MainMenu(),Window.DIM_STANDARD);
 		} catch (ClassNotFoundException | SQLException e) {
 			JOptionPane.showMessageDialog(null, "Critical database issue, please restart the game.");
 			DBClass.createStructures();

@@ -5,6 +5,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JOptionPane;
+
 import core.GameObject;
 import core.ObjectId;
 import core.Player;
@@ -35,8 +37,15 @@ public class MouseInput extends MouseAdapter{
 		if(Game.getPause()){
 			if(key == InputEvent.BUTTON1_MASK){
 				if(mouseX >= 122 && mouseX <= 302 && mouseY >= 169 && mouseY <= 209) Game.setPause();
-				if(mouseX >= 47 && mouseX <= 377 && mouseY >= 235 && mouseY <= 275)  Game.goBackToMenu();
-				if(mouseX >= 148 && mouseX <= 398 && mouseY >= 307 && mouseY <= 347) System.exit(0);
+				if(mouseX >= 47 && mouseX <= 542 && mouseY >= 235 && mouseY <= 275)  
+					if(JOptionPane.showConfirmDialog(e.getComponent(), "Restart this level ?") == JOptionPane.YES_OPTION)
+						Game.restartLevel();
+				if(mouseX >= 145 && mouseX <= 470 && mouseY >= 307 && mouseY <= 347) 
+					if(JOptionPane.showConfirmDialog(e.getComponent(), "Are you sure you want to go back to menu ?") == JOptionPane.YES_OPTION)
+						Game.goBackToMenu();
+				if(mouseX >= 215 && mouseX <= 470 && mouseY >= 380 && mouseY <= 420)
+					if(JOptionPane.showConfirmDialog(e.getComponent(), "Are you sure you want to quit the game ?") == JOptionPane.YES_OPTION)
+						System.exit(0);
 			}
 		}
 		else{

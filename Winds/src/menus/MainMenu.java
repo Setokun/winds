@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.SoftBevelBorder;
 
@@ -273,15 +274,17 @@ public class MainMenu extends JPanel{
      * @param evt
      */
     private void jBtnChangeProfileActionPerformed(ActionEvent evt) {
-    	try {
-    		DBClass.connect();
-			DBClass.executeQuery("UPDATE users SET current = false");
-		} catch (ClassNotFoundException | SQLException e) {
-		} finally {
-			DBClass.disconnect();
-		}
-    	Profile.current = null;
-		Window.affect(new Login(),Window.DIM_STANDARD);
+    	if(JOptionPane.showConfirmDialog(this, "Are you sure to change the current profile ?") == JOptionPane.YES_OPTION){
+	    	try {
+	    		DBClass.connect();
+				DBClass.executeQuery("UPDATE users SET current = false");
+			} catch (ClassNotFoundException | SQLException e) {
+			} finally {
+				DBClass.disconnect();
+			}
+	    	Profile.current = null;
+			Window.affect(new Login(),Window.DIM_STANDARD);
+    	}
     }
     /**
      * determines what action has to be done when clicking on the "Quit" button

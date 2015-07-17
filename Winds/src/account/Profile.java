@@ -177,7 +177,9 @@ public class Profile {
 				return 3;
 			}
 		} 
-		catch (Exception e) {}
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Unable to save your Winds profile");
+		}
 		finally{
 			DBClass.disconnect();
 		}

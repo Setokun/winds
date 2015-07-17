@@ -77,45 +77,50 @@ public class ServerConnection {
 	 */
 	public static ArrayList<Score> getScores() throws IOException{
 		ArrayList<Score> oldScores = Score.getLocalScoresForUpload();
-		uploadScores(oldScores);
-
-		ArrayList<Score> scores = new ArrayList<Score>();
-		JsonArray jArray = getJsonArrayOfGetRequest("action=getScores");
-		for (int i=0;i<jArray.size();i++) {
-		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-		    Score score = new Score(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
-		    score.setTime(Integer.valueOf(jsonObject.get("time").toString().replaceAll("\"", "")));
-		    score.setClicks(Integer.valueOf(jsonObject.get("nbClicks").toString().replaceAll("\"", "")));
-		    score.setNbItems(Integer.valueOf(jsonObject.get("nbItems").toString().replaceAll("\"", "")));
-		    score.setLevelName(jsonObject.get("levelName").toString().replaceAll("\"", ""));
-		    scores.add(score);
-		}
-		
-		for (int i = 0; i < scores.size(); i++) {
-			Score score = scores.get(i);
-			try {
-				String s = "INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
-						+ "VALUES ("+Profile.current.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");";
-				DBClass.connect();
-				DBClass.executeQuery(s);
-			} catch (ClassNotFoundException e) {
-			} catch (SQLException e) {
+		ArrayList<Score> scores = null;
+		try{
+			uploadScores(oldScores);
+	
+			scores = new ArrayList<Score>();
+			JsonArray jArray = getJsonArrayOfGetRequest("action=getScores");
+			for (int i=0;i<jArray.size();i++) {
+			    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+			    Score score = new Score(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+			    score.setTime(Integer.valueOf(jsonObject.get("time").toString().replaceAll("\"", "")));
+			    score.setClicks(Integer.valueOf(jsonObject.get("nbClicks").toString().replaceAll("\"", "")));
+			    score.setNbItems(Integer.valueOf(jsonObject.get("nbItems").toString().replaceAll("\"", "")));
+			    score.setLevelName(jsonObject.get("levelName").toString().replaceAll("\"", ""));
+			    scores.add(score);
+			}
+			
+			for (int i = 0; i < scores.size(); i++) {
+				Score score = scores.get(i);
 				try {
-					String s =  "UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()
-							+", nbItems="+score.getNbItems()+" WHERE idLevel="+score.getIdLevel()
-							+" AND idPlayer="+Profile.current.getId();
+					String s = "INSERT INTO scores (idPlayer, idLevel, time, nbClicks, nbItems) "
+							+ "VALUES ("+Profile.current.getId()+","+score.getIdLevel()+","+score.getTime()+","+score.getClicks()+","+score.getNbItems()+");";
 					DBClass.connect();
 					DBClass.executeQuery(s);
-				} catch (ClassNotFoundException e1) {
-				} catch (SQLException e1) {
-					JOptionPane.showMessageDialog(null, "Critical database issue, please restart the game.");
-					DBClass.createStructures();
-					DBClass.createStartData();
-					System.exit(1);
+				} catch (ClassNotFoundException e) {
+				} catch (SQLException e) {
+					try {
+						String s =  "UPDATE scores SET time="+score.getTime()+", nbClicks="+score.getClicks()
+								+", nbItems="+score.getNbItems()+" WHERE idLevel="+score.getIdLevel()
+								+" AND idPlayer="+Profile.current.getId();
+						DBClass.connect();
+						DBClass.executeQuery(s);
+					} catch (ClassNotFoundException e1) {
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null, "Critical database issue, please restart the game.");
+						DBClass.createStructures();
+						DBClass.createStartData();
+						System.exit(1);
+					}
+				}finally{
+					DBClass.disconnect();
 				}
-			}finally{
-				DBClass.disconnect();
 			}
+		}catch(IllegalStateException e){
+			scores = oldScores;
 		}
 		
 		return scores;
@@ -126,15 +131,23 @@ public class ServerConnection {
 	 * @throws IOException
 	 */
 	public static ArrayList<ThemeData> getThemesList() throws IOException{
-		ArrayList<ThemeData> themes = new ArrayList<ThemeData>();
-
-		JsonArray jArray = getJsonArrayOfGetRequest("action=getThemes");
-		for (int i=0;i<jArray.size();i++) {
-		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-		    ThemeData thm = new ThemeData();
-		    thm.setIdTheme(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
-		    thm.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
-		    themes.add(thm);
+		ArrayList<ThemeData> themes = null;
+		JsonArray jArray = null;
+		try{
+			jArray = getJsonArrayOfGetRequest("action=getThemes");
+		} catch (IllegalStateException e){
+			JOptionPane.showMessageDialog(null, "Impossible to get required informations from the server, please log on again !");
+		}
+		
+		if(jArray != null){
+			themes = new ArrayList<ThemeData>();
+			for (int i=0;i<jArray.size();i++) {
+			    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+			    ThemeData thm = new ThemeData();
+			    thm.setIdTheme(Integer.valueOf(jsonObject.get("id").toString().replaceAll("\"", "")));
+			    thm.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
+			    themes.add(thm);
+			}
 		}
 		
 		return themes;
@@ -155,8 +168,8 @@ public class ServerConnection {
 		    Trophy trophy = new Trophy();
 		    trophy.setDescription(jsonObject.get("trophy").toString().replaceAll("\"", ""));
 		    trophy.setAchieved(jsonObject.get("ok").toString().replaceAll("\"", "").equals("ok"));
-		    trophies.add(trophy);
-		}
+		    trophies.add(trophy);}
+		} catch (IllegalStateException e){
 		} catch (IOException e) {}		
 		
 		return trophies;
@@ -167,7 +180,7 @@ public class ServerConnection {
 	 * @return ThemeData
 	 * @throws IOException
 	 */
-	public static ThemeData getThemeInfos(int idTheme) throws IOException{
+	public static ThemeData getThemeInfos(int idTheme) throws IOException, IllegalStateException{
 		ThemeData themeData = null;
 
 		JsonArray jArray = getJsonArrayOfGetRequest("action=getThemes&idTheme="+idTheme);
@@ -187,7 +200,7 @@ public class ServerConnection {
 	 * @return Level
 	 * @throws IOException
 	 */
-	public static Level getLevelInfos(int idLevel) throws IOException{
+	public static Level getLevelInfos(int idLevel) throws IOException, IllegalStateException{
 		Level level = null;
 
 		JsonArray jArray = getJsonArrayOfGetRequest("action=getLevelInfos&idLevel="+idLevel);
@@ -223,19 +236,25 @@ public class ServerConnection {
 	public static ArrayList<Level> getBasicLevelsList() throws IOException{
 		ArrayList<Level> basicLevels = new ArrayList<Level>();
 
-		JsonArray jArray = getJsonArrayOfGetRequest("action=getBasicLevels");
-		for (int i=0;i<jArray.size();i++) {
-		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-		    Level lvl = new Level();
-		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
-		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
-		    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
-		    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
-		    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
-		    lvl.setIdDB(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
-		    String mode = jsonObject.get("levelMode").toString().replaceAll("\"", "");
-		    lvl.setMode((mode.equals("boss"))?LevelMode.boss:LevelMode.standard);
-		    basicLevels.add(lvl);
+		JsonArray jArray = null;
+		try{
+			jArray = getJsonArrayOfGetRequest("action=getBasicLevels");
+		} catch (IllegalStateException e){}
+		
+		if(jArray != null){
+			for (int i=0;i<jArray.size();i++) {
+			    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+			    Level lvl = new Level();
+			    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
+			    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
+			    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
+			    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
+			    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
+			    lvl.setIdDB(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+			    String mode = jsonObject.get("levelMode").toString().replaceAll("\"", "");
+			    lvl.setMode((mode.equals("boss"))?LevelMode.boss:LevelMode.standard);
+			    basicLevels.add(lvl);
+			}
 		}
 		
 		return basicLevels;
@@ -248,19 +267,30 @@ public class ServerConnection {
 	public static ArrayList<Level> getCustomLevelsList() throws IOException{
 		ArrayList<Level> customLevels = new ArrayList<Level>();
 
-		JsonArray jArray = getJsonArrayOfGetRequest("action=getCustomLevels");
-		for (int i=0;i<jArray.size();i++) {
-		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-		    Level lvl = new Level();
-		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
-		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
-		    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
-		    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
-		    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
-		    lvl.setIdDB(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
-		    customLevels.add(lvl);
+		JsonArray jArray = null;
+		try{
+			jArray = getJsonArrayOfGetRequest("action=getCustomLevels");
+		} catch (IllegalStateException e){
+			JarLevel[] jLvls = AddonManager.getJarLevels();
+			for (int i = 0; i < jLvls.length; i++) {
+				if(jLvls[i].getLevel().getType() == LevelType.custom)
+					customLevels.add(jLvls[i].getLevel());
+			}
 		}
-
+		
+		if(jArray != null){
+			for (int i=0;i<jArray.size();i++) {
+			    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+			    Level lvl = new Level();
+			    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
+			    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
+			    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
+			    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
+			    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
+			    lvl.setIdDB(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+			    customLevels.add(lvl);
+			}
+		}
 		return customLevels;
 	}
 	/**
@@ -271,18 +301,25 @@ public class ServerConnection {
 	public static ArrayList<Level> getLevelsToModerateList() throws IOException{
 		ArrayList<Level> levelsToModerate = new ArrayList<Level>();
 
-		JsonArray jArray = getJsonArrayOfGetRequest("action=getLevelsToModerate");
-		for (int i=0;i<jArray.size();i++) {
-		    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
-		    Level lvl = new Level();
-		    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
-		    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
-		    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
-		    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
-		    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
-		    lvl.setIdDB(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
-		    levelsToModerate.add(lvl);
+		JsonArray jArray = null;
+		try{
+			jArray = getJsonArrayOfGetRequest("action=getLevelsToModerate");
+		} catch (IllegalStateException e){}
+		
+		if(jArray != null){
+			for (int i=0;i<jArray.size();i++) {
+			    JsonObject jsonObject = jArray.get(i).getAsJsonObject();
+			    Level lvl = new Level();
+			    lvl.setTimeMax(Integer.valueOf(jsonObject.get("timeMax").toString().replaceAll("\"", "")));
+			    lvl.setIdTheme(Integer.valueOf(jsonObject.get("idTheme").toString().replaceAll("\"", "")));
+			    lvl.setName(jsonObject.get("name").toString().replaceAll("\"", ""));
+			    lvl.setDescription(jsonObject.get("description").toString().replaceAll("\"", ""));
+			    lvl.setCreator(jsonObject.get("creator").toString().replaceAll("\"", ""));
+			    lvl.setIdDB(Integer.valueOf(jsonObject.get("idLevel").toString().replaceAll("\"", "")));
+			    levelsToModerate.add(lvl);
+			}
 		}
+		
 
 		return levelsToModerate;
 	}
@@ -315,6 +352,10 @@ public class ServerConnection {
 				return theme.insertDB();
 			}
 			
+		}
+		catch (IOException e){
+			JOptionPane.showMessageDialog(null, "Unable to create the file, \nplease verify you have enough space on your hard drive \nand full access to the directory.");
+			return false;
 		}
 		catch (NullPointerException e){
 			JOptionPane.showMessageDialog(null, "Unable to install this theme !");
@@ -367,7 +408,11 @@ public class ServerConnection {
 					return level.insertDB();
 				}else return false;
 			}
-		} catch (Exception e){
+		} catch(IOException e){
+			JOptionPane.showMessageDialog(null, "Unable to create the file, \nplease verify you have enough space on your hard drive \nand full access to the directory.");
+			return false;
+		}
+		catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Unable to reach distant winds server, please verify your internet connection and try again !");
 			return false;
 		}
@@ -412,7 +457,11 @@ public class ServerConnection {
 			try { response = sendRequest(params); } 
 			catch (Exception e) {}
 		}
-		return response.size() > 0 ? scores.size() == Integer.valueOf(response.get(0)) : false;
+		try{
+			return response.size() > 0 ? scores.size() == Integer.valueOf(response.get(0)) : false;
+		}catch(NumberFormatException n){
+			return false;
+		}
 	}
 	//endregion
 	
@@ -425,7 +474,7 @@ public class ServerConnection {
 	 * @return JsonArray
 	 * @throws IOException
 	 */
-	private static JsonArray getJsonArrayOfGetRequest(String endURL) throws IOException {
+	private static JsonArray getJsonArrayOfGetRequest(String endURL) throws IOException, IllegalStateException {
 		URL url = new URL(URL_API_SERVER +"?email="+ Profile.current.getEmail()
 				+"&password="+ Profile.current.getPassword() +"&"+ endURL);
 		
