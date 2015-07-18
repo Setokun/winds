@@ -104,11 +104,11 @@ public class Score {
 			Score oldScore = null;
 			int counter = 0;	
 			DBClass.connect();
-			ResultSet r = DBClass.requestQuery("SELECT nbItems, nbClicks, time FROM scores WHERE idLevel="+idLevel);
+			ResultSet r = DBClass.requestQuery("SELECT nbItems, nbClicks, time FROM scores WHERE idLevel="+idLevel+" AND idPlayer="+Profile.current.getId());
 			while(r.next()) counter++;
 			
 			if(counter > 0){
-				r = DBClass.requestQuery("SELECT nbItems, nbClicks, time FROM scores WHERE idLevel="+idLevel);
+				r = DBClass.requestQuery("SELECT nbItems, nbClicks, time FROM scores WHERE idLevel="+idLevel+" AND idPlayer="+Profile.current.getId());
 				while(r.next()) 
 					oldScore = new Score(idLevel, r.getInt("nbClicks"),r.getInt("nbItems"), r.getInt("time"));
 				

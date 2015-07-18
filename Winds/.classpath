@@ -5,6 +5,5 @@
 	<classpathentry exported="true" kind="lib" path="jl1.0.jar"/>
 	<classpathentry kind="lib" path="hsqldb.jar"/>
 	<classpathentry kind="lib" path="gson.jar"/>
-	<classpathentry kind="lib" path="commons-codec-1.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

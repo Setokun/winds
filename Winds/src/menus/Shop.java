@@ -615,7 +615,6 @@ public class Shop  extends JPanel {
 				int col = tableLevelsToModerate.columnAtPoint(p);
 				int row = tableLevelsToModerate.rowAtPoint(p);
 				if(col == 1){
-					//System.out.println("Installation de " + tableLevelsToModerate.getValueAt(row, 0));
 					if(ServerConnection.downloadLevel((int)tableLevelsToModerate.getValueAt(row, 2))){
 						JOptionPane.showMessageDialog(null, "New level to moderate installed !!");
 						((DefaultTableModel)tableLevelsToModerate.getModel()).removeRow(row);

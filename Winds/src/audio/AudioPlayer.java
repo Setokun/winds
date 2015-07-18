@@ -110,11 +110,9 @@ public class AudioPlayer {
     				if(loop){play();}
                 }
                 catch(JavaLayerException e){
-                	System.out.println("exception levée !!");
                 	play();
                 }
 				catch (Exception e) { 
-                	System.out.println(e); 
                 }
             }
         }.start();
