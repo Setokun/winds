@@ -15,7 +15,7 @@ import leveleditor.EditorListener.TileLegendListener;
 import leveleditor.EditorListener.TileMatrixListener;
 
 /**
- * Class which is the graphic representation of JarLevel et JarTheme elements
+ * Class used to represent graphically some decors and interactions in the level editor GUI.
  */
 public class Tile extends JLabel implements Cloneable {
 	public  static final int SIZE=64, DEFAULT=0;
