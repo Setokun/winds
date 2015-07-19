@@ -2,6 +2,7 @@ package display;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
@@ -64,7 +65,7 @@ public class Game extends Canvas implements Runnable{
 			WIDTH = (int) Profile.current.getScreenDimensions().getWidth();
 			HEIGHT = (int) Profile.current.getScreenDimensions().getHeight();
 			AddonManager.loadJarTheme(AddonManager.getLoadedJarLevel().getLevel().getIdTheme());
-		    start();
+			EventQueue.invokeLater(()->{  start(); });
 		} catch(Exception e){
 			JOptionPane.showMessageDialog(null, "Critical database issue, please restart the game.");
 			System.exit(1);
@@ -107,12 +108,13 @@ public class Game extends Canvas implements Runnable{
 	    Point startPoint = AddonManager.getLoadedJarLevel().getLevel().getStartPosition();
 	    player = new Player(startPoint.x*128, startPoint.y*128, handler, ObjectId.PLAYER);
 		handler.addObject(player);
-		
+	
 		AddonManager.getLoadedJarTheme().loadInteractions(handler);
 	    AddonManager.getLoadedJarTheme().loadFront(handler);
 	    
 	    this.addKeyListener(new KeyInput());
 		this.addMouseListener(new MouseInput(handler));
+	    
 	}
 
 	/**
@@ -210,7 +212,7 @@ public class Game extends Canvas implements Runnable{
 		Graphics g = bs.getDrawGraphics();
 		Graphics2D g2d = (Graphics2D) g;
 		
-		g.setFont(new Font("bubble & soap", 0, 36));
+		g.setFont(windsPolice36);
 		g.setColor(Color.WHITE);
 		
 		if(pause){

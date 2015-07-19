@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 public class CloseWindowEvent extends WindowAdapter{
 	
 	public void windowClosing(WindowEvent e) {
-		int rep = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit game ?");
+		int rep = JOptionPane.showConfirmDialog(e.getComponent(), "Are you sure you want to quit game ?");
 		if(rep == 0) System.exit(0);
 	}
 

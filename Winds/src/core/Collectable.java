@@ -13,16 +13,13 @@ public class Collectable extends GameObject{
 	private CollectableId collectableId;
 	private static BufferedImage[] sprites = new BufferedImage[3];
 	
-	static {
+	public Collectable(float x, float y, CollectableId collectableId, ObjectId id) {
+		super(x, y, id);
+		this.collectableId = collectableId;
 		BufferedImageLoader loader = new BufferedImageLoader();
 		sprites[0] = new SpriteSheet(loader.loadImage("/resources/collectables/coin.png"), 32).grabImage(0, 0);
 		sprites[1] = new SpriteSheet(loader.loadImage("/resources/collectables/bubulle.png"), 25).grabImage(0, 0);
 		sprites[2] = new SpriteSheet(AddonManager.getLoadedJarTheme().getSpritesCollectable(), 32).grabImage(0, 0);
-	}
-	
-	public Collectable(float x, float y, CollectableId collectableId, ObjectId id) {
-		super(x, y, id);
-		this.collectableId = collectableId;
 	}
 	
 	/**
